@@ -1,0 +1,12 @@
+--- 'cubfits' Installation:
+0. Download 'cubfits':
+
+1. Required Packages:
+
+  - cubfits requires 'VGAM' and 'seqinr' packages.
+  - cubfits also enhances by 'pbdMPI' and 'parallel' packages.
+
+2. Default Installation:
+
+  > R CMD INSTALL cubfits_0.1-0.tar.gz
+

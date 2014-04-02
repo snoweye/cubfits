@@ -1,0 +1,167 @@
+
+\section[Utilities]{Utilities}
+\label{sec:utilities}
+\addcontentsline{toc}{section}{\thesection. Utilities}
+
+The \pkg{cubfits} provides simplified data input and output utilities that
+can quickly import sequence and expression values, turn them into
+\proglang{R} data structures, and dump analysis results in standard format.
+As long as data are in common format, the following functions simplify
+analysis work flows as in Section~\ref{sec:work_flows}.
+Further, the \proglang{R} data structures used in \pkg{cubfits} can be
+converted to different format after read in from disk or
+before write out to disk.
+
+
+\subsection[Data I/O Functions]{Data I/O Functions}
+\label{sec:data_io}
+\addcontentsline{toc}{subsection}{\thesubsection. Data I/O Functions}
+
+\begin{itemize}
+\item \code{read.seq()} is to read sequence data in FASTA format, and
+\item \code{write.seq()} is to write sequence data in FASTA format.
+\end{itemize}
+Both functions are simplified wrapper functions of \pkg{seqinr}.
+The writing function is mainly for simulation studies.
+
+\begin{itemize}
+\item \code{read.phi()} is to read in expression values in tsv/csv format, and
+\item \code{write.phi()} it to write out expression values in tsv/csv format.
+\end{itemize}
+Default data structure of these is a \code{data.frame}.
+The writing function is mainly for simulation studies.
+
+
+\subsection[Main Data Structures]{Main Data Structures}
+\label{sec:main_data_structures}
+\addcontentsline{toc}{subsection}{\thesubsection. Main Data Structures}
+
+The next data types are main data structures used in \pkg{cubfits}:
+\begin{itemize}
+\item \code{reu13.df} is a data structure (used by REU13 students)
+      contains codon positions and expression levels,
+\item \code{y} is a data structure
+      (used by REU12 students and \citet{Wallace2013})
+      contains synonymous codon counts for each sequence,
+\item \code{n} is a data structure
+      (used by REU12 students and \citet{Wallace2013})
+      contains total codon count for each sequence,
+\item \code{reu13.list} is a list version of \code{reu13.df} (adopted by WCC),
+\item \code{y.list} is a list version of \code{y} (adopted by WCC), and
+\item \code{n.list} is a list version of \code{n} (adopted by WCC).
+\end{itemize}
+These are typically fixed after data input steps and
+mainly used in the three main functions without further changes.
+Note that the objects with these data structures are normally sorted
+by ORF ids or names. The list versions are also useful for some models
+and speedup model fitting. Some conversion functions between data structures
+are provided in \pkg{cubfits}, see
+Section~\ref{sec:conversion_of_data_strcutures} for details.
+
+Also, there are other data structures for parameters, but those are
+sometimes model dependent. For example, data structure \code{b} may contain
+model parameters in different dimension.
+The parameters of each amino acid are
+$(log(\mu), \Delta t)$ for ROC model,
+$(log(\mu), \omega)$ for NSEf model, and
+$(log(\mu), \Delta t, \omega)$ for ROC+NSEf model.
+See help pages (\code{?cubfits::AllDataFormats}) for details.
+
+The following is an example of \code{reu13.df} data structure containing
+three amino acids A, C, and D. Each amino acid is in \code{data.frame}
+with four required columns \code{ORF} (sequence id), \code{phi} (expression
+level), \code{Pos} (codon position),
+and \code{Codon}, and one optional column \code{Codon.id} (created by
+\code{rearrange.reu13.df()} within \code{gen.reu13.df()} call.)
+\begin{Code}[title=Example of \code{reu13.df}]
+> str(ex.train$reu13.df)
+List of 3
+ $ A:'data.frame':	2682 obs. of  5 variables:
+  ..$ ORF     : chr [1:2682] "YBL023C" "YBL023C" "YBL023C" "YBL023C" ...
+  ..$ phi     : num [1:2682] 0.0186 0.0186 0.0186 0.0186 0.0186 ...
+  ..$ Pos     : num [1:2682] 109 353 123 294 1133 ...
+  ..$ Codon   : chr [1:2682] "GCA" "GCA" "GCA" "GCA" ...
+  ..$ Codon.id: int [1:2682] 0 0 0 0 0 0 0 0 0 0 ...
+ $ C:'data.frame':	662 obs. of  5 variables:
+  ..$ ORF     : chr [1:662] "YBL023C" "YBL023C" "YBL023C" "YBL023C" ...
+  ..$ phi     : num [1:662] 0.0186 0.0186 0.0186 0.0186 0.0186 ...
+  ..$ Pos     : num [1:662] 387 862 813 248 226 40 82 477 922 87 ...
+  ..$ Codon   : chr [1:662] "TGC" "TGC" "TGC" "TGT" ...
+  ..$ Codon.id: int [1:662] 0 0 0 1 1 1 1 1 1 1 ...
+ $ D:'data.frame':	3164 obs. of  5 variables:
+  ..$ ORF     : chr [1:3164] "YBL023C" "YBL023C" "YBL023C" "YBL023C" ...
+  ..$ phi     : num [1:3164] 0.0186 0.0186 0.0186 0.0186 0.0186 ...
+  ..$ Pos     : num [1:3164] 209 199 255 89 273 141 263 158 112 306 ...
+  ..$ Codon   : chr [1:3164] "GAC" "GAC" "GAC" "GAC" ...
+  ..$ Codon.id: int [1:3164] 0 0 0 0 0 0 0 0 0 0 ...
+\end{Code}
+
+The following is an example of corresponding \code{y} which has only
+synonymous codon counts for each amino acids and sequences.
+\begin{Code}[title=Example of \code{y}]
+> str(ex.train$y)
+List of 3
+ $ A: int [1:100, 1:4] 16 4 5 17 5 7 4 0 20 13 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:100] "YBL023C" "YBL074C" "YBR060C" "YBR068C" ...
+  .. ..$ : chr [1:4] "GCA" "GCC" "GCG" "GCT"
+ $ C: int [1:100, 1:2] 3 0 1 5 4 2 4 2 0 11 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:100] "YBL023C" "YBL074C" "YBR060C" "YBR068C" ...
+  .. ..$ : chr [1:2] "TGC" "TGT"
+ $ D: int [1:100, 1:2] 15 10 10 11 6 12 8 2 17 27 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:100] "YBL023C" "YBL074C" "YBR060C" "YBR068C" ...
+  .. ..$ : chr [1:2] "GAC" "GAT"
+\end{Code}
+
+The following is an example of corresponding \code{n} which has only
+total codon counts for each amino acids and sequences.
+\begin{Code}[title=Example of \code{n}]
+> str(ex.test$n)
+List of 3
+ $ A: Named int [1:100] 60 22 19 16 22 28 9 22 35 8 ...
+  ..- attr(*, "names")= chr [1:100] "YAL017W" "YBL033C" "YBL102W" "YBR010W" ...
+ $ C: Named int [1:100] 12 7 5 0 1 7 5 4 4 4 ...
+  ..- attr(*, "names")= chr [1:100] "YAL017W" "YBL033C" "YBL102W" "YBR010W" ...
+ $ D: Named int [1:100] 96 26 6 4 24 21 5 28 28 3 ...
+  ..- attr(*, "names")= chr [1:100] "YAL017W" "YBL033C" "YBL102W" "YBR010W" ...
+\end{Code}
+
+
+\subsection[Conversion of Data Structures]{Conversion of Data Structures}
+\label{sec:conversion_of_data_strcutures}
+\addcontentsline{toc}{subsection}{\thesubsection. Conversion of Data Structures}
+
+In order to improve performance, simply parallelize code is not enough.
+In \proglang{R}, a good data structure can be very different for computing
+performance.
+In practice, it is the best idea that not to change/modify/subset existing
+data structures within computations/iterations.
+As long as, data are not too big and in manageable size,
+for example in summarized statistics as Section~\ref{sec:main_data_structures}.
+It is worth to generate extra data structures which is efficient
+for some specific functions or particular computation even the information
+are redundant.
+
+However, managing different data structures could be a nightmare such that
+to be consistent across function calls.
+\pkg{cubfits} provides several utilities to generate (\code{gen*()})
+or convert (\code{convert*()}) extended data structures, such as
+\code{reu13.list}, \code{n.list}, and \code{y.list}.
+See help pages (\code{?cubfits::DataGenerating} and
+\code{?cubfits::DataConverting}) for details.
+
+Also, \pkg{cubfits} provides a simple demo
+\begin{Code}
+> demo(basic, 'cubfits')
+\end{Code}
+and shows how those generating and converting functions work.
+Note that this demo reads two example files from \pkg{cubfits} and turns them
+to main data structures can be called by three main functions introduced in
+Section~\ref{sec:main_functions}.
+The files are \code{seq_200.fasta} containing 200 sequences and
+\code{phi_200.tsv} containing corresponding expression levels.
+Both files are stored in the package directory \code{cubfits/inst/ex_data/}
+and installed in \code{$\{R_HOME\}/library/cubfits/ex_data/}.
+

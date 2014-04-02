@@ -1,0 +1,72 @@
+
+======================= Log Before Release =====================================
+2014-03-11:
+  * Clean and reformat all work flows.
+
+2014-02-26:
+  * Add MG's methods lognormal_MG and lognormal_MG0 back, but it still not work.
+  * Add trace of logL to work flows.
+
+2014-02-21:
+  * Add two component mixture normal to fit Yassour 2009 using constrOptim().
+  * Add simulating expression from two component mixture fits.
+  * Add above to simulation work flows.
+
+2014-02-20:
+  * Add Yassour 2009 dataset and man page.
+
+2014-02-19:
+  * Remove MG's method since it did not work.
+  * Add a misc code to extract parameters in work flows.
+
+2014-02-07:
+  * Add MG's proposal method for expected expression.
+
+2014-01-16:
+  * Finish conversion and debugging.
+  * Add negative selection conversion to work flows.
+
+2014-01-09:
+  * Rename variables and functions (everything) to be consistent with papers.
+
+2014-01-03:
+  * Add vignettes.
+
+2013-12-30:
+  * Add with and without phi work flows.
+  * Modify shell scripts.
+  * Incorporate all work flows into cubfits.
+  * Drop dependence of seqinr and VGAM.
+
+2013-12-27:
+  * Add man pages.
+
+2013-12-24:
+  * Test all other 24 genomes.
+
+2013-12-14:
+  * Add simulation work flow.
+
+2013-12-13:
+  * Add examples.
+  * Merge back 'cubds' code to simplify dependency.
+
+2013-11-15:
+  * Add simulation code.
+
+2013-11-14:
+  * Copy input/output to "cubds".
+
+2013-11-07:
+  * Add SCUO code.
+
+2013-10-30:
+  * Add MLE and posterior mean for initial values of testing data.
+
+2013-10-17:
+  * Rename to 'cubfits'.
+  * Rewrite several nasty functions.
+  * Add ROC, NSEf, and ROC+NSEf models.
+
+2013-09-xx:
+  * Start a 'cub' package.

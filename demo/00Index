@@ -1,0 +1,10 @@
+train.roc         cubfits   A training for ROC.
+appr.roc          cubfits   An approximation for ROC.
+pred.roc          cubfits   A prediction for ROC.
+scuo              cubfits   An example of computing scuo index.
+cai               cubfits   An example of computing cai.
+simu.roc          cubfits   An example of simulation study for ROC.
+plotbin           cubfits   An example of ploting binning and model.
+basic             cubfits   An example of reading and producing toy data.
+fitMultinom       cubfits   An example of Shah & Gilchrist 2011.
+mle.yassour       cubfits   An example of finding MLEs for yassour 2009.

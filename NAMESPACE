@@ -1,0 +1,61 @@
+import(methods)
+useDynLib(cubfits)
+# exportPattern("^[[:alpha:]]+")
+
+export(
+# Main
+  "cubfits",
+  "cubpred",
+  "cubappr",
+# Utility
+  "init.function",
+  "fitMultinom",
+  "estimatePhi",
+# Ploting
+  "plotprxy",
+  "plotbin",
+  "plotmodel",
+  "plotaddmodel",
+  "prop.bin.roc",
+  "prop.model.roc",
+# SCUO
+  "calc_scuo_values",
+  "scuo.random",
+# CAI
+  "calc_cai_values",
+# Simulation
+  "simu.orf",
+  "simu.phi.Obs",
+  "simu.mixnorm",
+# Data structure
+  "codon.low2up",
+  "codon.up2low",
+  "dna.low2up",
+  "dna.up2low",
+  "get.expath",
+  "gen.n",
+  "gen.reu13.df",
+  "gen.scuo",
+  "gen.phi.Obs",
+  "gen.y",
+  "gen.reu13.list",
+  "read.seq",
+  "write.seq",
+  "read.phi.df",
+  "write.phi.df",
+# Workflow
+  "get.workflow",
+  "cp.workflow",
+# MLE for mixnorm.
+  "mixnorm.optim",
+  "dmixnorm"
+)
+
+# Converting
+exportPattern("^convert.[[:alpha:]]+")
+
+# Reordering
+exportPattern("^rearrange.[[:alpha:]]+")
+
+# S3 method
+S3method("print", "mixnorm")

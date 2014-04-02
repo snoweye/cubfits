@@ -1,0 +1,20 @@
+For files under ./code and ./code_plot
+
+- ./code/00-set_env_*.r
+  Set environment variables.
+  These should be copied to the upper directory and renamed as "00-set_env.r".
+
+- ./code/00-*.r
+  Codes for setting work flows.
+
+- ./code/0*-*.r
+  Codes for data analysis and simulation.
+
+- ./code/s*-*.r
+  Extra codes for simulation only.
+
+- ./code/m*-*.r
+  Extra codes for matching cases.
+
+- ./code/u*-*.r
+  Utility functions for other codes.

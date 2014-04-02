@@ -1,0 +1,113 @@
+%\VignetteIndexEntry{cubfits-guide}
+
+\documentclass[article,shortnames,nojss]{cubfits-include/jss}
+
+\newcommand{\pkgver}{0.1-0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{
+\begin{minipage}{6in}
+\centering
+Wei-Chen Chen$^1$, Russell Zaretzki$^2$, William Howell$^1$, \\
+Drew Schmidt$^3$, and Michael Gilchrist$^{1,4}$
+\end{minipage}
+\\
+\\
+$^1$Department of Ecology and Evolutionary Biology, \\
+University of Tennessee, \\
+Knoxville, TN, USA \\
+\\
+$^2$Department of Statistics, Operations, and Management Science, \\
+University of Tennessee, \\
+Knoxville, TN, USA \\
+\\
+$^3$National Institute for Computational Sciences, \\
+University of Tennessee, \\
+Knoxville, TN, USA \\
+\\
+$^4$National Institute for Mathematical and Biological Synthesis, \\
+Knoxville, TN, USA \\
+%\\
+%\\
+%\today
+}
+\title{A Quick Guide for the \pkg{cubfits} Package {\small (Ver. \pkgver)}}
+
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., Gilchrist, M.} %% comma-separated
+\Plaintitle{Quick Guide for cubfits (Ver. \pkgver)} %% without formatting
+\Shorttitle{Quick Guide for cubfits (Ver. \pkgver)} %% a short title (if necessary)
+
+%% an abstract and keywords
+%\Abstract{
+%}
+%\Keywords{}
+%\Plainkeywords{} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Wei-Chen Chen\\
+  E-mail: \email{wccsnow@gmail.com}\\
+  URL: \url{http://thirteen-01.stat.iastate.edu/snoweye/mypage/}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\input{./cubfits-include/00-preamble}
+
+\begin{document}
+
+\pagenumbering{roman}
+\tableofcontents
+
+%\newpage
+\input{./cubfits-include/01-copyright}
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
+\newpage
+\input{./cubfits-include/01-acknowledgement}
+
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{./cubfits-include/01-introduction}
+\input{./cubfits-include/02-main_functions}
+\input{./cubfits-include/03-speedup}
+\input{./cubfits-include/04-workflows}
+\input{./cubfits-include/05-utilities}
+\input{./cubfits-include/06-misc}
+
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliography{./cubfits-include/cubfits}
+
+\end{document}
+
