@@ -73,12 +73,12 @@ for(i.case in case.names){
       id.label <- grep(paste("^", i.aa, "\\.", sep = ""), label)
       tl.codon <- length(id.label)
 
-      plot.aa(i.aa, id.label, tl.codon,          # For AA.
-              label.negsel.true,                 # For label.
-              bInit, EPhi,                       # For true.
-              b.mcmc, t.phi.mcmc,                # For unscaled results.
-              b.negsel.PM, phi.PM,               # For scaled results.
-              workflow.name, i.case, model)
+      plot.aa.allinone(i.aa, id.label, tl.codon,        # For AA.
+                       label.negsel.true,               # For label.
+                       bInit, EPhi,                     # For true.
+                       b.mcmc, t.phi.mcmc,              # For unscaled results.
+                       b.negsel.PM, phi.PM,             # For scaled results.
+                       workflow.name, i.case, model)
     }
   dev.off()
 }

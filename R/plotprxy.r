@@ -162,8 +162,8 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
   # Add legend.
   if(add.legend){
     label <- c("OLS", "WLS", "1-to-1")
-    col <- c(4, 2, 2)
-    lty <- c(3, 1, 1)
+    col <- c(2, 2, 4)
+    lty <- c(3, 1, 2)
     if(!add.one.to.one){
       label <- label[-3]
       col <- col[-3]
@@ -186,7 +186,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     }
 
     if(length(label) != 0){
-      legend(xlim[2] + width * (-0.8), ylim[2] - height * 0.8,
+      legend(xlim[2] + width * (-0.4), ylim[2] - height * 0.8,
              label, col = col, lty = lty)
     }
   }

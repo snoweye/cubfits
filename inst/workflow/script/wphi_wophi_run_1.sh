@@ -64,8 +64,8 @@ wait $RUN_3
 wait $RUN_4
 
 # Subset MCMC wphi results.
-Rscript ${CODE_PATH}/05-subset.r > \
-          ${ALL_OUT}/log/05-subset 2>&1
+mpiexec -np ${NP} Rscript ${CODE_PATH}/05-subset-tp.r > \
+                            ${ALL_OUT}/log/05-subset-tp 2>&1
 
 # Run MCMC for wophi.
 NP=5

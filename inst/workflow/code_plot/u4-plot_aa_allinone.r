@@ -49,7 +49,7 @@ plot.aa.allinone <- function(
   order.plot <- apply(deltat.phi.true, 2, function(x){ abs(diff(range(x))) })
   u.codon <- gsub(".\\.(.*)", "\\1", id.label)
   u.codon.sorted <- sort(u.codon)
-  color <- get.color(u.codon.sorted)
+  color <- cubfits:::get.color(u.codon.sorted)
 
   # Plot top row.
   lim <- range(range(deltat.phi.true), range(deltat.phi.PM))
