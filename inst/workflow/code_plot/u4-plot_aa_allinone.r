@@ -34,24 +34,23 @@ plot.aa.allinone <- function(
   }
 
   ### AA plot.
-  nf <- layout(rbind(rep(1, 5), matrix(1 + 1:(5 * 2), nrow = 2)),
-               rep(1, 5), c(1, 8, 8), respect = FALSE)
+  # nf <- layout(matrix(1:3, nrow = 3), 1, c(1, 4, 4), respect = FALSE)
 
-  # Plot title.
-  par(mar = c(0, 0, 0, 0))
-  plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5,
-       paste(workflow.name, ", ", get.case.main(i.case, model),
-             sep = ""))
-  par(mar = c(5.1, 4.1, 4.1, 2.1))
+  ### Plot title.
+  # par(mar = c(0, 0, 0, 0))
+  # plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+  # text(0.5, 0.5,
+  #      paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
+  # par(mar = c(5.1, 4.1, 4.1, 2.1))
 
   # Plot codon with large range first.
-  order.plot <- apply(deltat.phi.true, 2, function(x){ abs(diff(range(x))) })
-  u.codon <- gsub(".\\.(.*)", "\\1", id.label)
+  diff.range <- apply(deltat.phi.true, 2, function(x){ abs(diff(range(x))) })
+  order.plot <- order(diff.range, decreasing = TRUE)
+  u.codon <- gsub(".\\.(.*)", "\\1", label.negsel.true[id.label])
   u.codon.sorted <- sort(u.codon)
   color <- cubfits:::get.color(u.codon.sorted)
 
-  # Plot top row.
+  ### Plot top row.
   lim <- range(range(deltat.phi.true), range(deltat.phi.PM))
   plot(NULL, NULL,
        xlim = lim, ylim = lim,
@@ -59,20 +58,30 @@ plot.aa.allinone <- function(
        main = i.aa)
   for(i.codon in order.plot){
     points(deltat.phi.true[, i.codon], deltat.phi.PM[, i.codon],
-           col = color[u.codon.sorted == u.codon[i.codon]])
+           col = color[u.codon.sorted == u.codon[i.codon]],
+           pch = 20, cex = 0.5)
   }
+  abline(a = 0, b = 1, col = 4, lty = 2)
+  # legend(lim[2] + (lim[2] - lim[1]) * (-0.3),
+  #        lim[2] - (lim[2] - lim[1]) * 0.8,
+  #        "1-to-1", col = 4, lty = 2)
 
-  # Plot bottom row.
-  lim <- range(range(deltat.phi.true), range(deltat.phi.PM.scaled))
-  plot(NULL, NULL,
-       xlim = lim, ylim = lim,
-       xlab = "true Delta.t * true Phi",
-       ylab = "mean scaled Delta.t * mean scaled Phi",
-       main = i.aa)
-  for(i.codon in order.plot){
-    points(deltat.phi.true[, i.codon], deltat.phi.PM.scaled[, i.codon],
-           col = color[u.codon.sorted == u.codon[i.codon]])
-  }
+  ### Plot bottom row.
+  # lim <- range(range(deltat.phi.true), range(deltat.phi.PM.scaled))
+  # plot(NULL, NULL,
+  #      xlim = lim, ylim = lim,
+  #      xlab = "true Delta.t * true Phi",
+  #      ylab = "mean scaled Delta.t * mean scaled Phi",
+  #      main = i.aa)
+  # for(i.codon in order.plot){
+  #   points(deltat.phi.true[, i.codon], deltat.phi.PM.scaled[, i.codon],
+  #          col = color[u.codon.sorted == u.codon[i.codon]],
+  #          pch = 20, cex = 0.5)
+  # }
+  # abline(a = 0, b = 1, col = 4, lty = 2)
+  # legend(lim[2] + (lim[2] - lim[1]) * (-0.3),
+  #        lim[2] - (lim[2] - lim[1]) * 0.8,
+  #        "1-to-1", col = 4, lty = 2)
 
   invisible()
 } # End of plot.aa.allinone().

@@ -67,8 +67,16 @@ for(i.case in case.names){
   ### Plot.
   t.phi.mcmc <- t(phi.mcmc)
   fn.out <- paste(prefix$plot.AA, i.case, "_deltat.phi.pdf", sep = "")
-  # pdf(fn.out, width = 3 * 5, height = 7)
-  pdf(fn.out, width = 4, height = 9)
+  pdf(fn.out, width = 12, height = 11)
+    nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
+                 rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
+    # Plot title.
+    par(mar = c(0, 0, 0, 0))
+    plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+    text(0.5, 0.5,
+         paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
+    par(mar = c(5.1, 4.1, 4.1, 2.1))
+
     for(i.aa in aa.list){
       id.label <- grep(paste("^", i.aa, "\\.", sep = ""), label)
       tl.codon <- length(id.label)
@@ -80,6 +88,11 @@ for(i.case in case.names){
                        b.negsel.PM, phi.PM,             # For scaled results.
                        workflow.name, i.case, model)
     }
+
+    plot(NULL, NULL, type = "n", axes = FALSE,
+         xlim = c(0, 1), ylim = c(0, 1),
+         xlab = "", ylab = "", main = "")
+    legend(0, 0.9, "1-to-1", col = 4, lty = 2)
   dev.off()
 }
 

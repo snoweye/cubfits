@@ -186,7 +186,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     }
 
     if(length(label) != 0){
-      legend(xlim[2] + width * (-0.4), ylim[2] - height * 0.8,
+      legend(xlim[2] + width * (-0.3), ylim[2] - height * 0.8,
              label, col = col, lty = lty)
     }
   }
