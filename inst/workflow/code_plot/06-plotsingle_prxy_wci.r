@@ -32,7 +32,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 5, height = 5)
     # x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.PM,
-             x.ci = phi.CI,
+             y.ci = phi.CI,
              xlab = "Observed Production Rate (log10)",
              ylab = "Predicted Production Rate (log10)",
              weights = 1 / phi.STD.log10,
@@ -47,7 +47,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 5, height = 5)
     # x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.MED,
-             x.ci = phi.CI,
+             y.ci = phi.CI,
              xlab = "Observed Production Rate (log10)",
              ylab = "Predicted Production Rate (log10)",
              weights = 1 / phi.STD.log10,
@@ -64,7 +64,7 @@ for(i.case in case.names){
     plotprxy(phi.Obs, 10^(phi.PM.log10),
              xlab = "Observed Production Rate (log10)",
              ylab = "Predicted Production Rate (log10)",
-             x.ci = 10^(phi.CI.log10),
+             y.ci = 10^(phi.CI.log10),
              weights = 1 / phi.STD.log10,
              main = paste(i.case, " posterior log10 mean", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
