@@ -68,3 +68,5 @@ Rscript ${CODE_PLOT_PATH}/m6-plot_b_corr_negsel.r > \
           ${ALL_OUT}/log/m6-plot_b_corr_negsel 2>&1 &
 Rscript ${CODE_PLOT_PATH}/m6-plot_prxy.r > \
           ${ALL_OUT}/log/m6-plot_prxy 2>&1 &
+Rscript ${CODE_PLOT_PATH}/m6-plot_prxy_wci.r > \
+          ${ALL_OUT}/log/m6-plot_prxy_wci 2>&1 &

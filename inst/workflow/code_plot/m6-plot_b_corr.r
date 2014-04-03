@@ -126,10 +126,10 @@ y.scuo <- b.mean.org[[2]][id.slop]
 x.scuo.label <- label.org[[4]]
 xlim <- my.range(c(x.pm, x.scuo))
 ylim <- my.range(c(y.pm, y.scuo))
-x.pm.ci <- b.ci.org[[3]][, id.slop]
-y.pm.ci <- b.ci.org[[1]][, id.slop]
-x.scuo.ci <- b.ci.org[[4]][, id.slop]
-y.scuo.ci <- b.ci.org[[2]][, id.slop]
+x.pm.ci <- b.ci.org[[3]][id.slop,]
+y.pm.ci <- b.ci.org[[1]][id.slop,]
+x.scuo.ci <- b.ci.org[[4]][id.slop,]
+y.scuo.ci <- b.ci.org[[2]][id.slop,]
 
 fn.out <- paste(prefix$plot.match, "corr_nonscale_deltat_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
