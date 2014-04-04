@@ -33,7 +33,7 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
 
 
 # Subset MCMC results.
-NP=5
+NP=7
 mpiexec -np ${NP} Rscript ${CODE_PATH}/05-subset-tp.r > \
                             ${ALL_OUT}/log/05-subset-tp 2>&1
 Rscript ${CODE_PATH}/05-subset_rz.r > \
