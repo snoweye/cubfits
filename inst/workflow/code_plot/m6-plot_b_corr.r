@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))

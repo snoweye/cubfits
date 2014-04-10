@@ -67,4 +67,4 @@ ci.prob <- c(0.025, 0.975)
 
 
 ### CAUTION: for extra changes globally.
-# library(cubfits, quiet = TRUE)
+# library(cubfits, quietly = TRUE)

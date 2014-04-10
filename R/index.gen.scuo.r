@@ -1,36 +1,36 @@
 # For scuo format for Drew's scuo codes.
 
-gen.scuo <- function(seq.string, aa.list = .CF.GV$amino.acid,
+gen.scuo <- function(seq.string, aa.names = .CF.GV$amino.acid,
     split.S = TRUE, drop.X = TRUE, drop.MW = TRUE){
   if(split.S){
-    if("S" %in% aa.list){ 
-      if(! "Z" %in% aa.list){
-        aa.list <- c(aa.list, "Z")
+    if("S" %in% aa.names){ 
+      if(! "Z" %in% aa.names){
+        aa.names <- c(aa.names, "Z")
       }
     } else{
       split.S <- FALSE
     }
   } else{
-    if(all(c("S", "Z") %in% aa.list)){
+    if(all(c("S", "Z") %in% aa.names)){
         split.S <- TRUE
     }
   }
 
   if(drop.X){
-    aa.list <- aa.list[aa.list != "X"]
+    aa.names <- aa.names[aa.names != "X"]
   }
 
   if(drop.MW){
-    aa.list <- aa.list[!(aa.list %in% c("M", "W"))]
+    aa.names <- aa.names[!(aa.names %in% c("M", "W"))]
   }
 
-  aa.list <- sort(aa.list)
-  ret <- build.scuo(seq.string, aa.list, split.S = split.S)
+  aa.names <- sort(aa.names)
+  ret <- build.scuo(seq.string, aa.names, split.S = split.S)
   ret
 } # End of gen.scuo().
 
 
-build.scuo <- function(seq.string, aa.list, split.S = FALSE){
+build.scuo <- function(seq.string, aa.names, split.S = FALSE){
   names.seq <- names(seq.string)
 
   if(split.S){
@@ -41,10 +41,10 @@ build.scuo <- function(seq.string, aa.list, split.S = FALSE){
 
   ret.id <- NULL
   ret.counts <- NULL
-  for(i.aa in 1:length(aa.list)){
-    tmp.id <- cbind(aa.list[i.aa], names.seq)
+  for(i.aa in 1:length(aa.names)){
+    tmp.id <- cbind(aa.names[i.aa], names.seq)
 
-    scodon <- synonymous.codon[[aa.list[i.aa]]]
+    scodon <- synonymous.codon[[aa.names[i.aa]]]
     tmp <- lapply(1:length(seq.string),
              function(i.gene){
                tmp.ret <- rep(0L, length(scodon))

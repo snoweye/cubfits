@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 source("00-set_env.r")
 
@@ -32,18 +32,18 @@ if(file.exists(fn.in)){
              main = "SCUO vs phi.Obs")
 
     # Plot CAI vs phi.Obs.
-    plotprxy(CAI$cai, tmp, log10.x = FALSE, log10.y = FALSE,
+    plotprxy(CAI$CAI, tmp, log10.x = FALSE, log10.y = FALSE,
              xlab = "CAI", ylab = "Observed Production Rate (log10)",
              main = "CAI vs phi.Obs")
 
     # Plot SCUO vs CAI.
-    plotprxy(SCUO, CAI$cai, log10.x = FALSE, log10.y = FALSE,
+    plotprxy(SCUO, CAI$CAI, log10.x = FALSE, log10.y = FALSE,
              xlab = "SCUO", ylab = "CAI", main = "SCUO vs CAI")
   dev.off()
 } else{
   fn.out <- paste(prefix$plot.diag, "prxy_scuo_cai.pdf", sep = "")
   pdf(fn.out, width = 4, height = 4)
-    plotprxy(SCUO, CAI$cai, log10.x = FALSE, log10.y = FALSE,
+    plotprxy(SCUO, CAI$CAI, log10.x = FALSE, log10.y = FALSE,
              xlab = "SCUO", ylab = "CAI", main = "SCUO vs CAI")
     mtext(workflow, line = 3, cex = 0.6)
   dev.off()

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))

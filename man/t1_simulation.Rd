@@ -15,7 +15,7 @@
 }
 \arguments{
   \item{n}{number of ORFs or sequences.}
-  \item{bInit}{parameters of mutation and selections of format
+  \item{bInit}{parameters of mutation and selection of format
                \code{\link{b}}.}
   \item{phi.Obs}{an object of format \code{\link{phi.Obs}}.}
   \item{AA.prob}{proportion of amino acids.}

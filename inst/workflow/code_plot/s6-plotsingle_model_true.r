@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -18,7 +18,7 @@ EPhi.true <- EPhi
 
 # Arrange data.
 EPhi.true.lim <- range(EPhi.true)
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
 noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
@@ -30,7 +30,7 @@ id <- grep("(Intercept)", names(tmp), invert = TRUE)
 b.true <- convert.b.to.bVec(Eb)
 # b.true[id] <- b.true[id] * phi.scale
  b.true[id] <- b.true[id] * mean(EPhi) 
-b.true <- convert.bVec.to.b(b.true, aa.list)
+b.true <- convert.bVec.to.b(b.true, aa.names)
 true.roc <- prop.model.roc(b.true, EPhi.true.lim)
 
 
@@ -50,7 +50,7 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  b.PM <- convert.bVec.to.b(b.PM, aa.list)
+  b.PM <- convert.bVec.to.b(b.PM, aa.names)
   predict.roc <- prop.model.roc(b.PM, EPhi.true.lim)
 
   # Plot bin and model for measurements.
@@ -68,10 +68,10 @@ for(i.case in case.names){
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
     # Plot results.
-    for(i.aa in 1:length(aa.list)){
+    for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi.true[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = aa.list[i.aa])
+      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
 
       u.codon <- sort(unique(tmp.obs$codon))
       color <- cubfits:::get.color(u.codon)

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -35,9 +35,9 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 label <- NULL
-for(i.aa in aa.list){
+for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.aa, tmp, sep = "."))
@@ -50,7 +50,12 @@ id.slop <- grep("(Intercept)", all.names, invert = TRUE)
 
 scale.EPhi <- mean(EPhi)
 bInit[id.slop] <- bInit[id.slop] * scale.EPhi
-bInit.negsel <- get.negsel(bInit, id.slop, aa.list, label)
+bInit.negsel <- get.negsel(bInit, id.slop, aa.names, label)
+
+# True SCU.
+EPhi <- EPhi / scale.EPhi
+Eb <- convert.bVec.to.b(bInit, aa.names)
+SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 
 # Plot by case.
@@ -143,25 +148,21 @@ for(i.case in case.names){
            col = c("#0000FF50", "#FF000050"),
            cex = 0.8)
 
-    # Plot mediadn Phi vs mean Phi.
-    medPhi <- apply(phi.mcmc, 2, median)
-    meanPhi <- apply(phi.mcmc, 2, mean)
-    plotprxy(meanPhi, medPhi,
+    # Plot SCU
+    b <- convert.bVec.to.b(b.PM, aa.names)
+    SCU <- calc_scu_values(b, y.list, phi.PM)
+
+    plotprxy(SCU.true$SCU, SCU$SCU,
+             xlab = "True SCU (log10)",
+             ylab = "Predicted SCU (log10)",
+             main = "SCU (Posterior Mean)")
+
+    # Plot mSCU
+    plotprxy(SCU.true$mSCU, SCU$mSCU,
              log10.x = FALSE, log10.y = FALSE,
-             xlab = "Mean of Phi", ylab = "Median of Phi",
-             main = "By Iteration")
-
-    # Plot trace of EPhi.
-    trace <- lapply(1:length(ret$phi.Mat), function(i){ mean(ret$phi.Mat[[i]]) })
-    trace <- do.call("c", trace)
-
-    xlim <- c(1, length(ret$phi.Mat))
-    ylim <- range(c(range(trace), 1))
-    plot(NULL, NULL, xlim = xlim, ylim = ylim,
-         xlab = "Iterations", ylab = "Mean of EPhi",
-         main = "Trace of mean expression")
-    lines(x = 1:length(ret$phi.Mat), y = trace)
-    abline(h = 1, col = 2)
+             xlab = "True mSCU",
+             ylab = "Predicted mSCU",
+             main = "mSCU (Posterior mean)")
 
 
 # New page.
@@ -275,6 +276,26 @@ for(i.case in case.names){
 
 # New page.
     new.page(workflow.name, i.case, model)
+
+    # Plot mediadn Phi vs mean Phi.
+    medPhi <- apply(phi.mcmc, 2, median)
+    meanPhi <- apply(phi.mcmc, 2, mean)
+    plotprxy(meanPhi, medPhi,
+             log10.x = FALSE, log10.y = FALSE,
+             xlab = "Mean of Phi", ylab = "Median of Phi",
+             main = "By Iteration")
+
+    # Plot trace of EPhi.
+    trace <- lapply(1:length(ret$phi.Mat), function(i){ mean(ret$phi.Mat[[i]]) })
+    trace <- do.call("c", trace)
+
+    xlim <- c(1, length(ret$phi.Mat))
+    ylim <- range(c(range(trace), 1))
+    plot(NULL, NULL, xlim = xlim, ylim = ylim,
+         xlab = "Iterations", ylab = "Mean of EPhi",
+         main = "Trace of mean expression")
+    lines(x = 1:length(ret$phi.Mat), y = trace)
+    abline(h = 1, col = 2)
 
     # Get pacf.
     b.pacf <- NULL

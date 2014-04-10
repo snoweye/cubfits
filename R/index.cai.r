@@ -42,15 +42,15 @@ calc_cai_values <- function(y, y.list, w = NULL){
 
   # Comput CAI.
   log.w <- log(new.w)
-  cai.values <- do.call("c", lapply(1:length(y.list),
+  CAI.values <- do.call("c", lapply(1:length(y.list),
                                function(i.seq){
                                  tmp <- do.call("c", y.list[[i.seq]])
                                  exp(log.w %*% tmp / sum(tmp))
                                }))
-  names(cai.values) <- names(y.list)
+  names(CAI.values) <- names(y.list)
 
   # Return.
-  ret <- list(cai = cai.values, w = new.w)
+  ret <- list(CAI = CAI.values, w = new.w)
   ret
 } # End of calc_cai_values().
 

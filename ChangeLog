@@ -14,6 +14,7 @@
 
 2014-02-20:
   * Add Yassour 2009 dataset and man page.
+  * Add ASL related functions and man page.
 
 2014-02-19:
   * Remove MG's method since it did not work.

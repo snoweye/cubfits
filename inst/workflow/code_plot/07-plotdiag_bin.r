@@ -1,6 +1,6 @@
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -10,7 +10,7 @@ load(fn.in)
 
 # Arrange data.
 phi.Obs.lim <- range(phi.Obs)
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
 
 for(i.case in case.names){
@@ -30,7 +30,7 @@ for(i.case in case.names){
 
   # To adjust to similar range of phi.Obs.
   ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
-  b.PM <- convert.bVec.to.b(b.PM, aa.list)
+  b.PM <- convert.bVec.to.b(b.PM, aa.names)
   predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
 
   # Plot bin and model for measurements.
@@ -47,10 +47,10 @@ for(i.case in case.names){
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
     # Plot results.
-    for(i.aa in 1:length(aa.list)){
+    for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.phi.Obs[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = aa.list[i.aa])
+      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
     }
     model.label <- c("MCMC Posterior")
     model.lty <- 1
@@ -73,10 +73,10 @@ for(i.case in case.names){
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
     # Plot results.
-    for(i.aa in 1:length(aa.list)){
+    for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = aa.list[i.aa])
+      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
     }
     model.label <- c("MCMC Posterior")
     model.lty <- 1

@@ -108,26 +108,26 @@ convert.b.to.bVec <- function(b){
   do.call("c", lapply(b, function(x) x$coefficients))
 } # End of convert.b.to.bVec().
 
-convert.bVec.to.b <- function(bVec, aa.list, model = .CF.CT$model[1]){
+convert.bVec.to.b <- function(bVec, aa.names, model = .CF.CT$model[1]){
   n.coef <- get.my.ncoef(model)
   coef.names <- get.my.coefnames(model)
 
-  # Check b and aa.list.
-  aa.list <- aa.list[!(aa.list %in% c("M", "W", "X"))] # single and stop codons
-  if("S" %in% aa.list){
-    synonymous.codon <- .CF.GV$synonymous.codon.split[aa.list]
+  # Check b and aa.names.
+  aa.names <- aa.names[!(aa.names %in% c("M", "W", "X"))] # single and stop codons
+  if("S" %in% aa.names){
+    synonymous.codon <- .CF.GV$synonymous.codon.split[aa.names]
   } else{
-    synonymous.codon <- .CF.GV$synonymous.codon[aa.list]
+    synonymous.codon <- .CF.GV$synonymous.codon[aa.names]
   }
   if(length(bVec) !=
      sum(do.call("c", lapply(synonymous.codon, length)) - 1) * n.coef){
-    stop("length(bVec) is not corresponding to aa.list.")
+    stop("length(bVec) is not corresponding to aa.names.")
   }
 
   # Compute mutation and elong
   bInit <- list()
   id <- 0
-  for(aa in aa.list){
+  for(aa in aa.names){
     n.synonymous.codon <- length(synonymous.codon[[aa]]) - 1
     tl.params <- n.coef * n.synonymous.codon
 

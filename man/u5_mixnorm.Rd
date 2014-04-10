@@ -1,9 +1,9 @@
-\name{Mixture Normal Optimization}
+\name{Mixed Normal Optimization}
 \alias{mixnorm.optim}
 \alias{dmixnorm}
-\title{Mixture Normal Optimization}
+\title{Mixed Normal Optimization}
 \description{
-  Constrained optimization for mixture normal in 1D and typically for 2
+  Constrained optimization for mixed normal in 1D and typically for 2
   components.
 }
 \usage{
@@ -25,13 +25,17 @@
   the gene expression data \code{X} (usually in log scale)
   for \code{N} genes and \code{R} replicates (\code{NA} is allowed).
   The likelihood of each gene expression
-  is a \code{K = 2} component mixture normal distribution
+  is a \code{K = 2} component mixed normal distribution
   (\eqn{\sum_k p_k N(mu_k, \sigma_k^2 + \sigma_e^2)}{
         sum_k p_k N(mu_k, sigma_k^2 + sigma_e^2)})
   with measurement errors of the replicates
   (\eqn{N(0, \sigma_e^2)}{N(0, sigma_e^2)}).
 
-  The function \code{dmixnorm()} computes the density of the mixture
+  The \code{sigma_k^2} is as the error of random component and
+  the \code{sigma_e^2} is as the error of fixed component. Both
+  are within a mixture model of two normal distributions.
+
+  The function \code{dmixnorm()} computes the density of the mixed
   normal distribution.
 
   \code{param} is a parameter list and contains five elements:
@@ -47,6 +51,10 @@
   parameters, and \code{optim.ret} is the original returns of
   \code{constrOptim()}.
 }
+\note{
+  This function is limited for small \code{K}. An equivalent EM algorithm
+  should be done in a more stable way for large \code{K}.
+}
 \references{
   \url{http://www.tiem.utk.edu/~mikeg/}
 }
@@ -54,7 +62,8 @@
   Wei-Chen Chen \email{wccsnow@gmail.com}.
 }
 \seealso{
-  \code{\link{print.mixnorm}()} and \code{\link{simu.mixnorm}()}.
+  \code{\link{print.mixnorm}()},
+  \code{\link{simu.mixnorm}()}.
 }
 \examples{
 \dontrun{

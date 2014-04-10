@@ -1,15 +1,15 @@
 # Wrapper of find.prop.model.roc().
 prop.model.roc <- function(bInit, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
     nclass = 40, x.log10 = TRUE){
-  aa.list <- names(bInit)
-  if("Z" %in% aa.list){
-    synonymous.codon <- .CF.GV$synonymous.codon.split[aa.list]
+  aa.names <- names(bInit)
+  if("Z" %in% aa.names){
+    synonymous.codon <- .CF.GV$synonymous.codon.split[aa.names]
   } else{
-    synonymous.codon <- .CF.GV$synonymous.codon[aa.list]
+    synonymous.codon <- .CF.GV$synonymous.codon[aa.names]
   }
 
   # Compute mutation and elong
-  for(i.aa in aa.list){
+  for(i.aa in aa.names){
     bInit[[i.aa]]$u.codon <- synonymous.codon[[i.aa]]
   }
 

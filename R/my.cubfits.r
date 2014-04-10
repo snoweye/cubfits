@@ -38,7 +38,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   if(abs(mean(phi.Obs) - 1) > 1e-8 && scale.Phi == "mean_one"){
     .cubfitsEnv$my.stop(paste("mean(phi.Obs) =", mean(phi.Obs)))
   }
-  if(! is.null(phi.Init)){
+  if(!is.null(phi.Init)){
     if(!(all(is.finite(phi.Init)) && all(phi.Init > 0))){
       .cubfitsEnv$my.stop("phi.Init is invalid.")
     }

@@ -80,6 +80,8 @@ Rscript ${CODE_PLOT_PATH}/s6-plotsingle_prxy_true.r > \
           ${ALL_OUT}/log/s6-plotsingle_prxy_true 2>&1 &
 Rscript ${CODE_PLOT_PATH}/s6-plotsingle_prxy_true_wci.r > \
           ${ALL_OUT}/log/s6-plotsingle_prxy_true_wci 2>&1 &
+Rscript ${CODE_PLOT_PATH}/s6-plotsingle_scu_mscu.r > \
+          ${ALL_OUT}/log/s6-plotsingle_scu_mscu 2>&1 &
 
 # Plotting for matched cases only.
 Rscript ${CODE_PLOT_PATH}/m6-plot_b_corr.r > \

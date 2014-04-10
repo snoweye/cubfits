@@ -21,9 +21,9 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 label <- NULL
-for(i.aa in aa.list){
+for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.aa, tmp, sep = "."))

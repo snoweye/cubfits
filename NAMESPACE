@@ -23,6 +23,8 @@ export(
   "scuo.random",
 # CAI
   "calc_cai_values",
+# SCU
+  "calc_scu_values",
 # Simulation
   "simu.orf",
   "simu.phi.Obs",
@@ -43,6 +45,16 @@ export(
   "write.seq",
   "read.phi.df",
   "write.phi.df",
+# ASL
+  "dasl",
+  "dasla",
+  "pasl",
+  "pasla",
+  "qasl",
+  "qasla",
+  "rasl",
+  "rasla",
+  "asl.optim",
 # Workflow
   "get.workflow",
   "cp.workflow",

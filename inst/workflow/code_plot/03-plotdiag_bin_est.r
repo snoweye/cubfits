@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -14,7 +14,7 @@ load(fn.in)
 
 # Arrange data.
 phi.Obs.lim <- range(phi.Obs)
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
 predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
@@ -31,10 +31,10 @@ pdf(fn.out, width = 12, height = 11)
   par(mar = c(5.1, 4.1, 4.1, 2.1))
 
   # Plot results.
-  for(i.aa in 1:length(aa.list)){
+  for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.phi.Obs[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
-    plotbin(tmp.obs, tmp.roc, main = aa.list[i.aa], lty = 2)
+    plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa], lty = 2)
   }
   model.label <- c("Logistic Regression")
   model.lty <- 2

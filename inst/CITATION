@@ -21,7 +21,6 @@ citEntry(
   author = personList(as.person("Wei-Chen Chen"),
                       as.person("Russell Zaretzki"),
                       as.person("William Howell"),
-                      as.person("Preston Hewgley"),
                       as.person("Drew Schmidt"),
                       as.person("Michael Gilchrist")
                      ),

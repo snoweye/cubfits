@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -25,9 +25,9 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 label <- NULL
-for(i.aa in aa.list){
+for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.aa, tmp, sep = "."))
@@ -40,7 +40,7 @@ scale.EPhi <- mean(EPhi)
 bInit[id.slop] <- bInit[id.slop] * scale.EPhi
 
 id.slop <- grep("(Intercept)", all.names, invert = TRUE)
-bInit.negsel <- get.negsel(bInit, id.slop, aa.list, label)
+bInit.negsel <- get.negsel(bInit, id.slop, aa.names, label)
 
 
 # Plot by case.

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
 source("00-set_env.r")
@@ -13,9 +13,9 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 b.label <- NULL
-for(i.aa in aa.list){
+for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   b.label <- c(b.label, paste(i.aa, tmp, sep = "."))
@@ -71,7 +71,7 @@ all.jobs <- function(i.job){
   # Negative selection.
   all.names <- rownames(b.mcmc)
   id.slop <- grep("(Intercept)", all.names, invert = TRUE)
-  ret <- get.negsel(b.PM, id.slop, aa.list, b.label, b.ci.PM = b.ci.PM)
+  ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label
@@ -122,7 +122,7 @@ all.jobs <- function(i.job){
   phi.CI.log10 <- t(apply(phi.mcmc.log10, 1, quantile, prob = ci.prob))
 
   # Negative selection.
-  ret <- get.negsel(b.PM, id.slop, aa.list, b.label, b.ci.PM = b.ci.PM)
+  ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label

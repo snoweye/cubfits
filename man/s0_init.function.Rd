@@ -18,7 +18,7 @@
 }
 \arguments{
   \item{model}{main fitted model.}
-  \item{type.B}{proposal method for mutations and selections.}
+  \item{type.B}{proposal method for mutation and selection.}
   \item{type.p}{proposal method for hyper-parameters.}
   \item{type.Phi}{proposal method for Phi (true expression values).}
   \item{model.Phi}{prior of Phi.}

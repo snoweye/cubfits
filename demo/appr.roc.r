@@ -1,8 +1,7 @@
-rm(list = ls())
 start.time <- proc.time()
 
 # Initial
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 set.seed(1234)
 
 # Get xInit.appr

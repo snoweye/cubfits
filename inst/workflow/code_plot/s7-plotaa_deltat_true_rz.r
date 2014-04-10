@@ -24,9 +24,9 @@ fn.in <- paste(prefix$data, "/pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 label <- NULL
-for(i.codon in aa.list){
+for(i.codon in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.codon]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.codon, tmp, sep = "."))
@@ -37,7 +37,7 @@ all.names <- names(bInit)
 id.deltat <- grep("(Intercept)", all.names, invert = TRUE)
 
 ### Convert true to negsel and delta.t only.
-tmp <- get.negsel(bInit, id.deltat, aa.list, label)
+tmp <- get.negsel(bInit, id.deltat, aa.names, label)
 bInit <- tmp$b.negsel.PM
 label.negsel.true <- tmp$b.negsel.label
 
@@ -55,7 +55,7 @@ for(i.case in case.names){
   ### Convert unscaled result to negsel and delta.t only.
   tmp <- lapply(1:ncol(b.mcmc),
            function(i.iter){
-             tmp <- get.negsel(b.mcmc[, i.iter], id.deltat, aa.list, label)
+             tmp <- get.negsel(b.mcmc[, i.iter], id.deltat, aa.names, label)
              tmp$b.negsel.PM
            })
   b.mcmc <- do.call("cbind", tmp)
@@ -80,7 +80,7 @@ for(i.case in case.names){
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
-    for(i.aa in aa.list){
+    for(i.aa in aa.names){
       id.label <- grep(paste("^", i.aa, "\\.", sep = ""), label)
       tl.codon <- length(id.label)
 

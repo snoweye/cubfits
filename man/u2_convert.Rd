@@ -31,7 +31,7 @@
   dna.up2low(x)
 
   convert.b.to.bVec(b)
-  convert.bVec.to.b(bVec, aa.list, model = .CF.CT$model[1])
+  convert.bVec.to.b(bVec, aa.names, model = .CF.CT$model[1])
 }
 \arguments{
   \item{reu13.df}{a list of \code{\link{reu13.df}} data frames
@@ -44,7 +44,7 @@
 
   \item{b}{a \code{\link{b}} object.}
   \item{bVec}{a \code{\link{bVec}} object.}
-  \item{aa.list}{a vector contains amino acid names for analysis.}
+  \item{aa.names}{a vector contains amino acid names for analysis.}
   \item{model}{model fitted.}
 }
 \details{

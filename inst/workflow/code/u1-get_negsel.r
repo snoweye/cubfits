@@ -1,12 +1,12 @@
 ### Convert delta t to negative selection.
 
-get.negsel <- function(b.PM, id.slop, aa.list, b.label, b.ci.PM = NULL){
+get.negsel <- function(b.PM, id.slop, aa.names, b.label, b.ci.PM = NULL){
   b.negsel.PM <- b.PM[id.slop]
   if(!is.null(b.ci.PM)){
     b.negsel.ci.PM <- matrix(b.ci.PM[id.slop,], ncol = 2)
   }
   b.negsel.label <- b.label
-  for(i.aa in aa.list){
+  for(i.aa in aa.names){
     id.aa <- grep(paste("^", i.aa, "\\.", sep = ""), b.label)
 
     if(any(b.negsel.PM[id.aa] > 0)){

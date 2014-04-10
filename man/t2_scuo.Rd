@@ -32,7 +32,8 @@
   Drew Schmidt.
 }
 \seealso{
-  \code{\link{scuo.random}()}.
+  \code{\link{scuo.random}()}, \code{\link{calc_cai_values}()},
+  \code{\link{calc_scu_values}()}.
 }
 \examples{
 \dontrun{
@@ -40,7 +41,7 @@ library(cubfits)
 
 y.scuo <- convert.y.to.scuo(ex.train$y)
 SCUO <- calc_scuo_values(y.scuo)$SCUO
-plotprxy(ex.train$phi.Obs, SCUO)
+plotprxy(ex.train$phi.Obs, SCUO, ylab = "SCUO (log10)")
 }
 }
 \keyword{tool}

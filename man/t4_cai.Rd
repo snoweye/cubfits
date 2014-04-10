@@ -22,8 +22,8 @@
   If the input \code{w} is \code{NULL}, then empirical values are computed.
 }
 \value{
-  A list with two named elements \code{cai} and \code{w} are returned
-  where \code{cai} are CAI of input sequences (\code{y} and \code{y.list})
+  A list with two named elements \code{CAI} and \code{w} are returned
+  where \code{CAI} are CAI of input sequences (\code{y} and \code{y.list})
   and \code{w} are the relative frequencey used to computed those CAI's.
 }
 \references{
@@ -36,19 +36,22 @@
   Wei-Chen Chen \email{wccsnow@gmail.com}.
 }
 \seealso{
-  \code{\link{calc_scuo_values}()}.
+  \code{\link{calc_scuo_values}()},
+  \code{\link{calc_scu_values}()}.
 }
 \examples{
 \dontrun{
-library(cubfits)
+rm(list = ls())
+library(cubfits, quietly = TRUE)
 
 y <- ex.train$y
 y.list <- convert.y.to.list(y)
-CAI <- calc_cai_values(y, y.list)$cai
-plotprxy(ex.train$phi.Obs, CAI)
+CAI <- calc_cai_values(y, y.list)$CAI
+plot(CAI, log10(ex.train$phi.Obs), main = "Expression vs CAI",
+     xlab = "CAI", ylab = "Expression (log10)")
 
 ### Verify with the seqinr example.
-suppressMessages(library(seqinr, quietly = TRUE))
+library(seqinr, quietly = TRUE)
 inputdatfile <- system.file("sequences/input.dat", package = "seqinr")
 input <- read.fasta(file = inputdatfile, forceDNAtolower = FALSE)
 names(input)[65] <- paste(names(input)[65], ".1", sep = "") # name duplicated.
@@ -69,13 +72,13 @@ for(i in 1:64){
     w[i] <- ret$w[id]
   }
 }
-cai.res <- sapply(input, cai, w = w)
+CAI.res <- sapply(input, seqinr::cai, w = w)
 
 ### Plot.
-plot(cai.res, ret$cai,
+plot(CAI.res, ret$CAI,
      main = "Comparison of seqinR and cubfits results",
      xlab = "CAI from seqinR", ylab = "CAI from cubfits", las = 1)
-abline(c(0,1))
+abline(c(0, 1))
 }
 }
 \keyword{tool}

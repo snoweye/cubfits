@@ -9,9 +9,9 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 # Get AA and synonymous codons.
-aa.list <- names(reu13.df.obs)
+aa.names <- names(reu13.df.obs)
 label <- NULL
-for(i.aa in aa.list){
+for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.aa, tmp, sep = "."))
@@ -49,7 +49,7 @@ for(i.case in case.names){
   phi.PM <- rowMeans(phi.mcmc)
 
   # Negative selection.
-  ret <- get.negsel(b.PM, b.ci.PM, id.slop, aa.list, label)
+  ret <- get.negsel(b.PM, b.ci.PM, id.slop, aa.names, label)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   label.negsel <- ret$label.negsel
@@ -90,7 +90,7 @@ for(i.case in case.names){
   phi.PM <- rowMeans(phi.mcmc)
 
   # Negative selection.
-  ret <- get.negsel(b.PM, b.ci.PM, id.slop, aa.list, label)
+  ret <- get.negsel(b.PM, b.ci.PM, id.slop, aa.names, label)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   label.negsel <- ret$label.negsel

@@ -11,7 +11,7 @@ Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        person("Students", "REU13", role = "ctb"))
 Depends: R(>= 3.0.0), methods
 Suggests: seqinr, VGAM
-Enhances: pbdMPI (>= 0.2-2), parallel
+Enhances: pbdMPI (>= 0.2-2), parallel, EMCluster
 LazyLoad: yes
 LazyData: yes
 Description: Estimating mutation and selection coefficients on synonymous
@@ -21,7 +21,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
 URL: http://www.tiem.utk.edu/~mikeg/
-Packaged: 2014-04-04 14:55:06 UTC; snoweye
+Packaged: 2014-04-10 19:58:04 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

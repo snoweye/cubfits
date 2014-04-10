@@ -1,5 +1,4 @@
-rm(list = ls())
-library(cubfits, quiet = TRUE)
+library(cubfits, quietly = TRUE)
 set.seed(1234)
 
 ### Get individual of phi.Obs.
@@ -10,7 +9,6 @@ phi.Obs.all[phi.Obs.all == 0] <- NA
 ### Get geometric mean of phi.Obs and scaling similar to Wallace (2013).
 GM <- apply(yassour[, -1], 1, function(x) exp(mean(log(x[x != 0]))))
 phi.Obs <- GM / sum(GM) * 15000
-
 
 ### Run optimization.
 X <- log(as.matrix(phi.Obs.all))
@@ -32,7 +30,7 @@ par(mfrow = c(2, 1))
 ylim <- range(c(0, d.mn, d.post.fits, d.post.appr))
 
 ### All data
-hist(X, nclass = 50, freq = FALSE, ylim = ylim,
+hist(X, nclass = 100, freq = FALSE, ylim = ylim,
      xlab = "Expression (log)", ylab = "Density",
      main = paste("Yassour (N = ", nrow(X), ", R = ", ncol(X), ")",
                   sep = ""))
@@ -44,7 +42,7 @@ legend(min(x) + 0.5, ylim[2] * 0.9, c("mixture", "fits", "appr"),
 
 ### GM averaged
 X <- log(phi.Obs)
-hist(X, nclass = 50, freq = FALSE, ylim = ylim,
+hist(X, nclass = 100, freq = FALSE, ylim = ylim,
      xlab = "Expression (log)", ylab = "Density",
      main = paste("Yassour (N = ", length(X), ", averaged)",
                   sep = ""))
@@ -53,4 +51,3 @@ lines(x = x, y = d.post.fits, col = 2, lty = 2, lwd = 1.5)
 lines(x = x, y = d.post.appr, col = 4, lty = 3, lwd = 1.5)
 legend(min(x) + 0.5, ylim[2] * 0.9, c("mixture", "fits", "appr"),
        col = c(1, 2, 4), lty = c(1, 2, 3), lwd = 1.5)
-

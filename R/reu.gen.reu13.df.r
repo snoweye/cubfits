@@ -1,6 +1,6 @@
 ### An wrapper of RUE13 functions.
 
-gen.reu13.df <- function(seq.string, phi.df = NULL, aa.list = .CF.GV$amino.acid,
+gen.reu13.df <- function(seq.string, phi.df = NULL, aa.names = .CF.GV$amino.acid,
     split.S = TRUE, drop.X = TRUE, drop.MW = TRUE){
   if(is.null(phi.df)){
     phi.df <- cbind(names(seq.string), rep(1, length(seq.string)))
@@ -8,36 +8,36 @@ gen.reu13.df <- function(seq.string, phi.df = NULL, aa.list = .CF.GV$amino.acid,
   }
 
   if(split.S){
-    if("S" %in% aa.list){ 
-      if(! "Z" %in% aa.list){
-        aa.list <- c(aa.list, "Z")
+    if("S" %in% aa.names){ 
+      if(! "Z" %in% aa.names){
+        aa.names <- c(aa.names, "Z")
       }
     } else{
       split.S <- FALSE
     }
   } else{
-    if(all(c("S", "Z") %in% aa.list)){
+    if(all(c("S", "Z") %in% aa.names)){
         split.S <- TRUE
     }
   }
 
   if(drop.X){
-    aa.list <- aa.list[aa.list != "X"]
+    aa.names <- aa.names[aa.names != "X"]
   }
 
   if(drop.MW){
-    aa.list <- aa.list[!(aa.list %in% c("M", "W"))]
+    aa.names <- aa.names[!(aa.names %in% c("M", "W"))]
   }
 
-  aa.list <- sort(aa.list)
-  ret <- build.reu13.df(seq.string, phi.df, aa.list, split.S = split.S)
+  aa.names <- sort(aa.names)
+  ret <- build.reu13.df(seq.string, phi.df, aa.names, split.S = split.S)
 
   ret <- rearrange.reu13.df(ret)
   ret
 } # End of gen.reu13.df().
 
 
-build.reu13.df <- function(seq.string, phi.df, aa.list, split.S = split.S){
+build.reu13.df <- function(seq.string, phi.df, aa.names, split.S = split.S){
   # Subset genes which are both in common.
   names.seq <- as.character(names(seq.string))
   names.ORF <- as.character(phi.df[, 1])
@@ -50,13 +50,13 @@ build.reu13.df <- function(seq.string, phi.df, aa.list, split.S = split.S){
   # tmp.phi <- merge(names.seq, phi.df, all.x = TRUE)
 
   # Find AA position for all genes.
-  ret <- lapply(aa.list, build.aa.df,
+  ret <- lapply(aa.names, build.aa.df,
                 seq.string = seq.string, phi.df = phi.df, split.S = split.S)
   # ret <- list()
-  # for(i.aa in 1:length(aa.list)){
-  #   ret[[i.aa]] <- build.aa.df(aa.list[i.aa], seq.string, phi.df, split.S)
+  # for(i.aa in 1:length(aa.names)){
+  #   ret[[i.aa]] <- build.aa.df(aa.names[i.aa], seq.string, phi.df, split.S)
   # }
-  names(ret) <- aa.list
+  names(ret) <- aa.names
 
   ret
 } # End of build.reu13.df()
@@ -69,7 +69,7 @@ build.aa.df <- function(aa, seq.string, phi.df, split.S = TRUE){
     synonymous.codon <- .CF.GV$synonymous.codon[[aa]]
   }
 
-  # Build all AA data.frame from aa.list.
+  # Build all AA data.frame from aa.names.
   # func.get.seq.df <- function(i.gene){
   #   id <- which(seq.string[[i.gene]] %in% synonymous.codon)
   #   n.match <- length(id)

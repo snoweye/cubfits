@@ -64,7 +64,7 @@ library(cubfits)
 
 seq.data <- read.seq(get.expath("seq_200.fasta"))
 phi.df <- read.phi.df(get.expath("phi_200.tsv"))
-aa.list <- c("A", "C", "D")
+aa.names <- c("A", "C", "D")
 
 # Read in from FASTA file.
 seq.string <- convert.seq.data.to.string(seq.data)
