@@ -23,6 +23,7 @@ prefix$plot.match <- paste(prefix$all.out, "plot/match/", sep = "")
 prefix$plot.single <- paste(prefix$all.out, "plot/single/", sep = "")
 prefix$plot.trace <- paste(prefix$all.out, "plot/trace/", sep = "")
 prefix$plot.AA <- paste(prefix$all.out, "plot/AA/", sep = "")
+prefix$plot.multi <- paste(prefix$all.out, "plot/multi/", sep = "")
 
 prefix$code <- paste(cubfits::get.workflow("workflow/code/"), "/", sep = "")
 prefix$code.plot <- paste(cubfits::get.workflow("workflow/code_plot/"), "/", sep = "")

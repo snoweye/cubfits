@@ -127,11 +127,8 @@ for(i.case in case.names){
          xlab = "Production Rate (log10)",
          main = "Expression (Posterior Mean)")
     plot(p.2, col = "#FF000050", xlim = xlim, ylim = ylim, add = TRUE)
-    legend(xlim[1], ylim[2],
-           c("True", "Predicted"),
-           pch = c(15, 15),
-           col = c("#0000FF50", "#FF000050"),
-           cex = 0.8)
+    legend(xlim[1], ylim[2], c("True", "Predicted"),
+           pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
     # Overlap two histograms.
     p.1 <- hist(log10(EPhi / mean(EPhi)), nclass = 50, plot = FALSE)
@@ -142,11 +139,8 @@ for(i.case in case.names){
          xlab = "Production Rate (log10)",
          main = "Expression (Posterior Median)")
     plot(p.2, col = "#FF000050", xlim = xlim, ylim = ylim, add = TRUE)
-    legend(xlim[1], ylim[2],
-           c("True", "Predicted"),
-           pch = c(15, 15),
-           col = c("#0000FF50", "#FF000050"),
-           cex = 0.8)
+    legend(xlim[1], ylim[2], c("True", "Predicted"),
+           pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
     # Plot SCU
     b <- convert.bVec.to.b(b.PM, aa.names)
@@ -162,7 +156,7 @@ for(i.case in case.names){
              log10.x = FALSE, log10.y = FALSE,
              xlab = "True mSCU",
              ylab = "Predicted mSCU",
-             main = "mSCU (Posterior mean)")
+             main = "mSCU (Posterior Mean)")
 
 
 # New page.
@@ -231,22 +225,12 @@ for(i.case in case.names){
     # Add qqplot.
     x <- log10(EPhi / mean(EPhi))
     y <- log10(phi.PM / mean(phi.PM))
+    xlim <- ylim <- range(c(x, y))
     qqplot(x, y,
            xlim = xlim, ylim = ylim,
            xlab = "True Production Rate (log10)",
            ylab = "Predicted Production Rate (log10)",
            main = "Q-Q (Posterior Mean)",
-           pch = 20, cex = 0.6)
-    abline(a = 0, b = 1, col = 4, lty = 2)
-
-    # Add qqplot.
-    x <- log10(EPhi / mean(EPhi))
-    y <- log10(phi.MED / mean(phi.MED))
-    qqplot(x, y,
-           xlim = xlim, ylim = ylim,
-           xlab = "True Production Rate (log10)",
-           ylab = "Predicted Production Rate (log10)",
-           main = "Q-Q (Posterior Median)",
            pch = 20, cex = 0.6)
     abline(a = 0, b = 1, col = 4, lty = 2)
 
@@ -262,9 +246,22 @@ for(i.case in case.names){
            pch = 20, cex = 0.6)
     abline(a = 0, b = 1, col = 4, lty = 2)
 
+    # Add qqplot.
+    x <- log10(EPhi / mean(EPhi))
+    y <- log10(phi.MED / mean(phi.MED))
+    xlim <- ylim <- range(c(x, y))
+    qqplot(x, y,
+           xlim = xlim, ylim = ylim,
+           xlab = "True Production Rate (log10)",
+           ylab = "Predicted Production Rate (log10)",
+           main = "Q-Q (Posterior Median)",
+           pch = 20, cex = 0.6)
+    abline(a = 0, b = 1, col = 4, lty = 2)
+
     # Add qqplot for non-log.
     x <- EPhi / mean(EPhi)
     y <- phi.MED / mean(phi.MED)
+    xlim <- ylim <- range(c(x, y))
     qqplot(x, y,
            xlim = xlim, ylim = ylim,
            xlab = "True Production Rate",

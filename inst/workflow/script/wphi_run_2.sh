@@ -71,3 +71,6 @@ Rscript ${CODE_PLOT_PATH}/m6-plot_prxy.r > \
 Rscript ${CODE_PLOT_PATH}/m6-plot_prxy_wci.r > \
           ${ALL_OUT}/log/m6-plot_prxy_wci 2>&1 &
 
+# Plotting for multiple figures.
+Rscript ${CODE_PLOT_PATH}/08-plotmulti_wophi_scuo_wphi_pm.r > \
+          ${ALL_OUT}/log/08-plotmulti_wophi_scuo_wphi_pmtrue 2>&1 &
