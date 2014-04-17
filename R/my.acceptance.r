@@ -1,21 +1,19 @@
 # Inital global storages for acceptance rate.
-my.set.acceptance <- function(nSave, n.aa, G = NULL, G.pred = NULL){
+my.set.acceptance <- function(nSave, n.aa, n.G = NULL, n.G.pred = NULL){
   if(.CF.DP$trace.acceptance){
-    .cubfitsEnv$acceptance <- list(B = list(), phi = list(), phi.pred = list())
+    .cubfitsEnv$acceptance <- list()
 
     # For acceptance rate in S/M.
-    for(i.aa in 1:n.aa){
-      .cubfitsEnv$acceptance$B[[i.aa]] <- 0L 
-    }
+    .cubfitsEnv$acceptance$b <- rep(0L, n.aa)
 
     # For acceptance rate in training.
-    if(!is.null(G)){
-      .cubfitsEnv$acceptance$phi <- list(rep(0L, G))
+    if(!is.null(n.G)){
+      .cubfitsEnv$acceptance$phi <- rep(0L, n.G)
     }
 
     # For acceptance rate in prediction.
-    if(!is.null(G.pred)){
-      .cubfitsEnv$acceptance$phi.pred <- list(rep(0L, G.pred))
+    if(!is.null(n.G.pred)){
+      .cubfitsEnv$acceptance$phi.pred <- rep(0L, n.G.pred)
     }
   }
 
@@ -24,10 +22,10 @@ my.set.acceptance <- function(nSave, n.aa, G = NULL, G.pred = NULL){
 
 
 # Updating function to the global storages based on the variable name.
-my.update.acceptance <- function(var.name, accept, i = 1){
+my.update.acceptance <- function(var.name, accept){
   if(.CF.DP$trace.acceptance){
-    .cubfitsEnv$acceptance[[var.name]][[i]] <-
-      .cubfitsEnv$acceptance[[var.name]][[i]] + accept
+    .cubfitsEnv$acceptance[[var.name]] <-
+      .cubfitsEnv$acceptance[[var.name]] + accept
   }
 
   invisible()

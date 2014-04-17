@@ -8,7 +8,8 @@
 \usage{
   cubappr(reu13.df.obs, phi.Init, y, n,
           nIter = 1000, burnin = 100,
-          pInit = NULL, bInit = NULL, initBScale = 1,
+          pInit = NULL,
+          bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
           phi.DrawScale = 1,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
@@ -25,9 +26,11 @@
   \item{burnin}{number of burn-in iterations.}
   \item{pInit}{initial values for hyper-parameters.}
   \item{bInit}{initial values for parameters \code{\link{b}}.}
-  \item{initBScale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
-  \item{phi.DrawScale}{scaling factor for adaptive MCMC and random walk chain
-                    when drawing new Phi.}
+  \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
+  \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
+                     when drawing new \code{\link{b}}.}
+  \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
+                       when drawing new Phi.}
   \item{model}{model to be fitted, currently "roc" only.}
   \item{model.Phi}{prior model for Phi, currently "lognormal".}
   \item{adaptive}{adaptive method of MCMC for proposing new \code{\link{b}} and
@@ -74,7 +77,7 @@
 \dontrun{
 library(cubfits)
 
-demo(appr.roc, 'cubfits', ask = F, echo = F)
+demo(roc.appr, 'cubfits', ask = F, echo = F)
 }
 }
 \keyword{main function}

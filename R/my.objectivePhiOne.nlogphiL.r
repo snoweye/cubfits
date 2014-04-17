@@ -8,20 +8,23 @@
 
 ### Return log likelihood of multinomial distribution + log(phi) value.
 # For ROC + NSEf model.
-my.objectivePhiOne.nlogphiL.rocnse <- function(phi, fitlist, reu13.list.g, y.g, n.g){
-  ret <- my.objectivePhiOne.nlogL.rocnse(phi, fitlist, reu13.list.g, y.g, n.g)
+my.objectivePhiOne.nlogphiL.rocnsef <- function(phi, fitlist, reu13.list.g,
+    y.g, n.g){
+  ret <- my.objectivePhiOne.nlogL.rocnsef(phi, fitlist, reu13.list.g, y.g, n.g)
   ret - log(phi)
-} # End of my.objectivePhiOne.nlogphiL.rocnse().
+} # End of my.objectivePhiOne.nlogphiL.rocnsef().
 
 # For ROC model.
-my.objectivePhiOne.nlogphiL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
+my.objectivePhiOne.nlogphiL.roc <- function(phi, fitlist, reu13.list.g, y.g,
+    n.g){
   ret <- my.objectivePhiOne.nlogL.roc(phi, fitlist, reu13.list.g, y.g, n.g)
   ret - log(phi)
 } # End of my.objectivePhiOne.nlogphiL.roc().
 
 # For NSEf model.
-my.objectivePhiOne.nlogphiL.nse <- function(phi, fitlist, reu13.list.g, y.g, n.g){
-  ret <- my.objectivePhiOne.nlogL.nse(phi, fitlist, reu13.list.g, y.g, n.g)
+my.objectivePhiOne.nlogphiL.nsef <- function(phi, fitlist, reu13.list.g, y.g,
+    n.g){
+  ret <- my.objectivePhiOne.nlogL.nsef(phi, fitlist, reu13.list.g, y.g, n.g)
   ret - log(phi)
-} # End of my.objectivePhiOne.nlogphiL.nse().
+} # End of my.objectivePhiOne.nlogphiL.nsef().
 

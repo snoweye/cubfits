@@ -38,7 +38,6 @@
     \code{.CF.CT} is main controls of models. It currently includes
     \tabular{ll}{
       \code{model}    \tab main models \cr
-      \code{type.B}   \tab proposal for log(mu) and Delta.t (\code{\link{b}}) \cr
       \code{type.p}   \tab proposal for hyper-parameters \cr
       \code{type.Phi}   \tab proposal for Phi \cr
       \code{model.Phi}  \tab prior of Phi \cr

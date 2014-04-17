@@ -1,7 +1,7 @@
 # This file contains functions generating sequences for simulation studies.
 
-simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL,
-    orf.names = NULL, model = .CF.CT$model){
+simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
+    orf.length = NULL, orf.names = NULL, model = .CF.CT$model){
   # Check n.
   if(n <= 0){
     stop("n should be a positive integer.")
@@ -57,12 +57,12 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL
   }
 
   # Check model.
-  if(model[1] == "rocnse"){
-    simu.orf.model <- simu.orf.rocnse
+  if(model[1] == "rocnsef"){
+    simu.orf.model <- simu.orf.rocnsef
   } else if(model[1] == "roc"){
     simu.orf.model <- simu.orf.roc
-  } else if(model[1] == "nse"){
-    simu.orf.model <- simu.orf.nse
+  } else if(model[1] == "nsef"){
+    simu.orf.model <- simu.orf.nsef
   } else{
     stop("model is not found.")
   }
@@ -77,7 +77,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL
 } # End of simu.orf().
 
 
-simu.orf.rocnse <- function(orf.length, bInit, phi.Obs, AA.prob){
+simu.orf.rocnsef <- function(orf.length, bInit, phi.Obs, AA.prob){
   aa <- names(bInit)
   if(length(aa) == 0){
     stop("AA names are not found.")
@@ -105,7 +105,7 @@ simu.orf.rocnse <- function(orf.length, bInit, phi.Obs, AA.prob){
 
   ret <- paste(c("ATG", ret, "TAA"), collapse = "")
   ret
-} # End of simu.orf.rocnse().
+} # End of simu.orf.rocnsef().
 
 simu.orf.roc <- function(orf.length, bInit, phi.Obs, AA.prob){
   aa <- names(bInit)
@@ -140,7 +140,7 @@ simu.orf.roc <- function(orf.length, bInit, phi.Obs, AA.prob){
   ret
 } # End of simu.orf.roc().
 
-simu.orf.nse <- function(orf.length, bInit, phi.Obs, AA.prob){
+simu.orf.nsef <- function(orf.length, bInit, phi.Obs, AA.prob){
   aa <- names(bInit)
   if(length(aa) == 0){
     stop("AA names are not found.")
@@ -168,5 +168,5 @@ simu.orf.nse <- function(orf.length, bInit, phi.Obs, AA.prob){
 
   ret <- paste(c("ATG", ret, "TAA"), collapse = "")
   ret
-} # End of simu.orf.nse().
+} # End of simu.orf.nsef().
 

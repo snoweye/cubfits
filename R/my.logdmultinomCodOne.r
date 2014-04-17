@@ -19,7 +19,7 @@ get.my.logdmultinomCodOne <- function(model){
 # assumes reference codon is LAST as in VGAM.
 
 # For ROC + NSEf model.
-my.logdmultinomCodOne.rocnse <- function(baa, phi, yaa, naa,
+my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
     vec = FALSE, reu13.df.aa = NULL){
   # Rebuild tmp.phi from x.
   ### This is an inefficient version without rearrangeing.
@@ -39,7 +39,7 @@ my.logdmultinomCodOne.rocnse <- function(baa, phi, yaa, naa,
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability) where codon count among all
-  ### synomous codons for each positon is either 0 or 1 in rocnse model.
+  ### synomous codons for each positon is either 0 or 1 in rocnsef model.
   ### This reduces to a Bernoulli distribution.
   # lp.c.all <- vector(mode = "double", length = nrow(reu13.df.aa))
   # colnames.yaa <- colnames(yaa)
@@ -57,7 +57,7 @@ my.logdmultinomCodOne.rocnse <- function(baa, phi, yaa, naa,
 
   ### Combine above both steps.
   ### Suppose the lp.vec are in correct column and row orders.
-  lp.c.raw <- .Call("lp_c_raw_rocnse", lp.vec, nrow(lp.vec), ncol(lp.vec),
+  lp.c.raw <- .Call("lp_c_raw", lp.vec, nrow(lp.vec), ncol(lp.vec),
                     reu13.df.aa$Codon.id, naa)
 
   if(vec){
@@ -65,7 +65,7 @@ my.logdmultinomCodOne.rocnse <- function(baa, phi, yaa, naa,
   } else{
     return(sum(lp.c.raw))
   }
-} # End of my.logdmultinomCodOne.rocnse
+} # End of my.logdmultinomCodOne.rocnsef
 
 # For ROC model.
 my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
@@ -94,8 +94,51 @@ my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
 } # End of my.logdmultinomCodOne.roc
 
 # For NSEf model.
-my.logdmultinomCodOne.nse <- function(baa, phi, yaa, naa, vec = FALSE,
+my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
     reu13.df.aa = NULL){
-  stop("function is not implemented.")
-} # End of my.logdmultinomCodOne.roc
+  # Rebuild tmp.phi from x.
+  ### This is an inefficient version without rearrangeing.
+  # tmp.phi <- vector(mode = "double", length = nrow(reu13.df.aa))
+  # names.phi <- names(phi)
+  # for(i.gene in 1:length(phi)){
+  #   tmp.phi[reu13.df.aa$ORF == names.phi[i.gene]] <- phi[i.gene]
+  # }
+  ### This supposes that all data are rearrangeed by name.
+  tmp.phi <- rep(phi, naa)
+
+  # Rebuild x matix in 3 columns, cbind(1, tmp.phi:Pos).
+  xm <- matrix(cbind(1, tmp.phi * reu13.df.aa$Pos), ncol = 2)
+
+  # Call Rcpp to compute log posterior probability for every codon.
+  baamat <- matrix(baa, nrow = 2, byrow = TRUE)
+  lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
+
+  ### (Codon count) * (log posterior probability) where codon count among all
+  ### synomous codons for each positon is either 0 or 1 in nsef model.
+  ### This reduces to a Bernoulli distribution.
+  # lp.c.all <- vector(mode = "double", length = nrow(reu13.df.aa))
+  # colnames.yaa <- colnames(yaa)
+  # for(i.codon in 1:ncol(lp.vec)){
+  #   id <- reu13.df.aa$Codon == colnames.yaa[i.codon]
+  #   lp.c.all[id] <- lp.vec[id, i.codon]
+  # }
+
+  ### log posterior for each gene conditional on the amino acid.
+  # names.phi <- names(phi)
+  # lp.c.raw <- vector(mode = "double", length = length(phi))
+  # for(i.gene in 1:length(phi)){
+  #   lp.c.raw[i.gene] <- sum(lp.c.all[reu13.df.aa$ORF == names.phi[i.gene]])
+  # }
+
+  ### Combine above both steps.
+  ### Suppose the lp.vec are in correct column and row orders.
+  lp.c.raw <- .Call("lp_c_raw", lp.vec, nrow(lp.vec), ncol(lp.vec),
+                    reu13.df.aa$Codon.id, naa)
+
+  if(vec){
+    return(lp.c.raw)
+  } else{
+    return(sum(lp.c.raw))
+  }
+} # End of my.logdmultinomCodOne.nsef
 

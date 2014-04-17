@@ -15,15 +15,17 @@ my.drawPhiConditionalAll <- function(phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
     reu13.df = NULL){
   # Propose new phi.
   prop <- .cubfitsEnv$my.proposePhiAll(phi.Curr1, phi.DrawScale = phi.DrawScale,
-                                     phi.DrawScale.prev = phi.DrawScale.prev)
+                                       phi.DrawScale.prev = phi.DrawScale.prev)
 
   # Calculate acceptance prob.
-  lpCurr <- .cubfitsEnv$my.logPosteriorAll(phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
-                                           mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
-                                           reu13.df = reu13.df)
-  lpProp <- .cubfitsEnv$my.logPosteriorAll(prop$phi.Prop, phi.Obs, y, n, b, sigmaWsq,
-                                           mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
-                                           reu13.df = reu13.df)
+  lpCurr <- .cubfitsEnv$my.logPosteriorAll(
+              phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
+              mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
+              reu13.df = reu13.df)
+  lpProp <- .cubfitsEnv$my.logPosteriorAll(
+              prop$phi.Prop, phi.Obs, y, n, b, sigmaWsq,
+              mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
+              reu13.df = reu13.df)
   lpr <- lpProp - lpCurr
   logAcceptProb <- lpr - prop$lir
 
@@ -38,8 +40,6 @@ my.drawPhiConditionalAll <- function(phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
   my.update.adaptive("phi", accept)
     
   # Return.
-  # ret <- list(phi.New = phi.New, lpr = lpr, lir = prop$lir,
-  #             prop = prop$phi.Prop, lpProp = lpProp)
   ret <- list(phi.New = phi.New)
 
   ret

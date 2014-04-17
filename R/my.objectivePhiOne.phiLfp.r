@@ -9,12 +9,12 @@
 
 ### Return x * Likelihood(phi) * flat prior
 # For ROC + NSEf model.
-my.objectivePhiOne.xLfp.rocnse <- function(phi, fitlist, reu13.list.g, y.g, n.g,
-    add.llv.g = 0.0){
-  ret <- my.objectivePhiOne.nlogL.rocnse(phi, fitlist, reu13.list.g, y.g, n.g)
+my.objectivePhiOne.xLfp.rocnsef <- function(phi, fitlist, reu13.list.g, y.g,
+    n.g, add.llv.g = 0.0){
+  ret <- my.objectivePhiOne.nlogL.rocnsef(phi, fitlist, reu13.list.g, y.g, n.g)
   ret <- exp(-ret + log(phi) + add.llv.g)
   ret
-} # End of my.objectivePhiOne.xLfp.rocnse().
+} # End of my.objectivePhiOne.xLfp.rocnsef().
 
 # For ROC model.
 my.objectivePhiOne.xLfp.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g,
@@ -25,10 +25,10 @@ my.objectivePhiOne.xLfp.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g,
 } # End of my.objectivePhiOne.xLfp.roc().
 
 # For NSEf model.
-my.objectivePhiOne.xLfp.nse <- function(phi, fitlist, reu13.list.g, y.g, n.g,
+my.objectivePhiOne.xLfp.nsef <- function(phi, fitlist, reu13.list.g, y.g, n.g,
     add.llv.g = 0.0){
-  ret <- my.objectivePhiOne.nlogL.nse(phi, fitlist, reu13.list.g, y.g, n.g)
+  ret <- my.objectivePhiOne.nlogL.nsef(phi, fitlist, reu13.list.g, y.g, n.g)
   ret <- exp(-ret + log(phi) + add.llv.g)
   ret
-} # End of my.objectivePhiOne.xLfp.nse().
+} # End of my.objectivePhiOne.xLfp.nsef().
 

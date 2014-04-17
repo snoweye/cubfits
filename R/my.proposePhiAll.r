@@ -21,7 +21,7 @@ get.my.proposePhiAll <- function(type){
 #
 # Returns list with elements:
 #   * phi.Prop :   proposal for phi
-#   * lir   :   log importance ratio for given draw = 0
+#   * lir      :   log importance ratio for given draw = 0
 
 # Drew random walk given current status for new E[Phi].
 my.proposePhiAll.RW_Norm <- function(phi.Curr1, phi.DrawScale = 1,

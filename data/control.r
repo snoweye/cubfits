@@ -2,15 +2,15 @@
 
 # For method controls.
 .CF.CT <- list(
-  model = c("roc"),                             # main models
-  type.B = c("Norm"),                           # proposal for M and S
+  model = c("roc", "nsef", "rocnsef"),          # main models
+  # type.B = c("Norm"),                           # proposal for B
   type.p = c("lognormal_fix", "lognormal",
              "lognormal_MG", "lognormal_MG0",
              "fixed_SM"),                       # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal"),                   # prior of Phi
   init.Phi = c("PM"),                           # initial methods for Phi
-  init.fit = c("current", "random"),            # how is coef initialed in VGAM
+  init.fit = c("current", "random", "RW_Norm"), # how is beta proposed
   parallel = c("lapply", "mclapply",
                "task.pull", "pbdLapply"),       # parallel functions
   adaptive = c("simple", "none"),               # method for adaptive mcmc

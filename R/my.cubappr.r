@@ -1,14 +1,14 @@
 ### Special note for cubappr().
-# G and phi.DrawScale are actually the same role of
-# G.pred and phi.DrawScale.pred in cubpred().
+# n.G and phi.DrawScale are actually the same role of
+# n.G.pred and phi.DrawScale.pred in cubpred().
 ###
 
 # Function to run MCMC inference for following model:
-#   Given phi, n, b; across G genes:
-#     phi      ~ rlnorm(G, mu.Phi, sigma.Phi)
-#     y      ~ for(aa) rmultinom(G, invmlogit( phi * b[[aa]] ), n[[aa]] )
+#   Given phi, n, b; across n.G genes:
+#     phi      ~ rlnorm(n.G, mu.Phi, sigma.Phi)
+#     y      ~ for(aa) rmultinom(n.G, invmlogit( phi * b[[aa]] ), n[[aa]] )
 #
-# Expects phi.Init as vector of length G.
+# Expects phi.Init as vector of length n.G.
 # 
 # Subsequent Gibbs sampler:
 # (1) Sample of b | phi, y, using VGAM fit for Gaussian proposal
@@ -19,7 +19,8 @@
 ### No observation (phi) is required.
 my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
     nIter = 1000, burnin = 100,
-    pInit = NULL, bInit = NULL, initBScale = 1,
+    pInit = NULL,
+    bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
     phi.DrawScale = 1,
     model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
     adaptive = .CF.CT$adaptive[1],
@@ -46,8 +47,8 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
 
 ### Initial Storages ###
   # Setup data structures for results.
-  G <- nrow(y[[1]])                         # # of genes
-  A <- length(y)                            # # of amino acids
+  n.G <- nrow(y[[1]])                       # # of genes
+  n.aa <- length(y)                         # # of amino acids
   nsyns <- sapply(y, function(ybit){ dim(ybit)[2] })
                                             # # of synomous codons
   nBparams <- my.ncoef * sum(nsyns - 1)     # total # of regression parameters
@@ -56,21 +57,20 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
   # Storages for saving posterior samples.
   b.Mat <- my.generate.list(NA, nBparams, nSave)     # S/M
   p.Mat <- my.generate.list(NA, 2, nSave)            # hyperparameters
-  phi.Mat.pred <- my.generate.list(NA, G, nSave)       # E[Phi]
+  phi.Mat.pred <- my.generate.list(NA, n.G, nSave)   # E[Phi]
 
 ### Initial Parameters ###
   # Initial values for b.
+  bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
+  bRInitList <- lapply(bInitList, function(B){ B$R })
   if(is.null(bInit)){
-    bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
     bInit <- lapply(bInitList,
                function(B){
-                 B$coefficients + initBScale * backsolve(B$R, rnorm(nrow(B$R)))
+                 B$coefficients +
+                 init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
                })
   } else{
-    bInit <- lapply(bInit,
-               function(B){
-                 B$coefficients
-               })
+    bInit <- lapply(bInit, function(B){ B$coefficients })
   }
   bInitVec <- unlist(bInit)
 
@@ -104,11 +104,15 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
 
 ### MCMC here ###
   # Set acceptance rate storage.
-  my.set.acceptance(nSave, A, G.pred = G)
+  my.set.acceptance(nSave, n.aa, n.G.pred = n.G)
 
   # Set adaptive storage.
-  my.set.adaptive(nSave, G.pred = G, phi.DrawScale.pred = phi.DrawScale,
+  my.set.adaptive(nSave,
+                  n.aa = n.aa, b.DrawScale = b.DrawScale,
+                  n.G.pred = n.G, phi.DrawScale.pred = phi.DrawScale,
                   adaptive = adaptive[1])
+  b.DrawScale <- .cubfitsEnv$DrawScale$b[[1]]
+  b.DrawScale.prev <- b.DrawScale
   phi.DrawScale.pred <- .cubfitsEnv$DrawScale$phi.pred[[1]]
   phi.DrawScale.pred.prev <- phi.DrawScale.pred
 
@@ -119,13 +123,17 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
   # MCMC start.
   for(iter in 1:(nIter + burnin)){
     # Step 1: Update b using M-H step.
-    bUpdates <- .cubfitsEnv$my.drawBConditionalAll(bCurr, phi.Curr, y, n,
-                                                   reu13.df.obs)
+    bUpdates <- .cubfitsEnv$my.drawBConditionalAll(
+                  bCurr, phi.Curr, y, n, reu13.df.obs,
+                  bRInitList = bRInitList,
+                  b.DrawScale = b.DrawScale,
+                  b.DrawScale.prev = b.DrawScale.prev)
     bCurr  <- lapply(bUpdates, function(U){ U$bNew })
 
     # Step 2: Draw other parameters.
     log.Phi.Curr <- log(phi.Curr)
-    pUpdate <- .cubfitsEnv$my.pPropTypeNoObs(G, log.Phi.Obs.mean, log.Phi.Curr,
+    pUpdate <- .cubfitsEnv$my.pPropTypeNoObs(
+                 n.G, log.Phi.Obs.mean, log.Phi.Curr,
                  nu.Phi.Curr, bsig.Phi.Curr)
     nu.Phi.Curr <- pUpdate$ppCurr$y0
     bsig.Phi.Curr <- pUpdate$ppCurr$bb
@@ -136,18 +144,26 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
     # Step 3: Predict phi using M-H step.
     #         This is different to cubfits() and cubpred().
     phi.pred <- my.drawPhiConditionalAllPred(phi.Curr, y, n,
-               bCurr,
-               mu.Phi = mu.Phi.Curr,
-               sigma.Phi.sq = sigma.Phi.sqCurr, 
-               phi.DrawScale.pred = phi.DrawScale.pred,
-               phi.DrawScale.pred.prev = phi.DrawScale.pred.prev,
-               reu13.df = reu13.df.obs)
+                  bCurr,
+                  mu.Phi = mu.Phi.Curr,
+                  sigma.Phi.sq = sigma.Phi.sqCurr, 
+                  phi.DrawScale.pred = phi.DrawScale.pred,
+                  phi.DrawScale.pred.prev = phi.DrawScale.pred.prev,
+                  reu13.df = reu13.df.obs)
     phi.Curr <- phi.pred$phi.New
 
-    # Step A: Update scaling factor for each E[Phi].
+    # Step A: Update scaling factor.
+    b.DrawScale.prev <- b.DrawScale
     phi.DrawScale.pred.prev <- phi.DrawScale.pred
     if(iter %/% .CF.AC$renew.iter + 1 != .cubfitsEnv$curr.renew){
-      phi.DrawScale.pred <- .cubfitsEnv$my.update.DrawScale("phi.pred", phi.DrawScale)
+      # For each E[b].
+      b.DrawScale <- .cubfitsEnv$my.update.DrawScale(
+                       "b", b.DrawScale,
+                       update.curr.renew = FALSE)
+      # For each E[Phi].
+      phi.DrawScale.pred <- .cubfitsEnv$my.update.DrawScale(
+                              "phi.pred", phi.DrawScale,
+                              update.curr.renew = TRUE)
     }
 
     # Dump parameters out.

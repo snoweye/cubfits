@@ -8,17 +8,20 @@
 
 ### Return negative log likelihood of multinomial distribution.
 # For ROC + NSEf model.
-my.objectivePhiOne.nlogL.rocnse <- function(phi, fitlist, reu13.list.g, y.g, n.g){
+my.objectivePhiOne.nlogL.rocnsef <- function(phi, fitlist, reu13.list.g, y.g,
+    n.g){
   ret <- 0
   for(i.aa in 1:length(reu13.list.g)){ # i'th amino acid
     for(i.scodon in 1:length(reu13.list.g[[i.aa]])){ # i'th synonymous codon
       Pos <- reu13.list.g[[i.aa]][[i.scodon]]
       if(length(Pos) > 0){ # avoid gene has no synonymous codon
         xm <- matrix(cbind(1, phi, phi * Pos), ncol = 3)
-        # lp.vec <- my.inverse.mlogit(xm %*% fitlist[[i.aa]]$coef.mat, log = TRUE)
+        # lp.vec <- my.inverse.mlogit(xm %*% fitlist[[i.aa]]$coef.mat,
+        #                             log = TRUE)
 
-        ### Since 1 * log(mu) + phi * Delta.t + phi * Pos * omega is the exponent term, and
-        ### it can be scaled by x to yield (1/x) * M + 1 * S_1 + Pos * S_2
+        ### Since 1 * log(mu) + phi * Delta.t + phi * Pos * omega is the
+        ### exponent term, and it can be scaled by x to yield
+        ### (1/x) * M + 1 * S_1 + Pos * S_2
         ### where 1/x -> 0 as x -> infinity.
         exponent <- xm %*% fitlist[[i.aa]]$coef.mat
         id.infinite <- rowSums(!is.finite(exponent)) > 0
@@ -35,7 +38,7 @@ my.objectivePhiOne.nlogL.rocnse <- function(phi, fitlist, reu13.list.g, y.g, n.g
     }
   }
   -ret
-} # End of my.objectivePhiOne.nlogL.rocnse().
+} # End of my.objectivePhiOne.nlogL.rocnsef().
 
 # For ROC model.
 my.objectivePhiOne.nlogL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
@@ -68,14 +71,15 @@ my.objectivePhiOne.nlogL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
 } # End of my.objectivePhiOne.nlogL.roc().
 
 # For NSEf model.
-my.objectivePhiOne.nlogL.nse <- function(phi, fitlist, reu13.list.g, y.g, n.g){
+my.objectivePhiOne.nlogL.nsef <- function(phi, fitlist, reu13.list.g, y.g, n.g){
   ret <- 0
   for(i.aa in 1:length(reu13.list.g)){ # i'th amino acid
     for(i.scodon in 1:length(reu13.list.g[[i.aa]])){ # i'th synonymous codon
       Pos <- reu13.list.g[[i.aa]][[i.scodon]]
       if(length(Pos) > 0){ # avoid gene has no synonymous codon
         xm <- matrix(cbind(1, phi * Pos), ncol = 2)
-        # lp.vec <- my.inverse.mlogit(xm %*% fitlist[[i.aa]]$coef.mat, log = TRUE)
+        # lp.vec <- my.inverse.mlogit(xm %*% fitlist[[i.aa]]$coef.mat,
+        #                             log = TRUE)
 
         ### Since 1 * log(mu) + phi * Pos * omega is the exponent term, and
         ### it can be scaled by x to yield (1/x) * M + Pos * S_2
@@ -95,4 +99,4 @@ my.objectivePhiOne.nlogL.nse <- function(phi, fitlist, reu13.list.g, y.g, n.g){
     }
   }
   -ret
-} # End of my.objectivePhiOne.nlogL.nse().
+} # End of my.objectivePhiOne.nlogL.nsef().

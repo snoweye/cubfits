@@ -1,13 +1,19 @@
-train.roc         cubfits   A training for ROC.
-appr.roc          cubfits   An approximation for ROC.
-pred.roc          cubfits   A prediction for ROC.
-SCUO              cubfits   An example of computing SCUO index.
-CAI               cubfits   An example of computing CAI.
-mSCU              cubfits   An example of computing mSCU.
-simu.roc          cubfits   An example of simulation study for ROC.
-plotbin           cubfits   An example of ploting binning and model.
-basic             cubfits   An example of reading and producing toy data.
+roc.train         cubfits   A training example for ROC.
+roc.appr          cubfits   An approximation for ROC.
+roc.pred          cubfits   A prediction for ROC.
+nsef.train        cubfits   A training example for NSEf.
+nsef.appr         cubfits   An approximation for NSEf.
+nsef.pred         cubfits   A prediction for NSEf.
+rocnsef.train     cubfits   A training example for ROC+NSEf.
+rocnsef.appr      cubfits   An approximation for ROC+NSEf.
+rocnsef.pred      cubfits   A prediction for ROC+NSEf.
+SCUO              cubfits   Computing SCUO index.
+CAI               cubfits   Computing CAI.
+mSCU              cubfits   Computing mSCU.
+simu.roc          cubfits   A simulation study for ROC.
+plotbin           cubfits   Ploting binning and model.
+basic             cubfits   Reading and producing toy data.
 fitMultinom       cubfits   An example of Shah & Gilchrist 2011.
-yassour.mixed     cubfits   An example of fitting mixed model for yassour 2009.
-yassour.mixture   cubfits   An example of fitting mixture model for yassour 2009 by EM.
-yassour.asl       cubfits   An example of fitting ASL model for yassour 2009.
+yassour.mixed     cubfits   Fitting mixed model for yassour 2009.
+yassour.mixture   cubfits   Fitting mixture model for yassour 2009 by EM.
+yassour.asl       cubfits   Fitting ASL model for yassour 2009.

@@ -13,39 +13,88 @@ get.my.drawBConditionalAll <- function(type){
 } # End of get.my.drawBConditionalAll().
 
 
-# Draw new B.
-my.drawBConditionalAll.current <- function(bCurr, phi.Curr, y, n, reu13.df.obs){
-  ### Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
+# Draw new B via independent chain. VGAM searching starts from current values.
+my.drawBConditionalAll.current <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+    bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
+  # Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
   bFit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
                                         phi.new = phi.Curr, coefstart = bCurr)
 
-  ### Based on the above new fits of parameters to draw new beta (M, S_1, S_2).
+  # Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),
            function(i.aa){ # i'th amino acid.
-             tmp <- .cubfitsEnv$my.drawBConditionalFit(
-                      bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]], n[[i.aa]],
-                      reu13.df.aa = reu13.df.obs[[i.aa]])
-             # update S/M's acceptance.
-             my.update.acceptance("B", tmp$accept, i.aa)
-             tmp
+             my.drawBConditionalFit.ID_Norm(
+               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               n[[i.aa]],
+               reu13.df.aa = reu13.df.obs[[i.aa]])
            })
+
+  # Update beta's acceptance and adaptive.
+  accept <- do.call("c", lapply(1:length(ret),
+                           function(i.aa){
+                             ret[[i.aa]]$accept
+                           }))
+  my.update.acceptance("b", accept)
+  my.update.adaptive("b", accept)
+
   ret
 } # End of my.drawBConditionalAll.current().
 
-my.drawBConditionalAll.random <- function(bCurr, phi.Curr, y, n, reu13.df.obs){
-  ### Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
+# Draw new B via independent chain. VGAM searching starts randomly.
+my.drawBConditionalAll.random <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+    bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
+  # Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
   bFit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
                                         phi.new = phi.Curr)
 
-  ### Based on the above new fits of parameters to draw new beta (M, S_1, S_2).
+  # Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),
            function(i.aa){ # i'th amino acid.
-             tmp <- .cubfitsEnv$my.drawBConditionalFit(
-                      bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]], n[[i.aa]],
-                      reu13.df.aa = reu13.df.obs[[i.aa]])
-             # update S/M's acceptance.
-             my.update.acceptance("B", tmp$accept, i.aa)
-             tmp
+             my.drawBConditionalFit.ID_Norm(
+               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               n[[i.aa]],
+               reu13.df.aa = reu13.df.obs[[i.aa]])
            })
+
+  # Update beta's acceptance and adaptive.
+  accept <- do.call("c", lapply(1:length(ret),
+                           function(i.aa){
+                             ret[[i.aa]]$accept
+                           }))
+  my.update.acceptance("b", accept)
+  my.update.adaptive("b", accept)
+
   ret
 } # End of my.drawBConditionalAll.random().
+
+# Draw new B via random walk. No VGAM searching.
+# bRInitList is fixed as the initial fits via VGAM without measurement errors.
+# Only b.DrawScale and b.DrawScale.prev are changed for adaptive MCMC.
+my.drawBConditionalAll.RW_Norm <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+    bRInitList, b.DrawScale = 1, b.DrawScale.prev = 1){
+  # No VGAM searching.
+  bFit <- bCurr
+
+  # Based on the above new fits of parameters to draw new beta.
+  ret <- lapply(1:length(reu13.df.obs),
+           function(i.aa){ # i'th amino acid.
+             my.drawBConditionalFit.RW_Norm(
+               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               n[[i.aa]],
+               bRInitList.aa = bRInitList[[i.aa]],
+               b.DrawScale.aa = b.DrawScale[i.aa],
+               b.DrawScale.prev.aa = b.DrawScale.prev[i.aa],
+               reu13.df.aa = reu13.df.obs[[i.aa]])
+           })
+
+  # Update beta's acceptance and adaptive.
+  accept <- do.call("c", lapply(1:length(ret),
+                           function(i.aa){
+                             ret[[i.aa]]$accept
+                           }))
+  my.update.acceptance("b", accept)
+  my.update.adaptive("b", accept)
+
+  ret
+} # End of my.drawBConditionalAll.RW_Norm().
+

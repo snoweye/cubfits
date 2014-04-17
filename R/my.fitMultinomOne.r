@@ -15,8 +15,9 @@ get.my.fitMultinomOne <- function(model){
 
 
 # Fit a ROC + NSEf model.
-my.fitMultinomOne.rocnse <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
-    coefstart = NULL, x.arg = FALSE, y.arg = FALSE, qr.arg = FALSE){
+my.fitMultinomOne.rocnsef <- function(reu13.df.aa, phi, yaa, naa,
+    phi.new = NULL, coefstart = NULL, x.arg = FALSE, y.arg = FALSE,
+    qr.arg = FALSE){
   # If phi.new is not NULL, it means the caller is in MCMC steps.
   if(!is.null(phi.new)){
     tmp.phi <- rep(phi.new, naa)
@@ -32,7 +33,7 @@ my.fitMultinomOne.rocnse <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
               coef.mat = matrix(ret@coefficients, nrow = 3, byrow = TRUE),
               R = ret@R)
   ret
-} # End of my.fitMultinomOne.rocnse().
+} # End of my.fitMultinomOne.rocnsef().
 
 # Fit a ROC model.
 my.fitMultinomOne.roc <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
@@ -60,7 +61,7 @@ my.fitMultinomOne.roc <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
 } # End of my.fitMultinomOne.roc().
 
 # Fit a NSEf model.
-my.fitMultinomOne.nse <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
+my.fitMultinomOne.nsef <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
     coefstart = NULL, x.arg = FALSE, y.arg = FALSE, qr.arg = FALSE){
   # If phi.new is not NULL, it means the caller is in MCMC steps.
   if(!is.null(phi.new)){
@@ -77,5 +78,5 @@ my.fitMultinomOne.nse <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
               coef.mat = matrix(ret@coefficients, nrow = 2, byrow = TRUE),
               R = ret@R)
   ret
-} # End of my.fitMultinomOne.nse().
+} # End of my.fitMultinomOne.nsef().
 

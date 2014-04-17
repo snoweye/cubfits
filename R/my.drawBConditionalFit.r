@@ -1,26 +1,40 @@
-# Get the specific function accroding to the options.
-get.my.drawBConditionalFit <- function(type){
-  if(!any(type[1] %in% .CF.CT$type.B)){
-    stop("type is not found.")
-  }
-  ret <- eval(parse(text = paste("my.drawBConditionalFit.",
-                                 type[1], sep = "")))
-  assign("my.drawBConditionalFit", ret, envir = .cubfitsEnv)
-  ret
-} # End of get.my.drawBConditionalFit().
+### Get the specific function accroding to the options.
+# get.my.drawBConditionalFit <- function(type){
+#   if(!any(type[1] %in% .CF.CT$type.B)){
+#     stop("type is not found.")
+#   }
+#   ret <- eval(parse(text = paste("my.drawBConditionalFit.",
+#                                  type[1], sep = "")))
+#   assign("my.drawBConditionalFit", ret, envir = .cubfitsEnv)
+#   ret
+# } # End of get.my.drawBConditionalFit().
 
 
-# Draw new beta (M, S_1, S_2) from random walk.
-my.drawBConditionalFit.Norm <- function(bFitaa, baa, phi, yaa, naa,
-    drawScale = 1, reu13.df.aa = NULL){
+# Draw new beta from independent chain.
+my.drawBConditionalFit.ID_Norm <- function(bFitaa, baa, phi, yaa, naa,
+    reu13.df.aa = NULL){
   # Propose new beta.
   bHat <- bFitaa$coefficients
-  R <- bFitaa$R / drawScale
-  proplist <- my.propose.Norm(baa, bHat, R)
+  R <- bFitaa$R
+  proplist <- my.propose.ID_Norm(baa, bHat, R)
 
   # M-H step.
   ret <- my.drawBConditionalFit.MH(proplist, baa, phi, yaa, naa,
-                                   drawScale = drawScale,
+                                   reu13.df.aa = reu13.df.aa)
+  ret
+} # End of my.drawBConditionalFit.ID_Norm().
+
+# Draw new beta from random walk.
+my.drawBConditionalFit.RW_Norm <- function(bFitaa, baa, phi, yaa, naa,
+    bRInitList.aa, b.DrawScale.aa = 1, b.DrawScale.prev.aa = 1,
+    reu13.df.aa = NULL){
+  # Propose new beta.
+  bHat <- bFitaa
+  R <- bRInitList.aa
+  proplist <- my.propose.RW_Norm(baa, bHat, R,
+                                 b.DrawScale.aa, b.DrawScale.prev.aa)
+  # M-H step.
+  ret <- my.drawBConditionalFit.MH(proplist, baa, phi, yaa, naa,
                                    reu13.df.aa = reu13.df.aa)
   ret
 } # End of my.drawBConditionalFit.Norm().
@@ -28,7 +42,7 @@ my.drawBConditionalFit.Norm <- function(bFitaa, baa, phi, yaa, naa,
 
 # Utility function commonly for all my.drawBConditionalFit.*().
 my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
-    drawScale = 1, reu13.df.aa = NULL){
+    reu13.df.aa = NULL){
   baaProp <- proplist$prop
   lir <- proplist$lir
 
@@ -57,8 +71,6 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   }
 
   # Return.
-  # ret <- list(bNew = bNew, accept = accept,
-  #             lpr = lpr, lir = lir, bProp = baaProp)
   ret <- list(bNew = bNew, accept = accept)
 
   ret

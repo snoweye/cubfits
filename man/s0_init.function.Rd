@@ -7,7 +7,6 @@
 }
 \usage{
   init.function(model = .CF.CT$model[1],
-                type.B = .CF.CT$type.B[1],
                 type.p = .CF.CT$type.p[1],
                 type.Phi = .CF.CT$type.Phi[1],
                 model.Phi = .CF.CT$model.Phi[1],
@@ -18,7 +17,6 @@
 }
 \arguments{
   \item{model}{main fitted model.}
-  \item{type.B}{proposal method for mutation and selection.}
   \item{type.p}{proposal method for hyper-parameters.}
   \item{type.Phi}{proposal method for Phi (true expression values).}
   \item{model.Phi}{prior of Phi.}
@@ -46,13 +44,6 @@
     \item
     \code{model} is the main fitting model, currently only \code{roc} is
     fully supported.
-
-    \item
-    \code{type.B} is for proposing mutation (log(mu)) and selection (Delta.t) effects
-    (\code{\link{b}} coefficients). Currently, only \code{Norm} is supported
-    that normal distribution is proposed for independent chain updates. 
-    Ideally, this proposes new samples around MLE values condition on current
-    step. The higher acceptance rates is, the better sampling distribution is
 
     \item
     \code{type.p} is for proposing hyper-parameters in Gibb sampler. Currently,

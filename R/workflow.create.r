@@ -1,16 +1,23 @@
 # For work flows only.
 
-get.workflow <- function(file.name = "workflow/", pkg = "cubfits"){
+get.workflow <- function(dir.name = "workflow/",
+    model = c("roc", "nsef"), pkg = "cubfits"){
+  dir.name <- paste(dir.name, model[1], "/", sep = "")
   file.path <- tools::file_path_as_absolute(
-                 system.file(file.name, package = "cubfits"))
+                 system.file(dir.name, package = "cubfits"))
   file.path
 } # End of get.workflow().
 
 cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
-    pkg = "cubfits", to = NULL, code = FALSE){
+    model = c("roc", "nsef"), pkg = "cubfits", to = NULL, code = FALSE){
+  # Check OS.
+  if(Sys.info()["sysname"] == "Windows"){
+    stop("Non of work flows supports windows system.")
+  }
+
   # Check flow.
   if(!any(flow[1] %in% c("wphi", "wophi", "simu", "wphi_wophi"))){
-    stop("workflow is not found.")
+    stop("Work flow is not found.")
   }
 
   # Set new path.
@@ -30,7 +37,7 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
   }
 
   # Original work flow path.
-  path.workflow <- get.workflow(pkg = pkg)
+  path.workflow <- get.workflow(model = model[1], pkg = pkg)
 
   # Make new copies for basic work flows.
   cat("Copy ", flow[1], "_run_0.sh ...\n", sep = "")
@@ -60,7 +67,7 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
   if(flow[1] == "simu"){
     # simu uses default param.
     cat("Copy param/ ...\n", sep = "")
-    path.file <- paste(path.workflow, "/param", sep = "")
+    path.file <- paste(path.workflow, "/../param", sep = "")
     file.copy(path.file, path.current, overwrite = TRUE, recursive = TRUE)
   } else{
     # Rest cases use example param.
@@ -70,13 +77,13 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
     dir.create(path.file.new, mode = "0755")
 
     cat("Copy param/genome.fasta ... (fake)\n", sep = "")
-    path.file <- get.workflow(file.name = "./ex_data/seq_200.fasta", pkg = pkg)
+    path.file <- get.expath("seq_200.fasta")
     path.file.new <- paste(path.current, "/param/genome.fasta", sep = "")
     file.copy(path.file, path.file.new, overwrite = TRUE)
 
     if(flow[1] %in% c("wphi", "wphi_wophi")){
       cat("Copy param/genome.phi.tsv ... (fake)\n", sep = "")
-      path.file <- get.workflow(file.name = "./ex_data/phi_200.tsv", pkg = pkg)
+      path.file <- get.expath("phi_200.tsv")
       path.file.new <- paste(path.current, "/param/genome.phi.tsv", sep = "")
       file.copy(path.file, path.file.new, overwrite = TRUE)
     }

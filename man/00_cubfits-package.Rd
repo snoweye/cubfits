@@ -42,9 +42,9 @@
 \dontrun{
 library(cubfits)
 
-demo(train.roc, 'cubfits', ask = F, echo = F)
-demo(pred.roc, 'cubfits', ask = F, echo = F)
-demo(appr.roc, 'cubfits', ask = F, echo = F)
+demo(roc.train, 'cubfits', ask = F, echo = F)
+demo(roc.pred, 'cubfits', ask = F, echo = F)
+demo(roc.appr, 'cubfits', ask = F, echo = F)
 }
 }
 \keyword{package}
