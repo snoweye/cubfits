@@ -32,6 +32,7 @@ my.init.function <- function(model = .CF.CT$model[1],
   my.fitMultinomOne <- get.my.fitMultinomOne(model = model)
   my.fitMultinomAll <- get.my.fitMultinomAll(parallel = parallel)
   my.logdmultinomCodOne <- get.my.logdmultinomCodOne(model = model)
+  my.logdmultinomCodAllR <- get.my.logdmultinomCodAllR(parallel = parallel)
   my.logPosteriorAll <- get.my.logPosteriorAll(model.Phi = model.Phi)
   my.logLAll <- get.my.logLAll(model.Phi = model.Phi)
 
@@ -64,6 +65,7 @@ my.init.function <- function(model = .CF.CT$model[1],
               my.fitMultinomOne = my.fitMultinomOne,
               my.fitMultinomAll = my.fitMultinomAll,
               my.logdmultinomCodOne = my.logdmultinomCodOne,
+              my.logdmultinomCodAllR = my.logdmultinomCodAllR,
               my.logPosteriorAll = my.logPosteriorAll,
               my.logLAll = my.logLAll,
               # for prediction.

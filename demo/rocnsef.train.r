@@ -1,6 +1,6 @@
 start.time <- proc.time()
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 set.seed(1234)
 
 .CF.AC$renew.iter <- 3

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 source("00-set_env.r")
 
 # Get all cases.
@@ -14,20 +14,20 @@ for(i.case in case.names){
   load(fn.in)
 
   all.names <- names(b.PM)
-  id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
-  id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+  id.intercept <- grep("log.mu", all.names)
+  id.slop <- grep("omega", all.names)
 
   log.mu <- b.PM[id.intercept]
-  Delta.t <- b.PM[id.slop]
+  omega <- b.PM[id.slop]
 
   AA <- gsub("(.)\\.(.*)", "\\1", b.label)
   CODON <- gsub("(.)\\.(.*)", "\\2", b.label)
   
-  ret <- data.frame(AA = AA, CODON = CODON, Delta.t = Delta.t, log.mu = log.mu)
+  ret <- data.frame(AA = AA, CODON = CODON, omega = omega, log.mu = log.mu)
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[length(tmp)],
-                      Delta.t = 0, log.mu = 0)
+                      omega = 0, log.mu = 0)
     ret <- rbind(ret, tmp)
   }
 

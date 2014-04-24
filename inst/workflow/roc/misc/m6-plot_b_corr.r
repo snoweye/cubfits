@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits, quietly = TRUE))
+suppressMessages(library(cubfits))
 
 workflow.name <- "04_05-match_yassour"
 
@@ -45,10 +45,11 @@ for(i.case in 1:4){
   b.wf1.mean.org[[i.case]] <- rowMeans(b.mcmc)
 
   all.names <- rownames(b.mcmc)
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   scale.EPhi <- mean(rowMeans(phi.mcmc))
 
-  b.mcmc[id,] <- b.mcmc[id,] * scale.EPhi
+  b.mcmc[id.slop,] <- b.mcmc[id.slop,] * scale.EPhi
   b.wf1.ci[[i.case]] <- apply(b.mcmc, 1, quantile, prob = ci.prob)
   b.wf1.mean[[i.case]] <- rowMeans(b.mcmc)
 }
@@ -79,10 +80,11 @@ for(i.case in 1:4){
   b.wf2.mean.org[[i.case]] <- rowMeans(b.mcmc)
 
   all.names <- rownames(b.mcmc)
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   scale.EPhi <- mean(rowMeans(phi.mcmc))
 
-  b.mcmc[id,] <- b.mcmc[id,] * scale.EPhi
+  b.mcmc[id.slop,] <- b.mcmc[id.slop,] * scale.EPhi
   b.wf2.ci[[i.case]] <- apply(b.mcmc, 1, quantile, prob = ci.prob)
   b.wf2.mean[[i.case]] <- rowMeans(b.mcmc)
 }
@@ -90,7 +92,8 @@ for(i.case in 1:4){
 
 for(i.case in 1:4){
   # Plot M
-  id <- grep("(Intercept)", all.names, invert = FALSE)
+  # id <- grep("(Intercept)", all.names, invert = FALSE)
+  id.intercept <- grep("log.mu", all.names)
 
   if(i.case %in% 1:2){
     lab <- "log(mu) without phi"
@@ -98,8 +101,8 @@ for(i.case in 1:4){
     lab <- "log(mu) with phi"
   }
 
-  x <- b.wf1.mean[[i.case]][id]
-  y <- b.wf2.mean[[i.case]][id]
+  x <- b.wf1.mean[[i.case]][id.intercept]
+  y <- b.wf2.mean[[i.case]][id.intercept]
 
   xlim <- range(x)
   ylim <- range(y)
@@ -114,9 +117,9 @@ for(i.case in 1:4){
          ylab = paste(lab, " Yassour_HS", sep = ""),
          main = case.names.wf1[i.case])
     title(sub = workflow.name, cex.sub = 0.6)
-    for(i in 1:length(id)){
-      lines(x = b.wf1.ci[[i.case]][, id[i]], y = rep(y[i], 2), col = 1)
-      lines(x = rep(x[i], 2), y = b.wf2.ci[[i.case]][, id[i]], col = 1)
+    for(i in 1:length(id.intercept)){
+      lines(x = b.wf1.ci[[i.case]][, id.intercept[i]], y = rep(y[i], 2), col = 1)
+      lines(x = rep(x[i], 2), y = b.wf2.ci[[i.case]][, id.intercept[i]], col = 1)
     }
     abline(a = 0, b = 1, col = 4, lty = 2)
     # Add label
@@ -134,7 +137,8 @@ for(i.case in 1:4){
 
 
   # Plot S
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   
   if(i.case %in% 1:2){
     lab <- "Delta.t without phi"
@@ -142,8 +146,8 @@ for(i.case in 1:4){
     lab <- "Delta.t with phi"
   }
 
-  x <- b.wf1.mean[[i.case]][id]
-  y <- b.wf1.mean[[i.case]][id]
+  x <- b.wf1.mean[[i.case]][id.slop]
+  y <- b.wf1.mean[[i.case]][id.slop]
   xlim <- range(x)
   ylim <- range(y)
   xlim <- xlim + c(-1, 1) * (xlim[2] - xlim[1]) * 0.05
@@ -157,9 +161,9 @@ for(i.case in 1:4){
          ylab = paste(lab, " Yassour_HS", sep = ""),
          main = case.names.wf1[i.case])
     title(sub = workflow.name, cex.sub = 0.6)
-    for(i in 1:length(id)){
-      lines(x = b.wf1.ci[[i.case]][, id[i]], y = rep(y[i], 2), col = 1)
-      lines(x = rep(x[i], 2), y = b.wf2.ci[[i.case]][, id[i]], col = 1)
+    for(i in 1:length(id.slop)){
+      lines(x = b.wf1.ci[[i.case]][, id.slop[i]], y = rep(y[i], 2), col = 1)
+      lines(x = rep(x[i], 2), y = b.wf2.ci[[i.case]][, id.slop[i]], col = 1)
     }
     abline(a = 0, b = 1, col = 4, lty = 2)
     # Add label
@@ -177,7 +181,8 @@ for(i.case in 1:4){
   
   
   # Plot S original (no scaling by x to mean = 1)
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
 
   if(i.case %in% 1:2){
     lab <- "Delta.t without phi"
@@ -185,8 +190,8 @@ for(i.case in 1:4){
     lab <- "Delta.t with phi"
   }
   
-  x <- b.wf1.mean.org[[i.case]][id]
-  y <- b.wf2.mean.org[[i.case]][id]
+  x <- b.wf1.mean.org[[i.case]][id.slop]
+  y <- b.wf2.mean.org[[i.case]][id.slop]
   xlim <- range(x)
   ylim <- range(y)
   xlim <- xlim + c(-1, 1) * (xlim[2] - xlim[1]) * 0.05
@@ -200,9 +205,9 @@ for(i.case in 1:4){
          ylab = paste(lab, " Yassour_HS", sep = ""),
          main = case.names.wf1[i.case])
     title(sub = workflow.name, cex.sub = 0.6)
-    for(i in 1:length(id)){
-      lines(x = b.wf1.ci.org[[i.case]][, id[i]], y = rep(y[i], 2), col = 1)
-      lines(x = rep(x[i], 2), y = b.wf2.ci.org[[i.case]][, id[i]], col = 1)
+    for(i in 1:length(id.slop)){
+      lines(x = b.wf1.ci.org[[i.case]][, id.slop[i]], y = rep(y[i], 2), col = 1)
+      lines(x = rep(x[i], 2), y = b.wf2.ci.org[[i.case]][, id.slop[i]], col = 1)
     }
     abline(a = 0, b = 1, col = 4, lty = 2)
     # Add label

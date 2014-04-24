@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
@@ -46,7 +46,7 @@ for(i.case in 1:4){
 
 # Plot logmu.
 all.names <- names(b.PM)
-id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
+id.intercept <- grep("log.mu", all.names)
 
 x.pm <- b.mean[[3]][id.intercept]
 y.pm <- b.mean[[1]][id.intercept]
@@ -81,7 +81,7 @@ dev.off()
 
 
 # Plot Delta.t.
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+id.slop <- grep("Delta.t", all.names)
 
 x.pm <- b.mean[[3]][id.slop]
 y.pm <- b.mean[[1]][id.slop]
@@ -115,8 +115,8 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 
-# Plot Deltat.t original (no scaling by x to mean = 1).
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+# Plot Delta.t original (no scaling by x to mean = 1).
+id.slop <- grep("Delta.t", all.names)
 
 x.pm <- b.mean.org[[3]][id.slop]
 y.pm <- b.mean.org[[1]][id.slop]

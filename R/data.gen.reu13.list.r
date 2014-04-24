@@ -1,7 +1,7 @@
 ### For wallace format.
 
 gen.reu13.list <- function(seq.string, aa.names = .CF.GV$amino.acid,
-    split.S = TRUE, drop.X = TRUE, drop.MW = TRUE){
+    split.S = TRUE, drop.X = TRUE, drop.MW = TRUE, drop.1st.codon = TRUE){
   if(split.S){
     if("S" %in% aa.names){
       if(! "Z" %in% aa.names){
@@ -22,6 +22,10 @@ gen.reu13.list <- function(seq.string, aa.names = .CF.GV$amino.acid,
 
   if(drop.MW){
     aa.names <- aa.names[!(aa.names %in% c("M", "W"))]
+  }
+
+  if(drop.1st.codon){
+    seq.string <- lapply(seq.string, function(x){ x[-1] })
   }
 
   aa.names <- sort(aa.names)

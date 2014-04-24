@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -23,13 +23,14 @@ ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
 noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
 tmp <- convert.b.to.bVec(fitlist)
-id <- grep("(Intercept)", names(tmp), invert = TRUE)
+# id <- grep("(Intercept)", names(tmp), invert = TRUE)
+id.slop <- grep("Delta.t", names(tmp), invert = TRUE)
 
 ### Since Eb is not generated in scale of mean 1, but phi.Obs was already
 ### scaled in mean 1. I have to scale b.true accordingly.
 b.true <- convert.b.to.bVec(Eb)
-# b.true[id] <- b.true[id] * phi.scale
- b.true[id] <- b.true[id] * mean(EPhi) 
+# b.true[id.slop] <- b.true[id.slop] * phi.scale
+ b.true[id.slop] <- b.true[id.slop] * mean(EPhi) 
 b.true <- convert.bVec.to.b(b.true, aa.names)
 true.roc <- prop.model.roc(b.true, EPhi.true.lim)
 

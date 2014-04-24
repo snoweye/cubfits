@@ -14,14 +14,16 @@
 }
 \usage{
   gen.reu13.df(seq.string, phi.df = NULL, aa.names = .CF.GV$amino.acid,
-               split.S = TRUE, drop.X = TRUE, drop.MW = TRUE)
+               split.S = TRUE, drop.X = TRUE, drop.MW = TRUE,
+               drop.1st.codon = TRUE)
   gen.y(seq.string, aa.names = .CF.GV$amino.acid,
         split.S = TRUE, drop.X = TRUE, drop.MW = TRUE)
   gen.n(seq.string, aa.names = .CF.GV$amino.acid,
         split.S = TRUE, drop.X = TRUE, drop.MW = TRUE)
 
   gen.reu13.list(seq.string, aa.names = .CF.GV$amino.acid,
-                 split.S = TRUE, drop.X = TRUE, drop.MW = TRUE)
+                 split.S = TRUE, drop.X = TRUE, drop.MW = TRUE,
+                 drop.1st.codon = TRUE)
   gen.phi.Obs(phi.df)
   gen.scuo(seq.string, aa.names = .CF.GV$amino.acid,
            split.S = TRUE, drop.X = TRUE, drop.MW = TRUE)
@@ -33,6 +35,7 @@
   \item{split.S}{split amino acid 'S' if any.}
   \item{drop.X}{drop amino acid 'X' if any.}
   \item{drop.MW}{drop amino acid 'M' and 'W' if any.}
+  \item{drop.1st.codon}{if drop the first codon.}
 }
 \details{
   These functions mainly take inputs of sequence strings

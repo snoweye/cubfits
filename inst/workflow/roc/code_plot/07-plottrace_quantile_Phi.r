@@ -1,6 +1,6 @@
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # Load environment and set data.
 source("00-set_env.r")

@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 b <- bInit$roc
 phi.Obs <- ex.train$phi.Obs
@@ -9,7 +9,7 @@ plot(mSCU, log10(phi.Obs), main = "Expression vs mSCU",
      xlab = "mSCU", ylab = "Expression (log10)")
 
 ### Compare with CAI with weights seqinr::cubtab$sc.
-library(seqinr, quietly = TRUE)
+library(seqinr)
 w <- caitab$sc
 names(w) <- codon.low2up(rownames(caitab))
 CAI <- calc_cai_values(y, y.list, w = w)$CAI

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
 source("00-set_env.r")
@@ -14,11 +14,14 @@ load(fn.in)
 
 # Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
+coef.names <- cubfits:::get.my.coefnames(model)
 b.label <- NULL
+b.names <- NULL
 for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   b.label <- c(b.label, paste(i.aa, tmp, sep = "."))
+  b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
 # Get all cases.
@@ -40,7 +43,8 @@ all.jobs <- function(i.job){
 
   # Obtain the last 5000 iterations.
   b.mcmc <- do.call("cbind", ret$b.Mat[range$subset])
-  rownames(b.mcmc) <- names(ret$b.Mat[[1]])
+  # rownames(b.mcmc) <- names(ret$b.Mat[[1]])
+  rownames(b.mcmc) <- b.names
 
   p.mcmc <- do.call("cbind", ret$p.Mat[range$subset])
   rownames(p.mcmc) <- names(ret$p.Mat[[1]])
@@ -70,7 +74,7 @@ all.jobs <- function(i.job){
 
   # Negative selection.
   all.names <- rownames(b.mcmc)
-  id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM

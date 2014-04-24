@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits, quietly = TRUE))
+suppressMessages(library(cubfits))
 
 workflow.name <- "04_05-match_yassour"
 
@@ -47,10 +47,11 @@ for(i.case in 1:4){
   b.wf1.mean.org[[i.case]] <- rowMeans(b.mcmc)
 
   all.names <- rownames(b.mcmc)
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names, invert = TRUE)
   scale.EPhi <- mean(rowMeans(phi.mcmc))
 
-  b.mcmc[id,] <- b.mcmc[id,] * scale.EPhi
+  b.mcmc[id.slop,] <- b.mcmc[id.slop,] * scale.EPhi
   b.wf1.ci[[i.case]] <- apply(b.mcmc, 1, quantile, prob = ci.prob)
   b.wf1.mean[[i.case]] <- rowMeans(b.mcmc)
 }
@@ -81,17 +82,19 @@ for(i.case in 1:4){
   b.wf2.mean.org[[i.case]] <- rowMeans(b.mcmc)
 
   all.names <- rownames(b.mcmc)
-  id <- grep("(Intercept)", all.names, invert = TRUE)
+  # id <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("(Intercept)", all.names)
   scale.EPhi <- mean(rowMeans(phi.mcmc))
 
-  b.mcmc[id,] <- b.mcmc[id,] * scale.EPhi
+  b.mcmc[id.slop,] <- b.mcmc[id.slop,] * scale.EPhi
   b.wf2.ci[[i.case]] <- apply(b.mcmc, 1, quantile, prob = ci.prob)
   b.wf2.mean[[i.case]] <- rowMeans(b.mcmc)
 }
 
 
 # Plot S
-id <- grep("(Intercept)", all.names, invert = TRUE)
+# id <- grep("(Intercept)", all.names, invert = TRUE)
+id.slop <- grep("Delta.t", all.names)
 
 for(i.case in 1:4){
   if(i.case %in% 1:2){
@@ -100,10 +103,10 @@ for(i.case in 1:4){
     lab <- "Delta.t with phi"
   }
 
-  x <- b.wf1.mean[[i.case]][id]
-  y <- b.wf2.mean[[i.case]][id]
-  x.ci <- matrix(b.wf1.ci[[i.case]][, id], nrow = 2)
-  y.ci <- matrix(b.wf2.ci[[i.case]][, id], nrow = 2)
+  x <- b.wf1.mean[[i.case]][id.slop]
+  y <- b.wf2.mean[[i.case]][id.slop]
+  x.ci <- matrix(b.wf1.ci[[i.case]][, id.slop], nrow = 2)
+  y.ci <- matrix(b.wf2.ci[[i.case]][, id.slop], nrow = 2)
   label.case <- label
 
   for(i.aa in aa.names){
@@ -157,7 +160,7 @@ for(i.case in 1:4){
          ylab = paste(lab, "Yassour_HS", sep = ""),
          main = case.names.wf1[i.case])
     title(sub = workflow.name, cex.sub = 0.6)
-    for(i in 1:length(id)){
+    for(i in 1:length(id.slop)){
       lines(x = x.ci[, i], y = rep(y[i], 2), col = 1)
       lines(x = rep(x[i], 2), y = y.ci[, i], col = 1)
     }

@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # fit Shah & Gilchrist (2011)
 init.function(model = "roc")

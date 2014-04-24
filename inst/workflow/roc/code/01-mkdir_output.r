@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 ### Set environment and data.
 source("00-set_env.r")

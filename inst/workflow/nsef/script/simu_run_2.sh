@@ -36,8 +36,6 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
 NP=7
 mpiexec -np ${NP} Rscript ${CODE_PATH}/05-subset-tp.r > \
                             ${ALL_OUT}/log/05-subset-tp 2>&1
-Rscript ${CODE_PATH}/05-subset_rz.r > \
-          ${ALL_OUT}/log/05-subset_rz 2>&1
 Rscript ${CODE_PATH}/05-subset_tsv.r > \
           ${ALL_OUT}/log/05-subset_tsv 2>&1 &
 
@@ -96,12 +94,5 @@ Rscript ${CODE_PLOT_PATH}/m6-plot_prxy_wci.r > \
           ${ALL_OUT}/log/m6-plot_prxy_wci 2>&1 &
 
 # Plotting for multiple figures.
-Rscript ${CODE_PLOT_PATH}/s7-plotaa_deltat_true.r > \
-          ${ALL_OUT}/log/s7-plotaa_deltat_true 2>&1 &
 Rscript ${CODE_PLOT_PATH}/s8-plotmulti_true.r > \
           ${ALL_OUT}/log/s8-plotmulti_true 2>&1 &
-
-Rscript ${CODE_PLOT_PATH}/s7-plotaa_deltat_true_rz.r > \
-          ${ALL_OUT}/log/s7-plotaa_deltat_true_rz 2>&1 &
-Rscript ${CODE_PLOT_PATH}/s8-plotmulti_true_rz.r > \
-          ${ALL_OUT}/log/s8-plotmulti_true_rz 2>&1 &

@@ -1,7 +1,13 @@
 
 ======================= Log Before Release =====================================
+2014-04-22:
+  * Add ROC + NSEf work flows.
+
 2014-04-17:
   * Implement RW_Norm to get rid of independent chain via VGAM.
+
+2014-04-14:
+  * Add NSEf work flows.
 
 2014-03-11:
   * Clean and reformat all work flows.

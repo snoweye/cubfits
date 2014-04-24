@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -36,17 +36,20 @@ load(fn.in)
 
 # Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
+coef.names <- cubfits:::get.my.coefnames(model)
 label <- NULL
+b.names <- NULL
 for(i.aa in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.aa]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.aa, tmp, sep = "."))
+  b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
 # Get true values.
-all.names <- names(bInit)
-id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+all.names <- b.names 
+id.intercept <- grep("log.mu", all.names)
+id.slop <- grep("omega", all.names)
 
 scale.EPhi <- mean(EPhi)
 bInit[id.slop] <- bInit[id.slop] * scale.EPhi
@@ -100,14 +103,14 @@ for(i.case in case.names){
 # New page.
     new.page(workflow.name, i.case, model)
 
-    # Plot Delta.t.
+    # Plot omega.
     x <- bInit.negsel$b.negsel.PM
     y <- b.negsel.PM
     y.ci <- b.negsel.ci.PM
     x.label <- bInit.negsel$b.negsel.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
-                main = "Delta.t", add.lm = TRUE)
+                main = "omega", add.lm = TRUE)
 
     # Plot log(mu).
     x <- bInit[id.intercept]
@@ -304,11 +307,11 @@ for(i.case in case.names){
       b.pacf <- c(b.pacf, tmp[1])
     }
 
-    # Plot PACF Delta.t.
+    # Plot PACF omega.
     x <- b.pacf[id.slop]
     hist(x, nclass = 10,
          xlab = "Min Lag Partial Corr. < 0.1",
-         main = paste("PACF Delta.t\nmean=",
+         main = paste("PACF omega\nmean=",
                       sprintf("%4.2f", mean(x, na.rm = TRUE)),
                       " med.=",
                       sprintf("%4.2f", median(x, na.rm = TRUE)), sep = ""))

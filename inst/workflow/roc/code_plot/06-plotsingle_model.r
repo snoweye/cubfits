@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -24,7 +24,7 @@ ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
 noerror.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
 tmp <- convert.b.to.bVec(fitlist)
-id.slop <- grep("(Intercept)", names(tmp), invert = TRUE)
+id.slop <- grep("Delta.t", names(tmp))
 
 if(exists("Eb")){
   ### Since Eb is not generated in scale of mean 1, but phi.Obs was already

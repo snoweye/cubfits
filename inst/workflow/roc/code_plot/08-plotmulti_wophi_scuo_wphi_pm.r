@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -71,8 +71,8 @@ for(i.case in c(2, 3)){
 
 # Get negsel.
 all.names <- names(b.pm[[1]])
-id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+id.intercept <- grep("log.mu", all.names)
+id.slop <- grep("Delta.t", all.names)
 
 
 # Set layout.

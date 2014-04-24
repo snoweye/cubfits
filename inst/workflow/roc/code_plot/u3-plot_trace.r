@@ -1,15 +1,14 @@
 plottrace.param <- function(ret.b.Mat, names.b,
-    names.aa, id.intercept, workflow.name, i.case, model, bInit = NULL,
+    names.aa, id.plot, workflow.name, i.case, model, bInit = NULL,
     param = c("logmu", "deltat")){
   if(param[1] == "logmu"){
     ylab <- "log(mu)"
-    id.plot <- 1:nrow(names.b) %in% id.intercept
   } else if(param[1] == "deltat"){
     ylab <- "Delta.t"
-    id.plot <- !(1:nrow(names.b) %in% id.intercept)
   } else{
     stop("param is not found.")
   }
+  id.plot <- 1:nrow(names.b) %in% id.plot
 
   x <- 1:length(ret.b.Mat)
   xlim <- range(x)

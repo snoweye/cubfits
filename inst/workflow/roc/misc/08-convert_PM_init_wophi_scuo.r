@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits, quietly = TRUE))
+suppressMessages(library(cubfits))
 
 workflow.in <- c("sdlog_1.5", "sdlog_1.0", "sdlog_2.0")
 workflow.out <- "./output_collected"
@@ -40,7 +40,8 @@ save(b.mcmc.all, phi.mcmc.all, p.mcmc.all, file = fn.out)
 tmp <- colMeans(phi.mcmc.all)
 
 all.names <- rownames(b.mcmc.all)
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+# id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+id.slop <- grep("Delta.t", all.names)
 b.mcmc.all[id.slop,] <- t(t(b.mcmc.all[id.slop,]) * tmp)
 b.PM <- rowMeans(b.mcmc.all)
 

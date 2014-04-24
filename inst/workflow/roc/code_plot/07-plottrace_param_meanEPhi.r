@@ -1,6 +1,6 @@
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # Load environment and set data.
 source("00-set_env.r")
@@ -8,17 +8,24 @@ source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code.plot, "u3-plot_trace.r", sep = ""))
 fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")
 load(fn.in)
+coef.names <- cubfits:::get.my.coefnames(model)
 
 # Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
-  bInit <- lapply(Eb, function(x) x$coefficients)
+  bInit <- lapply(Eb, function(x){
+                        tmp <- x$coefficients
+                        names(tmp) <- rep(coef.names,
+                                          eacho = length(tmp) /
+                                                  length(coef.names))
+                        tmp
+                      })
   bInit <- do.call("c", bInit)
 
   # Get true values and scale accordingly.
   all.names <- names(bInit)
-  id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   scale.EPhi <- mean(EPhi)
   bInit.scaled <- bInit 
   bInit.scaled[id.slop] <- bInit.scaled[id.slop] * scale.EPhi
@@ -30,21 +37,23 @@ if(file.exists(fn.in)){
 # Check split.S.
 names.aa <- names(fitlist)
 split.S <- FALSE
-if("Delta.t" %in% names.aa){
+if("Delta.t" %in% fitlist){
   if("Z" %in% names.aa){
     split.S <- TRUE
   }
-  if(ncol(fitlist[["Delta.t"]]$coef.mat) == 3){
+  if(ncol(fitlist[["S"]]$coef.mat) == 3){
     split.S <- TRUE
   }
 }
 names.b <- lapply(1:length(names.aa),
              function(i.aa){
-               cbind(names.aa[i.aa], names(fitlist[[i.aa]]$coefficients))
+               tmp <- fitlist[[i.aa]]$coefficients
+               tmp <- rep(coef.names, each = length(tmp) / length(coef.names))
+               cbind(names.aa[i.aa], tmp)
              })
 names.b <- do.call("rbind", names.b)
-id.intercept <- grep("(Intercept)", names.b[, 2], invert = FALSE)
-id.slop <- grep("(Intercept)", names.b[, 2], invert = TRUE)
+id.intercept <- grep("log.mu", names.b[, 2])
+id.slop <- grep("Delta.t", names.b[, 2])
 
 # Trace each run.
 for(i.case in case.names){
@@ -71,7 +80,7 @@ for(i.case in case.names){
   # For deltat.
   fn.out <- paste(prefix$plot.trace, "param_deltat_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
-    plottrace.param(ret.b.Mat, names.b, names.aa, id.intercept,
+    plottrace.param(ret.b.Mat, names.b, names.aa, id.slop,
                     workflow.name, i.case, model,
                     bInit = bInit, param = "deltat")
   dev.off()
@@ -96,7 +105,7 @@ for(i.case in case.names){
   fn.out <- paste(prefix$plot.trace, "scaled_param_deltat_",
                   i.case, ".pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
-    plottrace.param(ret.b.Mat.scaled, names.b, names.aa, id.intercept,
+    plottrace.param(ret.b.Mat.scaled, names.b, names.aa, id.slop,
                     paste(workflow.name, ", scaled", sep = ""),
                     i.case, model,
                     bInit = bInit.scaled, param = "deltat")

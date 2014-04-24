@@ -19,7 +19,7 @@ get.my.logPosteriorAll <- function(model.Phi){
 my.logPosteriorAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq,
     mu.Phi = 0, sigma.Phi.sq = 1, reu13.df = NULL){
   ret <- dlnorm(phi.Obs, log(phi), sqrt(sigmaWsq), log = TRUE) +
-         my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
+         .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
          dlnorm(phi, mu.Phi, sqrt(sigma.Phi.sq), log = TRUE)
 
   ### Note that prior for all Phi is lognormal(mu.Phi, sigma.Phi), and assume

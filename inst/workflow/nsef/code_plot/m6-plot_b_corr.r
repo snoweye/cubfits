@@ -1,8 +1,8 @@
-### This script plots correlation of b (log(mu), Delta t).
+### This script plots correlation of b (log(mu), omega).
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
@@ -46,7 +46,7 @@ for(i.case in 1:4){
 
 # Plot logmu.
 all.names <- names(b.PM)
-id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
+id.intercept <- grep("log.mu", all.names)
 
 x.pm <- b.mean[[3]][id.intercept]
 y.pm <- b.mean[[1]][id.intercept]
@@ -80,8 +80,8 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 
-# Plot Delta.t.
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+# Plot omega.
+id.slop <- grep("omega", all.names)
 
 x.pm <- b.mean[[3]][id.slop]
 y.pm <- b.mean[[1]][id.slop]
@@ -96,27 +96,27 @@ y.pm.ci <- b.ci[[1]][id.slop,]
 x.scuo.ci <- b.ci[[4]][id.slop,]
 y.scuo.ci <- b.ci[[2]][id.slop,]
 
-fn.out <- paste(prefix$plot.match, "corr_deltat_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_omega_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
               x.ci = x.pm.ci, y.ci = y.pm.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_pm", workflow.name = workflow.name)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "corr_deltat_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_omega_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.scuo, y.scuo, x.scuo.label,
               x.ci = x.scuo.ci, y.ci = y.scuo.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_scuo", workflow.name = workflow.name)
 dev.off()
 
 
-# Plot Deltat.t original (no scaling by x to mean = 1).
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+# Plot omega original (no scaling by x to mean = 1).
+id.slop <- grep("omega", all.names)
 
 x.pm <- b.mean.org[[3]][id.slop]
 y.pm <- b.mean.org[[1]][id.slop]
@@ -131,21 +131,21 @@ y.pm.ci <- b.ci.org[[1]][id.slop,]
 x.scuo.ci <- b.ci.org[[4]][id.slop,]
 y.scuo.ci <- b.ci.org[[2]][id.slop,]
 
-fn.out <- paste(prefix$plot.match, "corr_nonscale_deltat_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_nonscale_omega_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
               x.ci = x.pm.ci, y.ci = y.pm.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_pm_nonscale", workflow.name = workflow.name)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "corr_nonscale_deltat_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_nonscale_omega_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.scuo, y.scuo, x.scuo.label,
               x.ci = x.scuo.ci, y.ci = y.scuo.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_scuo_nonscale", workflow.name = workflow.name)
 dev.off()
 

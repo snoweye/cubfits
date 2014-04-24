@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 set.seed(1234)
 
 ### Get individual of phi.Obs.

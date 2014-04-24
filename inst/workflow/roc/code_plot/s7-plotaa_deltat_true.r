@@ -25,19 +25,22 @@ load(fn.in)
 
 # Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
+ceof.names <- cubfits:::get.my.coefnames(model)
 label <- NULL
+b.names <- NULL
 for(i.codon in aa.names){
   tmp <- sort(unique(reu13.df.obs[[i.codon]]$Codon))
   tmp <- tmp[-length(tmp)]
   label <- c(label, paste(i.codon, tmp, sep = "."))
+  b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
-# Get id.deltat.
-all.names <- names(bInit)
-id.deltat <- grep("(Intercept)", all.names, invert = TRUE)
+# Get id.slop.
+all.names <- b.names
+id.slop <- grep("Delta.t", all.names)
 
 ### Convert true to negsel and delta.t only.
-tmp <- get.negsel(bInit, id.deltat, aa.names, label)
+tmp <- get.negsel(bInit, id.slop, aa.names, label)
 bInit <- tmp$b.negsel.PM
 label.negsel.true <- tmp$b.negsel.label
 
@@ -55,7 +58,7 @@ for(i.case in case.names){
   ### Convert unscaled result to negsel and delta.t only.
   tmp <- lapply(1:ncol(b.mcmc),
            function(i.iter){
-             tmp <- get.negsel(b.mcmc[, i.iter], id.deltat, aa.names, label)
+             tmp <- get.negsel(b.mcmc[, i.iter], id.slop, aa.names, label)
              tmp$b.negsel.PM
            })
   b.mcmc <- do.call("cbind", tmp)

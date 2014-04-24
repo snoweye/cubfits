@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 reu13.df <- ex.train$reu13.df
 phi.Obs <- ex.train$phi.Obs

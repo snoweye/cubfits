@@ -1,9 +1,9 @@
-### This script plot correlation of Delta t with adjusted reference codon
+### This script plot correlation of omega with adjusted reference codon
 ### such that all selection coefficients are negative.
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
@@ -45,7 +45,7 @@ for(i.case in 1:4){
 }
 
 
-# Plot Delta.t.
+# Plot omega.
 x.pm <- b.mean[[3]]
 y.pm <- b.mean[[1]]
 x.pm.label <- label[[3]]
@@ -70,27 +70,27 @@ if(any((x.scuo < 0 & y.scuo > 0) | (x.scuo > 0 & y.scuo < 0) |
   stop("Inconsistent cases (SCUO).")
 }
 
-# Plot Delta.t.
-fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_pm.pdf", sep = "")
+# Plot omega.
+fn.out <- paste(prefix$plot.match, "corr_negsel_omega_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
               x.ci = x.pm.ci, y.ci = y.pm.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_pm", workflow.name = workflow.name)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_negsel_omega_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.scuo, y.scuo, x.scuo.label,
               x.ci = x.scuo.ci, y.ci = y.scuo.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_scuo", workflow.name = workflow.name)
 dev.off()
 
 
-# Plot Delta.t original (no scaling by x to mean = 1).
+# Plot omega original (no scaling by x to mean = 1).
 x.pm <- b.mean.org[[3]]
 y.pm <- b.mean.org[[1]]
 x.pm.label <- label.org[[3]]
@@ -115,21 +115,21 @@ if(any((x.scuo < 0 & y.scuo > 0) | (x.scuo > 0 & y.scuo < 0) |
   stop("Inconsistent cases (SCUO).")
 }
 
-fn.out <- paste(prefix$plot.match, "corr_nonscale_negsel_deltat_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_nonscale_negsel_omega_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
               x.ci = x.pm.ci, y.ci = y.pm.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_pm_nonscale", workflow.name = workflow.name)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "corr_nonscale_negsel_deltat_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.match, "corr_nonscale_negsel_omega_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.scuo, y.scuo, x.scuo.label,
               x.ci = x.scuo.ci, y.ci = y.scuo.ci,
               xlim = xlim, ylim = ylim,
-              xlab = "Delta.t with phi", ylab = "Delta.t without phi",
+              xlab = "omega with phi", ylab = "omega without phi",
               main = "roc_ad_scuo_nonscale", workflow.name = workflow.name)
 dev.off()
 

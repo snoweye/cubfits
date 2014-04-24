@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 y <- ex.train$y
 y.list <- convert.y.to.list(y)
@@ -7,7 +7,7 @@ plot(CAI, log10(ex.train$phi.Obs), main = "Expression vs CAI",
      xlab = "CAI", ylab = "Expression (log10)")
 
 ### Verify with the seqinr example.
-library(seqinr, quietly = TRUE)
+library(seqinr)
 inputdatfile <- system.file("sequences/input.dat", package = "seqinr")
 input <- read.fasta(file = inputdatfile, forceDNAtolower = FALSE)
 names(input)[65] <- paste(names(input)[65], ".1", sep = "") # name duplicated.

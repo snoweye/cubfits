@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 source("00-set_env.r")
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 
@@ -31,7 +31,7 @@ for(i.case in case.names){
   # Load MCMC output.
   load(fn.in)
   all.names <- rownames(b.mcmc)
-  id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+  id.slop <- grep("Delta.t", all.names)
   b.PM <- rowMeans(b.mcmc)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
 

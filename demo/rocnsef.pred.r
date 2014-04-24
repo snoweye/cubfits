@@ -1,7 +1,7 @@
 start.time <- proc.time()
 
 # Initial
-library(cubfits, quietly = TRUE)
+library(cubfits)
 set.seed(1234)
 
 # Convert data.

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits, quietly = TRUE))
+suppressMessages(library(cubfits))
 
 source("00-set_env.r")
 

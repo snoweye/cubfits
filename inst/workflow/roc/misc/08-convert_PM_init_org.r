@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits, quietly = TRUE))
+suppressMessages(library(cubfits))
 
 workflow.in <- "org-02-fitsappr_yassour"
 workflow.out <- "41-simu_yassour"

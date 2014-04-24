@@ -1,6 +1,6 @@
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 # Load environment and set data.
 suppressMessages(library(pbdMPI, quietly = TRUE))

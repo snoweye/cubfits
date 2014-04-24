@@ -1,7 +1,8 @@
 ### An wrapper of RUE13 functions.
 
-gen.reu13.df <- function(seq.string, phi.df = NULL, aa.names = .CF.GV$amino.acid,
-    split.S = TRUE, drop.X = TRUE, drop.MW = TRUE){
+gen.reu13.df <- function(seq.string, phi.df = NULL,
+    aa.names = .CF.GV$amino.acid,
+    split.S = TRUE, drop.X = TRUE, drop.MW = TRUE, drop.1st.codon = TRUE){
   if(is.null(phi.df)){
     phi.df <- cbind(names(seq.string), rep(1, length(seq.string)))
     names(phi.df) <- c("ORF", "phi.value")
@@ -27,6 +28,10 @@ gen.reu13.df <- function(seq.string, phi.df = NULL, aa.names = .CF.GV$amino.acid
 
   if(drop.MW){
     aa.names <- aa.names[!(aa.names %in% c("M", "W"))]
+  }
+
+  if(drop.1st.codon){
+    seq.string <- lapply(seq.string, function(x){ x[-1] })
   }
 
   aa.names <- sort(aa.names)

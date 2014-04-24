@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 seq.data <- read.seq(get.expath("seq_200.fasta"))
 phi.df <- read.phi.df(get.expath("phi_200.tsv"))

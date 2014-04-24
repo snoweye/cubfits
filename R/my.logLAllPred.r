@@ -17,6 +17,6 @@ get.my.logLAllPred <- function(model.Phi){
 # Function to calculate complete logL for
 # (phi, b) given y and n
 my.logLAllPred.lognormal <- function(phi, y, n, b, reu13.df = NULL){
-  my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
+  .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
 } # End of my.logLAllPred.lognormal().
 

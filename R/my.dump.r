@@ -27,7 +27,9 @@ my.dump.lapply <- function(iter, list = NULL, envir = parent.frame()){
       save(list = list, file = file.data, envir = envir)
 
       .cubfitsEnv$iter <- iter
-      .cubfitsEnv$Random.seed <- .GlobalEnv$.Random.seed
+      if(exists(".Random.seed", envir = .GlobalEnv)){
+        .cubfitsEnv$Random.seed <- .GlobalEnv$.Random.seed
+      }
       file.env <- paste(.CF.DP$prefix.dump, "env_",
                         Sys.getpid(), ".rda", sep = "")
       save(list = ls(all.names = TRUE, envir = .cubfitsEnv),

@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -71,8 +71,8 @@ for(i.case in c(2, 3)){
 
 # Get negsel.
 all.names <- names(b.pm[[1]])
-id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+id.intercept <- grep("log.mu", all.names)
+id.slop <- grep("omega", all.names)
 
 
 # Set layout.
@@ -82,7 +82,7 @@ pdf(fn.out, width = 6, height = 10)
 # New page.
   new.page(workflow.name, case.main = paste(model, ": ", case.main, sep = ""))
 
-  # Plot Delta.t.
+  # Plot omega.
   x <- b.negsel[[2]]
   y <- b.negsel[[1]]
   x.ci <- b.negsel.ci[[2]]
@@ -90,7 +90,7 @@ pdf(fn.out, width = 6, height = 10)
   x.label <- b.negsel.label.list[[1]]
   plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
               xlab = "With Phi", ylab = "Without Phi",
-              main = "Delta.t", add.lm = TRUE)
+              main = "omega", add.lm = TRUE)
 
   # Plot log(mu).
   x <- b.pm[[2]][id.intercept]

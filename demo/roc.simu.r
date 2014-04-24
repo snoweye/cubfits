@@ -1,16 +1,18 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 set.seed(1234)
 
+# Normalize phi.Obs
+phi.Obs <- ex.train$phi.Obs / mean(ex.train$phi.Obs)
+
 # Generate sequences.
-da.roc <- simu.orf(length(ex.train$phi.Obs), bInit$roc,
-                   phi.Obs = ex.train$phi.Obs, model = "roc")
-names(da.roc) <- names(ex.train$phi.Obs)
+da.roc <- simu.orf(length(phi.Obs), bInit$roc,
+                   phi.Obs = phi.Obs, model = "roc")
+names(da.roc) <- names(phi.Obs)
 write.seq(da.roc, "toy_roc.fasta")
 
 # Read seqeuences back.
 seq.roc <- read.seq("toy_roc.fasta")
 seqstring.roc <- convert.seq.data.to.string(seq.roc)
-phi.Obs <- ex.train$phi.Obs / mean(ex.train$phi.Obs)
 phi <- data.frame(ORF = names(phi.Obs), phi.value = phi.Obs)
 
 # Generate data structures from sequences.
@@ -30,7 +32,7 @@ ret.time <- system.time({
 })
 
 x <- rowMeans(do.call("cbind", ret$phi.Mat)[, 11:20])
-y <- ex.train$phi.Obs
+y <- phi.Obs
 plotprxy(x, y)
 
 x <- log10(x / mean(x))

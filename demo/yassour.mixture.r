@@ -1,5 +1,5 @@
-library(cubfits, quietly = TRUE)
-library(EMCluster, quietly = TRUE)
+library(cubfits)
+library(EMCluster)
 set.seed(1234)
 
 ### Get individual of phi.Obs.

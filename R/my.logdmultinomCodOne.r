@@ -34,7 +34,7 @@ my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
   # Rebuild x matix in 3 columns, cbind(1, tmp.phi, tmp.phi:Pos).
   xm <- matrix(cbind(1, tmp.phi, tmp.phi * reu13.df.aa$Pos), ncol = 3)
 
-  # Call Rcpp to compute log posterior probability for every codon.
+  # Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 3, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
@@ -73,7 +73,7 @@ my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
   # Rebuild x matix in 2 columns, cbind(1, phi).
   xm <- matrix(cbind(1, phi), ncol = 2)
 
-  # Call Rcpp to compute log posterior probability for every codon.
+  # Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
@@ -106,10 +106,10 @@ my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
   ### This supposes that all data are rearrangeed by name.
   tmp.phi <- rep(phi, naa)
 
-  # Rebuild x matix in 3 columns, cbind(1, tmp.phi:Pos).
+  # Rebuild x matix in 2 columns, cbind(1, tmp.phi:Pos).
   xm <- matrix(cbind(1, tmp.phi * reu13.df.aa$Pos), ncol = 2)
 
-  # Call Rcpp to compute log posterior probability for every codon.
+  # Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 

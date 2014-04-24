@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 y.scuo <- convert.y.to.scuo(ex.train$y)
 SCUO <- calc_scuo_values(y.scuo)$SCUO

@@ -16,8 +16,9 @@ get.my.logLAll <- function(model.Phi){
 
 # Function to calculate complete logL for
 # (phi, b, sigmaWsq) given y, n, and phi.Obs
-my.logLAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq, reu13.df = NULL){
+my.logLAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq,
+    reu13.df = NULL){
   dlnorm(phi.Obs, log(phi), sqrt(sigmaWsq), log = TRUE) +
-  my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
+  .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
 } # End of my.logLAll.lognormal().
 

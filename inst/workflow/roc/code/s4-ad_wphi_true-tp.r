@@ -5,7 +5,7 @@ rm(list = ls())
 
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
-library(cubfits, quietly = TRUE)
+library(cubfits)
 set.seed(1234)
 
 ### Set environment.

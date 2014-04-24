@@ -1,4 +1,4 @@
-library(cubfits, quietly = TRUE)
+library(cubfits)
 
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
@@ -18,7 +18,7 @@ load(fn.in)
 # True SCU.
 bInit <- convert.b.to.bVec(Eb)
 all.names <- names(bInit)
-id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+id.slop <- grep("Delta.t", all.names)
 scale.EPhi <- mean(EPhi)
 bInit[id.slop] <- bInit[id.slop] * scale.EPhi
 EPhi <- EPhi / scale.EPhi

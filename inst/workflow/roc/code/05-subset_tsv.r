@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-library(cubfits, quietly = TRUE)
+library(cubfits)
 source("00-set_env.r")
 
 # Get all cases.
@@ -14,8 +14,8 @@ for(i.case in case.names){
   load(fn.in)
 
   all.names <- names(b.PM)
-  id.intercept <- grep("(Intercept)", all.names, invert = FALSE)
-  id.slop <- grep("(Intercept)", all.names, invert = TRUE)
+  id.intercept <- grep("log.mu", all.names)
+  id.slop <- grep("Delta.t", all.names)
 
   log.mu <- b.PM[id.intercept]
   Delta.t <- b.PM[id.slop]
