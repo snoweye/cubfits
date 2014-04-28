@@ -14,7 +14,8 @@ get.my.pPropTypeNoObs <- function(type){
 # Drew Gibbs Sampler given current status for lognormal prior around fixed
 # mean of log expression.
 my.pPropTypeNoObs.lognormal_fix <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
-    nu.Phi.Curr, sigma.Phi.Curr){
+    nu.Phi.Curr, sigma.Phi.Curr,
+    p.DrawScale = 1, p.DrawScale.prev = 1, Phi.Curr = NULL){
   # nu.Phi.Curr is unused in this case.
   # sigma.Phi.Curr is unused in this case.
 
@@ -37,16 +38,20 @@ my.pPropTypeNoObs.lognormal_fix <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
                        rate = sum((log.Phi.Curr - log.Phi.Obs.mean)^2) / 2))
   nu.Phi.Curr <- log.Phi.Obs.mean + rnorm(1) * sigma.Phi.Curr / sqrt(n.G)
 
-  # Only y0 and bb are used.
-  ppCurr <- list(y0 = nu.Phi.Curr, bb = sigma.Phi.Curr)
+  # Update prior's acceptance and adaptive.
+  accept <- 1
+  my.update.acceptance("p", accept)
+  my.update.adaptive("p", accept)
 
-  ret <- list(ppCurr = ppCurr)
+  # Only nu.Phi and sigma.Phi are used.
+  ret <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret
 } # End of my.pPropTypeNoObs.lognormal_fix().
 
 # Drew Gibbs Sampler given current status for lognormal prior.
 my.pPropTypeNoObs.lognormal <- function(n.G, log.Phi.Obs, log.Phi.Curr,
-    nu.Phi.Curr, sigma.Phi.Curr){
+    nu.Phi.Curr, sigma.Phi.Curr,
+    p.DrawScale = 1, p.DrawScale.prev = 1, Phi.Curr = NULL){
   # nu.Phi.Curr is unused in this case.
   # sigma.Phi.Curr is unused in this case.
 
@@ -61,16 +66,20 @@ my.pPropTypeNoObs.lognormal <- function(n.G, log.Phi.Obs, log.Phi.Curr,
   ## Draw \mu^*_phi from N(sum_g log(phi^{(t)}_g) / n_G, \sigma^{2*}_phi / n_G)
   nu.Phi.Curr <- mean(log.Phi.Curr) + rnorm(1) * sigma.Phi.Curr / sqrt(n.G)
 
-  # Only y0 and bb are used.
-  ppCurr <- list(y0 = nu.Phi.Curr, bb = sigma.Phi.Curr)
+  # Update prior's acceptance and adaptive.
+  accept <- 1
+  my.update.acceptance("p", accept)
+  my.update.adaptive("p", accept)
 
-  ret <- list(ppCurr = ppCurr)
+  # Only nu.Phi and sigma.Phi are used.
+  ret <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret
 } # End of my.pPropTypeNoObs.lognormal().
 
 # This method violates MCMC fundamental assumption.
 my.pPropTypeNoObs.lognormal_MG <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
-    nu.Phi.Curr, sigma.Phi.Curr){
+    nu.Phi.Curr, sigma.Phi.Curr,
+    p.DrawScale = 1, p.DrawScale.prev = 1, Phi.Curr = NULL){
   # nu.Phi.Curr is unused in this case.
   # sigma.Phi.Curr is unused in this case.
 
@@ -95,16 +104,20 @@ my.pPropTypeNoObs.lognormal_MG <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
   nu.Phi.Curr <- -sigma.Phi.Curr^2 / 2
   .cubfitsEnv$my.print(sigma.Phi.Curr)
 
-  # Only y0 and bb are used.
-  ppCurr <- list(y0 = nu.Phi.Curr, bb = sigma.Phi.Curr)
+  # Update prior's acceptance and adaptive.
+  accept <- 1
+  my.update.acceptance("p", accept)
+  my.update.adaptive("p", accept)
 
-  ret <- list(ppCurr = ppCurr)
+  # Only nu.Phi and sigma.Phi are used.
+  ret <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret
 } # End of my.pPropTypeNoObs.lognormal_MG().
 
 # This method violates MCMC fundamental assumption.
 my.pPropTypeNoObs.lognormal_MG0 <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
-    nu.Phi.Curr, sigma.Phi.Curr){
+    nu.Phi.Curr, sigma.Phi.Curr,
+    p.DrawScale = 1, p.DrawScale.prev = 1, Phi.Curr = NULL){
   # nu.Phi.Curr is unused in this case.
   # sigma.Phi.Curr is unused in this case.
 
@@ -129,19 +142,26 @@ my.pPropTypeNoObs.lognormal_MG0 <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
   nu.Phi.Curr <- 0.0
   .cubfitsEnv$my.print(sigma.Phi.Curr)
 
-  # Only y0 and bb are used.
-  ppCurr <- list(y0 = nu.Phi.Curr, bb = sigma.Phi.Curr)
+  # Update prior's acceptance and adaptive.
+  accept <- 1
+  my.update.acceptance("p", accept)
+  my.update.adaptive("p", accept)
 
-  ret <- list(ppCurr = ppCurr)
+  # Only nu.Phi and sigma.Phi are used.
+  ret <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret
 } # End of my.pPropTypeNoObs.lognormal_MG0().
 
 my.pPropTypeNoObs.fixed_SM <- function(n.G, log.Phi.Obs.mean, log.Phi.Curr,
-    nu.Phi.Curr, sigma.Phi.Curr){
+    nu.Phi.Curr, sigma.Phi.Curr,
+    p.DrawScale = 1, p.DrawScale.prev = 1, Phi.Curr = NULL){
   # Do nothing but skip this step.
 
-  ppCurr <- list(y0 = nu.Phi.Curr, bb = sigma.Phi.Curr)
+  # Update prior's acceptance and adaptive.
+  accept <- 1
+  my.update.acceptance("p", accept)
+  my.update.adaptive("p", accept)
 
-  ret <- list(ppCurr = ppCurr)
+  ret <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret
 } # End of my.pPropTypeNoObs.fixed_SM().

@@ -11,8 +11,8 @@
   cubpred(reu13.df.obs, phi.Obs, y, n,
           reu13.df.pred, y.pred, n.pred,
           nIter = 1000, burnin = 100,
-          pInit = NULL,
           bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
+          p.Init = NULL, p.DrawScale = 1,
           phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
           phi.Init.pred = NULL, phi.DrawScale.pred = 1,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
@@ -30,11 +30,13 @@
   \item{n.pred}{a \code{\link{n}} to be predicted.}
   \item{nIter}{number of iterations after burn-in iterations.}
   \item{burnin}{number of burn-in iterations.}
-  \item{pInit}{initial values for hyper-parameters.}
   \item{bInit}{initial values for parameters \code{\link{b}}.}
   \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
+  \item{p.Init}{initial values for hyper-parameters.}
+  \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
+                     when drawing new \code{sigma.Phi}.}
   \item{phi.Init}{initial values for Phi.}
   \item{init.Phi.Scale}{for initial Phi if \code{phi.Init = NULL}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks

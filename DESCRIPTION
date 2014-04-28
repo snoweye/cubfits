@@ -21,7 +21,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
 URL: http://www.tiem.utk.edu/~mikeg/
-Packaged: 2014-04-24 18:20:26 UTC; snoweye
+Packaged: 2014-04-28 19:57:54 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

@@ -63,7 +63,7 @@ range$thinning <- 10
 # For simulation only.
 simulation <- list()
 simulation$EPhi <- TRUE
-simulation$Eb <- TRUE
+simulation$Eb <- FALSE
 simulation$seed <- 1234
 simulation$sdlog <- 1.5
 

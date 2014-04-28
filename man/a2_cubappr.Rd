@@ -8,8 +8,8 @@
 \usage{
   cubappr(reu13.df.obs, phi.Init, y, n,
           nIter = 1000, burnin = 100,
-          pInit = NULL,
           bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
+          p.Init = NULL, p.DrawScale = 1,
           phi.DrawScale = 1,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
@@ -24,11 +24,13 @@
   \item{n}{a \code{\link{n}} object, total codon counts.}
   \item{nIter}{number of iterations after burn-in iterations.}
   \item{burnin}{number of burn-in iterations.}
-  \item{pInit}{initial values for hyper-parameters.}
   \item{bInit}{initial values for parameters \code{\link{b}}.}
   \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
+  \item{p.Init}{initial values for hyper-parameters.}
+  \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
+                     when drawing new \code{sigma.Phi}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
                        when drawing new Phi.}
   \item{model}{model to be fitted, currently "roc" only.}

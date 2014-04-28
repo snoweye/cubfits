@@ -4,6 +4,7 @@
 # Initial global storages.
 my.set.adaptive <- function(nSave,
     n.aa = NULL, b.DrawScale = NULL,
+    n.p = NULL, p.DrawScale = NULL,
     n.G = NULL, phi.DrawScale = NULL,
     n.G.pred = NULL, phi.DrawScale.pred = NULL,
     renew.iter = .CF.AC$renew.iter, adaptive = .CF.CT$adaptive[1]){
@@ -16,8 +17,10 @@ my.set.adaptive <- function(nSave,
 
   # Initials for updating acceptance rate.
   .cubfitsEnv$curr.renew <- 1
-  .cubfitsEnv$adaptive <- list(b = list(), phi = list(), phi.pred = list())
-  .cubfitsEnv$DrawScale <- list(b = list(), phi = list(), phi.pred = list())
+  .cubfitsEnv$adaptive <- list(b = list(), p = list(),
+                               phi = list(), phi.pred = list())
+  .cubfitsEnv$DrawScale <- list(b = list(), p = list(),
+                                phi = list(), phi.pred = list())
 
   # For adaptive rate in parameters.
   if(!is.null(n.aa)){
@@ -30,6 +33,21 @@ my.set.adaptive <- function(nSave,
         .cubfitsEnv$DrawScale$b[[i.renew]] <- b.DrawScale
       } else{
         stop("length of b.DrawScale is incorrect.")
+      }
+    }
+  }
+
+  # For adaptive rate in prior
+  if(!is.null(n.p)){
+    for(i.renew in 1:total.renew){
+      .cubfitsEnv$adaptive$p[[i.renew]] <- rep(0L, n.p)
+
+      if(length(p.DrawScale) == 1){
+        .cubfitsEnv$DrawScale$p[[i.renew]] <- rep(p.DrawScale, n.p)
+      } else if(length(p.DrawScale) == n.p){
+        .cubfitsEnv$DrawScale$p[[i.renew]] <- p.DrawScale
+      } else{
+        stop("length of p.DrawScale is incorrect.")
       }
     }
   }

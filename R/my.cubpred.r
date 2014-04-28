@@ -11,9 +11,9 @@
 # (1) Sample of b | phi, y, using VGAM fit for Gaussian proposal
 # (2) Sample sigmaW | phi, phi.Obs
 #     Sample mu.Phi, sigma.Phi | x 
-# (3) Sample of phi | b, phi.Obs, nu.Phi, bsig.Phi, m.Phi, ww, sigmaW, y,
+# (3) Sample of phi | b, phi.Obs, nu.Phi, sigma.Phi, m.Phi, ww, sigmaW, y,
 #     using logNormal proposal 
-# (4) Sample of phi.pred | b, nu.Phi, bsig.Phi, m.Phi, ww, y.pred,
+# (4) Sample of phi.pred | b, nu.Phi, sigma.Phi, m.Phi, ww, y.pred,
 #     using logNormal proposal 
 
 ### All genes have observations in the training set and
@@ -21,8 +21,8 @@
 my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     reu13.df.pred, y.pred, n.pred,
     nIter = 1000, burnin = 100,
-    pInit = NULL,
     bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
+    p.Init = NULL, p.DrawScale = 1,
     phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
     phi.Init.pred = NULL, phi.DrawScale.pred = 1,
     model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
@@ -104,17 +104,17 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   bInitVec <- unlist(bInit)
 
   # Initial values for p.
-  if(is.null(pInit)){
+  if(is.null(p.Init)){
     nu.Phi.Init <- mean(log(phi.Obs))
     sigmasqObs <- var(log(phi.Obs))
-    bsig.Phi.Init <- sqrt(.8 * sigmasqObs)     # \sigma_phi
+    sigma.Phi.Init <- sqrt(.8 * sigmasqObs)     # \sigma_phi
     sigmaWInit <- sqrt(.2 * sigmasqObs)        # \sigma_W
-    pInit <- c(sigmaW = sigmaWInit, nu.Phi = nu.Phi.Init,
-               bsig.Phi = bsig.Phi.Init)
+    p.Init <- c(sigmaW = sigmaWInit, nu.Phi = nu.Phi.Init,
+               sigma.Phi = sigma.Phi.Init)
   } else{
-    sigmaWInit <- pInit["sigmaW"]
-    nu.Phi.Init <- pInit["nu.Phi"]
-    bsig.Phi.Init <- pInit["bsig.Phi"]
+    sigmaWInit <- p.Init["sigmaW"]
+    nu.Phi.Init <- p.Init["nu.Phi"]
+    sigma.Phi.Init <- p.Init["sigma.Phi"]
   }
 
   # Initial values for training phi.
@@ -134,11 +134,11 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   bCurr <- bInit
 
   # Set current step for p.
-  p.Mat[[1]] <- pInit 
-  pCurr <- pInit
+  p.Mat[[1]] <- p.Init 
+  pCurr <- p.Init
   nu.Phi.Curr <- nu.Phi.Init
-  bsig.Phi.Curr <- bsig.Phi.Init
-  sigmaWCurr <- sigmaWInit
+  sigma.Phi.Curr <- sigma.Phi.Init
+  sigmaW.Curr <- sigmaWInit
 
   # Set current step for phi.
   phi.Mat[[1]] <- phi.Init
@@ -154,16 +154,19 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
 
 ### MCMC here ###
   # Set acceptance rate storage.
-  my.set.acceptance(nSave, n.aa, n.G = n.G, n.G.pred = n.G.pred)
+  my.set.acceptance(nSave, n.aa, n.p = 1, n.G = n.G, n.G.pred = n.G.pred)
 
   # Set adaptive storage.
   my.set.adaptive(nSave,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
+                  n.p = 1, p.DrawScale = p.DrawScale,
                   n.G = n.G, phi.DrawScale = phi.DrawScale,
                   n.G.pred = n.G.pred, phi.DrawScale.pred = phi.DrawScale.pred,
                   adaptive = adaptive[1])
   b.DrawScale <- .cubfitsEnv$DrawScale$b[[1]]
   b.DrawScale.prev <- b.DrawScale
+  p.DrawScale <- .cubfitsEnv$DrawScale$p[[1]]
+  p.DrawScale.prev <- p.DrawScale
   phi.DrawScale <- .cubfitsEnv$DrawScale$phi[[1]]
   phi.DrawScale.pred <- .cubfitsEnv$DrawScale$phi.pred[[1]]
   phi.DrawScale.prev <- phi.DrawScale
@@ -184,22 +187,23 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     bCurr  <- lapply(bUpdates, function(U){ U$bNew })
 
     # Step 2: Draw other parameters.
-    log.Phi.Curr <- log(phi.Curr)
-    pUpdate <- .cubfitsEnv$my.pPropType(n.G, log.Phi.Obs, log.Phi.Curr,
-                                        nu.Phi.Curr, bsig.Phi.Curr,
-                                        log.Phi.Obs.mean)
-    sigmaWCurr <- pUpdate$sigmaWCurr 
-    nu.Phi.Curr <- pUpdate$ppCurr$y0
-    bsig.Phi.Curr <- pUpdate$ppCurr$bb
-    pCurr <- c(sigmaWCurr, nu.Phi.Curr, bsig.Phi.Curr)
-    mu.Phi.Curr <- nu.Phi.Curr
-    sigma.Phi.sqCurr <- bsig.Phi.Curr^2
+    pUpdate <- .cubfitsEnv$my.pPropType(
+                 n.G, log.Phi.Obs, log(phi.Curr),
+                 nu.Phi.Curr, sigma.Phi.Curr,
+                 log.Phi.Obs.mean,
+                 p.DrawScale = p.DrawScale,
+                 p.DrawScale.prev = p.DrawScale.prev,
+                 Phi.Curr = phi.Curr)
+    sigmaW.Curr <- pUpdate$sigmaW
+    nu.Phi.Curr <- pUpdate$nu.Phi
+    sigma.Phi.Curr <- pUpdate$sigma.Phi
+    pCurr <- c(sigmaW.Curr, nu.Phi.Curr, sigma.Phi.Curr)
 
     # Step 3: Update phi using M-H step.
     phi.Update <- my.drawPhiConditionalAll(phi.Curr, phi.Obs, y, n,
-                    bCurr, sigmaWCurr^2,
-                    mu.Phi = mu.Phi.Curr,
-                    sigma.Phi.sq = sigma.Phi.sqCurr, 
+                    bCurr, sigmaW.Curr^2,
+                    mu.Phi = nu.Phi.Curr,
+                    sigma.Phi.sq = sigma.Phi.Curr^2, 
                     phi.DrawScale = phi.DrawScale,
                     phi.DrawScale.prev = phi.DrawScale.prev,
                     reu13.df = reu13.df.obs)
@@ -208,8 +212,8 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     # Step 4: Predict phi using M-H step. This is different to the Step 3.
     phi.pred <- my.drawPhiConditionalAllPred(phi.Curr.pred, y.pred, n.pred,
                   bCurr,
-                  mu.Phi = mu.Phi.Curr,
-                  sigma.Phi.sq = sigma.Phi.sqCurr, 
+                  mu.Phi = nu.Phi.Curr,
+                  sigma.Phi.sq = sigma.Phi.Curr^2, 
                   phi.DrawScale.pred = phi.DrawScale.pred,
                   phi.DrawScale.pred.prev = phi.DrawScale.pred.prev,
                   reu13.df = reu13.df.pred)
@@ -217,13 +221,18 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
 
     # Step A: Update scaling factor.
     b.DrawScale.prev <- b.DrawScale
+    p.DrawScale.prev <- p.DrawScale
     phi.DrawScale.prev <- phi.DrawScale
     phi.DrawScale.pred.prev <- phi.DrawScale.pred
     if(iter %/% .CF.AC$renew.iter + 1 != .cubfitsEnv$curr.renew){
       # For each E[b].
       b.DrawScale <- .cubfitsEnv$my.update.DrawScale(
-                         "b", b.DrawScale,
-                         update.curr.renew = FALSE)
+                       "b", b.DrawScale,
+                       update.curr.renew = FALSE)
+      # For prior.
+      p.DrawScale <- .cubfitsEnv$my.update.DrawScale(
+                       "p", p.DrawScale,
+                       update.curr.renew = FALSE)
       # For each E[Phi | Phi^{obs}].
       phi.DrawScale <- .cubfitsEnv$my.update.DrawScale(
                          "phi", phi.DrawScale,

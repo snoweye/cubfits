@@ -1,5 +1,8 @@
 
 ======================= Log Before Release =====================================
+2014-04:25:
+  * Add M-H random walk with restriction to hyper-parameters.
+
 2014-04-22:
   * Add ROC + NSEf work flows.
 
