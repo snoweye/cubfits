@@ -14,12 +14,12 @@ phi.Obs <- GM / sum(GM) * 15000
 X <- log(as.matrix(phi.Obs.all))
 param.init <- list(K = 2, prop = c(0.95, 0.05), mu = c(-0.59, 3.11),
                    sigma2 = c(1.40, 0.59), sigma2.e = 0.03)
-ret <- mixnorm.optim(X, K = 2, param = param.init)
+ret <- mixnormerr.optim(X, K = 2, param = param.init)
 print(ret)
 
 ### Compute density from 2 mixture normal.
 x <- seq(min(X, na.rm = TRUE), max(X, na.rm = TRUE), length = 100)
-d.mn <- dmixnorm(x, ret$param)
+d.mn <- dmixnormerr(x, ret$param)
 
 ### Compute density from posterior of mean expression.
 d.post.fits <- dnorm(x, -0.4848434, 0.8731349)

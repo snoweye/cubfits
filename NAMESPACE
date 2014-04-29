@@ -28,7 +28,7 @@ export(
 # Simulation
   "simu.orf",
   "simu.phi.Obs",
-  "simu.mixnorm",
+  "simu.mixnormerr",
 # Data structure
   "codon.low2up",
   "codon.up2low",
@@ -59,8 +59,8 @@ export(
   "get.workflow",
   "cp.workflow",
 # MLE for mixnorm.
-  "mixnorm.optim",
-  "dmixnorm"
+  "mixnormerr.optim",
+  "dmixnormerr"
 )
 
 # Converting
@@ -70,4 +70,4 @@ exportPattern("^convert.[[:alpha:]]+")
 exportPattern("^rearrange.[[:alpha:]]+")
 
 # S3 method
-S3method("print", "mixnorm")
+S3method("print", "mixnormerr")

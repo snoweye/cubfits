@@ -1,12 +1,12 @@
 \name{Print}
-\alias{print.mixnorm}
+\alias{print.mixnormerr}
 \title{Functions for Printing Objects According to Classes}
 \description{
-  A Class \code{mixnorm} is declared in \pkg{cubfits}, and this is the function
+  A Class \code{mixnormerr} is declared in \pkg{cubfits}, and this is the function
   to print and summary objects.
 }
 \usage{
-\method{print}{mixnorm}(x, digits = max(4, getOption("digits") - 3), ...)
+\method{print}{mixnormerr}(x, digits = max(4, getOption("digits") - 3), ...)
 }
 \arguments{
   \item{x}{an object with the class attributes.}
@@ -26,7 +26,7 @@
   Wei-Chen Chen \email{wccsnow@gmail.com}.
 }
 \seealso{
-  \code{\link{mixnorm.optim}()}.
+  \code{\link{mixnormerr.optim}()}.
 }
 \examples{
 \dontrun{
@@ -41,7 +41,7 @@ phi.Obs.all[phi.Obs.all == 0] <- NA
 X <- log(as.matrix(phi.Obs.all))
 param.init <- list(K = 2, prop = c(0.95, 0.05), mu = c(-0.59, 3.11),
                    sigma2 = c(1.40, 0.59), sigma2.e = 0.03)
-ret <- mixnorm.optim(X, K = 2, param = param.init)
+ret <- mixnormerr.optim(X, K = 2, param = param.init)
 print(ret)
 }
 }

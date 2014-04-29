@@ -118,7 +118,7 @@
 \seealso{
   \code{\link{init.function}()}, \code{\link{cubfits}()},
   \code{\link{cubpred}()}, \code{\link{cubappr}()}, and
-  \code{\link{mixnorm.optim}()}.
+  \code{\link{mixnormerr.optim}()}.
 }
 \examples{
 \dontrun{

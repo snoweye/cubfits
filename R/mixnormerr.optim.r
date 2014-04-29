@@ -1,7 +1,7 @@
 ### Functions for two components of mixture with measurement errors.
 
 # Negative log likelihood.
-mixnorm.nlogL <- function(theta, X, K, debug = .CO.CT$debug){
+mixnormerr.nlogL <- function(theta, X, K, debug = .CO.CT$debug){
   prop <- theta[1:(K - 1)]
   prop <- c(prop, 1 - prop)
   mu <- theta[K:(2 * K - 1)]
@@ -24,11 +24,11 @@ mixnorm.nlogL <- function(theta, X, K, debug = .CO.CT$debug){
   }
 
   -ret
-} # End of mixnorm.nlogL().
+} # End of mixnormerr.nlogL().
 
 
 # Constrained optimization for mixture normal with 2 components. 
-optim.mixnorm.logL <- function(X, PARAM){
+optim.mixnormerr.logL <- function(X, PARAM){
   K <- PARAM$K
   theta <- c(PARAM$prop[-K],
              PARAM$mu,
@@ -64,11 +64,11 @@ optim.mixnorm.logL <- function(X, PARAM){
   }
 
   ### Run constrained optimization.
-  ret <- constrOptim(theta, mixnorm.nlogL, grad = NULL, ui, ci,
+  ret <- constrOptim(theta, mixnormerr.nlogL, grad = NULL, ui, ci,
                      method = "Nelder-Mead",
                      X = X, K = K)
   ret
-} # End of optim.mixnorm.logL().
+} # End of optim.mixnormerr.logL().
 
 
 ### Initial parameters.
@@ -107,22 +107,22 @@ get.param <- function(theta, K = 2){
 
 
 ### Main function.
-mixnorm.optim <- function(X, K = 2, param = NULL){
+mixnormerr.optim <- function(X, K = 2, param = NULL){
   if(is.null(param)){
     PARAM <- init.param(X, K)
   } else{
     K <- param$K
     PARAM <- param
   }
-  tmp <- optim.mixnorm.logL(X, PARAM)
+  tmp <- optim.mixnormerr.logL(X, PARAM)
   PARAM.new <- get.param(tmp$par, K)
 
   ret <- list(param = PARAM.new,
               param.start = PARAM,
               optim.ret = tmp)
-  class(ret) <- "mixnorm"
+  class(ret) <- "mixnormerr"
   ret
-} # End of mixnorm.optim().
+} # End of mixnormerr.optim().
 
 
 ### S3 print method.
@@ -130,7 +130,7 @@ my.format <- function(x, digits = max(4, getOption("digits") - 3)){
   paste(formatC(x, format = "f", width = -1, digits = digits), collapse = " ")
 } # End of my.format().
 
-print.mixnorm <- function(x, digits = max(4, getOption("digits") - 3), ...){
+print.mixnormerr <- function(x, digits = max(4, getOption("digits") - 3), ...){
   cat("prop = ", my.format(x$param$prop, digits), "\n", sep = "")
   cat("mu = ", my.format(x$param$mu, digits), "\n", sep = "")
   cat("sigma2 = ", my.format(x$param$sigma2, digits), "\n",
@@ -141,15 +141,15 @@ print.mixnorm <- function(x, digits = max(4, getOption("digits") - 3), ...){
       ", iter = ", paste(x$optim.ret$counts, collapse = " "),
       ", convergence = ", x$optim.ret$convergence, "\n", sep = "")
   invisible()
-} # End of print.mixnorm().
+} # End of print.mixnormerr().
 
 
 ### For plotting.
-dmixnorm <- function(x, param){
-  do.call("c", lapply(x, dmixnorm.one, param))
-} # End of dmixnorm().
+dmixnormerr <- function(x, param){
+  do.call("c", lapply(x, dmixnormerr.one, param))
+} # End of dmixnormerr().
 
-dmixnorm.one <- function(x, param){
+dmixnormerr.one <- function(x, param){
   ret <- 0
   for(i.k in 1:param$K){
     tmp <- dnorm(x, param$mu[i.k], sqrt(param$sigma2[i.k] + param$sigma2.e),
@@ -158,5 +158,5 @@ dmixnorm.one <- function(x, param){
     ret <- ret + exp(tmp)
   }
   ret
-} # End of dmixnorm.one().
+} # End of dmixnormerr.one().
 

@@ -1,7 +1,7 @@
 \name{Simulation Tool}
 \alias{simu.orf}
 \alias{simu.phi.Obs}
-\alias{simu.mixnorm}
+\alias{simu.mixnormerr}
 \title{Simulate ORFs and Expression Data}
 \description{
   These utility functions generate data for simulation studies
@@ -11,7 +11,7 @@
   simu.orf(n, bInit, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL,
            orf.names = NULL, model = .CF.CT$model)
   simu.phi.Obs(Phi, sigmaW.lim = 1)
-  simu.mixnorm(n, param)
+  simu.mixnormerr(n, param)
 }
 \arguments{
   \item{n}{number of ORFs or sequences.}
@@ -24,7 +24,7 @@
   \item{model}{model to be simulated.}
   \item{Phi}{expression values (potentially true expression).}
   \item{sigmaW.lim}{std of measurement errors (between Phi and phi.Obs).}
-  \item{param}{as in \code{\link{dmixnorm}()}}
+  \item{param}{as in \code{\link{dmixnormerr}()}}
 }
 \details{
   \code{simu.orf()} generates ORFs or sequences based on the \code{bInit}
@@ -44,7 +44,7 @@
   errors to \code{Phi}, and errors have mean 0 and standard deviation
   \code{sigmaW.lim}.
 
-  \code{simu.mixnorm()} generates \code{Phi} according to the \code{param},
+  \code{simu.mixnormerr()} generates \code{Phi} according to the \code{param},
   and adds normal random errors to \code{Phi}.
 }
 \value{
@@ -52,7 +52,7 @@
 
   \code{simu.phi.Obs()} returns a vector of format \code{\link{phi.Obs}}.
 
-  \code{simu.mixnorm()} returns a list contains three vectors of length
+  \code{simu.mixnormerr()} returns a list contains three vectors of length
   \code{n}: one for expected gene expression \code{Phi}, one for observed
   gene expression \code{phi.Obs}, and one for the component id \code{id.K}.
 }
@@ -65,7 +65,7 @@
 \seealso{
   \code{\link{read.seq}()}, \code{\link{read.phi.df}()},
   \code{\link{write.seq}()}, \code{\link{write.phi.df}()}, and
-  \code{\link{mixnorm.optim}()}.
+  \code{\link{mixnormerr.optim}()}.
 }
 \examples{
 \dontrun{

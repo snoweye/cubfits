@@ -2,7 +2,7 @@
 
 # log(Phi) ~ \sum_k p_k N(mu_k, sigma_k^2)
 # log(Phi^{obs}) = log(Phi) + N(0, sigma_e^2)
-simu.mixnorm <- function(n, param){
+simu.mixnormerr <- function(n, param){
   id.K <- sample(1:param$K, n, replace = TRUE, prob = param$prop)
   n.K <- tabulate(id.K, nbins = param$K)
 
@@ -18,5 +18,5 @@ simu.mixnorm <- function(n, param){
   }
 
   ret
-} # End of simu.mixnorm().
+} # End of simu.mixnormerr().
 

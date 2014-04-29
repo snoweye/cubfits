@@ -1,6 +1,6 @@
 Package: cubfits
 Version: 0.1-0
-Date: 2013-12-13
+Date: 2014-04-28
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
@@ -15,13 +15,14 @@ Enhances: pbdMPI (>= 0.2-2), parallel, EMCluster
 LazyLoad: yes
 LazyData: yes
 Description: Estimating mutation and selection coefficients on synonymous
-       codon bias usage based on models of ribosome overhead cost (ROC).
+       codon bias usage based on models of ribosome overhead cost (ROC)
+       and nonsense error models with first order approximation (NSEf).
        Multinomial logistic regression and Markov Chain Monte Carlo are used to
        estimate and predict protein production rates with/without the presence
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
 URL: http://www.tiem.utk.edu/~mikeg/
-Packaged: 2014-04-28 19:57:54 UTC; snoweye
+Packaged: 2014-04-29 20:52:56 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

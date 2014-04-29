@@ -7,7 +7,7 @@
              "lognormal_MG", "lognormal_MG0",
              "fixed_SM", "lognormal_RW"),       # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
-  model.Phi = c("lognormal"),                   # prior of Phi
+  model.Phi = c("lognormal", "logmixture"),     # prior of Phi
   init.Phi = c("PM"),                           # initial methods for Phi
   init.fit = c("current", "random", "RW_Norm"), # how is beta proposed
   parallel = c("lapply", "mclapply",
