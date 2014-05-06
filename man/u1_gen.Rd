@@ -59,7 +59,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 seq.data <- read.seq(get.expath("seq_200.fasta"))
 phi.df <- read.phi.df(get.expath("phi_200.tsv"))

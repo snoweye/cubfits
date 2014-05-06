@@ -1,7 +1,13 @@
 
 ======================= Log Before Release =====================================
-2014-04:28:
-  * Add M-H random walk with restriction to hyper-parameters.
+2014-05-05:
+  * Change random walk to M-H algorithm with restriction to hyper-parameters.
+
+2014-04-30:
+  * Add log mixture normal to Phi distribution.
+
+2014-04-28:
+  * Add random walk with restriction to hyper-parameters.
 
 2014-04-22:
   * Add ROC + NSEf work flows.

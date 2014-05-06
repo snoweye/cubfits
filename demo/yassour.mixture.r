@@ -1,4 +1,4 @@
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 library(EMCluster)
 set.seed(1234)
 

@@ -1,6 +1,6 @@
 start.time <- proc.time()
 
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 .CF.AC$renew.iter <- 3

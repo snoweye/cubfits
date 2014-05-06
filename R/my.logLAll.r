@@ -16,9 +16,19 @@ get.my.logLAll <- function(model.Phi){
 
 # Function to calculate complete logL for
 # (phi, b, sigmaWsq) given y, n, and phi.Obs
-my.logLAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq,
+my.logLAll.lognormal <- function(phi, phi.Obs, y, n, b, p.Curr, 
     reu13.df = NULL){
-  dlnorm(phi.Obs, log(phi), sqrt(sigmaWsq), log = TRUE) +
+  # Dispatch.
+  sigmaW <- p.Curr[1]
+
+  # Return.
+  dlnorm(phi.Obs, log(phi), sigmaW, log = TRUE) +
   .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
 } # End of my.logLAll.lognormal().
+
+# No need to changed from my.logLAll.lognormal since prior does not count.
+my.logLAll.logmixture <- function(phi, phi.Obs, y, n, b, p.Curr,
+    reu13.df = NULL){
+  my.logLAll.lognormal(phi, phi.Obs, y, n, b, p.Curr, reu13.df = reu13.df)
+} # End of my.logLAll.logmixture().
 

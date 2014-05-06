@@ -3,7 +3,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits))
+suppressMessages(suppressMessages(library(cubfits, quietly = TRUE)))
 
 workflow.name <- "04_05-match_yassour"
 

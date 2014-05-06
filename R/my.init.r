@@ -7,6 +7,11 @@ my.init.function <- function(model = .CF.CT$model[1],
     type.Phi = .CF.CT$type.Phi[1], model.Phi = .CF.CT$model.Phi[1],
     init.Phi = .CF.CT$init.Phi[1], init.fit = .CF.CT$init.fit[1],
     parallel = .CF.CT$parallel[1], adaptive = .CF.CT$adaptive[1]){
+  # Condition changed due to limited implementations.
+  if(model.Phi == "logmixture"){
+    type.p <- "logmixture"
+  }
+
   # Check.
   if(any(parallel %in% c("task.pull", "pbdLapply"))){
     if(interactive()){
@@ -26,7 +31,6 @@ my.init.function <- function(model = .CF.CT$model[1],
 
   # Major functions.
   my.drawBConditionalAll <- get.my.drawBConditionalAll(type = init.fit)
-  # my.drawBConditionalFit <- get.my.drawBConditionalFit(type = type.B)
   my.pPropType <- get.my.pPropType(type = type.p)
   my.proposePhiAll <- get.my.proposePhiAll(type = type.Phi)
   my.fitMultinomOne <- get.my.fitMultinomOne(model = model)
@@ -59,7 +63,6 @@ my.init.function <- function(model = .CF.CT$model[1],
   ret <- list(my.ncoef = my.ncoef,
               # for training.
               my.drawBConditionalAll = my.drawBConditionalAll,
-              # my.drawBConditionalFit = my.drawBConditionalFit,
               my.pPropType = my.pPropType,
               my.proposePhiAll =  my.proposePhiAll,
               my.fitMultinomOne = my.fitMultinomOne,

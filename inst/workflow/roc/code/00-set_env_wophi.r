@@ -71,6 +71,12 @@ simulation$sdlog <- 1.5
 # For plotting.
 ci.prob <- c(0.025, 0.975)
 
+# For modeling of logmixture.
+p.nclass <- 4
+
 
 ### CAUTION: for extra changes globally.
-# library(cubfits)
+# suppressMessages(library(cubfits, quietly = TRUE))
+# .CF.CT$init.fit <- "RW_Norm"
+# .CF.CT$type.p <- "lognormal_MH"
+# .CF.CT$model.Phi <- "logmixture"

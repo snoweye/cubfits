@@ -4,7 +4,7 @@ rm(list = ls())
 
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 ### Set environment.
 source("00-set_env.r")
@@ -39,6 +39,7 @@ phi.DrawScale <- run.info$phi.DrawScale
 phi.init.PM <- phi.init.PM / mean(phi.init.PM)
 ret <- cubappr(reu13.df.obs, phi.init.PM, y, n,
                nIter = nIter, burnin = burnin,
+               p.nclass = p.nclass,
                phi.DrawScale = phi.DrawScale,
                model = model, verbose = TRUE, report = 10)
 

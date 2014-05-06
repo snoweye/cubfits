@@ -40,7 +40,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 demo(roc.train, 'cubfits', ask = F, echo = F)
 demo(roc.pred, 'cubfits', ask = F, echo = F)

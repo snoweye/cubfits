@@ -3,9 +3,8 @@
 # For method controls.
 .CF.CT <- list(
   model = c("roc", "nsef", "rocnsef"),          # main models
-  type.p = c("lognormal_fix", "lognormal",
-             "lognormal_MG", "lognormal_MG0",
-             "fixed_SM", "lognormal_RW"),       # proposal for hyperparameters
+  type.p = c("lognormal_fix", "lognormal_MH",
+             "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi
   init.Phi = c("PM"),                           # initial methods for Phi
@@ -21,7 +20,6 @@
   optim.method = c("Brent"),                       # for optim()
   stable.min.exp = .Machine$double.max.exp * 0.1,  # minimum exponent
   stable.max.exp = .Machine$double.max.exp * 0.5,  # maximum exponent
-  E.Xg = 1.0,                                      # expected Phi
   lower.optim = 1e-4,                              # lower of d logL(x)
   upper.optim = 1e2,                               # upper of d logL(x)
   lower.integrate = 0.0,                           # lower of \int L(x)

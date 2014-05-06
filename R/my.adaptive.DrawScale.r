@@ -90,4 +90,3 @@ my.DrawScale.scaling <- function(var.name, curr.window){
 
   ret
 } # End of my.DrawScale.scaling().
-

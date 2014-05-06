@@ -9,7 +9,7 @@
   cubfits(reu13.df.obs, phi.Obs, y, n,
           nIter = 1000, burnin = 100,
           bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-          p.Init = NULL, p.DrawScale = 1,
+          p.Init = NULL, p.nclass = 2,
           phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
@@ -28,8 +28,7 @@
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
-  \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
-                     when drawing new \code{sigma.Phi}.}
+  \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{phi.Init}{initial values for Phi.}
   \item{init.Phi.Scale}{for initial Phi if \code{phi.Init = NULL}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
@@ -92,7 +91,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 demo(roc.train, 'cubfits', ask = F, echo = F)
 }

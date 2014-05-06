@@ -43,7 +43,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 reu13.df <- rearrange.reu13.df(ex.train$reu13.df)
 y <- rearrange.y(ex.train$y)

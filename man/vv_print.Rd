@@ -30,7 +30,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 ### Get individual of phi.Obs.
 GM <- apply(yassour[, -1], 1, function(x) exp(mean(log(x[x != 0]))))

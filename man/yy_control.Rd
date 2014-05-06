@@ -122,7 +122,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 .CF.CT
 .CF.DP

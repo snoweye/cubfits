@@ -97,7 +97,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 dasl(-2:2)

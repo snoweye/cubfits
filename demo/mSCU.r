@@ -1,4 +1,4 @@
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 b <- bInit$roc
 phi.Obs <- ex.train$phi.Obs

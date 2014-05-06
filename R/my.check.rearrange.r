@@ -165,4 +165,3 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
 
   invisible()
 } # End of my.check.rearrange().
-

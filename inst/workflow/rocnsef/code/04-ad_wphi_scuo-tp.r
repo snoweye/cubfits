@@ -2,7 +2,7 @@ rm(list = ls())
 
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 ### Set environment.
 source("00-set_env.r")
@@ -38,6 +38,7 @@ phi.Obs <- phi.Obs / mean(phi.Obs)
 phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 ret <- cubfits(reu13.df.obs, phi.Obs, y, n,
                nIter = nIter, burnin = burnin,
+               p.nclass = p.nclass,
                phi.Init = phi.init.SCUO,
                phi.DrawScale = phi.DrawScale,
                model = model, verbose = TRUE, report = 10)

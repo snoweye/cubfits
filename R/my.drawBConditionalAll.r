@@ -14,17 +14,17 @@ get.my.drawBConditionalAll <- function(type){
 
 
 # Draw new B via independent chain. VGAM searching starts from current values.
-my.drawBConditionalAll.current <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+my.drawBConditionalAll.current <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
     bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
   # Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
-  bFit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
-                                        phi.new = phi.Curr, coefstart = bCurr)
+  b.Fit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
+                                        phi.new = phi.Curr, coefstart = b.Curr)
 
   # Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),
            function(i.aa){ # i'th amino acid.
              my.drawBConditionalFit.ID_Norm(
-               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               b.Fit[[i.aa]], b.Curr[[i.aa]], phi.Curr, y[[i.aa]],
                n[[i.aa]],
                reu13.df.aa = reu13.df.obs[[i.aa]])
            })
@@ -41,17 +41,17 @@ my.drawBConditionalAll.current <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
 } # End of my.drawBConditionalAll.current().
 
 # Draw new B via independent chain. VGAM searching starts randomly.
-my.drawBConditionalAll.random <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+my.drawBConditionalAll.random <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
     bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
   # Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
-  bFit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
+  b.Fit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
                                         phi.new = phi.Curr)
 
   # Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),
            function(i.aa){ # i'th amino acid.
              my.drawBConditionalFit.ID_Norm(
-               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               b.Fit[[i.aa]], b.Curr[[i.aa]], phi.Curr, y[[i.aa]],
                n[[i.aa]],
                reu13.df.aa = reu13.df.obs[[i.aa]])
            })
@@ -70,16 +70,16 @@ my.drawBConditionalAll.random <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
 # Draw new B via random walk. No VGAM searching.
 # bRInitList is fixed as the initial fits via VGAM without measurement errors.
 # Only b.DrawScale and b.DrawScale.prev are changed for adaptive MCMC.
-my.drawBConditionalAll.RW_Norm <- function(bCurr, phi.Curr, y, n, reu13.df.obs,
+my.drawBConditionalAll.RW_Norm <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
     bRInitList, b.DrawScale = 1, b.DrawScale.prev = 1){
   # No VGAM searching.
-  bFit <- bCurr
+  b.Fit <- b.Curr
 
   # Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),
            function(i.aa){ # i'th amino acid.
              my.drawBConditionalFit.RW_Norm(
-               bFit[[i.aa]], bCurr[[i.aa]], phi.Curr, y[[i.aa]],
+               b.Fit[[i.aa]], b.Curr[[i.aa]], phi.Curr, y[[i.aa]],
                n[[i.aa]],
                bRInitList.aa = bRInitList[[i.aa]],
                b.DrawScale.aa = b.DrawScale[i.aa],

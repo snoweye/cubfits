@@ -10,24 +10,18 @@
 #   * phi.New  :   new value for phi resulting from MH draw
 #   * accept:   boolean vector indicating if each proposal was accepted
 
-my.drawPhiConditionalAll <- function(phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
-    mu.Phi = 0, sigma.Phi.sq = 1, phi.DrawScale = 1, phi.DrawScale.prev = 1,
-    reu13.df = NULL){
+my.drawPhiConditionalAll <- function(phi.Curr1, phi.Obs, y, n, b,
+    p.Curr, phi.DrawScale = 1, phi.DrawScale.prev = 1, reu13.df = NULL){
   # Propose new phi.
   prop <- .cubfitsEnv$my.proposePhiAll(phi.Curr1, phi.DrawScale = phi.DrawScale,
                                        phi.DrawScale.prev = phi.DrawScale.prev)
 
   # Calculate acceptance prob.
   lpCurr <- .cubfitsEnv$my.logPosteriorAll(
-              phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
-              mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
-              reu13.df = reu13.df)
+              phi.Curr1, phi.Obs, y, n, b, p.Curr, reu13.df = reu13.df)
   lpProp <- .cubfitsEnv$my.logPosteriorAll(
-              prop$phi.Prop, phi.Obs, y, n, b, sigmaWsq,
-              mu.Phi = mu.Phi, sigma.Phi.sq = sigma.Phi.sq,
-              reu13.df = reu13.df)
-  lpr <- lpProp - lpCurr
-  logAcceptProb <- lpr - prop$lir
+              prop$phi.Prop, phi.Obs, y, n, b, p.Curr, reu13.df = reu13.df)
+  logAcceptProb <- lpProp - lpCurr - prop$lir
 
   # Run MH acceptance rule.
   u <- runif(length(phi.Curr1))
@@ -40,8 +34,7 @@ my.drawPhiConditionalAll <- function(phi.Curr1, phi.Obs, y, n, b, sigmaWsq,
   my.update.adaptive("phi", accept)
     
   # Return.
-  ret <- list(phi.New = phi.New)
-
+  ret <- phi.New
   ret
 } # End of my.drawPhiConditionalAll().
 

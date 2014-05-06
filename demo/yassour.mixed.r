@@ -1,4 +1,4 @@
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 ### Get individual of phi.Obs.

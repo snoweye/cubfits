@@ -45,7 +45,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 str(bInit)
 str(ex.test)

@@ -43,7 +43,7 @@
 }
 \examples{
 \dontrun{
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 ### example dataset.
 y.scuo <- convert.y.to.scuo(ex.train$y)

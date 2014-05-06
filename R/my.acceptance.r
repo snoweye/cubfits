@@ -1,6 +1,7 @@
 # Inital global storages for acceptance rate.
-my.set.acceptance <- function(nSave, n.aa, n.p = NULL, n.G = NULL,
-    n.G.pred = NULL){
+my.set.acceptance <- function(nSave, n.aa,
+    # n.p = NULL,
+    n.G = NULL, n.G.pred = NULL){
   if(.CF.DP$trace.acceptance){
     .cubfitsEnv$acceptance <- list()
 
@@ -8,7 +9,7 @@ my.set.acceptance <- function(nSave, n.aa, n.p = NULL, n.G = NULL,
     .cubfitsEnv$acceptance$b <- rep(0L, n.aa)
 
     # For acceptance rate in prior.
-    .cubfitsEnv$acceptance$p <- rep(0L, n.p)
+    # .cubfitsEnv$acceptance$p <- rep(0L, n.p)
 
     # For acceptance rate in training.
     if(!is.null(n.G)){
@@ -34,4 +35,3 @@ my.update.acceptance <- function(var.name, accept){
 
   invisible()
 } # End of my.update.acceptance().
-

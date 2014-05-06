@@ -1,10 +1,10 @@
-# These functions are for adaptive MCMC, and only for E[b], E[Phi | Phi^{obs}],
-# and E[Phi].
+# These functions are for adaptive MCMC, and only for E[b],
+# E[Phi | Phi^{obs}], and E[Phi].
 
 # Initial global storages.
 my.set.adaptive <- function(nSave,
     n.aa = NULL, b.DrawScale = NULL,
-    n.p = NULL, p.DrawScale = NULL,
+    # n.p = NULL, p.DrawScale = NULL,
     n.G = NULL, phi.DrawScale = NULL,
     n.G.pred = NULL, phi.DrawScale.pred = NULL,
     renew.iter = .CF.AC$renew.iter, adaptive = .CF.CT$adaptive[1]){
@@ -17,16 +17,17 @@ my.set.adaptive <- function(nSave,
 
   # Initials for updating acceptance rate.
   .cubfitsEnv$curr.renew <- 1
-  .cubfitsEnv$adaptive <- list(b = list(), p = list(),
+  .cubfitsEnv$adaptive <- list(b = list(),
+                               # p = list(),
                                phi = list(), phi.pred = list())
-  .cubfitsEnv$DrawScale <- list(b = list(), p = list(),
+  .cubfitsEnv$DrawScale <- list(b = list(),
+                                # p = list(),
                                 phi = list(), phi.pred = list())
 
   # For adaptive rate in parameters.
   if(!is.null(n.aa)){
     for(i.renew in 1:total.renew){
       .cubfitsEnv$adaptive$b[[i.renew]] <- rep(0L, n.aa)
-
       if(length(b.DrawScale) == 1){
         .cubfitsEnv$DrawScale$b[[i.renew]] <- rep(b.DrawScale, n.aa)
       } else if(length(b.DrawScale) == n.aa){
@@ -38,25 +39,23 @@ my.set.adaptive <- function(nSave,
   }
 
   # For adaptive rate in prior
-  if(!is.null(n.p)){
-    for(i.renew in 1:total.renew){
-      .cubfitsEnv$adaptive$p[[i.renew]] <- rep(0L, n.p)
-
-      if(length(p.DrawScale) == 1){
-        .cubfitsEnv$DrawScale$p[[i.renew]] <- rep(p.DrawScale, n.p)
-      } else if(length(p.DrawScale) == n.p){
-        .cubfitsEnv$DrawScale$p[[i.renew]] <- p.DrawScale
-      } else{
-        stop("length of p.DrawScale is incorrect.")
-      }
-    }
-  }
+  # if(!is.null(n.p)){
+  #   for(i.renew in 1:total.renew){
+  #     .cubfitsEnv$adaptive$p[[i.renew]] <- rep(0L, n.p)
+  #     if(length(p.DrawScale) == 1){
+  #       .cubfitsEnv$DrawScale$p[[i.renew]] <- rep(p.DrawScale, n.p)
+  #     } else if(length(p.DrawScale) == n.p){
+  #       .cubfitsEnv$DrawScale$p[[i.renew]] <- p.DrawScale
+  #     } else{
+  #       stop("length of p.DrawScale is incorrect.")
+  #     }
+  #   }
+  # }
 
   # For adaptive rate in expectations.
   if(!is.null(n.G)){
     for(i.renew in 1:total.renew){
       .cubfitsEnv$adaptive$phi[[i.renew]] <- rep(0L, n.G)
-
       if(length(phi.DrawScale) == 1){
         .cubfitsEnv$DrawScale$phi[[i.renew]] <- rep(phi.DrawScale, n.G)
       } else if(length(phi.DrawScale) == n.G){
@@ -93,4 +92,3 @@ my.update.adaptive <- function(var.name, accept){
     .cubfitsEnv$adaptive[[var.name]][[.cubfitsEnv$curr.renew]] + accept
   invisible()
 } # End of my.update.adaptive().
-

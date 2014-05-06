@@ -16,11 +16,17 @@ get.my.logPosteriorAll <- function(model.Phi){
 
 # Function to calculate complete log-posterior for
 # (phi, b, sigmaWsq, mu.Phi, sigma.Phi.sq) given y, n, and phi.Obs
-my.logPosteriorAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq,
-    mu.Phi = 0, sigma.Phi.sq = 1, reu13.df = NULL){
-  ret <- dlnorm(phi.Obs, log(phi), sqrt(sigmaWsq), log = TRUE) +
+my.logPosteriorAll.lognormal <- function(phi, phi.Obs, y, n, b, p.Curr,
+    reu13.df = NULL){
+  # Dispatch.
+  sigmaW <- p.Curr[1]
+  nu.Phi <- p.Curr[2]
+  sigma.Phi <- p.Curr[3]
+
+  # Return.
+  ret <- dlnorm(phi.Obs, log(phi), sigmaW, log = TRUE) +
          .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
-         dlnorm(phi, mu.Phi, sqrt(sigma.Phi.sq), log = TRUE)
+         dlnorm(phi, nu.Phi, sigma.Phi, log = TRUE)
 
   ### Note that prior for all Phi is lognormal(mu.Phi, sigma.Phi), and assume
   ### proper priors for mu.Phi (normal) and sigma.Phi (inverse gamma.)
@@ -37,4 +43,19 @@ my.logPosteriorAll.lognormal <- function(phi, phi.Obs, y, n, b, sigmaWsq,
 
   ret
 } # End of my.logPosteriorAll.lognormal().
+
+# Function for log mixture normal.
+my.logPosteriorAll.logmixture <- function(phi, phi.Obs, y, n, b, p.Curr,
+    reu13.df = NULL){
+  # Dispatch.
+  sigmaW <- p.Curr[1]
+  paramlog <- p.Curr[-1]
+
+  # Return
+  log.phi <- log(phi)
+  ret <- dlnorm(phi.Obs, log.phi, sigmaW, log = TRUE) +
+         .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
+         dlmixnorm(log.phi, paramlog, log = TRUE)
+  ret
+} # End of my.logPosteriorAll.logmixture().
 

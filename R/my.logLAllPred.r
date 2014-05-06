@@ -20,3 +20,9 @@ my.logLAllPred.lognormal <- function(phi, y, n, b, reu13.df = NULL){
   .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df)
 } # End of my.logLAllPred.lognormal().
 
+# No need to changed from my.logLAll.lognormal since prior does not count.
+my.logLAllPred.logmixture <- function(phi, y, n, b,
+    reu13.df = NULL){
+  my.logLAllPred.lognormal(phi, y, n, b, reu13.df = reu13.df)
+} # End of my.logLAll.logmixture().
+

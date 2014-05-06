@@ -2,7 +2,7 @@
 
 rm(list = ls())
 
-suppressMessages(library(cubfits))
+suppressMessages(suppressMessages(library(cubfits, quietly = TRUE)))
 
 workflow.in <- c("pm", "sdlog_1.5", "sdlog_1.0", "sdlog_2.0")
 workflow.out <- "./param_collected"

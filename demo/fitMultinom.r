@@ -1,4 +1,4 @@
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 # fit Shah & Gilchrist (2011)
 init.function(model = "roc")

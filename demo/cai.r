@@ -1,4 +1,4 @@
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 
 y <- ex.train$y
 y.list <- convert.y.to.list(y)

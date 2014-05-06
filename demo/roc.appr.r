@@ -1,7 +1,7 @@
 start.time <- proc.time()
 
 # Initial
-library(cubfits)
+suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 # Get phi.Init.appr
