@@ -32,11 +32,18 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
     if(class(m.1) != "try-error"){
       a <- m.1$coef[1]
       b <- m.1$coef[2]
+      R2 <- summary(m.1)$r.squared
       abline(a = a, b = b, col = 2)
+
       width <- xlim[2] - xlim[1]
       height <- ylim[2] - ylim[1]
       text(xlim[1] + width * 0.01, ylim[2] - height * 0.05,
            parse(text = paste("y == ", a, " + ", b, " * x", sep = "")),
+           pos = 4, cex = 0.5)
+
+      text(xlim[1] + width * 0.01, ylim[2] - height * 0.10,
+           parse(text = paste("R^2 == ",
+                              sprintf("%.4f", R2), sep = "")),
            pos = 4, cex = 0.5)
     }
   }

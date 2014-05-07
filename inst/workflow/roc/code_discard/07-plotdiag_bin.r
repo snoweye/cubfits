@@ -50,8 +50,7 @@ for(i.case in case.names){
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.phi.Obs[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = "")
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
     }
     model.label <- c("MCMC Posterior")
     model.lty <- 1
@@ -77,8 +76,7 @@ for(i.case in case.names){
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = "")
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
     }
     model.label <- c("MCMC Posterior")
     model.lty <- 1

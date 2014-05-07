@@ -31,6 +31,8 @@ phi.init.PM[id.na] <- phi.Obs[id.na]
 ### Run scuo initial.
 phi.init.SCUO <- scuo.random(SCUO, meanlog = -simulation$sdlog^2 / 2,
                                    sdlog = simulation$sdlog)
+# phi.init.SCUO <- log(SCUO / mean(SCUO))
+# phi.init.SCUO <- exp(phi.init.SCUO / sd(phi.init.SCUO) * simulation$sdlog)
 names(phi.init.SCUO) <- names(phi.Obs)
 
 ### Scale to Mean 1.

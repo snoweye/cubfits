@@ -2,7 +2,7 @@
 ### This plots one amino acid for ROC or NSE model.
 plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
     xlab = "Production Rate (log10)", ylab = "Proportion",
-    xlim = NULL, lty = 1, x.log10 = TRUE, stderr = FALSE){
+    xlim = NULL, lty = 1, x.log10 = TRUE, stderr = FALSE, ...){
   if(x.log10){
     ret.bin$center <- log10(ret.bin$center)
     if(!is.null(ret.model)){
@@ -29,7 +29,7 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
   u.codon <- sort(unique(as.character(ret.bin$codon)))
   u.center <- unique(ret.bin$center)
   color <- get.color(u.codon)
-  # Reorder R for better legend.
+  ### Reorder R for better legend.
   if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
     u.codon <- u.codon[c(3:6, 1:2)]
     color <- color[c(3:6, 1:2)]
@@ -37,7 +37,7 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
 
   ### Make an empty plot
   plot(NULL, NULL, xlim = x.lim, ylim = y.lim,
-       main = main, xlab = xlab, ylab = ylab)
+       main = main, xlab = xlab, ylab = ylab, ...)
 
   ### Add observed dots for means and whiskers for standard deviations.
   for(i.codon in 1:length(u.codon)){
@@ -61,12 +61,21 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
   }
 
   ### Add modeled lines.
+  u.codon.star <- u.codon
   if(!is.null(ret.model)){
     plotaddmodel(ret.model, lty, u.codon, color, x.log10 = FALSE)
+
+    ### Add focal codon.
+    u.codon.star <- attr(ret.model, "u.codon.star")
+    if(!is.null(u.codon.star)){
+      if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
+        u.codon.star <- u.codon.star[c(3:6, 1:2)]
+      }
+    }
   }
 
   ### Add legends.
-  legend(x.lim[1], y.lim[2], u.codon, col = color, 
+  legend(x.lim[1], y.lim[2], u.codon.star, col = color, 
          box.lty = 0, lty = 1, pch = 19, cex = 0.8)
 } # End of plotbin().
 

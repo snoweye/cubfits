@@ -2,7 +2,7 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code.plot, "u3-plot_trace.r", sep = ""))
@@ -11,9 +11,9 @@ load(fn.in)
 
 q.probs <- c(0.01, 0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99)
 
-# Trace each run.
+### Trace each run.
 for(i.case in case.names){
-  # All mcmc outputs.
+  ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -21,7 +21,7 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  # Find genes by quantile.
+  ### Find genes by quantile.
   ret.phi.Mat <- ret$phi.Mat
   ret.phi.Mat.scaled <- lapply(ret.phi.Mat[range$subset],
                                function(x) x / mean(x))
@@ -34,43 +34,45 @@ for(i.case in case.names){
     id.gene <- c(id.gene, which.min(abs(ret.phi.Mat.PM - q.PM[i.q])))
   }
 
-  # Subset.
+  ### Subset.
   phi.sub <- lapply(ret.phi.Mat, function(x){ x[id.gene] })
   phi.PM.sub <- lapply(ret.phi.Mat.scaled, function(x){ x[id.gene] })
 
-  # Get trace plot.
+  ### Get trace plot.
   trace.Mat <- log10(do.call("cbind", phi.sub))
   xlim.trace <- c(1, ncol(trace.Mat))
   ylim.trace <- range(trace.Mat)
 
-  # Get hist plot.
-  hist.Mat <- log10(do.call("cbind", phi.PM.sub))
+  ### Get hist plot.
+  hist.Mat <- log10(do.call("cbind", phi.PM.sub)[, range$subset])
   hist.list <- apply(hist.Mat, 1,
                      function(x){ hist(x, nclass = 50, plot = FALSE) })
+  hist.mean <- rowMeans(hist.Mat)
   xlim.hist <- range(hist.Mat)
   ylim.hist <- range(unlist(lapply(hist.list,
                                    function(p){ range(p$counts) })))
 
-  # Get non-log hist plot.
-  hist.Mat.nl <- do.call("cbind", phi.PM.sub)
+  ### Get non-log hist plot.
+  hist.Mat.nl <- do.call("cbind", phi.PM.sub)[, range$subset]
+  hist.mean.nl <- rowMeans(hist.Mat.nl)
   hist.list.nl <- apply(hist.Mat.nl, 1,
                         function(x){ hist(x, nclass = 50, plot = FALSE) })
   xlim.hist.nl <- range(hist.Mat.nl)
   ylim.hist.nl <- range(unlist(lapply(hist.list.nl,
                                       function(p){ range(p$counts) })))
 
-  # Set layout.
+  ### Set layout.
   fn.out <- paste(prefix$plot.trace, "quantile_Phi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 9, height = 10)
 
-  # Plot trace for each quantile.
+  ### Plot trace for each quantile.
   for(i.q in 1:length(q.PM)){
-# New page.
+### New page.
     if(i.q %% 3 == 1){
       nf <- layout(matrix(c(1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
                           nrow = 4, ncol = 3, byrow = TRUE),
                    c(1, 1, 1), c(1, 8, 8, 8), respect = FALSE)
-      # Plot title.
+      ### Plot title.
       par(mar = c(0, 0, 0, 0))
       plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
       text(0.5, 0.5,
@@ -78,26 +80,29 @@ for(i.case in case.names){
       par(mar = c(5.1, 4.1, 4.1, 2.1))
     }
 
-    # Plot trace
+    ### Plot trace
     plot(1:ncol(trace.Mat), trace.Mat[i.q,],
          type = "l",
          xlim = xlim.trace, ylim = ylim.trace,
          xlab = "Iterations", ylab = "Production Rate (log10)",
          main = paste(names(id.gene)[i.q], ", q = ", q.probs[i.q], sep = ""))
+    abline(h = hist.mean[i.q], col = 2)
 
-    # Plot hist
+    ### Plot hist
     plot(hist.list[[i.q]],
          # xlim = xlim.hist, ylim = ylim.hist,
          xlab = "Posterior Production Rate (log10)",
          main = paste(names(id.gene)[i.q], ", sdlog = ",
                       sprintf("%.4f", sd(hist.Mat[i.q,])), sep = ""))
+    abline(v = hist.mean[i.q], col = 2)
 
-    # Plot non-log hist
+    ### Plot non-log hist
     plot(hist.list.nl[[i.q]],
          # xlim = xlim.hist.nl, ylim = ylim.hist.nl,
          xlab = "Posterior Production Rate",
          main = paste(names(id.gene)[i.q], ", sd = ",
                       sprintf("%.4f", sd(hist.Mat.nl[i.q,])), sep = ""))
+    abline(v = hist.mean.nl[i.q], col = 2)
   }
 
   dev.off()

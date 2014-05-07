@@ -1,4 +1,4 @@
-# Plot production rates.
+### Plot production rates.
 plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     log10.x = TRUE, log10.y = TRUE,
     add.lm = TRUE, add.one.to.one = TRUE, weights = NULL,
@@ -7,7 +7,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     xlab = "Predicted Production Rate (log10)",
     ylab = "Observed Production Rate (log10)",
     main = NULL){
-  # Check data.
+  ### Check data.
   if(length(x) != length(y)){
     stop("x and y are not euqal length.")
   }
@@ -30,7 +30,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     y.ci <- matrix(y.ci[id,], ncol = 2)
   }
 
-  # Transformation.
+  ### Transformation.
   if(log10.x){
     tmp <- mean(x)
     x <- log10(x / tmp)
@@ -54,7 +54,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     }
   }
 
-  # Find bounds.
+  ### Find bounds.
   if(is.null(xlim)){
     xlim <- range(x)
   }
@@ -67,11 +67,11 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
   height <- ylim[2] - ylim[1]
   ylim <- ylim + height * 0.05 * c(-1, 1)
 
-  # Plot.
+  ### Plot.
   plot(x, y, xlim = xlim, ylim = ylim, cex = 0.5, pch = 20,
        xlab = xlab, ylab = ylab, main = main)
 
-  # Overalp outliers if x.ci and y.ci are given.
+  ### Overalp outliers if x.ci and y.ci are given.
   id.outliers <- NULL
   if(is.null(x.ci) && !is.null(y.ci)){
     id.outliers <- (x < y.ci[, 1]) | (x > y.ci[, 2])
@@ -102,7 +102,7 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     }
   }
 
-  # Add lm.
+  ### Add lm.
   if(add.lm){
     if(is.null(weights)){
       m.1 <- try(lm(y ~ x), silent = TRUE)
@@ -147,19 +147,19 @@ plotprxy <- function(x, y, x.ci = NULL, y.ci = NULL,
     }
   }
 
-  # Add one-to-one.
+  ### Add one-to-one.
   if(add.one.to.one){
     abline(a = 0, b = 1, col = 4, lty = 2)
   }
 
-  # Add NaN and NA.
+  ### Add NaN and NA.
   if(sum(!id) > 0){
     text(xlim[1] + width * 0.01, ylim[2] - height * 0.40,
          parse(text = paste("NaN == ", n.nan, sep = "")),
          pos = 4, cex = 0.5)
   }
 
-  # Add legend.
+  ### Add legend.
   if(add.legend){
     label <- c("OLS", "WLS", "1-to-1")
     col <- c(2, 2, 4)

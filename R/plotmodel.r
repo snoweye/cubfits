@@ -2,7 +2,7 @@
 ### This plots one amino acid for ROC or NSE model.
 plotmodel <- function(ret.model, main = NULL,
     xlab = "Production Rate (log10)", ylab = "Proportion",
-    xlim = NULL, lty = 1, x.log10 = TRUE){
+    xlim = NULL, lty = 1, x.log10 = TRUE, ...){
   if(x.log10){
     ret.model$center <- log10(ret.model$center)
   }
@@ -26,13 +26,23 @@ plotmodel <- function(ret.model, main = NULL,
 
   ### Make an empty plot
   plot(NULL, NULL, xlim = x.lim, ylim = y.lim,
-       main = main, xlab = xlab, ylab = ylab)
+       main = main, xlab = xlab, ylab = ylab, ...)
 
   ### Add modeled lines.
   plotaddmodel(ret.model, lty, u.codon, color, x.log10 = FALSE)
 
+  ### Add focal codon.
+  u.codon.star <- attr(ret.model, "u.codon.star")
+  if(!is.null(u.codon.star)){
+    if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
+      u.codon.star <- u.codon.star[c(3:6, 1:2)]
+    }
+  } else{
+    u.codon.star <- u.codon
+  }
+
   ### Add legends.
-  legend(x.lim[1], y.lim[2], u.codon, col = color,
+  legend(x.lim[1], y.lim[2], u.codon.star, col = color,
          box.lty = 0, lty = 1, pch = 19, cex = 0.8)
 } # End of plotmodel().
 

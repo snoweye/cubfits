@@ -14,7 +14,7 @@
 
   plotmodel(ret.model, main = NULL,
             xlab = "Production Rate (log10)", ylab = "Proportion",
-            xlim = NULL, lty = 1, x.log10 = TRUE)
+            xlim = NULL, lty = 1, x.log10 = TRUE, ...)
 
   plotaddmodel(ret.model, lty, u.codon = NULL, color = NULL,
                x.log10 = TRUE)
@@ -36,6 +36,8 @@
   \item{u.codon}{unique synonymous codon names.}
   \item{color}{a color vector for unique codon, typically returns of
                the internal function \code{get.color()}.}
+
+  \item{...}{options passed to \code{plot()}.}
 }
 \details{
   The function \code{plotmodel()} plots the fitted curves obtained from

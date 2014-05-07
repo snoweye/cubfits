@@ -12,11 +12,11 @@ if(length(case.names) < 4){
   stop("Need 4 cases to match with.")
 }
 
-# Load data.
+### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
+### Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
 b.ci.org <- list()
 b.mean.org <- list()
 label.org <- list()
@@ -24,7 +24,7 @@ b.ci <- list()
 b.mean <- list()
 label <- list()
 for(i.case in 1:4){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, case.names[i.case], "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     stop(paste(fn.in, " is not found.", sep = ""))
@@ -35,7 +35,7 @@ for(i.case in 1:4){
   b.mean.org[[i.case]] <- b.negsel.PM
   label.org[[i.case]] <- b.negsel.label
 
-  # Subset of mcmc output with scaling.
+  ### Subset of mcmc output with scaling.
   fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
   load(fn.in)
 
@@ -45,7 +45,7 @@ for(i.case in 1:4){
 }
 
 
-# Plot Delta.t.
+### Plot Delta.t.
 x.pm <- b.mean[[3]]
 y.pm <- b.mean[[1]]
 x.pm.label <- label[[3]]
@@ -59,8 +59,8 @@ y.pm.ci <- b.ci[[1]]
 x.scuo.ci <- b.ci[[4]]
 y.scuo.ci <- b.ci[[2]]
 
-# Convert selection to negative value by changing the relative base. 
-# Note that this can fail in some inconsistent cases.
+### Convert selection to negative value by changing the relative base. 
+### Note that this can fail in some inconsistent cases.
 if(any((x.pm < 0 & y.pm > 0) | (x.pm > 0 & y.pm < 0) |
         label[[1]] != label[[3]])){
   stop("Inconsistent cases (PM).")
@@ -70,7 +70,7 @@ if(any((x.scuo < 0 & y.scuo > 0) | (x.scuo > 0 & y.scuo < 0) |
   stop("Inconsistent cases (SCUO).")
 }
 
-# Plot Delta.t.
+### Plot Delta.t.
 fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
@@ -90,7 +90,7 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 
-# Plot Delta.t original (no scaling by x to mean = 1).
+### Plot Delta.t original (no scaling by x to mean = 1).
 x.pm <- b.mean.org[[3]]
 y.pm <- b.mean.org[[1]]
 x.pm.label <- label.org[[3]]
@@ -104,8 +104,8 @@ y.pm.ci <- b.ci.org[[1]]
 x.scuo.ci <- b.ci.org[[4]]
 y.scuo.ci <- b.ci.org[[2]]
 
-# Convert selection to negative value by changing the relative base. 
-# Note that this can fail in some inconsistent cases.
+### Convert selection to negative value by changing the relative base. 
+### Note that this can fail in some inconsistent cases.
 if(any((x.pm < 0 & y.pm > 0) | (x.pm > 0 & y.pm < 0) |
         label[[1]] != label[[3]])){
   stop("Inconsistent cases (PM).")

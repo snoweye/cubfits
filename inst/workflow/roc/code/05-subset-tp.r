@@ -8,11 +8,11 @@ init(set.seed = FALSE)
 source("00-set_env.r")
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 
-# Load data.
+### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Get AA and synonymous codons.
+### Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
 coef.names <- cubfits:::get.my.coefnames(model)
 b.label <- NULL
@@ -24,12 +24,12 @@ for(i.aa in aa.names){
   b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
-# Get all cases.
+### Get all cases.
 # for(i.case in case.names){
 all.jobs <- function(i.job){
   i.case <- case.names[i.job]
 
-  # Check first.
+  ### Check first.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   if(!file.exists(fn.in)){
     # cat("File not found: ", fn.in, "\n", sep = "")
@@ -37,11 +37,11 @@ all.jobs <- function(i.job){
     stop(paste("File not found: ", fn.in, "\n", sep = ""))
   }
 
-  # Load MCMC output.
+  ### Load MCMC output.
   cat(i.job, ": ", i.case, ", load: ", fn.in, "\n", sep = "")
   load(fn.in)
 
-  # Obtain the last 5000 iterations.
+  ### Obtain the last 5000 iterations.
   b.mcmc <- do.call("cbind", ret$b.Mat[range$subset])
   # rownames(b.mcmc) <- names(ret$b.Mat[[1]])
   rownames(b.mcmc) <- b.names
@@ -61,30 +61,39 @@ all.jobs <- function(i.job){
     rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])
   }
 
-  # Dump posterior distributions.
+  ### Dump posterior distributions.
   fn.out <- paste(prefix$subset, i.case, ".rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   save(b.mcmc, p.mcmc, phi.mcmc, file = fn.out)
 
-  # Obtain posterior means.
+  ### Obtain posterior means.
   b.PM <- rowMeans(b.mcmc)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
   p.PM <- rowMeans(p.mcmc)
   phi.PM <- rowMeans(phi.mcmc)
 
-  # Negative selection.
+  ### Negative selection.
   all.names <- rownames(b.mcmc)
   id.slop <- grep("Delta.t", all.names)
-  ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
+  id.intercept <- grep("log.mu", all.names)
+  ret <- get.negsel(b.PM, intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label
 
-  # Dump summarized results.
+  ### log.mu
+  b.logmu.PM <- ret$b.logmu.PM
+  b.logmu.ci.PM <- ret$b.logmu.ci.PM
+  b.logmu.label <- ret$b.logmu.label
+
+  ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
-  save(b.PM, b.ci.PM, p.PM, phi.PM,
-       b.negsel.PM, b.negsel.ci.PM, b.label, b.negsel.label,
+  save(b.PM, b.ci.PM, p.PM, phi.PM, b.label,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
        file = fn.out)
 
   ### Thinning.
@@ -108,7 +117,7 @@ all.jobs <- function(i.job){
   # cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   # save(b.PM, p.PM, phi.PM, file = fn.out)
 
-  # Scaling.
+  ### Scaling.
   scale.EPhi <- colMeans(phi.mcmc)
   phi.mcmc <- t(t(phi.mcmc) / scale.EPhi)
   b.mcmc[id.slop,] <- t(t(b.mcmc[id.slop,]) * scale.EPhi)
@@ -125,19 +134,26 @@ all.jobs <- function(i.job){
   phi.STD.log10 <- apply(phi.mcmc.log10, 1, sd)
   phi.CI.log10 <- t(apply(phi.mcmc.log10, 1, quantile, prob = ci.prob))
 
-  # Negative selection.
-  ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
+  ### Negative selection.
+  ret <- get.negsel(b.PM, id.intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label
+  ### log.mu
+  b.logmu.PM <- ret$b.logmu.PM
+  b.logmu.ci.PM <- ret$b.logmu.ci.PM
+  b.logmu.label <- ret$b.logmu.label
 
-  # Dump summarized results.
+  ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   save(b.PM, b.ci.PM,
        phi.PM, phi.STD, phi.CI, phi.MED,
-       phi.PM.log10, phi.STD.log10, phi.CI.log10,
-       b.negsel.PM, b.negsel.ci.PM, b.label, b.negsel.label,
+       phi.PM.log10, phi.STD.log10, phi.CI.log10, b.label,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
        file = fn.out)
 
   return(c(comm.rank(), i.job))

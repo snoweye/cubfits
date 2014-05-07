@@ -46,7 +46,19 @@ find.prop.model.roc <- function(bInit, phi.bin, phi.Obs.scale = 1){
     predict.roc[[aa]] <- cbind(scodon.prob, phi.bin * phi.Obs.scale)
     predict.roc[[aa]] <- as.data.frame(predict.roc[[aa]],
                                        stringsAsFactors = FALSE)
-    colnames(predict.roc[[aa]]) <- c(bInit[[aa]]$u.codon, "center")
+
+    u.codon <- bInit[[aa]]$u.codon
+    colnames(predict.roc[[aa]]) <- c(u.codon, "center")
+
+    ### Add attr for u.codon.star
+    if(all(bInit[[aa]]$coef.mat[2,] < 0)){
+      u.codon[length(u.codon)] <- paste(u.codon[length(u.codon)], "*", sep = "")
+    } else{
+      id.max <- which.max(bInit[[aa]]$coef.mat[2,])
+      u.codon.max <- colnames(bInit[[aa]]$coef.mat)[id.max]
+      u.codon[u.codon == u.codon.max] <- paste(u.codon.max, "*")
+    }
+    attr(predict.roc[[aa]], "u.codon.star") <- u.codon
   }
 
   names(predict.roc) <- u.aa

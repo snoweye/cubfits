@@ -11,7 +11,7 @@
 
   plotbin(ret.bin, ret.model = NULL, main = NULL,
           xlab = "Production Rate (log10)", ylab = "Proportion",
-          xlim = NULL, lty = 1, x.log10 = TRUE, stderr = FALSE)
+          xlim = NULL, lty = 1, x.log10 = TRUE, stderr = FALSE, ...)
 }
 \arguments{
   \item{reu13.df}{a \code{\link{reu13.df}} object.}
@@ -27,6 +27,7 @@
   \item{lty}{line type if \code{ret.model} is provided.}
   \item{x.log10}{\code{log10()} transformation of X-axis.}
   \item{stderr}{plot stand error instead of stand deviation.}
+  \item{...}{options passed to \code{plot()}.}
 }
 \details{
   The function \code{plotbin()} plots the binning results \code{ret.bin}

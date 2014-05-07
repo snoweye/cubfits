@@ -40,7 +40,8 @@ pdf(fn.out, width = 12, height = 11)
   for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.EPhi[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
-    plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa], lty = 2)
+    plotbin(tmp.obs, tmp.roc, main = "", lty = 2)
+    text(0, 1, aa.names[i.aa], cex = 1.5)
   }
   model.label <- c("Logistic Regression")
   model.lty <- 2

@@ -35,14 +35,13 @@ pdf(fn.out, width = 12, height = 11)
   text(0.5, 0.8, workflow.name)
   text(0.5, 0.4, "bin: observed phi")
 
-  par(mar = c(0, 0, 0, 0))
+  par(mar = c(5.1, 4.1, 4.1, 2.1))
 
   # Plot results.
   for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.phi.Obs[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
-    plotbin(tmp.obs, tmp.roc, main = "", lty = 3, axes = FASLE)
-    text(0, 1, aa.names[i.aa], cex = 1.5)
+    plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa], lty = 3)
   }
   model.label <- c("True Model")
   model.lty <- 3
@@ -64,14 +63,13 @@ pdf(fn.out, width = 12, height = 11)
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
   text(0.5, 0.8, workflow.name)
   text(0.5, 0.4, "bin: true phi")
-  par(mar = c(0, 0, 0, 0))
+  par(mar = c(5.1, 4.1, 4.1, 2.1))
 
   # Plot results.
   for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.EPhi[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
-    plotbin(tmp.obs, tmp.roc, main = "", lty = 3, axes = FALSE)
-    text(0, 1, aa.names[i.aa], cex = 1.5)
+    plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa], lty = 3)
   }
   model.label <- c("True Model")
   model.lty <- 3
