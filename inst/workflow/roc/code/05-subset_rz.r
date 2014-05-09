@@ -6,11 +6,11 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 
-# Load data.
+### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Get AA and synonymous codons.
+### Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
 b.label <- NULL
 for(i.aa in aa.names){
@@ -19,23 +19,23 @@ for(i.aa in aa.names){
   b.label <- c(b.label, paste(i.aa, tmp, sep = "."))
 }
 
-# Get all cases.
+### Get all cases.
 for(i.case in case.names){
-  # Check first.
+  ### Check first.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
     next
   }
 
-  # Load MCMC output.
+  ### Load MCMC output.
   load(fn.in)
   all.names <- rownames(b.mcmc)
   id.slop <- grep("Delta.t", all.names)
   b.PM <- rowMeans(b.mcmc)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
 
-  # Scaling.
+  ### Scaling.
   t.phi.mcmc <- t(phi.mcmc)
   x.phi.mcmc <- as.vector(t.phi.mcmc / colMeans(phi.mcmc))
   n.1 <- length(x.phi.mcmc) - 1
@@ -60,13 +60,13 @@ for(i.case in case.names){
     b.ci.PM[i.b,] <- beta1.hat + qt(ci.prob, n.1) * se1.hat * sqrt(n.1)
   }
 
-  # Negative selection.
+  ### Negative selection.
   ret <- get.negsel(b.PM, id.slop, aa.names, b.label, b.ci.PM = b.ci.PM)
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label
 
-  # Dump summarized results.
+  ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM_scaling_rz.rda", sep = "")
   save(b.PM, b.ci.PM, b.negsel.PM, b.negsel.ci.PM,
        b.label, b.negsel.label,

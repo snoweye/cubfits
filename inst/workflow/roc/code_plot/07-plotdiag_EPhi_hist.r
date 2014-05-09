@@ -7,9 +7,9 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Plot.
+### Plot.
 for(i.case in case.names){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -23,7 +23,7 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  # Plot.
+  ### Plot.
   fn.out <- paste(prefix$plot.diag, "EPhi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ret <- hist(phi.PM, nclass = 50, xlab = "EPhi", main = i.case)

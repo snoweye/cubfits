@@ -33,25 +33,25 @@ for(i.case in case.names){
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
 
-  ### Fix xlim.
-  lim.bin <- range(ret.phi.Obs[[1]]$center)
-  lim.model <- range(predict.roc[[1]]$center)
-  x.lim <- c((lim.bin[1] + lim.model[1]) / 2,
-              max(lim.bin[2], lim.model[2]))
+  ### Fix xlim at log10 scale.
+  lim.bin <- range(log10(ret.phi.Obs[[1]]$center))
+  lim.model <- range(log10(predict.roc[[1]]$center))
+  xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 4,
+            max(lim.bin[2], lim.model[2]))
 
   ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.diag, "bin_pred_phiObs_", i.case, ".pdf", sep = "")
-  pdf(fn.out, width = 14, height = 11)
+  pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
-    mat <- cbind(rep(23, 6), mat)
-    nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
+    mat <- cbind(rep(23, 6), mat, rep(24, 6))
+    nf <- layout(mat, c(3, rep(8, 5), 1), c(3, 8, 8, 8, 8, 3), respect = FALSE)
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.8,
+    text(0.5, 0.5,
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
-    text(0.5, 0.4, "bin: observed phi")
+    text(0.5, 0.2, "bin: observed phi")
     par(mar = c(0, 0, 0, 0))
 
     ### Plot results.
@@ -59,13 +59,13 @@ for(i.case in case.names){
       tmp.obs <- ret.phi.Obs[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-              lty = 3, axes = FALSE, xlim = xlim)
+              lty = 1, axes = FALSE, xlim = xlim)
       box()
       text(0, 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 17:19){
+      if(i.aa %in% 15:19){
         axis(1)
       }
     }
@@ -73,7 +73,7 @@ for(i.case in case.names){
     model.lty <- 1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
-    legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -86,17 +86,17 @@ for(i.case in case.names){
 
   ### Plot bin and model for predictions.
   fn.out <- paste(prefix$plot.diag, "bin_pred_EPhi_", i.case, ".pdf", sep = "")
-  pdf(fn.out, width = 14, height = 11)
+  pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
-    mat <- cbind(rep(23, 6), mat)
-    nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
+    mat <- cbind(rep(23, 6), mat, rep(24, 6))
+    nf <- layout(mat, c(3, rep(8, 5), 1), c(3, 8, 8, 8, 8, 3), respect = FALSE)
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.8,
+    text(0.5, 0.5,
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
-    text(0.5, 0.4, "bin: posterior mean of Phi")
+    text(0.5, 0.2, "bin: posterior mean of Phi")
     par(mar = c(0, 0, 0, 0))
 
     ### Plot results.
@@ -104,13 +104,13 @@ for(i.case in case.names){
       tmp.obs <- ret.EPhi[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-              lty = 3, axes = FALSE, xlim = xlim)
+              lty = 1, axes = FALSE, xlim = xlim)
       box()
       text(0, 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 17:19){
+      if(i.aa %in% 15:19){
         axis(1)
       }
     }
@@ -118,7 +118,7 @@ for(i.case in case.names){
     model.lty <- 1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
-    legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

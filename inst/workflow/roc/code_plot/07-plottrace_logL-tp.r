@@ -2,7 +2,7 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 suppressMessages(library(pbdMPI, quietly = TRUE))
 init(set.seed = FALSE)
 source("00-set_env.r")
@@ -13,12 +13,12 @@ load(fn.in)
 ### Initial.
 init.function(model = model)
 
-# Trace each run.
+### Trace each run.
 # for(i.case in case.names){
 all.jobs <- function(i.job){
   i.case <- case.names[i.job]
 
-  # All mcmc outputs.
+  ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   if(!file.exists(fn.in)){
     # cat("File not found: ", fn.in, "\n", sep = "")
@@ -56,7 +56,7 @@ all.jobs <- function(i.job){
                   })
   }
 
-  # Load logL mean results.
+  ### Load logL mean results.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   load(fn.in)
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
@@ -79,7 +79,7 @@ all.jobs <- function(i.job){
   xlim <- range(x)
   ylim <- range(range(logL), logL.PM)
 
-  # Trace of logL.
+  ### Trace of logL.
   fn.out <- paste(prefix$plot.trace, "logL_", i.case, ".pdf", sep = "")
   cat(i.job, ": ", i.case, ", plot: ", fn.out, "\n", sep = "")
   pdf(fn.out, width = 6, height = 4)
@@ -92,7 +92,7 @@ all.jobs <- function(i.job){
     abline(h = logL.PM, col = 2)
   dev.off()
 
-  # Dump logL.
+  ### Dump logL.
   fn.out <- paste(prefix$subset, "trace_logL_", i.case, ".rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   save(logL, logL.PM, file = fn.out)

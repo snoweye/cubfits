@@ -11,11 +11,11 @@ if(length(case.names) < 4){
   stop("Need 4 cases to match with.")
 }
 
-# Load data.
+### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
+### Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
 b.ci.org <- list()
 b.mean.org <- list()
 label.org <- list()
@@ -23,7 +23,7 @@ b.ci <- list()
 b.mean <- list()
 label <- list()
 for(i.case in 1:4){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, case.names[i.case], "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     stop(paste(fn.in, " is not found.", sep = ""))
@@ -34,7 +34,7 @@ for(i.case in 1:4){
   b.mean.org[[i.case]] <- b.PM
   label.org[[i.case]] <- b.label
 
-  # Subset of mcmc output with scaling.
+  ### Subset of mcmc output with scaling.
   fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
   load(fn.in)
 
@@ -44,7 +44,7 @@ for(i.case in 1:4){
 }
 
 
-# Plot logmu.
+### Plot logmu.
 all.names <- names(b.PM)
 id.intercept <- grep("log.mu", all.names)
 
@@ -80,7 +80,7 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 
-# Plot Delta.t.
+### Plot Delta.t.
 id.slop <- grep("Delta.t", all.names)
 
 x.pm <- b.mean[[3]][id.slop]
@@ -115,7 +115,7 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 
-# Plot Delta.t original (no scaling by x to mean = 1).
+### Plot Delta.t original (no scaling by x to mean = 1).
 id.slop <- grep("Delta.t", all.names)
 
 x.pm <- b.mean.org[[3]][id.slop]

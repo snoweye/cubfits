@@ -47,6 +47,11 @@ b.logmu.label.list <- list()
 SCU.mean <- list()
 SCU.median <- list()
 for(i.case in c(2, 3)){
+  fn.in <- paste(prefix$subset, case.names[i.case], "_PM.rda", sep = "")
+  if(!file.exists(fn.in)){
+    stop(paste(fn.in, " is not found.", sep = ""))
+  }
+  load(fn.in)
   fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
   if(!file.exists(fn.in)){
     stop(paste(fn.in, " is not found.", sep = ""))

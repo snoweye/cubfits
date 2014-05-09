@@ -7,12 +7,12 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Pre processed phi.Obs.
+### Pre processed phi.Obs.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 for(i.case in case.names){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -26,11 +26,11 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  # Plot posterior mean.
+  ### Plot posterior mean.
   fn.out <- paste(prefix$plot.single,
                   "prxy_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
-    # x-axis: predicted, y-axis: observed.
+    ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.PM,
              weights = 1 / phi.STD.log10,
              xlab = "Observed Production Rate (log10)",
@@ -40,11 +40,11 @@ for(i.case in case.names){
           line = 3, cex = 0.6)
   dev.off()
 
-  # Plot posterior median.
+  ### Plot posterior median.
   fn.out <- paste(prefix$plot.single,
                   "prxy_med_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
-    # x-axis: predicted, y-axis: observed.
+    ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.MED,
              weights = 1 / phi.STD.log10,
              xlab = "Observed Production Rate (log10)",
@@ -54,11 +54,11 @@ for(i.case in case.names){
           line = 3, cex = 0.6)
   dev.off()
 
-  # Plot posterior log10 mean.
+  ### Plot posterior log10 mean.
   fn.out <- paste(prefix$plot.single,
                   "prxy_log10_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
-    # x-axis: predicted, y-axis: observed.
+    ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, 10^(phi.PM.log10),
              weights = 1 / phi.STD.log10,
              xlab = "Observed Production Rate (log10)",

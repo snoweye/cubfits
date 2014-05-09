@@ -21,12 +21,12 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
     ylim <- my.range(y)
   }
 
-  # main part.
+  ### main part.
   plot(NULL, NULL, xlim = xlim, ylim = ylim,
        xlab = xlab, ylab = ylab, main = main)
   mtext(workflow.name, line = 3, cex = 0.6)
 
-  # Add lm.
+  ### Add lm.
   if(add.lm){
     m.1 <- try(lm(y ~ x), silent = TRUE)
     if(class(m.1) != "try-error"){
@@ -48,10 +48,10 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
     }
   }
 
-  # Add one-to-one.
+  ### Add one-to-one.
   abline(a = 0, b = 1, col = 4, lty = 2)
 
-  # Add main lines.
+  ### Add main lines.
   for(i in 1:length(x)){
     if(!is.null(x.ci)){
       lines(x = x.ci[i,], y = rep(y[i], 2), col = 1)
@@ -64,7 +64,7 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
     points(x, y, pch = 20, cex = 0.5, col = 2)
   }
 
-  # Add label.
+  ### Add label.
   x.split <- xlim[1] + (xlim[2] - xlim[1]) / 2
   tmp.id <- order(x)
   tmp.x <- x[tmp.id]

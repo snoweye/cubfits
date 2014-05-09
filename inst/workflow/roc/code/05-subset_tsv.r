@@ -5,7 +5,7 @@ rm(list = ls())
 suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 
-# Get all cases.
+### Get all cases.
 for(i.case in case.names){
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   if(!file.exists(fn.in)){

@@ -2,7 +2,7 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code.plot, "u3-plot_trace.r", sep = ""))
@@ -10,7 +10,7 @@ fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")
 load(fn.in)
 coef.names <- cubfits:::get.my.coefnames(model)
 
-# Load true Phi.
+### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
@@ -23,7 +23,7 @@ if(file.exists(fn.in)){
                       })
   bInit <- do.call("c", bInit)
 
-  # Get true values and scale accordingly.
+  ### Get true values and scale accordingly.
   all.names <- names(bInit)
   id.slop <- grep("Delta.t", all.names)
   scale.EPhi <- mean(EPhi)
@@ -34,7 +34,7 @@ if(file.exists(fn.in)){
   bInit.scaled <- NULL
 }
 
-# Check split.S.
+### Check split.S.
 names.aa <- names(fitlist)
 split.S <- FALSE
 if("Delta.t" %in% fitlist){
@@ -55,9 +55,9 @@ names.b <- do.call("rbind", names.b)
 id.intercept <- grep("log.mu", names.b[, 2])
 id.slop <- grep("Delta.t", names.b[, 2])
 
-# Trace each run.
+### Trace each run.
 for(i.case in case.names){
-  # All mcmc outputs.
+  ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -65,11 +65,11 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  # For original plots.
+  ### For original plots.
   ret.b.Mat <- ret$b.Mat
   ret.phi.Mat <- ret$phi.Mat
 
-  # For logmu.
+  ### For logmu.
   fn.out <- paste(prefix$plot.trace, "param_logmu_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
     plottrace.param(ret.b.Mat, names.b, names.aa, id.intercept,
@@ -77,7 +77,7 @@ for(i.case in case.names){
                     bInit = bInit, param = "logmu")
   dev.off()
 
-  # For deltat.
+  ### For deltat.
   fn.out <- paste(prefix$plot.trace, "param_deltat_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
     plottrace.param(ret.b.Mat, names.b, names.aa, id.slop,
@@ -85,7 +85,7 @@ for(i.case in case.names){
                     bInit = bInit, param = "deltat")
   dev.off()
 
-  # For mean EPhi.
+  ### For mean EPhi.
   fn.out <- paste(prefix$plot.trace, "meanEPhi_", 
                   i.case, ".pdf", sep = "")
   pdf(fn.out, width = 6, height = 4)
@@ -93,7 +93,7 @@ for(i.case in case.names){
                        workflow.name, i.case, model)
   dev.off()
 
-  # For scaled plots.
+  ### For scaled plots.
   ret.b.Mat.scaled <- lapply(1:length(ret.b.Mat),
                         function(i){
                           tmp <- ret.b.Mat[[i]]
@@ -101,7 +101,7 @@ for(i.case in case.names){
                           tmp
                         })
 
-  # For deltat.
+  ### For deltat.
   fn.out <- paste(prefix$plot.trace, "scaled_param_deltat_",
                   i.case, ".pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)

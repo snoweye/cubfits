@@ -2,13 +2,13 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Trace each run.
+### Trace each run.
 for(i.case in case.names){
-  # All mcmc outputs.
+  ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -24,12 +24,12 @@ for(i.case in case.names){
   p.names[p.names == "nu.Phi"] <- "m.Phi"
   p.names[p.names == "bsig.Phi"] <- "s.Phi"
 
-  # Plot priors.
+  ### Plot priors.
   for(i.p in 1:length(p.names)){
     fn.out <- paste(prefix$plot.trace, "prior_", p.names[i.p], "_", i.case,
                     ".pdf", sep = "")
     pdf(fn.out, width = 6, height = 4)
-      ylim <- range(trace[i.p,])
+      ylim <- range(trace[i.p,], finite = TRUE)
       plot(NULL, NULL, xlim = xlim, ylim = ylim,
            xlab = "Iterations", ylab = p.names[i.p])
       mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),

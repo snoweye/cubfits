@@ -7,9 +7,9 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Plot.
+### Plot.
 for(i.case in case.names){
-  # All mcmc outputs.
+  ### All mcmc outputs.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat(paste("File not found: ", fn.in, "\n", sep = ""))
@@ -20,7 +20,7 @@ for(i.case in case.names){
   medPhi <- apply(phi.mcmc, 2, median)
   meanPhi <- apply(phi.mcmc, 2, mean)
 
-  # Plot.
+  ### Plot.
   fn.out <- paste(prefix$plot.diag, "medPhi_EPhi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plotprxy(meanPhi, medPhi,

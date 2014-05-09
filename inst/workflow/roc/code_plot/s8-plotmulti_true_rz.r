@@ -10,7 +10,7 @@ source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot, "u5-new_page.r", sep = ""))
 
-# Load true Phi.
+### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
@@ -20,11 +20,11 @@ if(file.exists(fn.in)){
 
 bInit <- convert.b.to.bVec(Eb)
 
-# Load data.
+### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Get AA and synonymous codons.
+### Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
 label <- NULL
 for(i.aa in aa.names){
@@ -33,7 +33,7 @@ for(i.aa in aa.names){
   label <- c(label, paste(i.aa, tmp, sep = "."))
 }
 
-# Get true values.
+### Get true values.
 all.names <- names(bInit)
 id.slop <- grep("Delta.t", all.names)
 scale.EPhi <- mean(EPhi)
@@ -41,9 +41,9 @@ bInit[id.slop] <- bInit[id.slop] * scale.EPhi
 bInit.negsel <- get.negsel(bInit, id.slop, aa.names, label)
 
 
-# Plot by case.
+### Plot by case.
 for(i.case in case.names){
-  # Check files.
+  ### Check files.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -56,25 +56,25 @@ for(i.case in case.names){
   }
 
 
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   load(fn.in)
 
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   load(fn.in)
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   load(fn.in)
 
 
-  # Set layout.
+  ### Set layout.
   fn.out <- paste(prefix$plot.multi, "rz_", i.case, ".pdf", sep = "")
   workflow.name <- paste("RZ ", workflow.name, sep = "")
   pdf(fn.out, width = 6, height = 10)
-#New page
+### New page
     new.page(workflow.name, i.case, model)
 
-    # Plot org Delta.t.
+    ### Plot org Delta.t.
     x <- bInit.negsel$b.negsel.PM
     y <- b.negsel.PM
     y.ci <- b.negsel.ci.PM
@@ -83,7 +83,7 @@ for(i.case in case.names){
                 xlab = "True", ylab = "Estimated",
                 main = "Delta.t", add.lm = TRUE)
 
-    # Plot RZ Delta.t.
+    ### Plot RZ Delta.t.
     fn.in <- paste(prefix$subset, i.case, "_PM_scaling_rz.rda", sep = "")
     load(fn.in)
     y <- b.negsel.PM

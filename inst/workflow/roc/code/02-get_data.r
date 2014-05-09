@@ -31,7 +31,7 @@ if(file.exists(fn.in)){
   y.scuo <- gen.scuo(seq.string)
   SCUO <- calc_scuo_values(y.scuo)$SCUO
 
-  # A fake SCUO is used.
+  ### A fake SCUO is used.
   phi <- data.frame(ORF = names(seq.string), phi = SCUO)
 }
 

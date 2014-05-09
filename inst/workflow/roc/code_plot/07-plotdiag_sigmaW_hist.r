@@ -7,16 +7,16 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Pre processed phi.Obs.
+### Pre processed phi.Obs.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Keep _wphi_ cases only.
+### Keep _wphi_ cases only.
 case.names <- case.names[grep("_wphi_", case.names)]
 
-# Plot.
+### Plot.
 for(i.case in case.names){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -30,7 +30,7 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  # Plot.
+  ### Plot.
   fn.out <- paste(prefix$plot.diag, "sigmaW_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ret <- hist(p.mcmc[1,], nclass = 40,

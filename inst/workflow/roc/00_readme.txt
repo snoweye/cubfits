@@ -7,12 +7,9 @@
 - ./code_plot/
   contains all R codes for post process results from work flows. 
 
+- ./code_plot_nps/
+  contains all R codes for results (no post scaling) from work flows. 
+  only good for with constrained prior distribution.
+
 - ./script/
   contains all shell scripts for lunching work flows.
-
-- ./misc/
-  contains some codes comparing across different work flows and
-  only for manually usages.
-
-- ./code_discard/
-  contains codes built for old work flows.

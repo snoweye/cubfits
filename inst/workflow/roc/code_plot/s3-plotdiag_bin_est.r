@@ -5,7 +5,7 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 source("00-set_env.r")
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
@@ -18,27 +18,27 @@ if(file.exists(fn.in)){
   stop(paste(fn.in, " is not found.", sep = ""))
 }
 
-# Arrange data.
+### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
 ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi)
 predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
-# Plot bin and model for measurements.
+### Plot bin and model for measurements.
 fn.out <- paste(prefix$plot.diag, "bin_est_EPhi.pdf", sep = "")
-pdf(fn.out, width = 14, height = 11)
+pdf(fn.out, width = 16, height = 11)
   mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                 nrow = 6, ncol = 5, byrow = TRUE)
-  mat <- cbind(rep(23, 6), mat)
-  nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
-  # Plot title.
+  mat <- cbind(rep(23, 6), mat, rep(24, 6))
+  nf <- layout(mat, c(3, rep(8, 5), 1), c(3, 8, 8, 8, 8, 3), respect = FALSE)
+  ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.8, workflow.name)
-  text(0.5, 0.4, "bin: true phi")
+  text(0.5, 0.5, workflow.name)
+  text(0.5, 0.2, "bin: true phi")
   par(mar = c(0, 0, 0, 0))
 
-  # Plot results.
+  ### Plot results.
   for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.EPhi[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
@@ -49,7 +49,7 @@ pdf(fn.out, width = 14, height = 11)
     if(i.aa %in% c(1, 6, 11, 16)){
       axis(2)
     }
-    if(i.aa %in% 17:19){
+    if(i.aa %in% 15:19){
       axis(1)
     }
   }
@@ -57,7 +57,7 @@ pdf(fn.out, width = 14, height = 11)
   model.lty <- 2
   plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
        xlim = c(0, 1), ylim = c(0, 1))
-  legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
 
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

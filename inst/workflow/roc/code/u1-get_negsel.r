@@ -21,15 +21,15 @@ get.negsel <- function(b.PM, id.intercept, id.slop, aa.names, b.label,
 
     if(any(b.negsel.PM[id.aa] > 0)){
       ### Delta.t
-      tmp <- max(b.negsel.PM[id.aa])
+      max.deltat <- max(b.negsel.PM[id.aa])
       id.max <- which.max(b.negsel.PM[id.aa])
-      b.negsel.PM[id.aa] <- b.negsel.PM[id.aa] - tmp
-      b.negsel.PM[id.aa][id.max] <- -tmp
+      b.negsel.PM[id.aa] <- b.negsel.PM[id.aa] - max.deltat
+      b.negsel.PM[id.aa][id.max] <- -max.deltat
 
       ### log.mu
-      tmp <- b.logmu.PM[id.max]
-      b.logmu.PM[id.aa] <- b.logmu.PM[id.aa] - tmp
-      b.logmu.PM[id.aa][id.max] <- -tmp
+      max.logmu <- b.logmu.PM[id.aa][id.max]
+      b.logmu.PM[id.aa] <- b.logmu.PM[id.aa] - max.logmu
+      b.logmu.PM[id.aa][id.max] <- -max.logmu
 
       ### Change C.I.
       if(!is.null(b.ci.PM)){
@@ -42,17 +42,17 @@ get.negsel <- function(b.PM, id.intercept, id.slop, aa.names, b.label,
         } else{
           ### Delta.t
           tmp.ci <- matrix(b.negsel.ci.PM[id.aa,], ncol = 2)[id.max,]
-          b.negsel.ci.PM[id.aa,] <- b.negsel.ci.PM[id.aa,] - tmp
+          b.negsel.ci.PM[id.aa,] <- b.negsel.ci.PM[id.aa,] - max.deltat
           b.negsel.ci.PM[id.aa,][id.max,] <- -tmp.ci
 
           ### log.mu
           tmp.ci <- matrix(b.logmu.ci.PM[id.aa,], ncol = 2)[id.max,]
-          b.logmu.ci.PM[id.aa,] <- b.logmu.ci.PM[id.aa,] - tmp
+          b.logmu.ci.PM[id.aa,] <- b.logmu.ci.PM[id.aa,] - max.logmu
           b.logmu.ci.PM[id.aa,][id.max,] <- -tmp.ci
         }
       }
 
-      # Replace codon name.
+      ### Replace codon name.
       tmp <- .CF.GV$synonymous.codon[[i.aa]]
       if(sum(id.aa) != length(tmp)){
         tmp <- .CF.GV$synonymous.codon.split[[i.aa]]

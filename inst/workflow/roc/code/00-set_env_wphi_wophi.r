@@ -29,21 +29,21 @@ prefix$plot.AA <- paste(prefix$all.out, "plot/AA/", sep = "")
 prefix$plot.multi <- paste(prefix$all.out, "plot/multi/", sep = "")
 
 ### For ploting without scaling.
-prefix$plot.ns <- paste(prefix$all.out, "plot_ns/", sep = "")
-prefix$plot.ns.diag <- paste(prefix$all.out, "plot_ns/diag/", sep = "")
-prefix$plot.ns.match <- paste(prefix$all.out, "plot_ns/match/", sep = "")
-prefix$plot.ns.single <- paste(prefix$all.out, "plot_ns/single/", sep = "")
-prefix$plot.ns.trace <- paste(prefix$all.out, "plot_ns/trace/", sep = "")
-prefix$plot.ns.AA <- paste(prefix$all.out, "plot_ns/AA/", sep = "")
-prefix$plot.ns.multi <- paste(prefix$all.out, "plot_ns/multi/", sep = "")
+prefix$plot.nps <- paste(prefix$all.out, "plot_nps/", sep = "")
+prefix$plot.nps.diag <- paste(prefix$all.out, "plot_nps/diag/", sep = "")
+prefix$plot.nps.match <- paste(prefix$all.out, "plot_nps/match/", sep = "")
+prefix$plot.nps.single <- paste(prefix$all.out, "plot_nps/single/", sep = "")
+prefix$plot.nps.trace <- paste(prefix$all.out, "plot_nps/trace/", sep = "")
+prefix$plot.nps.AA <- paste(prefix$all.out, "plot_nps/AA/", sep = "")
+prefix$plot.nps.multi <- paste(prefix$all.out, "plot_nps/multi/", sep = "")
 
 ### For code.
 prefix$code <- paste(cubfits::get.workflow(model = model), "/",
                      "code/", sep = "")
 prefix$code.plot <- paste(cubfits::get.workflow(model = model), "/",
                           "code_plot/", sep = "")
-prefix$code.plot.ns <- paste(cubfits::get.workflow(model = model), "/",
-                             "code_plot_ns/", sep = "")
+prefix$code.plot.nps <- paste(cubfits::get.workflow(model = model), "/",
+                             "code_plot_nps/", sep = "")
 
 ### Specify data files.
 file.data <- list()

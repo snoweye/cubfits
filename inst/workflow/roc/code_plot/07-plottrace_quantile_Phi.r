@@ -8,6 +8,10 @@ source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code.plot, "u3-plot_trace.r", sep = ""))
 fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")
 load(fn.in)
+fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
+if(file.exists(fn.in)){
+  load(fn.in)
+}
 
 q.probs <- c(0.01, 0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99)
 
@@ -94,6 +98,9 @@ for(i.case in case.names){
          main = paste(names(id.gene)[i.q], ", sdlog = ",
                       sprintf("%.4f", sd(hist.Mat[i.q,])), sep = ""))
     abline(v = hist.mean[i.q], col = 2)
+    if(exists("EPhi")){
+      abline(v = log10(EPhi[id.gene[i.q]]), col = 4, lty = 2)
+    }
 
     ### Plot non-log hist
     plot(hist.list.nl[[i.q]],
@@ -102,6 +109,9 @@ for(i.case in case.names){
          main = paste(names(id.gene)[i.q], ", sd = ",
                       sprintf("%.4f", sd(hist.Mat.nl[i.q,])), sep = ""))
     abline(v = hist.mean.nl[i.q], col = 2)
+    if(exists("EPhi")){
+      abline(v = EPhi[id.gene[i.q]], col = 4, lty = 2)
+    }
   }
 
   dev.off()

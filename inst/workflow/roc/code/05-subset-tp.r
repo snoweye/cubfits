@@ -43,7 +43,6 @@ all.jobs <- function(i.job){
 
   ### Obtain the last 5000 iterations.
   b.mcmc <- do.call("cbind", ret$b.Mat[range$subset])
-  # rownames(b.mcmc) <- names(ret$b.Mat[[1]])
   rownames(b.mcmc) <- b.names
 
   p.mcmc <- do.call("cbind", ret$p.Mat[range$subset])
@@ -66,23 +65,34 @@ all.jobs <- function(i.job){
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   save(b.mcmc, p.mcmc, phi.mcmc, file = fn.out)
 
+  ### Find indices.
+  all.names <- rownames(b.mcmc)
+  id.slop <- grep("Delta.t", all.names)
+  id.intercept <- grep("log.mu", all.names)
+
+### Original scale. ###
   ### Obtain posterior means.
   b.PM <- rowMeans(b.mcmc)
   b.ci.PM <- t(apply(b.mcmc, 1, quantile, prob = ci.prob))
   p.PM <- rowMeans(p.mcmc)
+
   phi.PM <- rowMeans(phi.mcmc)
+  phi.STD <- apply(phi.mcmc, 1, sd)
+  phi.CI <- t(apply(phi.mcmc, 1, quantile, prob = ci.prob))
+  phi.MED <- apply(phi.mcmc, 1, median)
+
+  phi.mcmc.log10 <- log10(phi.mcmc)
+  phi.PM.log10 <- rowMeans(phi.mcmc.log10)
+  phi.STD.log10 <- apply(phi.mcmc.log10, 1, sd)
+  phi.CI.log10 <- t(apply(phi.mcmc.log10, 1, quantile, prob = ci.prob))
 
   ### Negative selection.
-  all.names <- rownames(b.mcmc)
-  id.slop <- grep("Delta.t", all.names)
-  id.intercept <- grep("log.mu", all.names)
   ret <- get.negsel(b.PM, id.intercept, id.slop, aa.names, b.label,
                     b.ci.PM = b.ci.PM)
   ### Delta.t
   b.negsel.PM <- ret$b.negsel.PM
   b.negsel.ci.PM <- ret$b.negsel.ci.PM
   b.negsel.label <- ret$b.negsel.label
-
   ### log.mu
   b.logmu.PM <- ret$b.logmu.PM
   b.logmu.ci.PM <- ret$b.logmu.ci.PM
@@ -91,7 +101,9 @@ all.jobs <- function(i.job){
   ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
-  save(b.PM, b.ci.PM, p.PM, phi.PM, b.label,
+  save(b.PM, b.ci.PM, p.PM,
+       phi.PM, phi.STD, phi.CI, phi.MED,
+       phi.PM.log10, phi.STD.log10, phi.CI.log10, b.label,
        b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
        b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
        file = fn.out)
@@ -117,6 +129,7 @@ all.jobs <- function(i.job){
   # cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   # save(b.PM, p.PM, phi.PM, file = fn.out)
 
+### Post-scaling. ###
   ### Scaling.
   scale.EPhi <- colMeans(phi.mcmc)
   phi.mcmc <- t(t(phi.mcmc) / scale.EPhi)

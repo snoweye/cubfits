@@ -20,7 +20,7 @@ EPhi <- phi$true.phi
 ### Plot.
 fn.out <- paste(prefix$plot.diag, "phiObs_vs_true.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
-  # x-axis: true, y-axis: observed.
+  ### x-axis: true, y-axis: observed.
   plotprxy(EPhi, phi.Obs, main = "True vs Observed",
            xlab = "Phi True", ylab = "Observed")
   mtext(workflow.name, line = 3, cex = 0.6)

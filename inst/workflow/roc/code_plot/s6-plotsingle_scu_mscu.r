@@ -3,7 +3,7 @@ suppressMessages(library(cubfits, quietly = TRUE))
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
-# Load true Phi.
+### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
@@ -11,11 +11,11 @@ if(file.exists(fn.in)){
   stop(paste(fn.in, " is not found.", sep = ""))
 }
 
-# Pre processed phi.Obs.
+### Pre processed phi.Obs.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# True SCU.
+### True SCU.
 bInit <- convert.b.to.bVec(Eb)
 all.names <- names(bInit)
 id.slop <- grep("Delta.t", all.names)
@@ -26,7 +26,7 @@ Eb <- convert.bVec.to.b(bInit, names(reu13.df.obs))
 SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 for(i.case in case.names){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -43,7 +43,7 @@ for(i.case in case.names){
   b <- convert.bVec.to.b(b.PM, names(reu13.df.obs))
   SCU <- calc_scu_values(b, y.list, phi.PM)
 
-  # Plot SCU.
+  ### Plot SCU.
   fn.out <- paste(prefix$plot.single,
                   "scu_true_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
@@ -55,7 +55,7 @@ for(i.case in case.names){
           line = 3, cex = 0.6)
   dev.off()
 
-  # Plot mSCU.
+  ### Plot mSCU.
   fn.out <- paste(prefix$plot.single,
                   "mscu_true_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)

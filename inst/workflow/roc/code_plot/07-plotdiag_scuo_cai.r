@@ -6,12 +6,12 @@ suppressMessages(library(cubfits, quietly = TRUE))
 
 source("00-set_env.r")
 
-# Pre processed phi.Obs.
+### Pre processed phi.Obs.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-# Plot.
-# x-axis: predicted, y-axis: observed.
+### Plot.
+### x-axis: predicted, y-axis: observed.
 fn.in <- file.data$tsv
 if(file.exists(fn.in)){
   tmp <- log10(phi.Obs / mean(phi.Obs))
@@ -20,23 +20,23 @@ if(file.exists(fn.in)){
     nf <- layout(matrix(c(1, 1, 1, 2, 3, 4),
                         nrow = 2, ncol = 3, byrow = TRUE),
                  c(1, 1, 1), c(1, 8), respect = FALSE)
-    # Plot title.
+    ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.5, workflow.name)
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
-    # Plot SCUO vs phi.Obs.
+    ### Plot SCUO vs phi.Obs.
     plotprxy(SCUO, tmp, log10.x = FALSE, log10.y = FALSE,
              xlab = "SCUO", ylab = "Observed Production Rate (log10)",
              main = "SCUO vs phi.Obs")
 
-    # Plot CAI vs phi.Obs.
+    ### Plot CAI vs phi.Obs.
     plotprxy(CAI$CAI, tmp, log10.x = FALSE, log10.y = FALSE,
              xlab = "CAI", ylab = "Observed Production Rate (log10)",
              main = "CAI vs phi.Obs")
 
-    # Plot SCUO vs CAI.
+    ### Plot SCUO vs CAI.
     plotprxy(SCUO, CAI$CAI, log10.x = FALSE, log10.y = FALSE,
              xlab = "SCUO", ylab = "CAI", main = "SCUO vs CAI")
   dev.off()

@@ -23,9 +23,9 @@ bInit <- convert.b.to.bVec(Eb)
 fn.in <- paste(prefix$data, "/pre_process.rda", sep = "")
 load(fn.in)
 
-# Get AA and synonymous codons.
+### Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
-ceof.names <- cubfits:::get.my.coefnames(model)
+coef.names <- cubfits:::get.my.coefnames(model)
 label <- NULL
 b.names <- NULL
 for(i.codon in aa.names){
@@ -35,7 +35,7 @@ for(i.codon in aa.names){
   b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
-# Get id.slop.
+### Get id.slop.
 all.names <- b.names
 id.slop <- grep("Delta.t", all.names)
 
@@ -45,7 +45,7 @@ bInit <- tmp$b.negsel.PM
 label.negsel.true <- tmp$b.negsel.label
 
 
-# Plot by case.
+### Plot by case.
 for(i.case in case.names){
   ### Load subset mcmc run.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
@@ -76,7 +76,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 12, height = 11)
     nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
                  rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
-    # Plot title.
+    ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.5,
@@ -87,11 +87,11 @@ for(i.case in case.names){
       id.label <- grep(paste("^", i.aa, "\\.", sep = ""), label)
       tl.codon <- length(id.label)
 
-      plot.aa.allinone(i.aa, id.label, tl.codon,        # For AA.
-                       label.negsel.true,               # For label.
-                       bInit, EPhi,                     # For true.
-                       b.mcmc, t.phi.mcmc,              # For unscaled results.
-                       b.negsel.PM, phi.PM,             # For scaled results.
+      plot.aa.allinone(i.aa, id.label, tl.codon,      ### For AA.
+                       label.negsel.true,             ### For label.
+                       bInit, EPhi,                   ### For true.
+                       b.mcmc, t.phi.mcmc,            ### For unscaled results.
+                       b.negsel.PM, phi.PM,           ### For scaled results.
                        workflow.name, i.case, model)
     }
 
