@@ -32,8 +32,8 @@ for(i.case in 1:4){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
+  # load(fn.in)
 
   b.ci[[i.case]] <- b.negsel.ci.PM
   b.mean[[i.case]] <- b.negsel.PM
@@ -67,7 +67,7 @@ if(any((x.scuo < 0 & y.scuo > 0) | (x.scuo > 0 & y.scuo < 0) |
 }
 
 ### Plot Delta.t.
-fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "corr_negsel_deltat_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.pm, y.pm, x.pm.label,
               x.ci = x.pm.ci, y.ci = y.pm.ci,
@@ -76,7 +76,7 @@ pdf(fn.out, width = 5, height = 5)
               main = "roc_ad_pm", workflow.name = workflow.name)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "corr_negsel_deltat_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   plot.b.corr(x.scuo, y.scuo, x.scuo.label,
               x.ci = x.scuo.ci, y.ci = y.scuo.ci,

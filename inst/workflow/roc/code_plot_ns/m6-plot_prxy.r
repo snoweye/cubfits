@@ -21,18 +21,18 @@ for(i.case in 1:4){
     stop(paste(fn.in, " is not found.", sep = ""))
   }
   load(fn.in)
-  fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    stop(paste(fn.in, " is not found.", sep = ""))
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   stop(paste(fn.in, " is not found.", sep = ""))
+  # }
+  # load(fn.in)
   phi.mean[[i.case]] <- phi.PM
   phi.median[[i.case]] <- phi.MED
   phi.std[[i.case]] <- phi.STD.log10
 }
 
 # Plot posterior mean.
-fn.out <- paste(prefix$plot.match, "prxy_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "prxy_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   # x-axis: with phi, y-axis: without phi.
   plotprxy(phi.mean[[3]], phi.mean[[1]], weights = 1 / phi.std[[1]],
@@ -42,7 +42,7 @@ pdf(fn.out, width = 5, height = 5)
   mtext(workflow.name, line = 3, cex = 0.6)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "prxy_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "prxy_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   # x-axis: with phi, y-axis: without phi.
   plotprxy(phi.mean[[4]], phi.mean[[2]], weights = 1 / phi.std[[2]],
@@ -53,7 +53,7 @@ pdf(fn.out, width = 5, height = 5)
 dev.off()
 
 # Plot posterior median.
-fn.out <- paste(prefix$plot.match, "prxy_med_pm.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "prxy_med_pm.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   # x-axis: with phi, y-axis: without phi.
   plotprxy(phi.median[[3]], phi.median[[1]], weights = 1 / phi.std[[1]],
@@ -63,7 +63,7 @@ pdf(fn.out, width = 5, height = 5)
   mtext(workflow.name, line = 3, cex = 0.6)
 dev.off()
 
-fn.out <- paste(prefix$plot.match, "prxy_med_scuo.pdf", sep = "")
+fn.out <- paste(prefix$plot.ns.match, "prxy_med_scuo.pdf", sep = "")
 pdf(fn.out, width = 5, height = 5)
   # x-axis: with phi, y-axis: without phi.
   plotprxy(phi.median[[4]], phi.median[[2]], weights = 1 / phi.std[[2]],

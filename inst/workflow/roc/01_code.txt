@@ -22,3 +22,7 @@ For files under ./code and ./code_plot
 - ./code_plot/*-plot*.r
   Mainly for summarizing and plotting the outputs of work flows.
 
+- ./code_plot_ns/*-plot*.r
+  Non scaling in post processing.
+  Mainly for summarizing and plotting the outputs of work flows.
+

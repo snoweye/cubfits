@@ -5,7 +5,7 @@ rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
-# Load environment and set data.
+### Load environment and set data.
 source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
@@ -17,7 +17,7 @@ if(file.exists(fn.in)){
   load(fn.in)
 }
 
-# Arrange data.
+### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
 ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
@@ -36,9 +36,9 @@ if(exists("Eb")){
   true.roc <- prop.model.roc(b.true, phi.Obs.lim)
 }
 
-# Load each chain.
+### Load each chain.
 for(i.case in case.names){
-  # Subset of mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -57,30 +57,48 @@ for(i.case in case.names){
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
 
-  # Plot bin and model for measurements.
+  ### Fix xlim.
+  lim.bin <- range(ret.phi.Obs[[1]]$center)
+  lim.model <- range(predict.roc[[1]]$center)
+  x.lim <- c((lim.bin[1] + lim.model[1]) / 2,
+              max(lim.bin[2], lim.model[2]))
+
+  ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.single, "bin_merge_phiObs_",
                   i.case, ".pdf", sep = "")
-  pdf(fn.out, width = 12, height = 11)
-    nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-                 rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
-    # Plot title.
+  pdf(fn.out, width = 14, height = 11)
+    mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
+                  nrow = 6, ncol = 5, byrow = TRUE)
+    mat <- cbind(rep(23, 6), mat)
+    nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
+    ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.8,
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
     text(0.5, 0.4, "bin: observed phi")
-    par(mar = c(5.1, 4.1, 4.1, 2.1))
+    par(mar = c(0, 0, 0, 0))
 
-    # Plot results.
+    ### Plot results.
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.phi.Obs[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
+      plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
+              lty = 3, axes = FALSE, xlim = xlim)
+      box()
+      text(0, 1, aa.names[i.aa], cex = 1.5)
+      if(i.aa %in% c(1, 6, 11, 16)){
+        axis(2)
+      }
+      if(i.aa %in% 17:19){
+        axis(1)
+      }
 
+      ### Add true model if it is available.
       u.codon <- sort(unique(tmp.obs$codon))
       color <- cubfits:::get.color(u.codon)
 
-      if(length(grep("_wophi_", i.case)) == 0){  # wphi case, add regression.
+      if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
         tmp.roc <- noerror.roc[[i.aa]]
         plotaddmodel(tmp.roc, 2, u.codon, color)
       }
@@ -91,10 +109,10 @@ for(i.case in case.names){
       }
     }
 
-    # Add label.
+    ### Add label.
     model.label <- "MCMC Posterior"
     model.lty <- 1
-    if(length(grep("_wophi_", i.case)) == 0){  # wphi case, add regression.
+    if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
       model.label <- c(model.label, "Logistic Regression")
       model.lty <- c(model.lty, 2)
     }
@@ -105,33 +123,53 @@ for(i.case in case.names){
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
     legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+
+    ### Plot xlab.
+    plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+    text(0.5, 0.5, "Estimated Production Rate (log10)")
+
+    ### Plot ylab.
+    plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+    text(0.5, 0.5, "Propotion", srt = 90)
   dev.off()
 
 
-  # Plot bin and model for predictions.
+  ### Plot bin and model for predictions.
   fn.out <- paste(prefix$plot.single, "bin_merge_EPhi_",
                   i.case, ".pdf", sep = "")
-  pdf(fn.out, width = 12, height = 11)
-    nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-                 rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
-    # Plot title.
+  pdf(fn.out, width = 14, height = 11)
+    mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
+                  nrow = 6, ncol = 5, byrow = TRUE)
+    mat <- cbind(rep(23, 6), mat)
+    nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
+    ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.8,
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
     text(0.5, 0.4, "bin: posterior mean of Phi")
-    par(mar = c(5.1, 4.1, 4.1, 2.1))
+    par(mar = c(0, 0, 0, 0))
 
-    # Plot results.
+    ### Plot results.
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
-      plotbin(tmp.obs, tmp.roc, main = aa.names[i.aa])
+      plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
+              lty = 3, axes = FALSE, xlim = xlim)
+      box()
+      text(0, 1, aa.names[i.aa], cex = 1.5)
+      if(i.aa %in% c(1, 6, 11, 16)){
+        axis(2)
+      }
+      if(i.aa %in% 17:19){
+        axis(1)
+      }
 
       u.codon <- sort(unique(tmp.obs$codon))
       color <- cubfits:::get.color(u.codon)
 
-      if(length(grep("_wophi_", i.case)) == 0){  # wphi case, add regression.
+      ### Add true model if it is available.
+      if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
         tmp.roc <- noerror.roc[[i.aa]]
         plotaddmodel(tmp.roc, 2, u.codon, color, x.log10 = TRUE)
       }
@@ -142,10 +180,10 @@ for(i.case in case.names){
       }
     }
 
-    # Add label.
+    ### Add label.
     model.label <- "MCMC Posterior"
     model.lty <- 1
-    if(length(grep("_wophi_", i.case)) == 0){  # wphi case, add regression.
+    if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
       model.label <- c(model.label, "Logistic Regression")
       model.lty <- c(model.lty, 2)
     }
@@ -156,5 +194,13 @@ for(i.case in case.names){
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
     legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+
+    ### Plot xlab.
+    plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+    text(0.5, 0.5, "Estimated Production Rate (log10)")
+
+    ### Plot ylab.
+    plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+    text(0.5, 0.5, "Propotion", srt = 90)
   dev.off()
 }

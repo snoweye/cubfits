@@ -35,6 +35,9 @@ phi.DrawScale <- run.info$phi.DrawScale
 
 ### Run.
 phi.Obs <- phi.Obs / mean(phi.Obs)
+if(.CF.CT$model.Phi == "logmixture"){
+  phi.init.SCUO <- phi.init.SCUO.emp
+}
 phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 ret <- cubfits(reu13.df.obs, phi.Obs, y, n,
                nIter = nIter, burnin = burnin,

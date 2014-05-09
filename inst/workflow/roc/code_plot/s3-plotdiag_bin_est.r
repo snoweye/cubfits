@@ -26,26 +26,44 @@ predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
 # Plot bin and model for measurements.
 fn.out <- paste(prefix$plot.diag, "bin_est_EPhi.pdf", sep = "")
-pdf(fn.out, width = 12, height = 11)
-  nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-               rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
+pdf(fn.out, width = 14, height = 11)
+  mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
+                nrow = 6, ncol = 5, byrow = TRUE)
+  mat <- cbind(rep(23, 6), mat)
+  nf <- layout(mat, c(1, rep(8, 5)), c(1, 8, 8, 8, 8, 1), respect = FALSE)
   # Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
   text(0.5, 0.8, workflow.name)
   text(0.5, 0.4, "bin: true phi")
-  par(mar = c(5.1, 4.1, 4.1, 2.1))
+  par(mar = c(0, 0, 0, 0))
 
   # Plot results.
   for(i.aa in 1:length(aa.names)){
     tmp.obs <- ret.EPhi[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
-    plotbin(tmp.obs, tmp.roc, main = "", lty = 2)
+    plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
+            lty = 2, axes = FALSE)
+    box()
     text(0, 1, aa.names[i.aa], cex = 1.5)
+    if(i.aa %in% c(1, 6, 11, 16)){
+      axis(2)
+    }
+    if(i.aa %in% 17:19){
+      axis(1)
+    }
   }
   model.label <- c("Logistic Regression")
   model.lty <- 2
   plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
        xlim = c(0, 1), ylim = c(0, 1))
   legend(0, 0.9, model.label, lty = model.lty, box.lty = 0)
+
+  ### Plot xlab.
+  plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+  text(0.5, 0.5, "Estimated Production Rate (log10)")
+
+  ### Plot ylab.
+  plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+  text(0.5, 0.5, "Propotion", srt = 90)
 dev.off()

@@ -76,7 +76,7 @@ all.jobs <- function(i.job){
   all.names <- rownames(b.mcmc)
   id.slop <- grep("Delta.t", all.names)
   id.intercept <- grep("log.mu", all.names)
-  ret <- get.negsel(b.PM, intercept, id.slop, aa.names, b.label,
+  ret <- get.negsel(b.PM, id.intercept, id.slop, aa.names, b.label,
                     b.ci.PM = b.ci.PM)
   ### Delta.t
   b.negsel.PM <- ret$b.negsel.PM

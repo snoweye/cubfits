@@ -43,18 +43,18 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   predict.roc <- prop.model.roc(b.PM, EPhi.true.lim)
 
   ### Plot bin and model for measurements.
-  fn.out <- paste(prefix$plot.single, "bin_merge_true_",
+  fn.out <- paste(prefix$plot.ns.single, "bin_merge_true_",
                   i.case, ".pdf", sep = "")
   pdf(fn.out, width = 14, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),

@@ -23,7 +23,8 @@ for(i.case in case.names){
 
   ### Find genes by quantile.
   ret.phi.Mat <- ret$phi.Mat
-  ret.phi.Mat.scaled <- lapply(ret.phi.Mat, function(x) x / mean(x))
+  # ret.phi.Mat.scaled <- lapply(ret.phi.Mat, function(x) x / mean(x))
+  ret.phi.Mat.scaled <- ret.phi.Mat
 
   ret.phi.Mat.PM <- rowMeans(do.call("cbind", ret.phi.Mat.scaled))
   q.PM <- quantile(ret.phi.Mat.PM, probs = q.probs)
@@ -61,7 +62,7 @@ for(i.case in case.names){
                                       function(p){ range(p$counts) })))
 
   ### Set layout.
-  fn.out <- paste(prefix$plot.trace, "quantile_Phi_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.ns.trace, "quantile_Phi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 9, height = 10)
 
   ### Plot trace for each quantile.

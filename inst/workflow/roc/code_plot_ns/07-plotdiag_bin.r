@@ -21,12 +21,12 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   ### To adjust to similar range of phi.Obs.
   ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
@@ -40,7 +40,7 @@ for(i.case in case.names){
               max(lim.bin[2], lim.model[2]))
 
   ### Plot bin and model for measurements.
-  fn.out <- paste(prefix$plot.diag, "bin_pred_phiObs_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.ns.diag, "bin_pred_phiObs_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 14, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
@@ -85,7 +85,7 @@ for(i.case in case.names){
   dev.off()
 
   ### Plot bin and model for predictions.
-  fn.out <- paste(prefix$plot.diag, "bin_pred_EPhi_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.ns.diag, "bin_pred_EPhi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 14, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
