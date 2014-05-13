@@ -5,6 +5,7 @@
 \alias{.CF.OP}
 \alias{.CF.AC}
 \alias{.CF.PT}
+\alias{.CF.PARAM}
 \alias{.cubfitsEnv}
 \alias{.CO.CT}
 \docType{data}
@@ -21,6 +22,7 @@
   .CF.OP
   .CF.AC
   .CF.PT
+  .CF.PARAM
   .CO.CT
 }
 \format{
@@ -102,6 +104,16 @@
     }
 
   \item
+    \code{.CF.PARAM} controls the parameters and hyperparameters of priors.
+    It currently includes
+    \tabular{ll}{
+      \code{phi.meanlog} \tab mean of phi in loca scale \cr
+      \code{phi.sdlog} \tab standard deviation of phi in loca scale \cr
+      \code{hp.gamma.alpha} \tab hyperparameters of gamma distribution \cr
+      \code{hp.gamma.alpha} \tab hyperparameters of gamma distribution
+    }
+
+  \item
     \code{.CO.CT} controls the constrained optimization function. It currently
     includes
     \tabular{ll}{
@@ -130,6 +142,7 @@ suppressMessages(library(cubfits, quietly = TRUE))
 .CF.OP
 .CF.AC
 .CF.PT
+.CF.PARAM
 .CO.CT
 
 ls(.cubfitsEnv)

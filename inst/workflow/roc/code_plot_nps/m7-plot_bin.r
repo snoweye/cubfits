@@ -1,40 +1,18 @@
-### This script plots binning and model predictions from MCMC with measurement
-### errors.
-
 rm(list = ls())
 
 suppressMessages(library(cubfits, quietly = TRUE))
 
 ### Load environment and set data.
 source("00-set_env.r")
-source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
+source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
-fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")
-load(fn.in)
-fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
-load(fn.in)
-EPhi.true <- EPhi
 
 ### Arrange data.
-EPhi.true.lim <- range(EPhi.true)
+phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
-ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
-noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
-tmp <- convert.b.to.bVec(fitlist)
-id.slop <- grep("Delta.t", names(tmp), invert = TRUE)
-
-### Since Eb is not generated in scale of mean 1, but phi.Obs was already
-### scaled in mean 1. I have to scale b.true accordingly.
-b.true <- convert.b.to.bVec(Eb)
-# b.true[id.slop] <- b.true[id.slop] * phi.scale
- b.true[id.slop] <- b.true[id.slop] * mean(EPhi) 
-b.true <- convert.bVec.to.b(b.true, aa.names)
-true.roc <- prop.model.roc(b.true, EPhi.true.lim)
-
-
-### Load each chain.
+ret.all <- NULL
 for(i.case in case.names){
   ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
@@ -50,12 +28,47 @@ for(i.case in case.names){
   # }
   # load(fn.in)
 
+  ### To adjust to similar range of phi.Obs.
+  ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
-  predict.roc <- prop.model.roc(b.PM, EPhi.true.lim)
+  predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
+
+  ret.all[[i.case]] <- list(ret.EPhi = ret.EPhi, predict.roc = predict.roc)
+}
+
+### Get possible match cases. wophi fits vs wphi fits on wphi EPhi.
+match.case <- rbind(
+  c("ad_wophi_pm", "ad_wphi_pm"),
+  c("ad_wophi_scuo", "ad_wphi_scuo"),
+  c("ad_wophi_true", "ad_wphi_true"),
+  c("ad_wphi_wophi_pm", "ad_wphi_pm"),
+  c("ad_wphi_wophi_scuo", "ad_wphi_scuo")
+)
+match.case <- matrix(paste(model, match.case, sep = "_"), ncol = 2)
+
+### Plot matched cases.
+for(i.match in 1:nrow(match.case)){
+  if(!match.case[i.match, 1] %in% names(ret.all) ||
+     !match.case[i.match, 2] %in% names(ret.all)){
+    next
+  }
+
+  ### Dispatch.
+  # ret.EPhi.1 <- ret.all[[match.case[i.match, 1]]]$ret.EPhi
+  ret.EPhi.2 <- ret.all[[match.case[i.match, 2]]]$ret.EPhi
+  predict.roc.1 <- ret.all[[match.case[i.match, 1]]]$predict.roc
+  predict.roc.2 <- ret.all[[match.case[i.match, 2]]]$predict.roc
+
+  ### Fix xlim at log10 scale.
+  lim.bin <- range(log10(ret.EPhi.2[[1]]$center))
+  lim.model <- range(log10(predict.roc.1[[1]]$center),
+                     log10(predict.roc.2[[1]]$center))
+  xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 8,
+            lim.bin[2] + (lim.bin[2] - lim.bin[1]) / 8)
 
   ### Plot bin and model for measurements.
-  fn.out <- paste(prefix$plot.nps.single, "bin_merge_true_",
-                  i.case, "_nps.pdf", sep = "")
+  fn.out <- paste(prefix$plot.match, "bin_", match.case[i.match, 1], "_",
+                  match.case[i.match, 2], ".pdf", sep = "")
   pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
@@ -64,17 +77,18 @@ for(i.case in case.names){
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5,
-         paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
-    text(0.5, 0.2, "bin: true Phi")
+    text(0.5, 0.6,
+         paste(workflow.name, ", ", match.case[i.match, 1], " vs ",
+               match.case[i.match, 2], sep = ""))
+    text(0.5, 0.4, "bin: posterior mean of Phi")
     par(mar = c(0, 0, 0, 0))
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){
-      tmp.obs <- ret.EPhi.true[[i.aa]]
-      tmp.roc <- predict.roc[[i.aa]]
+      tmp.obs <- ret.EPhi.2[[i.aa]]
+      tmp.roc <- predict.roc.2[[i.aa]]
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-              lty = 1, axes = FALSE)
+              lty = 2, axes = FALSE, xlim = xlim)
       box()
       text(0, 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
@@ -94,43 +108,24 @@ for(i.case in case.names){
       axis(3, tck = 0.02, labels = FALSE)
       axis(4, tck = 0.02, labels = FALSE)
 
-      ### Add true model if it is available.
+      #### Add the first model.
       u.codon <- sort(unique(tmp.obs$codon))
       color <- cubfits:::get.color(u.codon)
 
-      if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
-        tmp.roc <- noerror.roc[[i.aa]]
-        plotaddmodel(tmp.roc, 2, u.codon, color)
-      }
-
-      if(exists("Eb")){
-        tmp.roc <- true.roc[[i.aa]]
-        plotaddmodel(tmp.roc, 3, u.codon, color)
-      }
+      tmp.roc <- predict.roc.1[[i.aa]]
+      plotaddmodel(tmp.roc, 1, u.codon, color)
     }
 
     ### Add label.
-    model.label <- "MCMC Posterior"
-    model.lty <- 1
-    if(length(grep("_wophi_", i.case)) == 0){  ### wphi case, add regression.
-      model.label <- c(model.label, "Logistic Regression")
-      model.lty <- c(model.lty, 2)
-    }
-    if(exists("Eb")){
-      model.label <- c(model.label, "True Model")
-      model.lty <- c(model.lty, 3)
-    }
+    model.label <- match.case[i.match,]
+    model.lty <- 2:1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
     legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    if(exists("Eb")){
-      text(0.5, 0.5, "True Production Rate (log10)")
-    } else{
-      text(0.5, 0.5, "Estimated Production Rate (log10)")
-    }
+    text(0.5, 0.5, "Estimated Production Rate (log10)")
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

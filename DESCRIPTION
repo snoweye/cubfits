@@ -15,14 +15,13 @@ Enhances: pbdMPI (>= 0.2-2), parallel
 LazyLoad: yes
 LazyData: yes
 Description: Estimating mutation and selection coefficients on synonymous
-       codon bias usage based on models of ribosome overhead cost (ROC)
-       and nonsense error models with first order approximation (NSEf).
+       codon bias usage based on models of ribosome overhead cost (ROC).
        Multinomial logistic regression and Markov Chain Monte Carlo are used to
        estimate and predict protein production rates with/without the presence
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
 URL: http://www.tiem.utk.edu/~mikeg/
-Packaged: 2014-05-09 21:05:39 UTC; snoweye
+Packaged: 2014-05-13 18:31:12 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

@@ -9,7 +9,7 @@
   cubfits(reu13.df.obs, phi.Obs, y, n,
           nIter = 1000, burnin = 100,
           bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-          p.Init = NULL, p.nclass = 2,
+          p.Init = NULL, p.nclass = 2, p.DrawScale = 1,
           phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
@@ -29,6 +29,8 @@
                      when drawing new \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
+  \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
+                     when drawing new \code{sigma.Phi}.}
   \item{phi.Init}{initial values for Phi.}
   \item{init.Phi.Scale}{for initial Phi if \code{phi.Init = NULL}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
@@ -67,6 +69,9 @@
 }
 \note{
   Note that \code{phi.Obs} need to be normalized to mean 1.
+
+  \code{p.DrawScale} may cause scaling prior if adaptive MCMC is used, and
+  it can result in non-exits of equilibrium distribution.
 }
 \references{
   \url{http://www.tiem.utk.edu/~mikeg/}

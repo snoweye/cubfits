@@ -46,6 +46,8 @@ Rscript ${CODE_PLOT_PATH}/m6-plot_prxy.r > \
           ${ALL_OUT}/log_nps/m6-plot_prxy 2>&1 &
 Rscript ${CODE_PLOT_PATH}/m6-plot_prxy_wci.r > \
           ${ALL_OUT}/log_nps/m6-plot_prxy_wci 2>&1 &
+Rscript ${CODE_PLOT_PATH}/m7-plot_bin.r > \
+          ${ALL_OUT}/log_nps/m7-plot_bin 2>&1 &
 
 ### Plotting for multiple figures.
 Rscript ${CODE_PLOT_PATH}/08-plotmulti_wophi_scuo_wphi_pm.r > \

@@ -25,7 +25,7 @@ get.my.proposePhiAllPred <- function(type){
 #   * phi.Prop :   proposal for phi
 #   * lir   :   log importance ratio for given draw = 0
 
-# Drew random walk from normal given current status.
+# Draw random walk from normal given current status.
 my.proposePhiAllPred.RW_Norm <- function(phi.Curr1, phi.DrawScale.pred = 1,
     phi.DrawScale.pred.prev = 1){
   propScale <- phi.DrawScale.pred

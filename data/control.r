@@ -1,9 +1,11 @@
-# cubfits control variables.
+### cubfits control variables.
 
-# For method controls.
+### For method controls.
 .CF.CT <- list(
   model = c("roc", "nsef", "rocnsef"),          # main models
-  type.p = c("lognormal_fix", "lognormal_MH",
+  type.p = c("lognormal_fix",
+             "lognormal_MH",
+             "lognormal_RW",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi
@@ -15,7 +17,7 @@
   scale.Phi = c("mean_one", "none")             # scaling for Phi
 )
 
-# For optimization.
+### For optimization.
 .CF.OP <- list(
   optim.method = c("Brent"),                       # for optim()
   stable.min.exp = .Machine$double.max.exp * 0.1,  # minimum exponent
@@ -26,7 +28,7 @@
   upper.integrate = Inf                            # upper of \int L(x)
 )
 
-# For dumpping data.
+### For dumpping data.
 .CF.DP <- list(
   dump = FALSE,                    # if dumping within MCMC
   iter = 1000,                     # iterations per dumping
@@ -38,7 +40,7 @@
   report.proc = 100                # iterations to report proc.time()
 )
 
-# For addaptive control.
+### For addaptive control.
 .CF.AC <- list(
   renew.iter = 100,                # per renewing iterations
   target.accept.lower = 0.25,      # target acceptance lower bound
@@ -48,3 +50,17 @@
   sigma2.lower = 0.01,             # lower bound of sigma^2
   sigma2.upper = 100               # upper bound of sigma^2
 )
+
+### For parameters.
+.CF.PARAM <- list(
+  phi.meanlog = -1.125,            # mean of phi in log scale
+  phi.sdlog = 1.5,                 # standard deviation of phi in log scale
+  # hp.gamma.mean = 0.966,           # mean of gamma distribution for sdlog
+  # hp.gamma.sd = 0.01375,           # sd of gamma distribution for sdlog
+  # hp.gamma.var = 0.0001890625,     # var of gamma distribution for sdlog
+  hp.gamma.shape = 4935.701,       # 0.966^2 / 0.0001890625
+  hp.gamma.scale = 0.0001957169    # 0.0001890625 / 0.966
+)
+### Gamma has mean = alpha * beta and var = alpha * beta^2
+### where alpha and beta are the shape and scale parameters in R,
+### resepectively.

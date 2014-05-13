@@ -20,16 +20,24 @@ for(i.case in case.names){
   xlim <- range(x)
 
   trace <- do.call("cbind", ret$p.Mat)
-  p.names <- rownames(trace)
-  p.names[p.names == "nu.Phi"] <- "m.Phi"
-  p.names[p.names == "bsig.Phi"] <- "s.Phi"
+  # p.names <- rownames(trace)
+  # p.names[p.names == "nu.Phi"] <- "m.Phi"
+  # p.names[p.names == "bsig.Phi"] <- "s.Phi"
+  if(nrow(trace) == 3){
+    p.names <- c("sigmaW", "m.Phi", "s.Phi")
+  } else if(nrow(trace) == 2){
+    p.names <- c("m.Phi", "s.Phi")
+  } else{
+    cat("Not log normal model?\n")
+    next
+  }
 
   ### Plot priors.
   for(i.p in 1:length(p.names)){
     fn.out <- paste(prefix$plot.trace, "prior_", p.names[i.p], "_", i.case,
                     ".pdf", sep = "")
     pdf(fn.out, width = 6, height = 4)
-      ylim <- range(trace[i.p,], finite = TRUE)
+      ylim <- range(trace[i.p,])
       plot(NULL, NULL, xlim = xlim, ylim = ylim,
            xlab = "Iterations", ylab = p.names[i.p])
       mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),

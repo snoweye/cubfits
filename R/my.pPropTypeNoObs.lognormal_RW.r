@@ -1,16 +1,16 @@
-### Gibbs sampler and M-H for step 2, mainly for hyperparameters.
+### Gibbs sampler and random walk for step 2, mainly for hyperparameters.
 
-### Draw gamma for lognormal priors (nu.Phi, sigma.Phi) around current
+### Draw inv-/gamma for lognormal priors (nu.Phi, sigma.Phi) around current
 ### mean of log expression.
-my.pPropTypeNoObs.lognormal_MH <- function(n.G, phi.Curr,
+my.pPropTypeNoObs.lognormal_RW <- function(n.G, phi.Curr,
     p.Curr, hp.param, p.DrawScale = 1, p.DrawScale.prev = 1){
   ### Dispatch.
   nu.Phi.Curr <- p.Curr[1]
   sigma.Phi.Curr <- p.Curr[2]
-  # hp.sigma.Phi <- hp.param$hp.sigma.Phi
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.propose.sigma.Phi.Gamma(sigma.Phi.Curr) # , hp.sigma.Phi)
+  proplist <- my.propose.sigma.Phi.RW(sigma.Phi.Curr, p.DrawScale[1],
+                                      p.DrawScale.prev[1])
 
   ### M-H step.
   list.Curr <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
@@ -23,5 +23,4 @@ my.pPropTypeNoObs.lognormal_MH <- function(n.G, phi.Curr,
   ### Only nu.Phi and sigma.Phi are used.
   ret <- c(ret$nu.Phi, ret$sigma.Phi)
   ret
-} # my.pPropTypeNoObs.lognormal_MH().
-
+} # my.pPropTypeNoObs.lognormal_RW().

@@ -94,3 +94,4 @@ p.nclass <- 2
 # .CF.CT$init.fit <- "RW_Norm"
 # .CF.CT$type.p <- "lognormal_MH"
 # .CF.CT$model.Phi <- "logmixture"
+# .CF.PARAM$hp.gamma.scale <- .CF.PARAM$hp.gamma.scale * 10

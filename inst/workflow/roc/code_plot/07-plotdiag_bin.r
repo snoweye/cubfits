@@ -45,7 +45,7 @@ for(i.case in case.names){
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
     mat <- cbind(rep(23, 6), mat, rep(24, 6))
-    nf <- layout(mat, c(3, rep(8, 5), 1), c(3, 8, 8, 8, 8, 3), respect = FALSE)
+    nf <- layout(mat, c(3, rep(8, 5), 2), c(3, 8, 8, 8, 8, 3), respect = FALSE)
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -68,7 +68,19 @@ for(i.case in case.names){
       if(i.aa %in% 15:19){
         axis(1)
       }
+      if(i.aa %in% 1:5){
+        axis(3)
+      }
+      if(i.aa %in% c(5, 10, 15)){
+        axis(4)
+      }
+      axis(1, tck = 0.02, labels = FALSE)
+      axis(2, tck = 0.02, labels = FALSE)
+      axis(3, tck = 0.02, labels = FALSE)
+      axis(4, tck = 0.02, labels = FALSE)
     }
+
+    ### Add label.
     model.label <- c("MCMC Posterior")
     model.lty <- 1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
@@ -90,7 +102,7 @@ for(i.case in case.names){
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
     mat <- cbind(rep(23, 6), mat, rep(24, 6))
-    nf <- layout(mat, c(3, rep(8, 5), 1), c(3, 8, 8, 8, 8, 3), respect = FALSE)
+    nf <- layout(mat, c(3, rep(8, 5), 2), c(3, 8, 8, 8, 8, 3), respect = FALSE)
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -113,7 +125,19 @@ for(i.case in case.names){
       if(i.aa %in% 15:19){
         axis(1)
       }
+      if(i.aa %in% 1:5){
+        axis(3)
+      }
+      if(i.aa %in% c(5, 10, 15)){
+        axis(4)
+      }
+      axis(1, tck = 0.02, labels = FALSE)
+      axis(2, tck = 0.02, labels = FALSE)
+      axis(3, tck = 0.02, labels = FALSE)
+      axis(4, tck = 0.02, labels = FALSE)
     }
+
+    ### Add label.
     model.label <- c("MCMC Posterior")
     model.lty <- 1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
