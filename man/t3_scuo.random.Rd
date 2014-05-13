@@ -6,7 +6,8 @@
   provided original unchanged SCUO order.
 }
 \usage{
-  scuo.random(SCUO, phi.Obs = NULL, meanlog = -1.125, sdlog = 1.5)
+  scuo.random(SCUO, phi.Obs = NULL, meanlog = .CF.PARAM$phi.meanlog,
+              sdlog = .CF.PARAM$phi.sdlog)
 }
 \arguments{
   \item{SCUO}{SCUO index returned from \code{\link{calc_scuo_values}()}.}

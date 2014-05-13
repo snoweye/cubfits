@@ -17,7 +17,7 @@
 my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     nIter = 1000, burnin = 100,
     bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-    p.Init = NULL, p.nclass = 2, p.DrawScale = 1,
+    p.Init = NULL, p.nclass = 2, p.DrawScale = 0.1,
     phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
     model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
     adaptive = .CF.CT$adaptive[1],

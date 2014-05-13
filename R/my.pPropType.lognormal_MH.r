@@ -4,7 +4,7 @@
 ### drew inv-/gamma for lognormal priors (nu.Phi, sigma.Phi) around current
 ### mean of log expression.
 my.pPropType.lognormal_MH <- function(n.G, log.phi.Obs, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 1, p.DrawScale.prev = 1){
+    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
   ### Dispatch.
   nu.Phi.Curr <- p.Curr[2]
   sigma.Phi.Curr <- p.Curr[3]
@@ -40,12 +40,14 @@ my.propose.sigma.Phi.Gamma <- function(sigma.Phi.Curr, # hp.sigma.Phi,
     hp.gamma.scale = .CF.PARAM$hp.gamma.scale){
   ### Draw from proposal.
   ### Gamma distribution with a flat prior.
-  # sigma.Phi.New <- rgamma(1, 1 / hp.sigma.Phi, scale = hp.sigma.Phi)
-  ### Gamma distribution with a empirical prior.
-  # sigma.Phi.New <- rgamma(1, hp.gamma.shape, scale = hp.gamma.scale)
-  ### Inverse Gamma distribution with a empirical prior.
-  sigma.Phi.New <- 1 / rgamma(1, hp.gamma.shape, scale = 1 / hp.gamma.scale)
-  nu.Phi.New <- -sigma.Phi.New^2 / 2
+  # sigma2.Phi.New <- rgamma(1, 1 / hp.sigma.Phi, scale = hp.sigma.Phi)
+  ### Gamma distribution with an informative  prior.
+  sigma2.Phi.New <- rgamma(1, hp.gamma.shape, scale = hp.gamma.scale)
+  ### Inverse Gamma distribution with an informative prior.
+  # sigma2.Phi.New <- 1 / rgamma(1, hp.gamma.shape, scale = 1 / hp.gamma.scale)
+
+  sigma.Phi.New <- sqrt(sigma2.Phi.New)
+  nu.Phi.New <- -sigma2.Phi.New / 2
 
   ### Compute log ratio of prior since lognormal is not symmetric.
   ### Gamma distribution with a flat prior.
@@ -54,18 +56,18 @@ my.propose.sigma.Phi.Gamma <- function(sigma.Phi.Curr, # hp.sigma.Phi,
   #        dgamma(sigma.Phi.Curr, 1 / hp.sigma.Phi,
   #               scale = hp.sigma.Phi, log = TRUE)
   ### Gamma distribution.
+  lir <- dgamma(sigma.Phi.New, hp.gamma.shape,
+                scale = hp.gamma.scale, log = TRUE) -
+         dgamma(sigma.Phi.Curr, hp.gamma.shape,
+                scale = hp.gamma.scale, log = TRUE)
+  ### Inverse Gamma distribution with an informative prior.
+  ### Y = 1 / X, |J| = 1 / X^2, f_Y(y) = f_X(x = 1/y) |J|
   # lir <- dgamma(1 / sigma.Phi.New, hp.gamma.shape,
   #               scale = 1 / hp.gamma.scale, log = TRUE) -
+  #        2 * log(sigma.Phi.New) -
   #        dgamma(1 / sigma.Phi.Curr, hp.gamma.shape,
-  #               scale = 1 / hp.gamma.scale, log = TRUE)
-  ### Inverse Gamma distribution with a empirical prior.
-  ### Y = 1 / X, |J| = 1 / X^2, f_Y(y) = f_X(x = 1/y) |J|
-  lir <- dgamma(1 / sigma.Phi.New, hp.gamma.shape,
-                scale = 1 / hp.gamma.scale, log = TRUE) -
-         2 * log(sigma.Phi.New) -
-         dgamma(1 / sigma.Phi.Curr, hp.gamma.shape,
-                scale = 1 / hp.gamma.scale, log = TRUE) +
-         2 * log(sigma.Phi.Curr)
+  #               scale = 1 / hp.gamma.scale, log = TRUE) +
+  #        2 * log(sigma.Phi.Curr)
 
   ### Return.
   ret <- list(nu.Phi = as.numeric(nu.Phi.New),

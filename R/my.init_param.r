@@ -1,14 +1,22 @@
 my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
     cub.method = c("fits", "appr", "pred")){
   if(is.null(p.Init)){
-    sigmasqObs <- var(log(phi.Obs))
-    sigmaW.Init <- sqrt(.2 * sigmasqObs)        # \sigma_W
+    sigma2Obs <- var(log(phi.Obs))
+    sigmaW.Init <- sqrt(.2 * sigma2Obs)        # \sigma_W
 
     if(model.Phi == "lognormal"){
       nu.Phi.Init <- mean(log(phi.Obs))
-      sigma.Phi.Init <- sqrt(.8 * sigmasqObs)     # \sigma_phi
+      sigma.Phi.Init <- sqrt(.8 * sigma2Obs)     # \sigma_phi
 
       ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init)
+
+      ### Overwrite .CF.PARAM$hp.gamma.shape and .CF.PARAM$hp.gamma.scale
+      ### using an informative flat prior. This only affects when
+      ### .CF.CT$type.p = "lognormal_MH" which needs to specify hyperparameters.
+      if(.CF.PARAM$hp.overwrite){
+        .CF.PARAM$hp.gamma.shape <- sigma.Phi.Init^2 / 0.8
+        .CF.PARAM$hp.gamma.scale <- 0.8
+      }
     } else if(model.Phi[1] == "logmixture"){
       if(p.nclass <= 1){
         stop("p.nclass > 1")

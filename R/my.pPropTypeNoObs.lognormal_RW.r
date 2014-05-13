@@ -3,7 +3,7 @@
 ### Draw inv-/gamma for lognormal priors (nu.Phi, sigma.Phi) around current
 ### mean of log expression.
 my.pPropTypeNoObs.lognormal_RW <- function(n.G, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 1, p.DrawScale.prev = 1){
+    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
   ### Dispatch.
   nu.Phi.Curr <- p.Curr[1]
   sigma.Phi.Curr <- p.Curr[2]

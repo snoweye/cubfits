@@ -58,8 +58,9 @@
   # hp.gamma.mean = 0.966,           # mean of gamma distribution for sdlog
   # hp.gamma.sd = 0.01375,           # sd of gamma distribution for sdlog
   # hp.gamma.var = 0.0001890625,     # var of gamma distribution for sdlog
-  hp.gamma.shape = 4935.701,       # 0.966^2 / 0.0001890625
-  hp.gamma.scale = 0.0001957169    # 0.0001890625 / 0.966
+  hp.gamma.shape = 49357.01,       # 0.966^2 / 0.0001890625 / 0.1
+  hp.gamma.scale = 0.00001957169,  # 0.0001890625 / 0.966 * 0.1
+  hp.overwrite = TRUE              # if allow my.pInit() to overwrite
 )
 ### Gamma has mean = alpha * beta and var = alpha * beta^2
 ### where alpha and beta are the shape and scale parameters in R,
