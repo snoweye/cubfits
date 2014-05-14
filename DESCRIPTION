@@ -20,8 +20,8 @@ Description: Estimating mutation and selection coefficients on synonymous
        estimate and predict protein production rates with/without the presence
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
-URL: http://www.tiem.utk.edu/~mikeg/
-Packaged: 2014-05-13 21:56:09 UTC; snoweye
+URL: https://github.com/snoweye/cubfits
+Packaged: 2014-05-14 20:56:48 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

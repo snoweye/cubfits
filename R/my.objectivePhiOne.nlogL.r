@@ -1,13 +1,13 @@
-# - nlogL method will return the negative logL value for given phi.
-#   These are only called by the optim function to find the MLE.
-#
-# - These functions are based on per gene list in the following order
-#     genes -> amino acids -> synonymous codons -> counts
-#   for reu13.list.g, y.g, and n.g.
+### - nlogL method will return the negative logL value for given phi.
+###   These are only called by the optim function to find the MLE.
+###
+### - These functions are based on per gene list in the following order
+###     genes -> amino acids -> synonymous codons -> counts
+###   for reu13.list.g, y.g, and n.g.
 
 
 ### Return negative log likelihood of multinomial distribution.
-# For ROC + NSEf model.
+### For ROC + NSEf model.
 my.objectivePhiOne.nlogL.rocnsef <- function(phi, fitlist, reu13.list.g, y.g,
     n.g){
   ret <- 0
@@ -32,7 +32,7 @@ my.objectivePhiOne.nlogL.rocnsef <- function(phi, fitlist, reu13.list.g, y.g,
         }
         lp.vec <- my.inverse.mlogit(exponent, log = TRUE)
 
-        # Only add the observed codon to the log lilelihood.
+        ### Only add the observed codon to the log lilelihood.
         ret <- ret + sum(lp.vec[, i.scodon])
       }
     }
@@ -40,7 +40,7 @@ my.objectivePhiOne.nlogL.rocnsef <- function(phi, fitlist, reu13.list.g, y.g,
   -ret
 } # End of my.objectivePhiOne.nlogL.rocnsef().
 
-# For ROC model.
+### For ROC model.
 my.objectivePhiOne.nlogL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
   ret <- 0
   for(i.aa in 1:length(y.g)){ # i'th amino acid
@@ -60,7 +60,7 @@ my.objectivePhiOne.nlogL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
       }
       lp.vec <- my.inverse.mlogit(exponent, log = TRUE)
 
-      # Only add the observed codon to the log lilelihood.
+      ### Only add the observed codon to the log lilelihood.
       # ret <- ret + sum((y.g[[i.aa]] * lp.vec))
       ### 0 * (-Inf) produces NaN
       ret <- ret + sum((y.g[[i.aa]] * lp.vec)[y.g[[i.aa]] != 0])
@@ -70,7 +70,7 @@ my.objectivePhiOne.nlogL.roc <- function(phi, fitlist, reu13.list.g, y.g, n.g){
   -ret
 } # End of my.objectivePhiOne.nlogL.roc().
 
-# For NSEf model.
+### For NSEf model.
 my.objectivePhiOne.nlogL.nsef <- function(phi, fitlist, reu13.list.g, y.g, n.g){
   ret <- 0
   for(i.aa in 1:length(reu13.list.g)){ # i'th amino acid
@@ -93,7 +93,7 @@ my.objectivePhiOne.nlogL.nsef <- function(phi, fitlist, reu13.list.g, y.g, n.g){
         }
         lp.vec <- my.inverse.mlogit(exponent, log = TRUE)
 
-        # Only add the observed codon to the log lilelihood.
+        ### Only add the observed codon to the log lilelihood.
         ret <- ret + sum(lp.vec[, i.scodon])
       }
     }

@@ -1,4 +1,4 @@
-# For print some information within MCMC.
+### For print some information within MCMC.
 my.verbose <- function(verbose, iter, report){
   if(verbose){
     if(iter != 0){

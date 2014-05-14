@@ -58,7 +58,7 @@ case.names <- paste(model, "_", case.names, sep = "")
 
 ### Basic information.
 run.info <- list()
-run.info$nIter <- 9000
+run.info$nIter <- 4000
 run.info$burnin <- 1000
 run.info$phi.DrawScale <- 1
 
@@ -70,7 +70,7 @@ run.info$adaptive <- "simple"
 
 ### For MCMC.
 range <- list()
-range$subset <- 5001:10000
+range$subset <- 3001:5000
 range$thinning <- 10
 
 ### For simulation only.
@@ -90,6 +90,5 @@ p.nclass <- 2
 ### CAUTION: for extra changes globally.
 # suppressMessages(library(cubfits, quietly = TRUE))
 # .CF.CT$init.fit <- "RW_Norm"
-# .CF.CT$type.p <- "lognormal_MH"
+# .CF.CT$type.p <- "lognormal_RW"
 # .CF.CT$model.Phi <- "logmixture"
-# .CF.PARAM$hp.gamma.scale <- .CF.PARAM$hp.gamma.scale * 10

@@ -1,8 +1,8 @@
-# This either returns a log posterior vector or sum of the vector.
-#
-# These functions are for all predicting genes.
+### This either returns a log posterior vector or sum of the vector.
+###
+### These functions are for all predicting genes.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.logPosteriorAllPred <- function(model.Phi){
   if(!any(model.Phi[1] %in% .CF.CT$model.Phi)){
     stop("model.Phi is not found.")
@@ -14,15 +14,15 @@ get.my.logPosteriorAllPred <- function(model.Phi){
 } # End of get.my.logPosteriorAllPred().
 
 
-# Function to calculate complete log-posterior for
-# (phi, b, mu.Phi, sigma.Phi.sq) given y and n
+### Function to calculate complete log-posterior for
+### (phi, b, mu.Phi, sigma.Phi.sq) given y and n
 my.logPosteriorAllPred.lognormal <- function(phi, y, n, b, p.Curr,
     reu13.df = NULL){
-  # Dispatch.
+  ### Dispatch.
   nu.Phi <- p.Curr[1]
   sigma.Phi <- p.Curr[2]
 
-  # Return.
+  ### Return.
   ret <- .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
          dlnorm(phi, nu.Phi, sigma.Phi, log = TRUE)
 
@@ -42,13 +42,13 @@ my.logPosteriorAllPred.lognormal <- function(phi, y, n, b, p.Curr,
   ret
 } # End of my.logPosteriorAllPred.lognormal().
 
-# Function for log mixture normal.
+### Function for log mixture normal.
 my.logPosteriorAllPred.logmixture <- function(phi, y, n, b, p.Curr,
     reu13.df = NULL){
-  # Dispatch.
+  ### Dispatch.
   paramlog <- p.Curr
 
-  # Return
+  ### Return
   ret <- .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
          dlmixnorm(log(phi), paramlog, log = TRUE)
   ret

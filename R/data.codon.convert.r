@@ -30,9 +30,9 @@ codon.up2low <- function(x){
 } # End of codon.up2low().
 
 
-# Extension version of c2s.
+### Extension version of c2s.
 codon2string <- function(i.seq.data){
-  # Check if i.seq.data has length of correct codon triplets.
+  ### Check if i.seq.data has length of correct codon triplets.
   tl.i.seq.data <- length(i.seq.data)
   if(tl.i.seq.data %% 3 != 0 && tl.i.seq.data < 3){
     stop("length of i.seq.data is incorrect.")

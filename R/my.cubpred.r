@@ -21,11 +21,16 @@
 my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     reu13.df.pred, y.pred, n.pred,
     nIter = 1000, burnin = 100,
-    bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-    p.Init = NULL, p.nclass = 2, p.DrawScale = 0.1,
-    phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
-    phi.Init.pred = NULL, phi.DrawScale.pred = 1,
-    model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
+    bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+        b.DrawScale = .CF.CONF$b.DrawScale,
+    p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
+        p.DrawScale = .CF.CONF$p.DrawScale,
+    phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
+        phi.DrawScale = .CF.CONF$phi.DrawScale,
+    phi.Init.pred = NULL,
+        phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
+    model = .CF.CT$model[1],
+    model.Phi = .CF.CT$model.Phi[1],
     adaptive = .CF.CT$adaptive[1],
     scale.Phi = .CF.CT$scale.Phi[1],
     verbose = .CF.DP$verbose,
@@ -113,13 +118,13 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
 
   ### Initial values for training phi.
   if(is.null(phi.Init)){
-    phi.Init <- phi.Obs * exp(init.Phi.Scale * p.Init[1] * rnorm(n.G))
+    phi.Init <- phi.Obs * exp(init.phi.Scale * p.Init[1] * rnorm(n.G))
   }
 
   ### Initial values for predicting phi.
   if(is.null(phi.Init.pred)){
     phi.Init.pred <- median(phi.Obs) *
-                     exp(init.Phi.Scale * p.Init[1] * rnorm(n.G.pred))
+                     exp(init.phi.Scale * p.Init[1] * rnorm(n.G.pred))
     names(phi.Init.pred) <- rownames(y.pred[[1]])
   }
 

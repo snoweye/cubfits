@@ -1,6 +1,6 @@
-# Some rearrangement utilities mainly to sort and rearrange data.
+### Some rearrangement utilities mainly to sort and rearrange data.
 
-# Reording REU13's data frame such that in ORF order.
+### Reording REU13's data frame such that in ORF order.
 rearrange.reu13.df <- function(reu13.df){
   ret <- reu13.df
   for(i.aa in 1:length(ret)){ # i'th amino acid.
@@ -11,7 +11,7 @@ rearrange.reu13.df <- function(reu13.df){
     ret[[i.aa]]$Pos <- as.double(as.character(ret[[i.aa]]$Pos))
     ret[[i.aa]]$Codon <- as.character(ret[[i.aa]]$Codon)
 
-    # Add one more column for performance.
+    ### Add one more column for performance.
     if(is.null(ret[[i.aa]]$Codon.id)){
       ret[[i.aa]]$Codon.id <- vector(mode = "integer",
                                      length = nrow(ret[[i.aa]]))
@@ -24,7 +24,7 @@ rearrange.reu13.df <- function(reu13.df){
   ret
 } # End of rearrange.reu13.df().
 
-# Reording y data frame such that in ORF order.
+### Reording y data frame such that in ORF order.
 rearrange.y <- function(y){
   ret <- y
   for(i.aa in 1:length(ret)){ # i'th amino acid
@@ -33,7 +33,7 @@ rearrange.y <- function(y){
   ret
 } # End of rearrange.y().
 
-# Reording n data frame such that in ORF order.
+### Reording n data frame such that in ORF order.
 rearrange.n <- function(n){
   ret <- n
   for(i.aa in 1:length(ret)){ # i'th amino acid
@@ -45,7 +45,7 @@ rearrange.n <- function(n){
   ret
 } # End of rearrange.n().
 
-# Reording x vector such that in ORF order.
+### Reording x vector such that in ORF order.
 rearrange.phi.Obs <- function(phi.Obs){
   tmp <- names(phi.Obs)
   order.tmp <- order(tmp)

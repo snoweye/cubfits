@@ -3,7 +3,7 @@
 ###   c(eta_1, ..., eta_K, mu_1, ..., mu_K, sd_1, ..., sd_K)
 ### with sum_k eta_k = 1 and mu_1 < ... < mu_K.
 
-# Density of mixture normal distribution in K components.
+### Density of mixture normal distribution in K components.
 dmixnorm <- function(x, param, log = FALSE){
   K <- length(param) / 3
 
@@ -15,7 +15,7 @@ dmixnorm <- function(x, param, log = FALSE){
     ret[[i.k]] <- log.eta.k + dnorm(x, mean = mu.k, sd = sd.k, log = TRUE)
   }
 
-  # Return.
+  ### Return.
   ret <- rowSums(exp(do.call("cbind", ret)))
   if(log){
     ret <- log(ret)
@@ -23,7 +23,7 @@ dmixnorm <- function(x, param, log = FALSE){
   ret
 } # End of dmixnorm().
 
-# Density of log mixture normal distribution in K components.
+### Density of log mixture normal distribution in K components.
 dlmixnorm <- function(x, paramlog, log = FALSE, x.in.log = TRUE){
   if(!x.in.log){
     log.x <- log(x)
@@ -32,15 +32,15 @@ dlmixnorm <- function(x, paramlog, log = FALSE, x.in.log = TRUE){
   }
   ret <- dmixnorm(log.x, paramlog, log = TRUE) - log.x
 
-  # Return.
+  ### Return.
   if(!log){
     ret <- exp(ret)
   }
   ret
 } # End of dlmixnorm().
 
-# Compute eta_k * f(x_i; mu_k, sigma_k)
-# Return a N by K matrix.
+### Compute eta_k * f(x_i; mu_k, sigma_k)
+### Return a N by K matrix.
 proplmixnorm <- function(x, paramlog, x.in.log = TRUE){
   K <- length(paramlog) / 3
 
@@ -58,7 +58,7 @@ proplmixnorm <- function(x, paramlog, x.in.log = TRUE){
     ret[[i.k]] <- log.eta.k + dnorm(x, mean = mu.k, sd = sigma.k, log = TRUE)
   }
 
-  # Return.
+  ### Return.
   ret <- exp(do.call("cbind", ret))
   ret
 } # End of proplmixnorm().

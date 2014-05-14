@@ -1,11 +1,11 @@
-# Generate phi.Obs based on Phi.
+### Generate phi.Obs based on Phi.
 
-# log(Phi^{obs}) ~ N(log(Phi), sigma_W^2)
+### log(Phi^{obs}) ~ N(log(Phi), sigma_W^2)
 simu.phi.Obs <- function(Phi, sigmaW.lim = 1){
   tl.x <- length(Phi)
   orf.names <- names(Phi)
 
-  # Check orf.names.
+  ### Check orf.names.
   if(length(orf.names) != tl.x){
     orf.names <- paste("ORF", 1:tl.x, sep = "")
   }

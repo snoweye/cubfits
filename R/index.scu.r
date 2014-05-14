@@ -1,14 +1,14 @@
 ### This file is to compute the strength of translational selection
 ### on codon usage (SCU).
 ### Ref: Wallace, et.al. (2013) p. 1451.
-#
-# \pi_c^M = exp(M_c) / \sum{c' | a} exp(M_{c'})
-#
-# S'_c = S_c - \sum{c' | a} \pi_{c'}^M S_{c'}
-#
-# SCU_g = x_g \frac{1}{L_g} \sum_i S'_{c_i}
-#
-# mSCU_g = \frac{1}{L_g} \sum_i S'_{c_i}
+###
+### \pi_c^M = exp(M_c) / \sum{c' | a} exp(M_{c'})
+###
+### S'_c = S_c - \sum{c' | a} \pi_{c'}^M S_{c'}
+###
+### SCU_g = x_g \frac{1}{L_g} \sum_i S'_{c_i}
+###
+### mSCU_g = \frac{1}{L_g} \sum_i S'_{c_i}
 
 calc_scu_values <- function(b, y.list, phi.Obs = NULL){
   aa.names <- names(b)

@@ -90,6 +90,9 @@ for(i.case in case.names){
          xlab = "Iterations", ylab = "Production Rate (log10)",
          main = paste(names(id.gene)[i.q], ", q = ", q.probs[i.q], sep = ""))
     abline(h = hist.mean[i.q], col = 2)
+    if(exists("EPhi")){
+      abline(h = EPhi[id.gene[i.q]], col = 4, lty = 2)
+    }
 
     ### Plot hist
     plot(hist.list[[i.q]],

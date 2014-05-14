@@ -1,7 +1,7 @@
-# Generate phi.Obs based on param returned from mixnorm.optim().
+### Generate phi.Obs based on param returned from mixnorm.optim().
 
-# log(Phi) ~ \sum_k p_k N(mu_k, sigma_k^2)
-# log(Phi^{obs}) = log(Phi) + N(0, sigma_e^2)
+### log(Phi) ~ \sum_k p_k N(mu_k, sigma_k^2)
+### log(Phi^{obs}) = log(Phi) + N(0, sigma_e^2)
 simu.mixnormerr <- function(n, param){
   id.K <- sample(1:param$K, n, replace = TRUE, prob = param$prop)
   n.K <- tabulate(id.K, nbins = param$K)
@@ -19,4 +19,3 @@ simu.mixnormerr <- function(n, param){
 
   ret
 } # End of simu.mixnormerr().
-

@@ -1,8 +1,8 @@
-# This either returns a log posterior vector or sum of the vector.
-#
-# These functions are for one amino acid.
+### This either returns a log posterior vector or sum of the vector.
+###
+### These functions are for one amino acid.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.logdmultinomCodOne <- function(model){
   if(!any(model[1] %in% .CF.CT$model)){
     stop("model is not found.")
@@ -14,14 +14,14 @@ get.my.logdmultinomCodOne <- function(model){
 } # End of get.my.logdmultinomCodOne().
 
 
-# Returns log posterior of codon draws for single amino acid
-# reu13.df.aa, yaa, naa, baa should be correctly matched
-# assumes reference codon is LAST as in VGAM.
+### Returns log posterior of codon draws for single amino acid
+### reu13.df.aa, yaa, naa, baa should be correctly matched
+### assumes reference codon is LAST as in VGAM.
 
-# For ROC + NSEf model.
+### For ROC + NSEf model.
 my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
     vec = FALSE, reu13.df.aa = NULL){
-  # Rebuild tmp.phi from x.
+  ### Rebuild tmp.phi from x.
   ### This is an inefficient version without rearrangeing.
   # tmp.phi <- vector(mode = "double", length = nrow(reu13.df.aa))
   # names.phi <- names(phi)
@@ -31,10 +31,10 @@ my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
   ### This supposes that all data are rearrangeed by name.
   tmp.phi <- rep(phi, naa)
 
-  # Rebuild x matix in 3 columns, cbind(1, tmp.phi, tmp.phi:Pos).
+  ### Rebuild x matix in 3 columns, cbind(1, tmp.phi, tmp.phi:Pos).
   xm <- matrix(cbind(1, tmp.phi, tmp.phi * reu13.df.aa$Pos), ncol = 3)
 
-  # Call C to compute log posterior probability for every codon.
+  ### Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 3, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
@@ -67,18 +67,18 @@ my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
   }
 } # End of my.logdmultinomCodOne.rocnsef
 
-# For ROC model.
+### For ROC model.
 my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
     reu13.df.aa = NULL){
-  # Rebuild x matix in 2 columns, cbind(1, phi).
+  ### Rebuild x matix in 2 columns, cbind(1, phi).
   xm <- matrix(cbind(1, phi), ncol = 2)
 
-  # Call C to compute log posterior probability for every codon.
+  ### Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
-  # (Codon count) * (log posterior probability).
-  # log posterior for each gene conditional on the amino acid.
+  ### (Codon count) * (log posterior probability).
+  ### log posterior for each gene conditional on the amino acid.
   # lp.c.raw <- rowSums(yaa * lp.vec)
 
   ### 0 * (-Inf) produces NaN
@@ -93,10 +93,10 @@ my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
   }
 } # End of my.logdmultinomCodOne.roc
 
-# For NSEf model.
+### For NSEf model.
 my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
     reu13.df.aa = NULL){
-  # Rebuild tmp.phi from x.
+  ### Rebuild tmp.phi from x.
   ### This is an inefficient version without rearrangeing.
   # tmp.phi <- vector(mode = "double", length = nrow(reu13.df.aa))
   # names.phi <- names(phi)
@@ -106,10 +106,10 @@ my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
   ### This supposes that all data are rearrangeed by name.
   tmp.phi <- rep(phi, naa)
 
-  # Rebuild x matix in 2 columns, cbind(1, tmp.phi:Pos).
+  ### Rebuild x matix in 2 columns, cbind(1, tmp.phi:Pos).
   xm <- matrix(cbind(1, tmp.phi * reu13.df.aa$Pos), ncol = 2)
 
-  # Call C to compute log posterior probability for every codon.
+  ### Call C to compute log posterior probability for every codon.
   baamat <- matrix(baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 

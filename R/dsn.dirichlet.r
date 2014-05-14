@@ -1,8 +1,8 @@
 ### For Dirichlet distribution.
 
-# Density of Dirichlet.
+### Density of Dirichlet.
 ddirichlet <- function(x, alpha, log = FALSE){
-  # length(x) should be equal to length(alpha)
+  ### length(x) should be equal to length(alpha)
   ret <- sum(lgamma(alpha)) - lgamma(sum(alpha)) + (alpha - 1) * log(x)
   if(!log){
     ret <- exp(ret)

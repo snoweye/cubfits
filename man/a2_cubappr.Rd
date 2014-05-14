@@ -8,9 +8,11 @@
 \usage{
   cubappr(reu13.df.obs, phi.Init, y, n,
           nIter = 1000, burnin = 100,
-          bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-          p.Init = NULL, p.nclass = 2, p.DrawScale = 0.1,
-          phi.DrawScale = 1,
+          bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+              b.DrawScale = .CF.CONF$b.DrawScale,
+          p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
+              p.DrawScale = .CF.CONF$p.DrawScale,
+          phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
           verbose = .CF.DP$verbose,
@@ -32,8 +34,8 @@
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{sigma.Phi}.}
-  \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
-                       when drawing new Phi.}
+  \item{phi.DrawScale.pred}{scaling factor for adaptive MCMC with random walks
+                            when drawing new Phi of predicted set.}
   \item{model}{model to be fitted, currently "roc" only.}
   \item{model.Phi}{prior model for Phi, currently "lognormal".}
   \item{adaptive}{adaptive method of MCMC for proposing new \code{\link{b}} and
@@ -70,7 +72,7 @@
   it can result in non-exits of equilibrium distribution.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 }
 \author{
   Wei-Chen Chen \email{wccsnow@gmail.com}.

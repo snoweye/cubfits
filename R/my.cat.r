@@ -1,6 +1,6 @@
-# These are for cat within some iterations of long MCMC.
+### These are for cat within some iterations of long MCMC.
 
-# Get the specific function according to the option.
+### Get the specific function according to the option.
 get.my.cat <- function(parallel){
   if(!any(parallel[1] %in% .CF.CT$parallel)){
     stop("parallel is not found.")
@@ -12,17 +12,17 @@ get.my.cat <- function(parallel){
 } # End of get.my.cat().
 
 
-# For lapply.
+### For lapply.
 my.cat.lapply <- function(..., file = "", sep = " ", fill = FALSE,
     labels = NULL, append = FALSE){
   cat(..., file = file, sep = sep, fill = fill, labels = labels,
       append = append)
 } # End of my.cat.lapply().
 
-# For mclapply.
+### For mclapply.
 my.cat.mclapply <- my.cat.lapply
 
-# For task pull.
+### For task pull.
 my.cat.task.pull <- function(..., file = "", sep = " ", fill = FALSE,
     labels = NULL, append = FALSE){
   if(pbdMPI::comm.rank() == 0L){
@@ -32,7 +32,7 @@ my.cat.task.pull <- function(..., file = "", sep = " ", fill = FALSE,
   invisible()
 } # End of my.cat.task.pull().
 
-# For pbdLapply. 
+### For pbdLapply. 
 my.cat.pbdLapply <- function(..., file = "", sep = " ", fill = FALSE,
     labels = NULL, append = FALSE){
   if(pbdMPI::comm.rank() == 0L){

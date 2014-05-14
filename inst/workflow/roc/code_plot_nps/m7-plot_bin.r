@@ -117,7 +117,7 @@ for(i.match in 1:nrow(match.case)){
     }
 
     ### Add label.
-    model.label <- match.case[i.match,]
+    model.label <- paste(model, c("without phi", "with phi"), sep = " ")
     model.lty <- 2:1
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))

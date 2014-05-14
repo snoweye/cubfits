@@ -1,8 +1,8 @@
-# Propose new Phi conditioning on all orhter parameters.
-#
-# These functions are for all genes.
+### Propose new Phi conditioning on all orhter parameters.
+###
+### These functions are for all genes.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.proposePhiAll <- function(type){
   if(!any(type[1] %in% .CF.CT$type.Phi)){
     stop("type is not found.")
@@ -14,16 +14,16 @@ get.my.proposePhiAll <- function(type){
 } # End of get.my.proposePhiAll().
 
 
-# Assumes phi.Curr1, are vectors of length # of genes;
-# b, y, n are lists of lenght number of aas.
-#
-# Currently using random walk.
-#
-# Returns list with elements:
-#   * phi.Prop :   proposal for phi
-#   * lir      :   log importance ratio for given draw = 0
+### Assumes phi.Curr1, are vectors of length # of genes;
+### b, y, n are lists of lenght number of aas.
+###
+### Currently using random walk.
+###
+### Returns list with elements:
+###   * phi.Prop :   proposal for phi
+###   * lir      :   log importance ratio for given draw = 0
 
-# Draw random walk given current status for new E[Phi].
+### Draw random walk given current status for new E[Phi].
 my.proposePhiAll.RW_Norm <- function(phi.Curr1, phi.DrawScale = 1,
     phi.DrawScale.prev = 1){
   propScale <- phi.DrawScale

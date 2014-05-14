@@ -1,6 +1,6 @@
-# These are for dumpping temporary within some iterations of long MCMC.
+### These are for dumpping temporary within some iterations of long MCMC.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.dump <- function(parallel){
   if(!any(parallel[1] %in% .CF.CT$parallel)){
     stop("parallel is not found.")
@@ -12,7 +12,7 @@ get.my.dump <- function(parallel){
 } # End of get.my.dump().
 
 
-# For lapply.
+### For lapply.
 my.dump.lapply <- function(iter, list = NULL, envir = parent.frame()){
   if(.CF.DP$dump){
     if((iter %% .CF.DP$iter) == 0){
@@ -42,10 +42,10 @@ my.dump.lapply <- function(iter, list = NULL, envir = parent.frame()){
   invisible()
 } # End of my.dump.lapply().
 
-# For mclapply.
+### For mclapply.
 my.dump.mclapply <- my.dump.lapply
 
-# For task pull.
+### For task pull.
 my.dump.task.pull <- function(iter, list = NULL, envir = parent.frame()){
   if(pbdMPI::comm.rank() == 0L){
     my.dump.lapply(iter, list = list, envir = envir)
@@ -53,7 +53,7 @@ my.dump.task.pull <- function(iter, list = NULL, envir = parent.frame()){
   invisible()
 } # End of my.dump.task.pull().
 
-# For pbdLapply.
+### For pbdLapply.
 my.dump.pbdLapply <- function(iter, list = NULL, envir = parent.frame()){
   if(pbdMPI::comm.rank() == 0L){
     my.dump.lapply(iter, list = list, envir = envir)

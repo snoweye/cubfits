@@ -1,11 +1,11 @@
-# These are functions to be exprted.
+### These are functions to be exprted.
 
-# Main
+### Main
 cubfits <- my.cubfits
 cubpred <- my.cubpred
 cubappr <- my.cubappr
 
-# Utility
+### Utility
 init.function <- my.init.function
 
 estimatePhi <- function(fitlist, reu13.list, y.list, n.list,

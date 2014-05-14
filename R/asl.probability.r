@@ -1,5 +1,5 @@
 ### This file contains functions related to ASL or ASL*.
-# Reference: Kotz, Kozubowski, and Podgorski (2001).
+### Reference: Kotz, Kozubowski, and Podgorski (2001).
 
 pasl <- function(q, theta = 0, mu = 0, sigma = 1, lower.tail = TRUE,
     log.p = FALSE){

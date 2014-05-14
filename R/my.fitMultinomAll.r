@@ -1,9 +1,9 @@
-# Fit multinomial logistic regression and find Delta.t and log(mu) (selection and mutation
-# effects) based on vglm() in VGAM package.
-#
-# These functions are for all amino acids.
-#
-# Main purpose of these functions is parallelization.
+### Fit multinomial logistic regression and find Delta.t and log(mu) (selection and mutation
+### effects) based on vglm() in VGAM package.
+###
+### These functions are for all amino acids.
+###
+### Main purpose of these functions is parallelization.
 
 # Get the specific function according to the options.
 get.my.fitMultinomAll <- function(parallel){
@@ -16,10 +16,10 @@ get.my.fitMultinomAll <- function(parallel){
 } # End of get.my.fitMultinomAll().
 
 
-# For lapply.
+### For lapply.
 my.fitMultinomAll.lapply <- function(reu13.df, phi, y, n, phi.new = NULL,
     coefstart = NULL){
-  # since vglm change seeds within it's call, backup first and restore later.
+  ### since vglm change seeds within it's call, backup first and restore later.
   if(exists(".Random.seed", envir = .GlobalEnv)){
     .GlobalEnv$.Random.seed.org <- .GlobalEnv$.Random.seed
   }
@@ -38,10 +38,10 @@ my.fitMultinomAll.lapply <- function(reu13.df, phi, y, n, phi.new = NULL,
   ret
 } # End of my.fitmultinomAll.lapply().
 
-# For mclapply.
+### For mclapply.
 my.fitMultinomAll.mclapply <- function(reu13.df, phi, y, n, phi.new = NULL,
     coefstart = NULL){
-  # since vglm change seeds within it's call, backup first and restore later.
+  ### since vglm change seeds within it's call, backup first and restore later.
   if(exists(".Random.seed", envir = .GlobalEnv)){
     .GlobalEnv$.Random.seed.org <- .GlobalEnv$.Random.seed
   }
@@ -60,10 +60,10 @@ my.fitMultinomAll.mclapply <- function(reu13.df, phi, y, n, phi.new = NULL,
   ret
 } # End of my.fitmultinomAll.mclapply().
 
-# For task pull.
+### For task pull.
 my.fitMultinomAll.task.pull <- function(reu13.df, phi, y, n, phi.new = NULL,
     coefstart = NULL){
-  # since vglm change seeds within it's call, backup first and restore later.
+  ### since vglm change seeds within it's call, backup first and restore later.
   if(exists(".Random.seed", envir = .GlobalEnv)){
     .GlobalEnv$.Random.seed.org <- .GlobalEnv$.Random.seed
   }
@@ -82,10 +82,10 @@ my.fitMultinomAll.task.pull <- function(reu13.df, phi, y, n, phi.new = NULL,
   ret
 } # End of my.fitmultinomAll.task.pull().
 
-# For pbdLapply.
+### For pbdLapply.
 my.fitMultinomAll.pbdLapply <- function(reu13.df, phi, y, n, phi.new = NULL,
     coefstart = NULL){
-  # since vglm change seeds within it's call, backup first and restore later.
+  ### since vglm change seeds within it's call, backup first and restore later.
   if(exists(".Random.seed", envir = .GlobalEnv)){
     .GlobalEnv$.Random.seed.org <- .GlobalEnv$.Random.seed
   }

@@ -1,13 +1,13 @@
-# This file contains two type of methods: MLE and posterior mean for
-# estimating an appropriate initial value of expected gene expression phi
-# for one gene given sequence information/counts.
+### This file contains two type of methods: MLE and posterior mean for
+### estimating an appropriate initial value of expected gene expression phi
+### for one gene given sequence information/counts.
 
-# - fitlist is a list beta estimation from fitMultinom(). amino acid -> beta.
-# - reu13.list.g is a gene list. amino acid -> codon -> position.
-# - y.g is a gene list. amino acid -> codon count.
-# - n.g is a gene list. amino acid -> total codon count.
+### - fitlist is a list beta estimation from fitMultinom(). amino acid -> beta.
+### - reu13.list.g is a gene list. amino acid -> codon -> position.
+### - y.g is a gene list. amino acid -> codon count.
+### - n.g is a gene list. amino acid -> total codon count.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.estimatePhiOne <- function(init.Phi, model){
   if(!any(init.Phi[1] %in% .CF.CT$init.Phi)){
     stop("initial method is not found.")
@@ -23,7 +23,7 @@ get.my.estimatePhiOne <- function(init.Phi, model){
 
 
 ### For mle methods.
-# For ROC + NSEf model.
+### For ROC + NSEf model.
 my.estimatePhiOne.MLE.rocnsef <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -35,7 +35,7 @@ my.estimatePhiOne.MLE.rocnsef <- function(fitlist, reu13.list.g, y.g, n.g,
   ret
 } # End of my.estimatePhiOne.MLE.rocnsef().
 
-# For ROC model.
+### For ROC model.
 my.estimatePhiOne.MLE.roc <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -47,7 +47,7 @@ my.estimatePhiOne.MLE.roc <- function(fitlist, reu13.list.g, y.g, n.g,
   ret
 } # End of my.estimatePhiOne.MLE.roc().
 
-# For NSEf model.
+### For NSEf model.
 my.estimatePhiOne.MLE.nsef <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -61,22 +61,22 @@ my.estimatePhiOne.MLE.nsef <- function(fitlist, reu13.list.g, y.g, n.g,
 
 
 ### For posterior mean methods.
-# For ROC + NSEf model.
+### For ROC + NSEf model.
 my.estimatePhiOne.PM.rocnsef <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
     upper.integrate = .CF.OP$upper.integrate, control = list()){
-  # Check lower first.
+  ### Check lower first.
   lphilv.g <- -my.objectivePhiOne.nlogphiL.rocnsef(lower.optim, fitlist,
                  reu13.list.g, y.g, n.g)
 
-  # set default values.
+  ### set default values.
   add.lphilv.g <- 0.0
   mlphilv.g <- 0.0
   add.llv.g <- 0.0
   mllv.g <- 0.0
 
-  # Find the maximum value of log phi * L and adjust accordingly.
+  ### Find the maximum value of log phi * L and adjust accordingly.
   if(lphilv.g <= .CF.OP$stable.min.exp || lphilv.g >= .CF.OP$stable.max.exp){
     tmp <- optim(E.Phi, my.objectivePhiOne.nlogphiL.rocnsef, gr = NULL,
                  fitlist, reu13.list.g, y.g, n.g,
@@ -88,7 +88,7 @@ my.estimatePhiOne.PM.rocnsef <- function(fitlist, reu13.list.g, y.g, n.g,
       add.lphilv.g <- .CF.OP$stable.max.exp - mlphilv.g
     }
 
-    # Find the maximum value of log L and adjust accordingly.
+    ### Find the maximum value of log L and adjust accordingly.
     if(mlphilv.g - log(tmp$par) <= .CF.OP$stable.min.exp ||
        mlphilv.g - log(tmp$par) >= .CF.OP$stable.max.exp){
       tmp <- optim(tmp$par, my.objectivePhiOne.nlogL.rocnsef, gr = NULL,
@@ -102,39 +102,39 @@ my.estimatePhiOne.PM.rocnsef <- function(fitlist, reu13.list.g, y.g, n.g,
     }
   }
 
-  # Integrate scaled phi * L over phi.
+  ### Integrate scaled phi * L over phi.
   numerator <- my.integrate(Vectorize(my.objectivePhiOne.xLfp.rocnsef, "phi"),
                             lower.integrate, upper.integrate,
                             fitlist, reu13.list.g, y.g, n.g, add.lphilv.g,
                             control = control)
 
-  # Integrate scaled L over phi.
+  ### Integrate scaled L over phi.
   denominator <- my.integrate(Vectorize(my.objectivePhiOne.Lfp.rocnsef, "phi"),
                               lower.integrate, upper.integrate,
                               fitlist, reu13.list.g, y.g, n.g, add.llv.g,
                               control = control)
 
-  # Compute the posterior mean.
+  ### Compute the posterior mean.
   ret <- (numerator$value / denominator$value) * exp(add.llv.g - add.lphilv.g)
   ret
 } # End of my.estimatePhiOne.PM.rocnsef().
 
-# For ROC model.
+### For ROC model.
 my.estimatePhiOne.PM.roc <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
     upper.integrate = .CF.OP$upper.integrate, control = list()){
-  # Check lower first.
+  ### Check lower first.
   lphilv.g <- -my.objectivePhiOne.nlogphiL.roc(lower.optim, fitlist,
                  reu13.list.g, y.g, n.g)
 
-  # set default values.
+  ### set default values.
   add.lphilv.g <- 0.0
   mlphilv.g <- 0.0
   add.llv.g <- 0.0
   mllv.g <- 0.0
 
-  # Find the maximum value of log phi * L and adjust accordingly.
+  ### Find the maximum value of log phi * L and adjust accordingly.
   if(lphilv.g <= .CF.OP$stable.min.exp || lphilv.g >= .CF.OP$stable.max.exp){
     tmp <- optim(E.Phi, my.objectivePhiOne.nlogphiL.roc, gr = NULL,
                  fitlist, reu13.list.g, y.g, n.g,
@@ -146,7 +146,7 @@ my.estimatePhiOne.PM.roc <- function(fitlist, reu13.list.g, y.g, n.g,
       add.lphilv.g <- .CF.OP$stable.max.exp - mlphilv.g
     }
 
-    # Find the maximum value of log L and adjust accordingly.
+    ### Find the maximum value of log L and adjust accordingly.
     if(mlphilv.g - log(tmp$par) <= .CF.OP$stable.min.exp ||
        mlphilv.g - log(tmp$par) >= .CF.OP$stable.max.exp){
       tmp <- optim(tmp$par, my.objectivePhiOne.nlogL.roc, gr = NULL,
@@ -160,39 +160,39 @@ my.estimatePhiOne.PM.roc <- function(fitlist, reu13.list.g, y.g, n.g,
     }
   }
 
-  # integrate phi * L over phi.
+  ### integrate phi * L over phi.
   numerator <- my.integrate(Vectorize(my.objectivePhiOne.xLfp.roc, "phi"),
                             lower.integrate, upper.integrate,
                             fitlist, reu13.list.g, y.g, n.g, add.lphilv.g,
                             control = control)
 
-  # integrate L over phi.
+  ### integrate L over phi.
   denominator <- my.integrate(Vectorize(my.objectivePhiOne.Lfp.roc, "phi"),
                               lower.integrate, upper.integrate,
                               fitlist, reu13.list.g, y.g, n.g, add.llv.g,
                               control = control)
 
-  # Compute the posterior mean.
+  ### Compute the posterior mean.
   ret <- (numerator$value / denominator$value) * exp(add.llv.g - add.lphilv.g)
   ret
 } # End of my.estimatePhiOne.PM.roc().
 
-# For NSEf model.
+### For NSEf model.
 my.estimatePhiOne.PM.nsef <- function(fitlist, reu13.list.g, y.g, n.g,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
     upper.integrate = .CF.OP$upper.integrate, control = list()){
-  # Check lower first.
+  ### Check lower first.
   lphilv.g <- -my.objectivePhiOne.nlogphiL.nsef(lower.optim, fitlist,
                  reu13.list.g, y.g, n.g)
 
-  # set default values.
+  ### set default values.
   add.lphilv.g <- 0.0
   mlphilv.g <- 0.0
   add.llv.g <- 0.0
   mllv.g <- 0.0
 
-  # Find the maximum value of log phi * L and adjust accordingly.
+  ### Find the maximum value of log phi * L and adjust accordingly.
   if(lphilv.g <= .CF.OP$stable.min.exp || lphilv.g >= .CF.OP$stable.max.exp){
     tmp <- optim(E.Phi, my.objectivePhiOne.nlogphiL.nsef, gr = NULL,
                  fitlist, reu13.list.g, y.g, n.g,
@@ -204,7 +204,7 @@ my.estimatePhiOne.PM.nsef <- function(fitlist, reu13.list.g, y.g, n.g,
       add.lphilv.g <- .CF.OP$stable.max.exp - mlphilv.g
     }
 
-    # Find the maximum value of log L and adjust accordingly.
+    ### Find the maximum value of log L and adjust accordingly.
     if(mlphilv.g - log(tmp$par) <= .CF.OP$stable.min.exp ||
        mlphilv.g - log(tmp$par) >= .CF.OP$stable.max.exp){
       tmp <- optim(tmp$par, my.objectivePhiOne.nlogL.nsef, gr = NULL,
@@ -218,25 +218,25 @@ my.estimatePhiOne.PM.nsef <- function(fitlist, reu13.list.g, y.g, n.g,
     }
   }
 
-  # integrate phi * L over phi.
+  ### integrate phi * L over phi.
   numerator <- my.integrate(Vectorize(my.objectivePhiOne.xLfp.nsef, "phi"),
                             lower.integrate, upper.integrate,
                             fitlist, reu13.list.g, y.g, n.g, add.lphilv.g,
                             control = control)
 
-  # integrate L over phi.
+  ### integrate L over phi.
   denominator <- my.integrate(Vectorize(my.objectivePhiOne.Lfp.nsef, "phi"),
                               lower.integrate, upper.integrate,
                               fitlist, reu13.list.g, y.g, n.g, add.llv.g,
                               control = control)
 
-  # Compute the posterior mean.
+  ### Compute the posterior mean.
   ret <- (numerator$value / denominator$value) * exp(add.llv.g - add.lphilv.g)
   ret
 } # End of my.estimatePhiOne.PM.nsef().
 
 
-# Adopted from integrate() for more flexible controls.
+### Adopted from integrate() for more flexible controls.
 my.integrate <- function(f, lower, upper, ..., control = list()){
   if(is.null(control$subdivisions)){
     subdivisions <- 100L
@@ -282,4 +282,3 @@ my.integrate <- function(f, lower, upper, ..., control = list()){
                    aux = aux)
   ret
 } # End of my.integrate().
-

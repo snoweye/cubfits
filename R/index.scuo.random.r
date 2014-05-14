@@ -1,5 +1,5 @@
-# Generate random phi values from lognormal distribution and matched by the
-# rank of SCUO indices.
+### Generate random phi values from lognormal distribution and matched by the
+### rank of SCUO indices.
 
 scuo.random <- function(SCUO, phi.Obs = NULL,
     meanlog = .CF.PARAM$phi.meanlog, sdlog = .CF.PARAM$phi.sdlog){

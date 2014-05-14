@@ -1,4 +1,4 @@
-# Generate a (column-wised) list structure for given # of rows and columns.
+### Generate a (column-wised) list structure for given # of rows and columns.
 my.generate.list <- function(value, nrow, ncol){
   ret <- vector(mode = "list", length = ncol)
   for(i in 1:ncol){

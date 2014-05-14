@@ -69,7 +69,7 @@
   All functions return the corresponding formats.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 }
 \author{
   Wei-Chen Chen \email{wccsnow@gmail.com}.

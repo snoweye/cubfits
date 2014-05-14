@@ -1,4 +1,4 @@
-# For reading.
+### For reading.
 
 read.seq <- function(file.name, forceDNAtolower = FALSE,
     convertDNAtoupper = TRUE){

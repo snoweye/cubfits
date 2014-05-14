@@ -40,7 +40,7 @@ qasla.one.log <- function(p, theta, kappa, sigma, lower.tail = TRUE,
     }
   }
 
-  # convert to p any way.
+  ### convert to p any way.
   if(log.p){
     p <- exp(p)
   }

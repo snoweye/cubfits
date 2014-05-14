@@ -1,13 +1,13 @@
 ### This file is to compute cai (codon adaptive index).
-#
-# CAI = exp( 1/L \sum_{l = 1}^L log( w_i(l) ) )
-#
-# w_i(l) = f_i / max( f_j )
-#
-# i, j \in synonymous codons for amino acid
+###
+### CAI = exp( 1/L \sum_{l = 1}^L log( w_i(l) ) )
+###
+### w_i(l) = f_i / max( f_j )
+###
+### i, j \in synonymous codons for amino acid
 
 calc_cai_values <- function(y, y.list, w = NULL){
-  # Get w
+  ### Get w
   if(is.null(w)){
     w <- do.call("c", lapply(1:length(y),
                         function(i.aa){
@@ -18,7 +18,7 @@ calc_cai_values <- function(y, y.list, w = NULL){
                         }))
   }
 
-  # Update w's names.
+  ### Update w's names.
   w.names <- names(w)
   if(is.null(w.names)){
     stop("w should be named.")
@@ -27,7 +27,7 @@ calc_cai_values <- function(y, y.list, w = NULL){
     names(w) <- w.names
   }
 
-  # Sort w by y's codon names. 
+  ### Sort w by y's codon names. 
   codon.names <- do.call("c", lapply(y.list[[1]], function(aa){ names(aa) }))
   new.w <- NULL 
   for(i in codon.names){
@@ -40,7 +40,7 @@ calc_cai_values <- function(y, y.list, w = NULL){
   }
   names(new.w) <- codon.names
 
-  # Comput CAI.
+  ### Comput CAI.
   log.w <- log(new.w)
   CAI.values <- do.call("c", lapply(1:length(y.list),
                                function(i.seq){
@@ -49,7 +49,7 @@ calc_cai_values <- function(y, y.list, w = NULL){
                                }))
   names(CAI.values) <- names(y.list)
 
-  # Return.
+  ### Return.
   ret <- list(CAI = CAI.values, w = new.w)
   ret
 } # End of calc_cai_values().

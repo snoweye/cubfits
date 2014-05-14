@@ -1,4 +1,4 @@
-# This function will check if input data are all in correct arragement.
+### This function will check if input data are all in correct arragement.
 
 my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     reu13.df.pred = NULL, y.pred = NULL, n.pred = NULL,
@@ -6,12 +6,12 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
   n.aa <- length(reu13.df.obs)
   names.aa <- names(reu13.df.obs)
 
-  # Check aa order.
+  ### Check aa order.
   if(any(order(names.aa) != 1:length(names.aa))){
     stop("aa is not in right order.")
   }
 
-  # Check reu13.df.obs.
+  ### Check reu13.df.obs.
   for(i.aa in 1:n.aa){
     if(any(order(reu13.df.obs[[i.aa]]$ORF) !=
            1:length(reu13.df.obs[[i.aa]]$ORF))){
@@ -37,7 +37,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check y.
+  ### Check y.
   if(!all(names(y) == names.aa)){
     stop("Amino acid in y may be incorrect.")
   }
@@ -50,7 +50,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check n.
+  ### Check n.
   if(!all(names(n) == names.aa)){
     stop("Amino acid in n may be incorrect.")
   }
@@ -63,7 +63,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check phi.Obs.
+  ### Check phi.Obs.
   if(!is.null(phi.Obs)){
     if(any(order(names(phi.Obs)) != 1:length(phi.Obs))){
       stop("phi.Obs is not sorted in ORF.")
@@ -73,7 +73,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check reu13.df.pred.
+  ### Check reu13.df.pred.
   if(!is.null(reu13.df.pred)){
     if(!all(names(reu13.df.pred) == names.aa)){
       stop("Amino acid in reu13.df.pred may be incorrect.")
@@ -107,7 +107,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check y.pred.
+  ### Check y.pred.
   if(!is.null(y.pred)){
     if(!all(names(y.pred) == names.aa)){
       stop("Amino acid in y.pred may be incorrect.")
@@ -125,7 +125,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check n.pred.
+  ### Check n.pred.
   if(!is.null(n.pred)){
     if(!all(names(n.pred) == names.aa)){
       stop("Amino acid in n.pred may be incorrect.")
@@ -143,7 +143,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check phi.Init.
+  ### Check phi.Init.
   if(!is.null(phi.Init)){
     if(any(order(names(phi.Init)) != 1:length(phi.Init))){
       stop("phi.Init is not sorted in ORF.")
@@ -153,7 +153,7 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  # Check phi.Init.pred.
+  ### Check phi.Init.pred.
   if(!is.null(phi.Init.pred)){
     if(any(order(names(phi.Init.pred)) != 1:length(phi.Init.pred))){
       stop("phi.Init.pred is not sorted in ORF.")

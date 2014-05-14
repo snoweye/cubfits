@@ -1,4 +1,4 @@
-# Wrapper of find.prop.bin.roc().
+### Wrapper of find.prop.bin.roc().
 prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20){
   if(is.null(phi.Obs)){
     n.aa <- length(reu13.df)
@@ -19,11 +19,11 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20){
     names(phi.Obs) <- tmp.ORF
   }
 
-  # rebuild phi.method from phi.Obs or reu13.df
+  ### Rebuild phi.method from phi.Obs or reu13.df
   phi.method <- data.frame(ORF = names(phi.Obs), phi = phi.Obs,
                            stringsAsFactors = FALSE)
 
-  # call find.prop.bin.roc().
+  ### Call find.prop.bin.roc().
   phi.bin <- as.vector(quantile(phi.Obs, c(0, seq(0.05, 0.95, length = nclass), 1)))
   ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin)
   ret
@@ -31,11 +31,11 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20){
 
 
 ### Summarize by amino acid.
-# sub.aa.dfs is from REU12.
-# phi.method is a data.frame(ORF, phi),
-#            where ORF is the key to match codons in sub.aa.dfs.
-# phi.bin is a vector used to bin phi.method$phi, usually
-#       quantile(phi.method$phi, c(0, seq(0.05, 0.95, length = 19), 1)).
+### sub.aa.dfs is from REU12.
+### phi.method is a data.frame(ORF, phi),
+###            where ORF is the key to match codons in sub.aa.dfs.
+### phi.bin is a vector used to bin phi.method$phi, usually
+###       quantile(phi.method$phi, c(0, seq(0.05, 0.95, length = 19), 1)).
 
 find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
   nclass <- length(phi.bin) - 1

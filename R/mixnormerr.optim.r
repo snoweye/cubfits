@@ -1,6 +1,6 @@
 ### Functions for two components of mixture with measurement errors.
 
-# Negative log likelihood.
+### Negative log likelihood.
 mixnormerr.nlogL <- function(theta, X, K, debug = .CO.CT$debug){
   prop <- theta[1:(K - 1)]
   prop <- c(prop, 1 - prop)
@@ -27,7 +27,7 @@ mixnormerr.nlogL <- function(theta, X, K, debug = .CO.CT$debug){
 } # End of mixnormerr.nlogL().
 
 
-# Constrained optimization for mixture normal with 2 components. 
+### Constrained optimization for mixture normal with 2 components. 
 optim.mixnormerr.logL <- function(X, PARAM){
   K <- PARAM$K
   theta <- c(PARAM$prop[-K],
@@ -36,11 +36,11 @@ optim.mixnormerr.logL <- function(X, PARAM){
              log(PARAM$sigma2.e))
 
   ### Constrains:
-  # p_k > 0 for all k
-  # -p_k > -1 for all k
-  # p_1 + ... + p_{K - 1} > 0
-  # -p_1 - ... - p_{K - 1} > -1
-  # log(sigma_k^2) - log(sigma_r^2) > 0 for all k
+  ###   p_k > 0 for all k
+  ###   -p_k > -1 for all k
+  ###   p_1 + ... + p_{K - 1} > 0
+  ###   -p_1 - ... - p_{K - 1} > -1
+  ###   log(sigma_k^2) - log(sigma_r^2) > 0 for all k
   ui <- rbind(cbind(diag(K - 1),
                     matrix(0, nrow = K - 1, ncol = 2 * K + 1)),
               cbind(-diag(K - 1),
@@ -74,7 +74,6 @@ optim.mixnormerr.logL <- function(X, PARAM){
 ### Initial parameters.
 init.param <- function(X, K = 2){
   tmp <- rowMeans(X, na.rm = TRUE)
-  # mu <- sort(sample(tmp, K))
   mu <- as.vector(quantile(tmp, prob = seq(0.20, 0.99, length = K)))
   sigma2 <- rep(var(tmp, na.rm = TRUE) / K, K)
   sigma2.e <- mean(apply(X, 1, var, na.rm = TRUE)) / K
@@ -99,7 +98,7 @@ get.param <- function(theta, K = 2){
   sigma2 <- exp(theta[(2 * K):(3 * K - 1)])
   sigma2.e <- exp(theta[3 * K])
 
-  # Convert to a list.
+  ### Convert to a list.
   PARAM <- list(K = K, prop = prop, mu = mu, sigma2 = sigma2,
                 sigma2.e = sigma2.e)
   PARAM

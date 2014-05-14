@@ -1,4 +1,4 @@
-# Some format converting functions, mainly from data.frame to list.
+### Some format converting functions, mainly from data.frame to list.
 
 ### scodon is for synonymous codon.
 convert.reu13.df.to.list <- function(reu13.df){
@@ -60,7 +60,7 @@ convert.y.to.scuo <- function(y){
     tmp.id <- cbind(names.aa[i.aa], names.ORF)
     tmp.counts <- y[[i.aa]]
 
-    # The maximum is 6 possible codons.
+    ### The maximum is 6 possible codons.
     add.col <- 6 - ncol(tmp.counts)
     if(add.col > 0){
       tmp.counts <- cbind(tmp.counts,
@@ -76,7 +76,7 @@ convert.y.to.scuo <- function(y){
   ret.id <- as.data.frame(ret.id, stringsAsFactors = FALSE)
   ret.counts <- as.data.frame(ret.counts, stringsAsFactors = FALSE)
 
-  # amio acid, gene name, and 6 possible codons.
+  ### amio acid, gene name, and 6 possible codons.
   ret <- cbind(ret.id, ret.counts)
   colnames(ret) <- c("AA", "ORF", paste("C", 1:6, sep = ""))
   ret
@@ -112,7 +112,7 @@ convert.bVec.to.b <- function(bVec, aa.names, model = .CF.CT$model[1]){
   n.coef <- get.my.ncoef(model)
   coef.names <- get.my.coefnames(model)
 
-  # Check b and aa.names.
+  ### Check b and aa.names.
   aa.names <- aa.names[!(aa.names %in% c("M", "W", "X"))] # single and stop codons
   if("S" %in% aa.names){
     synonymous.codon <- .CF.GV$synonymous.codon.split[aa.names]
@@ -124,7 +124,7 @@ convert.bVec.to.b <- function(bVec, aa.names, model = .CF.CT$model[1]){
     stop("length(bVec) is not corresponding to aa.names.")
   }
 
-  # Compute mutation and elong
+  ### Compute mutation and elong
   bInit <- list()
   id <- 0
   for(aa in aa.names){

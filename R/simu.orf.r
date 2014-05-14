@@ -1,13 +1,13 @@
-# This file contains functions generating sequences for simulation studies.
+### This file contains functions generating sequences for simulation studies.
 
 simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     orf.length = NULL, orf.names = NULL, model = .CF.CT$model){
-  # Check n.
+  ### Check n.
   if(n <= 0){
     stop("n should be a positive integer.")
   }
 
-  # Check bInit.
+  ### Check bInit.
   if(!is.list(bInit)){
     stop("bInit should be a list.")
   }
@@ -19,7 +19,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     stop("bInit[[i]]$coef.mat should be in matrix format for all i.")
   }
 
-  # Check phi.Obs
+  ### Check phi.Obs
   if(is.null(phi.Obs)){
     phi.Obs <- rlnorm(n)
   }
@@ -30,7 +30,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     stop("length(phi.Obs) != n.")
   }
 
-  # Check AA.prob.
+  ### Check AA.prob.
   if(is.null(AA.prob)){
     AA.prob <- rep(1, length(bInit))
   }
@@ -43,7 +43,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     stop("AA.prob should be all positilve.")
   }
 
-  # Check orf.length.
+  ### Check orf.length.
   if(is.null(orf.length)){
     orf.length <- sample(10:20, n, replace = TRUE)
   }
@@ -51,12 +51,12 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     stop("orf.length is incorrect")
   }
 
-  # Check orf.names.
+  ### Check orf.names.
   if(length(orf.names) != n){
     orf.names <- paste("ORF", 1:n, sep = "")
   }
 
-  # Check model.
+  ### Check model.
   if(model[1] == "rocnsef"){
     simu.orf.model <- simu.orf.rocnsef
   } else if(model[1] == "roc"){
@@ -67,7 +67,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
     stop("model is not found.")
   }
 
-  # Run the function.
+  ### Run the function.
   ret <- lapply(1:n, function(i.n){
                        simu.orf.model(orf.length[i.n], bInit, phi.Obs[i.n],
                                       AA.prob)

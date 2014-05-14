@@ -1,4 +1,4 @@
-# For scuo format for Drew's scuo codes.
+### For scuo format for Drew's scuo codes.
 
 gen.scuo <- function(seq.string, aa.names = .CF.GV$amino.acid,
     split.S = TRUE, drop.X = TRUE, drop.MW = TRUE){
@@ -55,7 +55,7 @@ build.scuo <- function(seq.string, aa.names, split.S = FALSE){
              })
     tmp <- do.call("rbind", tmp)
 
-    # The maximum is 6 possible codons.
+    ### The maximum is 6 possible codons.
     add.col <- 6 - ncol(tmp)
     if(add.col > 0){
       tmp <- cbind(tmp, matrix(NA, nrow = nrow(tmp), ncol = add.col))
@@ -70,7 +70,7 @@ build.scuo <- function(seq.string, aa.names, split.S = FALSE){
   ret.id <- as.data.frame(ret.id, stringsAsFactors = FALSE)
   ret.counts <- as.data.frame(ret.counts, stringsAsFactors = FALSE)
 
-  # amio acid, gene name, and 6 possible codons.
+  ### amio acid, gene name, and 6 possible codons.
   ret <- cbind(ret.id, ret.counts)
   colnames(ret) <- c("AA", "ORF", paste("C", 1:6, sep = ""))
 

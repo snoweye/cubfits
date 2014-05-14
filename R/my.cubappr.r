@@ -19,14 +19,18 @@
 ### No observation (phi) is required.
 my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
     nIter = 1000, burnin = 100,
-    bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-    p.Init = NULL, p.nclass = 2, p.DrawScale = 0.1,
-    phi.DrawScale = 1,
-    model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
+    bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+        b.DrawScale = .CF.CONF$b.DrawScale,
+    p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
+        p.DrawScale = .CF.CONF$p.DrawScale,
+    phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
+    model = .CF.CT$model[1],
+    model.Phi = .CF.CT$model.Phi[1],
     adaptive = .CF.CT$adaptive[1],
     scale.Phi = .CF.CT$scale.Phi[1],
     verbose = .CF.DP$verbose,
-    iterThin = .CF.DP$iterThin, report = .CF.DP$report){
+    iterThin = .CF.DP$iterThin,
+    report = .CF.DP$report){
 
 ### Setup functions ###
   ### Setup function pointers by type or model.
@@ -108,7 +112,7 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
   my.set.adaptive(nSave,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
                   n.p = 1, p.DrawScale = p.DrawScale,
-                  n.G.pred = n.G, phi.DrawScale.pred = phi.DrawScale,
+                  n.G.pred = n.G, phi.DrawScale.pred = phi.DrawScale.pred,
                   adaptive = adaptive[1])
   b.DrawScale <- .cubfitsEnv$DrawScale$b[[1]]
   b.DrawScale.prev <- b.DrawScale
@@ -160,7 +164,7 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
                        update.curr.renew = FALSE)
       ### For each E[Phi].
       phi.DrawScale.pred <- .cubfitsEnv$my.update.DrawScale(
-                              "phi.pred", phi.DrawScale,
+                              "phi.pred", phi.DrawScale.pred,
                               update.curr.renew = TRUE)
     }
 

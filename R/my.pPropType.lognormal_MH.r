@@ -44,8 +44,10 @@ my.propose.sigma.Phi.Gamma <- function(sigma.Phi.Curr, # hp.sigma.Phi,
   ### Gamma distribution with an informative  prior.
   sigma2.Phi.New <- rgamma(1, hp.gamma.shape, scale = hp.gamma.scale)
   ### Inverse Gamma distribution with an informative prior.
-  # sigma2.Phi.New <- 1 / rgamma(1, hp.gamma.shape, scale = 1 / hp.gamma.scale)
+  # sigma2.Phi.New <- 1 / rgamma(1, hp.invgamma.shape,
+  #                                 scale = hp.invgamma.scale)
 
+  ### Adjust accroding to the restriction.
   sigma.Phi.New <- sqrt(sigma2.Phi.New)
   nu.Phi.New <- -sigma2.Phi.New / 2
 
@@ -63,10 +65,10 @@ my.propose.sigma.Phi.Gamma <- function(sigma.Phi.Curr, # hp.sigma.Phi,
   ### Inverse Gamma distribution with an informative prior.
   ### Y = 1 / X, |J| = 1 / X^2, f_Y(y) = f_X(x = 1/y) |J|
   # lir <- dgamma(1 / sigma.Phi.New, hp.gamma.shape,
-  #               scale = 1 / hp.gamma.scale, log = TRUE) -
+  #               scale = hp.invgamma.scale, log = TRUE) -
   #        2 * log(sigma.Phi.New) -
   #        dgamma(1 / sigma.Phi.Curr, hp.gamma.shape,
-  #               scale = 1 / hp.gamma.scale, log = TRUE) +
+  #               scale = hp.invgamma.scale, log = TRUE) +
   #        2 * log(sigma.Phi.Curr)
 
   ### Return.

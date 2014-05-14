@@ -1,6 +1,6 @@
-# Provide number of coefficients for the given model.
+### Provide number of coefficients for the given model.
 
-# Get the constant according to the options.
+### Get the constant according to the options.
 get.my.ncoef <- function(model){
   if(model[1] == "rocnsef"){
     ret <- 3

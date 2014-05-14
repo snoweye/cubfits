@@ -20,7 +20,7 @@
   The results will cat or print on the STDOUT by default.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 }
 \author{
   Wei-Chen Chen \email{wccsnow@gmail.com}.

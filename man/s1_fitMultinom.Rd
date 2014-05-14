@@ -39,7 +39,7 @@
   \code{b$R} (covariance matrix of parameters, *R* matrix in QR decomposition).
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 
   Shah P. and Gilchrist MA.
     ``Explaining complex codon usage patterns

@@ -51,28 +51,28 @@ asl.logL <- function(theta, x){
 asl.optim.init <- function(x){
   ### Implementation of Lemma 3.5.2 (p. 173, KKP 2001.)
 
-  # Step 1.
+  ### Step 1.
   theta <- x
   all.h <- do.call("c", lapply(theta, h.theta, x))
   r <- which.min(all.h)
 
-  # Setp 2.
+  ### Setp 2.
   if(r == 1){
-    # theta.hat <= x(1)
+    ### theta.hat <= x(1)
 
     ### This case degenerates to an ASL(theta, mu = mean(x) - x(1), 0) which is
     ### equivalent to a positive exponential distribution.
     ### eqn (3.5.75).
     ret <- c(x[r], x[r] - mean(x), 0, 0)
   } else if(r == length(x)){
-    # theta.hat >= x(n)
+    ### theta.hat >= x(n)
 
     ### This case degenerates to an ASL(theta, mu = x(n) - mean(x), 0) which is
     ### equivalent to a negative exponential distribution.
     ### eqn (3.5.81).
     ret <- c(x[r], mean(x) - x[r], 0, 0)
   } else{
-    # x(1) < theta.hat < x(n)
+    ### x(1) < theta.hat < x(n)
 
     ### eqn (3.5.121).
     theta.hat <- x[r]

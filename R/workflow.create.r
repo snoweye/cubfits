@@ -1,4 +1,4 @@
-# For work flows only.
+### For work flows only.
 
 get.workflow <- function(dir.name = "workflow/",
     model = c("roc", "nsef"), pkg = "cubfits"){
@@ -10,17 +10,17 @@ get.workflow <- function(dir.name = "workflow/",
 
 cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
     model = c("roc", "nsef"), pkg = "cubfits", to = NULL, code = FALSE){
-  # Check OS.
+  ### Check OS.
   if(Sys.info()["sysname"] == "Windows"){
     stop("Non of work flows supports windows system.")
   }
 
-  # Check flow.
+  ### Check flow.
   if(!any(flow[1] %in% c("wphi", "wophi", "simu", "wphi_wophi"))){
     stop("Work flow is not found.")
   }
 
-  # Set new path.
+  ### Set new path.
   if(interactive()){
     cat("This function is supposed to run in batch ...\n")
     if(is.null(to)){
@@ -36,10 +36,10 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
     dir.create(path.current, mode = "0755")
   }
 
-  # Original work flow path.
+  ### Original work flow path.
   path.workflow <- get.workflow(model = model[1], pkg = pkg)
 
-  # Make new copies for basic work flows.
+  ### Make new copies for basic work flows.
   cat("Copy ", flow[1], "_run_0.sh ...\n", sep = "")
   path.file <- paste(path.workflow, "/script/", flow[1], "_run_0.sh",
                      sep = "")
@@ -71,12 +71,12 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
   file.copy(path.file, path.file.new, overwrite = TRUE)
 
   if(flow[1] == "simu"){
-    # simu uses default param.
+    ### simu uses default param.
     cat("Copy param/ ...\n", sep = "")
     path.file <- paste(path.workflow, "/../param", sep = "")
     file.copy(path.file, path.current, overwrite = TRUE, recursive = TRUE)
   } else{
-    # Rest cases use example param.
+    ### Rest cases use example param.
     cat("Make param/ ...\n", sep = "")
     path.file.new <- paste(path.current, "/param/", sep = "")
     unlink(path.file.new, recursive = TRUE, force = TRUE)
@@ -95,14 +95,14 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
     }
   }
 
-  # Copy to local for customizing only.
+  ### Copy to local for customizing only.
   if(code){
     cat("Copy code/ ...\n", sep = "")
     path.file <- paste(path.workflow, "/code", sep = "")
     file.copy(path.file, path.current, overwrite = TRUE, recursive = TRUE)
   }
 
-  # Done.
+  ### Done.
   cat("Done ...\n\n")
   cat("Please check \"", path.current, "/00-set_env.r\" ...\n",
       sep = "")

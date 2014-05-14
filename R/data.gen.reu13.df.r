@@ -43,18 +43,18 @@ gen.reu13.df <- function(seq.string, phi.df = NULL,
 
 
 build.reu13.df <- function(seq.string, phi.df, aa.names, split.S = split.S){
-  # Subset genes which are both in common.
+  ### Subset genes which are both in common.
   names.seq <- as.character(names(seq.string))
   names.ORF <- as.character(phi.df[, 1])
   phi.df <- phi.df[names.ORF %in% names.seq,]
   n.seq <- length(seq.string)
 
-  # Reorder genes and phi.df.
+  ### Reorder genes and phi.df.
   seq.string <- seq.string[order(names.seq)]
   # names.seq <- data.frame(ORF = names.seq, stringsAsFactors = FALSE)
   # tmp.phi <- merge(names.seq, phi.df, all.x = TRUE)
 
-  # Find AA position for all genes.
+  ### Find AA position for all genes.
   ret <- lapply(aa.names, build.aa.df,
                 seq.string = seq.string, phi.df = phi.df, split.S = split.S)
   # ret <- list()
@@ -74,7 +74,7 @@ build.aa.df <- function(aa, seq.string, phi.df, split.S = TRUE){
     synonymous.codon <- .CF.GV$synonymous.codon[[aa]]
   }
 
-  # Build all AA data.frame from aa.names.
+  ### Build all AA data.frame from aa.names.
   # func.get.seq.df <- function(i.gene){
   #   id <- which(seq.string[[i.gene]] %in% synonymous.codon)
   #   n.match <- length(id)

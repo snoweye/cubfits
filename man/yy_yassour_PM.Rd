@@ -35,7 +35,7 @@
   information, so those genes are dropped from \code{\link{yassour}} dataset.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 }
 \seealso{
   \code{\link{yassour}}

@@ -11,10 +11,14 @@
   cubpred(reu13.df.obs, phi.Obs, y, n,
           reu13.df.pred, y.pred, n.pred,
           nIter = 1000, burnin = 100,
-          bInit = NULL, init.b.Scale = 1, b.DrawScale = 1,
-          p.Init = NULL, p.nclass = 2, p.DrawScale = 0.1,
-          phi.Init = NULL, init.Phi.Scale = 1, phi.DrawScale = 1,
-          phi.Init.pred = NULL, phi.DrawScale.pred = 1,
+          bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+              b.DrawScale = .CF.CONF$b.DrawScale,
+          p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
+              p.DrawScale = .CF.CONF$p.DrawScale,
+          phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
+              phi.DrawScale = .CF.CONF$phi.DrawScale,
+          phi.Init.pred = NULL,
+              phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
           verbose = .CF.DP$verbose,
@@ -39,7 +43,7 @@
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{sigma.Phi}.}
   \item{phi.Init}{initial values for Phi.}
-  \item{init.Phi.Scale}{for initial Phi if \code{phi.Init = NULL}.}
+  \item{init.phi.Scale}{for initial phi if \code{phi.Init = NULL}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
                        when drawing new Phi.}
   \item{phi.Init.pred}{initial values for Phi of predicted set.}
@@ -84,7 +88,7 @@
   it can result in non-exits of equilibrium distribution.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 
   Shah P. and Gilchrist MA.
     ``Explaining complex codon usage patterns

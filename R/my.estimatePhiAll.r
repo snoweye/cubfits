@@ -1,14 +1,14 @@
-# This file contains two type of methods: MLE and posterior mean for
-# estimating appropriate initial values of expected gene expression phi
-# for all genes given sequence information/counts.
-# Main purpose of these functions is parallelization.
+### This file contains two type of methods: MLE and posterior mean for
+### estimating appropriate initial values of expected gene expression phi
+### for all genes given sequence information/counts.
+### Main purpose of these functions is parallelization.
 
-# - fitlist is a list beta estimation from fitMultinom(). amino acid -> beta.
-# - reu13.list is an all gene list. gene -> amino acid -> codon -> position.
-# - y is an all gene list. gene -> amino acid -> codon count.
-# - n is an all gene list. gene -> amino acid -> total codon count.
+### - fitlist is a list beta estimation from fitMultinom(). amino acid -> beta.
+### - reu13.list is an all gene list. gene -> amino acid -> codon -> position.
+### - y is an all gene list. gene -> amino acid -> codon count.
+### - n is an all gene list. gene -> amino acid -> total codon count.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.estimatePhiAll <- function(parallel){
   if(!any(parallel[1] %in% .CF.CT$parallel)){
     stop("parallel is not found.")
@@ -19,7 +19,7 @@ get.my.estimatePhiAll <- function(parallel){
 } # End of get.my.estimatePhiAll().
 
 
-# For lapply.
+### For lapply.
 my.estimatePhiAll.lapply <- function(fitlist, reu13.list, y.list, n.list,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -40,7 +40,7 @@ my.estimatePhiAll.lapply <- function(fitlist, reu13.list, y.list, n.list,
   ret
 } # End of my.estimatePhiAll.lapply().
 
-# For mclapply.
+### For mclapply.
 my.estimatePhiAll.mclapply <- function(fitlist, reu13.list, y.list, n.list,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -61,7 +61,7 @@ my.estimatePhiAll.mclapply <- function(fitlist, reu13.list, y.list, n.list,
   ret
 } # End of my.estimatePhiAll.mclapply().
 
-# For task pull.
+### For task pull.
 my.estimatePhiAll.task.pull <- function(fitlist, reu13.list, y.list, n.list,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,
@@ -82,7 +82,7 @@ my.estimatePhiAll.task.pull <- function(fitlist, reu13.list, y.list, n.list,
   ret
 } # End of my.estimatePhiAll.task.pull().
 
-# For pbdLapply.
+### For pbdLapply.
 my.estimatePhiAll.pbdLapply <- function(fitlist, reu13.list, y.list, n.list,
     E.Phi = .CF.OP$E.Phi, lower.optim = .CF.OP$lower.optim,
     upper.optim = .CF.OP$upper.optim, lower.integrate = .CF.OP$lower.integrate,

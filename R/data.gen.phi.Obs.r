@@ -1,4 +1,4 @@
-# Convert phi.df to phi.Obs
+### Convert phi.df to phi.Obs
 
 gen.phi.Obs <- function(phi.df){
   phi.Obs <- phi.df[, 2]

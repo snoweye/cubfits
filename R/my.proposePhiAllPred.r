@@ -1,9 +1,9 @@
-# Propose new Phi conditioning on all orhter parameters for new genes
-# in the prediction set.
-#
-# These functions are for all genes.
+### Propose new Phi conditioning on all orhter parameters for new genes
+### in the prediction set.
+###
+### These functions are for all genes.
 
-# Get the specific function according to the options.
+### Get the specific function according to the options.
 get.my.proposePhiAllPred <- function(type){
   if(!any(type[1] %in% .CF.CT$type.Phi)){
     stop("type is not found.")
@@ -15,17 +15,17 @@ get.my.proposePhiAllPred <- function(type){
 } # End of get.my.proposePhiAllPred().
 
 
-# Assumes phi.Curr1, are vectors of length # of genes;
-# b, y, n are lists of lenght number of aas.
-#
-# Currently using random walk based upon Fisher-weighting
-# logistic regression and Normal parts of conditional posterior.
-#
-# Returns list with elements:
-#   * phi.Prop :   proposal for phi
-#   * lir   :   log importance ratio for given draw = 0
+### Assumes phi.Curr1, are vectors of length # of genes;
+### b, y, n are lists of lenght number of aas.
+###
+### Currently using random walk based upon Fisher-weighting
+### logistic regression and Normal parts of conditional posterior.
+###
+### Returns list with elements:
+###   * phi.Prop :   proposal for phi
+###   * lir   :   log importance ratio for given draw = 0
 
-# Draw random walk from normal given current status.
+### Draw random walk from normal given current status.
 my.proposePhiAllPred.RW_Norm <- function(phi.Curr1, phi.DrawScale.pred = 1,
     phi.DrawScale.pred.prev = 1){
   propScale <- phi.DrawScale.pred

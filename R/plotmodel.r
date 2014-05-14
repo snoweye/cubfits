@@ -18,7 +18,7 @@ plotmodel <- function(ret.model, main = NULL,
   u.codon <- sort(colnames(ret.model)[-ncol(ret.model)])
   color <- get.color(u.codon)
 
-  # Reorder R for better legend.
+  ### Reorder R for better legend.
   if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
     u.codon <- u.codon[c(3:6, 1:2)]
     color <- color[c(3:6, 1:2)]

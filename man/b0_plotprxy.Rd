@@ -43,7 +43,7 @@
   A scatter plot with a fitted \code{lm()} line and R squared value.
 }
 \references{
-  \url{http://www.tiem.utk.edu/~mikeg/}
+  \url{https://github.com/snoweye/cubfits/}
 }
 \author{
   Wei-Chen Chen \email{wccsnow@gmail.com}.
