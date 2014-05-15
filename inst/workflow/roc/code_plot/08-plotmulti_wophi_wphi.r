@@ -96,7 +96,7 @@ for(i.match in 1:nrow(match.case)){
   }
 
   ### Check if both cases are matched.
-  if(is.null(phi.pm[[1]]) || is.null(phi.pm[[2]])){
+  if(length(b.pm) != 2){
     next
   }
 
