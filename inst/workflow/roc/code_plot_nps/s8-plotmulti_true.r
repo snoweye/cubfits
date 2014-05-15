@@ -88,6 +88,8 @@ for(i.case in case.names){
   ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   # load(fn.in)
 

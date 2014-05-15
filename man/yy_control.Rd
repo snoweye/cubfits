@@ -1,13 +1,13 @@
 \name{Controls}
 \alias{.cubfitsEnv}
 \alias{.CF.CT}
+\alias{.CF.CONF}
 \alias{.CF.DP}
 \alias{.CF.GV}
 \alias{.CF.OP}
 \alias{.CF.AC}
 \alias{.CF.PT}
 \alias{.CF.PARAM}
-\alias{.CF.CONF}
 \alias{.CO.CT}
 \docType{data}
 \title{Default Controlling Options}
@@ -18,13 +18,13 @@
 \usage{
   .cubfitsEnv
   .CF.CT
+  .CF.CONF
   .CF.GV
   .CF.DP
   .CF.OP
   .CF.AC
   .CF.PT
   .CF.PARAM
-  .CF.CONF
   .CO.CT
 }
 \format{
@@ -46,9 +46,23 @@
       \code{type.Phi}  \tab proposal for Phi \cr
       \code{model.Phi} \tab prior of Phi \cr
       \code{init.Phi}  \tab initial methods for Phi \cr
-      \code{init.fit}  \tab how is coefficient initialed in VGAM \cr
+      \code{init.fit}  \tab how is coefficient proposed \cr
       \code{parallel}  \tab parallel functions \cr
       \code{adaptive}  \tab method for adaptive MCMC
+    }
+
+  \item
+    \code{.CF.CONF} controls the initial and draw scaling. 
+    It currently includes
+    \tabular{ll}{
+      \code{scale.phi}          \tab if phi were scaled to mean 1\cr
+      \code{init.b.Scale}       \tab initial b scale \cr
+      \code{init.phi.Scale}     \tab initial phi scale \cr
+      \code{p.nclass}           \tab number of classes if mixture phi \cr
+      \code{b.DrawScale}        \tab drawing scale for b if random walk \cr
+      \code{p.DrawScale}        \tab drawing scale for p if random walk \cr
+      \code{phi.DrawScale}      \tab random walk scale for phi \cr
+      \code{phi.DrawScale.pred} \tab random walk scale for phi.pred
     }
 
   \item
@@ -109,23 +123,12 @@
     \code{.CF.PARAM} controls the parameters and hyperparameters of priors.
     It currently includes
     \tabular{ll}{
-      \code{phi.meanlog}    \tab mean of phi in loca scale \cr
-      \code{phi.sdlog}      \tab standard deviation of phi in loca scale \cr
-      \code{hp.gamma.alpha} \tab hyperparameters of gamma distribution \cr
-      \code{hp.gamma.alpha} \tab hyperparameters of gamma distribution
-    }
-
-  \item
-    \code{.CF.CONF} controls the initial and draw scaling. 
-    It currently includes
-    \tabular{ll}{
-      \code{init.b.Scale}       \tab initial b scale \cr
-      \code{init.phi.Scale}     \tab initial phi scale \cr
-      \code{p.nclass}           \tab number of classes if mixture phi \cr
-      \code{b.DrawScale}        \tab drawing scale for b if random walk \cr
-      \code{p.DrawScale}        \tab drawing scale for p if random walk \cr
-      \code{phi.DrawScale}      \tab random walk scale for phi \cr
-      \code{phi.DrawScale.pred} \tab random walk scale for phi.pred
+      \code{phi.meanlog}      \tab mean of phi in loca scale \cr
+      \code{phi.sdlog}        \tab standard deviation of phi in loca scale \cr
+      \code{hp.gamma.shape}   \tab hyperparameters of gamma distribution \cr
+      \code{hp.gamma.scale}   \tab hyperparameters of gamma distribution \cr
+      \code{hp.gamma.inflate} \tab inflate gamma variance if overwrite \cr
+      \code{hp.overwrite}     \tab if allow \code{my.pInit()} to overwrite
     }
 
   \item
@@ -152,6 +155,7 @@
 suppressMessages(library(cubfits, quietly = TRUE))
 
 .CF.CT
+.CF.CONF
 .CF.DP
 .CF.GV
 .CF.OP

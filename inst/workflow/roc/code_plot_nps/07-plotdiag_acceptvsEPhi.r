@@ -6,7 +6,7 @@ source("00-set_env.r")
 source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
 
 for(i.case in case.names){
-  ### Subset of mcmc output.
+  ### mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -14,9 +14,20 @@ for(i.case in case.names){
   }
   load(fn.in)
 
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
+  if(!file.exists(fn.in)){
+    cat("File not found: ", fn.in, "\n", sep = "")
+    next
+  }
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
   # load(fn.in)
 
   phi.mcmc.1 <- rowMeans(phi.mcmc[, -1] != phi.mcmc[, -ncol(phi.mcmc)])

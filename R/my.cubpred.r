@@ -32,7 +32,6 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     model = .CF.CT$model[1],
     model.Phi = .CF.CT$model.Phi[1],
     adaptive = .CF.CT$adaptive[1],
-    scale.Phi = .CF.CT$scale.Phi[1],
     verbose = .CF.DP$verbose,
     iterThin = .CF.DP$iterThin, report = .CF.DP$report){
 
@@ -47,7 +46,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   if(!(all(is.finite(phi.Obs)) && all(phi.Obs > 0))){
     .cubfitsEnv$my.stop("phi.Obs is invalid.")
   }
-  if(abs(mean(phi.Obs) - 1) > 1e-8 && scale.Phi == "mean_one"){
+  if(abs(mean(phi.Obs) - 1) > 1e-8 && .CF.CONF$scale.phi){
     .cubfitsEnv$my.stop(paste("mean(phi.Obs) =", mean(phi.Obs)))
   }
   if(!is.null(phi.Init)){
@@ -62,7 +61,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     if(!(all(is.finite(phi.Init.pred)) && all(phi.Init.pred > 0))){
       .cubfitsEnv$my.stop("phi.Init.pred is invalid.")
     }
-    if(abs(mean(phi.Init.pred) - 1) > 1e-8 && scale.Phi == "mean_one"){
+    if(abs(mean(phi.Init.pred) - 1) > 1e-8 && .CF.CONF$scale.phi){
       .cubfitsEnv$my.stop(paste("mean(phi.Init.pred) =", mean(phi.Init.pred)))
     }
   }

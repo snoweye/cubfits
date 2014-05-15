@@ -66,7 +66,7 @@ for(i.case in case.names){
                                       function(p){ range(p$counts) })))
 
   ### Set layout.
-  fn.out <- paste(prefix$plot.trace, "quantile_Phi_", i.case, "_nps.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.trace, "quantile_Phi_", i.case, ".pdf", sep = "")
   pdf(fn.out, width = 9, height = 10)
 
   ### Plot trace for each quantile.
@@ -91,6 +91,9 @@ for(i.case in case.names){
          xlab = "Iterations", ylab = "Production Rate (log10)",
          main = paste(names(id.gene)[i.q], ", q = ", q.probs[i.q], sep = ""))
     abline(h = hist.mean[i.q], col = 2)
+    if(exists("EPhi")){
+      abline(h = log10(EPhi[id.gene[i.q]]), col = 4, lty = 2)
+    }
 
     ### Plot hist
     plot(hist.list[[i.q]],

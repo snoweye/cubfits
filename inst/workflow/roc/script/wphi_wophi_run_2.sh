@@ -76,5 +76,5 @@ Rscript ${CODE_PLOT_PATH}/m7-plot_bin.r > \
           ${ALL_OUT}/log/m7-plot_bin 2>&1 &
 
 ### Plotting for multiple figures.
-Rscript ${CODE_PLOT_PATH}/08-plotmulti_wophi_scuo_wphi_pm.r > \
-          ${ALL_OUT}/log/08-plotmulti_wophi_scuo_wphi_pmtrue 2>&1 &
+Rscript ${CODE_PLOT_PATH}/08-plotmulti_wophi_wphi.r > \
+          ${ALL_OUT}/log/08-plotmulti_wophi_wphi 2>&1 &

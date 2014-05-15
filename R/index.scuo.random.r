@@ -3,8 +3,6 @@
 
 scuo.random <- function(SCUO, phi.Obs = NULL,
     meanlog = .CF.PARAM$phi.meanlog, sdlog = .CF.PARAM$phi.sdlog){
-#    meanlog = -1.125, sdlog = 1.5){
-#    meanlog = -0.441473, sdlog = 1.393285){
   if(!is.null(phi.Obs)){
     meanlog <- mean(log(phi.Obs))
     sdlog <- sqrt(var(log(phi.Obs)))

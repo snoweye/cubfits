@@ -12,6 +12,7 @@ load(fn.in)
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
 
+### Load all data.
 ret.all <- NULL
 for(i.case in case.names){
   ### Subset of mcmc output.
@@ -21,6 +22,8 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")

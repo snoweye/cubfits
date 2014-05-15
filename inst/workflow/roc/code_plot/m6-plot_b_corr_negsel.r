@@ -94,7 +94,8 @@ if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
                 x.ci = x.pm.ci, y.ci = y.pm.ci,
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
-                main = "roc_ad_pm", workflow.name = workflow.name)
+                main = "roc_ad_pm", add.lm = TRUE,
+                workflow.name = workflow.name)
   dev.off()
 }
 
@@ -105,6 +106,7 @@ if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
                 x.ci = x.scuo.ci, y.ci = y.scuo.ci,
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
-                main = "roc_ad_scuo", workflow.name = workflow.name)
+                main = "roc_ad_scuo", add.lm = TRUE,
+                workflow.name = workflow.name)
   dev.off()
 }

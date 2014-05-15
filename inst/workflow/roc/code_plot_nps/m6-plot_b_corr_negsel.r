@@ -88,7 +88,7 @@ if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
 
 ### Plot Delta.t.
 if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
-  fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_pm.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "corr_negsel_deltat_pm.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plot.b.corr(x.pm, y.pm, x.pm.label,
                 x.ci = x.pm.ci, y.ci = y.pm.ci,
@@ -99,7 +99,7 @@ if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
 }
 
 if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
-  fn.out <- paste(prefix$plot.match, "corr_negsel_deltat_scuo.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "corr_negsel_deltat_scuo.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plot.b.corr(x.scuo, y.scuo, x.scuo.label,
                 x.ci = x.scuo.ci, y.ci = y.scuo.ci,

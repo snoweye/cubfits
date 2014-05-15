@@ -19,6 +19,8 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")

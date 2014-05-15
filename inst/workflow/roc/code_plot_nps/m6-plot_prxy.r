@@ -38,7 +38,7 @@ for(i.case in 1:4){
 
 ### Plot posterior mean.
 if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
-  fn.out <- paste(prefix$plot.match, "prxy_pm.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "prxy_pm.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: with phi, y-axis: without phi.
     plotprxy(phi.mean[[3]], phi.mean[[1]], weights = 1 / phi.std[[1]],
@@ -50,7 +50,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
 }
 
 if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
-  fn.out <- paste(prefix$plot.match, "prxy_scuo.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "prxy_scuo.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: with phi, y-axis: without phi.
     plotprxy(phi.mean[[4]], phi.mean[[2]], weights = 1 / phi.std[[2]],
@@ -63,7 +63,7 @@ if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
 
 ### Plot posterior median.
 if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
-  fn.out <- paste(prefix$plot.match, "prxy_med_pm.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "prxy_med_pm.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: with phi, y-axis: without phi.
     plotprxy(phi.median[[3]], phi.median[[1]], weights = 1 / phi.std[[1]],
@@ -75,7 +75,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
 }
 
 if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
-  fn.out <- paste(prefix$plot.match, "prxy_med_scuo.pdf", sep = "")
+  fn.out <- paste(prefix$plot.nps.match, "prxy_med_scuo.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: with phi, y-axis: without phi.
     plotprxy(phi.median[[4]], phi.median[[2]], weights = 1 / phi.std[[2]],

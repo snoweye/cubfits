@@ -21,7 +21,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        of expressions and measurement errors.
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
-Packaged: 2014-05-14 20:56:48 UTC; snoweye
+Packaged: 2014-05-15 21:03:08 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],
