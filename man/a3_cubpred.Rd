@@ -20,7 +20,7 @@
           phi.Init.pred = NULL,
               phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
-          adaptive = .CF.CT$adaptive[1], scale.Phi = .CF.CT$scale.Phi[1],
+          adaptive = .CF.CT$adaptive[1],
           verbose = .CF.DP$verbose,
           iterThin = .CF.DP$iterThin, report = .CF.DP$report)
 }
@@ -52,7 +52,6 @@
   \item{model.Phi}{prior model for Phi, currently "lognormal".}
   \item{adaptive}{adaptive method of MCMC for proposing new \code{\link{b}}
                   and Phi.}
-  \item{scale.Phi}{method of checking pre-scaled Phi.}
   \item{verbose}{print iteration messages.}
   \item{iterThin}{thinning iterations.}
   \item{report}{number of iterations to report more information.}

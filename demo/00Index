@@ -9,8 +9,8 @@ nsef.pred         cubfits   A prediction for NSEf.
 rocnsef.train     cubfits   A training example for ROC+NSEf.
 rocnsef.appr      cubfits   An approximation for ROC+NSEf.
 rocnsef.pred      cubfits   A prediction for ROC+NSEf.
-SCUO              cubfits   Computing SCUO index.
-CAI               cubfits   Computing CAI.
+scuo              cubfits   Computing SCUO index.
+cai               cubfits   Computing CAI.
 mSCU              cubfits   Computing mSCU.
 plotbin           cubfits   Ploting binning and model.
 basic             cubfits   Reading and producing toy data.
