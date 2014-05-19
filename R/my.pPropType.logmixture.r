@@ -2,10 +2,12 @@
 
 ### Draw prior for log mixture normal distribtuion.
 my.pPropType.logmixture <- function(n.G, log.phi.Obs, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
+    p.Curr, hp.param){
   ### Dispatch.
   paramlog.Curr <- p.Curr[-1]
   log.phi.Curr <- log(phi.Curr)
+  p.DrawScale <- .cubfitsEnv$all.DrawScale$p
+  p.DrawScale.prev <- .cubfitsEnv$all.DrawScale$p.prev
 
   ### Draw \sigma^{2*}_W from IG((n_G - 1) / 2,
   ###                            (n_G - 1) S^{2(t)}_{phi_{obs}} / 2)

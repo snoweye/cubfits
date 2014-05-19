@@ -10,6 +10,13 @@ my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
 
       ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init)
 
+      ### One more for bias.Phi.
+      if(.CF.CONF$estimate.bias.Phi){
+        nu.Phi.Init <- 0
+        bias.Phi.Init <- mean(log(phi.Obs))
+        ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init, bias.Phi.Init)
+      }
+
       ### Overwrite .CF.PARAM$hp.gamma.shape and .CF.PARAM$hp.gamma.scale
       ### using an informative flat prior. This only affects when
       ### .CF.CT$type.p = "lognormal_MH" which needs to specify hyperparameters.

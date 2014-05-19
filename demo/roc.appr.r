@@ -18,7 +18,7 @@ ret.time <- system.time({
 print(ret.time)
 
 # Report
-x <- rowMeans(do.call("cbind", ret$phi.Mat)[, 11:20])
+x <- rowMeans(do.call("cbind", ret$phi.pred.Mat)[, 11:20])
 y <- ex.test$phi.Obs
 x <- log10(x / mean(x))
 y <- log10(y / mean(y))

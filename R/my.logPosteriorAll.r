@@ -7,8 +7,13 @@ get.my.logPosteriorAll <- function(model.Phi){
   if(!any(model.Phi[1] %in% .CF.CT$model.Phi)){
     stop("model.Phi is not found.")
   }
-  ret <- eval(parse(text = paste("my.logPosteriorAll.",
-                                 model.Phi[1], sep = "")))
+  if(!.CF.CONF$estimate.bias.Phi){
+    ret <- eval(parse(text = paste("my.logPosteriorAll.",
+                                   model.Phi[1], sep = "")))
+  } else{
+    ret <- eval(parse(text = paste("my.logPosteriorAll.",
+                                   model.Phi[1], "_bias", sep = "")))
+  }
   assign("my.logPosteriorAll", ret, envir = .cubfitsEnv)
   ret
 } # End of get.my.logPosteriorAll().
@@ -59,3 +64,39 @@ my.logPosteriorAll.logmixture <- function(phi, phi.Obs, y, n, b, p.Curr,
   ret
 } # End of my.logPosteriorAll.logmixture().
 
+
+### Bias of Phi version.
+
+### Function to calculate complete log-posterior for
+### (phi, b, sigmaWsq, mu.Phi, sigma.Phi.sq) given y, n, and phi.Obs
+my.logPosteriorAll.lognormal_bias <- function(phi, phi.Obs, y, n, b, p.Curr,
+    reu13.df = NULL){
+  ### Dispatch.
+  sigmaW <- p.Curr[1]
+  nu.Phi <- p.Curr[2]
+  sigma.Phi <- p.Curr[3]
+  bias.Phi <- p.Curr[length(p.Curr)]
+
+  ### Return.
+  log.phi <- log(phi) + bias.Phi
+  ret <- dlnorm(phi.Obs, log.phi, sigmaW, log = TRUE) +
+         .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
+         dlnorm(phi, nu.Phi, sigma.Phi, log = TRUE)
+  ret
+} # End of my.logPosteriorAll.lognormal_bias().
+
+### Function for log mixture normal.
+my.logPosteriorAll.logmixture_bias <- function(phi, phi.Obs, y, n, b, p.Curr,
+    reu13.df = NULL){
+  ### Dispatch.
+  sigmaW <- p.Curr[1]
+  paramlog <- p.Curr[-c(1, length(p.Curr))]
+  bias.Phi <- p.Curr[length(p.Curr)]
+
+  ### Return
+  log.phi <- log(phi) + bias.Phi
+  ret <- dlnorm(phi.Obs, log.phi, sigmaW, log = TRUE) +
+         .cubfitsEnv$my.logdmultinomCodAllR(b, phi, y, n, reu13.df = reu13.df) +
+         dlmixnorm(log.phi, paramlog, log = TRUE)
+  ret
+} # End of my.logPosteriorAll.logmixture_bias().

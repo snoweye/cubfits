@@ -7,9 +7,12 @@ my.init.function <- function(model = .CF.CT$model[1],
     type.Phi = .CF.CT$type.Phi[1], model.Phi = .CF.CT$model.Phi[1],
     init.Phi = .CF.CT$init.Phi[1], init.fit = .CF.CT$init.fit[1],
     parallel = .CF.CT$parallel[1], adaptive = .CF.CT$adaptive[1]){
-  ### Condition changed due to limited implementations.
+  ### Overwite conditions changed due to limited implementations.
   if(model.Phi == "logmixture"){
     type.p <- "logmixture"
+  }
+  if(.CF.CONF$estimate.bias.Phi){
+    type.p <- "lognormal_bias_RW"
   }
 
   ### Check.

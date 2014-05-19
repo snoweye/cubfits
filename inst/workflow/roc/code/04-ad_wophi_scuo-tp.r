@@ -40,7 +40,9 @@ phi.DrawScale <- run.info$phi.DrawScale
 if(.CF.CT$model.Phi == "logmixture"){
   phi.init.SCUO <- phi.init.SCUO.emp    ### lognormal fails
 }
-phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+if(.CF.CONF$scale.phi){
+  phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+}
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,
                nIter = nIter, burnin = burnin,
                p.nclass = p.nclass,

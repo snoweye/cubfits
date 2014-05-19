@@ -57,10 +57,10 @@ reu13.list <- convert.reu13.df.to.list(ex.test$reu13.df)
 y.list <- convert.y.to.list(ex.test$y)
 n.list <- convert.n.to.list(ex.test$n)
 
-# Get phi.Init.pred
+# Get phi.pred.Init
 init.function(model = "roc")
 fitlist <- fitMultinom(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n)
-phi.Init.pred <- estimatePhi(fitlist, reu13.list, y.list, n.list,
+phi.pred.Init <- estimatePhi(fitlist, reu13.list, y.list, n.list,
                          E.Phi = median(ex.test$phi.Obs),
                          lower.optim = min(ex.test$phi.Obs) * 0.9,
                          upper.optim = max(ex.test$phi.Obs) * 1.1)

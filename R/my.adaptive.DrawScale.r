@@ -11,17 +11,18 @@ get.my.update.DrawScale <- function(adaptive){
 
 
 ### No adaptive.
-my.update.DrawScale.none <- function(var.name, phi.DrawScale,
-    update.curr.renew = TRUE){
-  phi.DrawScale
+my.update.DrawScale.none <- function(var.name, update.curr.renew = TRUE){
+  invisible()
 } # End of my.update.DrawScale.none().
 
 
 ### Update scaling factors for every gene.
-my.update.DrawScale.simple <- function(var.name, phi.DrawScale,
-    update.curr.renew = TRUE){
+my.update.DrawScale.simple <- function(var.name, update.curr.renew = TRUE){
   ### Update new scaling factors.
   ret <- my.DrawScale.scaling(var.name, .cubfitsEnv$curr.renew)
+
+  ### Update global.
+  .cubfitsEnv$all.DrawScale[[var.name]] <- ret
 
   ### Update curr.renew to global.
   .cubfitsEnv$DrawScale[[var.name]][[.cubfitsEnv$curr.renew + 1]] <- ret
@@ -30,7 +31,7 @@ my.update.DrawScale.simple <- function(var.name, phi.DrawScale,
     .cubfitsEnv$curr.renew <- .cubfitsEnv$curr.renew + 1
   }
 
-  ret
+  invisible()
 } # End of my.update.DrawScale().
 
 my.DrawScale.scaling <- function(var.name, curr.window){

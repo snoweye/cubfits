@@ -40,8 +40,10 @@ seq.data <- seq.data[names(seq.data) %in% phi$ORF]
 phi <- phi[phi$ORF %in% names(seq.data),]
 seq.data <- seq.data[order(names(seq.data))]
 phi <- phi[order(phi$ORF),]
-phi.scale <- mean(phi[, 2])
-phi[, 2] <- phi[, 2] / phi.scale
+if(.CF.CONF$scale.phi){
+  phi.scale <- mean(phi[, 2])
+  phi[, 2] <- phi[, 2] / phi.scale
+}
 
 ### Convert to string and get SCUO after subsetting and reordering.
 seq.string <- convert.seq.data.to.string(seq.data)

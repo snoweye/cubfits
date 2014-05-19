@@ -15,7 +15,7 @@ get.my.drawBConditionalAll <- function(type){
 
 ### Draw new B via independent chain. VGAM searching starts from current values.
 my.drawBConditionalAll.current <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
-    bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
+    bRInitList = NULL){
   ### Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
   b.Fit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
                                         phi.new = phi.Curr, coefstart = b.Curr)
@@ -42,7 +42,7 @@ my.drawBConditionalAll.current <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
 
 ### Draw new B via independent chain. VGAM searching starts randomly.
 my.drawBConditionalAll.random <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
-    bRInitList = NULL, b.DrawScale = 1, b.DrawScale.prev = 1){
+    bRInitList = NULL){
   ### Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
   b.Fit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
                                         phi.new = phi.Curr)
@@ -71,7 +71,7 @@ my.drawBConditionalAll.random <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
 ### bRInitList is fixed as the initial fits via VGAM without measurement errors.
 ### Only b.DrawScale and b.DrawScale.prev are changed for adaptive MCMC.
 my.drawBConditionalAll.RW_Norm <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
-    bRInitList, b.DrawScale = 1, b.DrawScale.prev = 1){
+    bRInitList){
   ### No VGAM searching.
   b.Fit <- b.Curr
 
@@ -82,8 +82,8 @@ my.drawBConditionalAll.RW_Norm <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
                b.Fit[[i.aa]], b.Curr[[i.aa]], phi.Curr, y[[i.aa]],
                n[[i.aa]],
                bRInitList.aa = bRInitList[[i.aa]],
-               b.DrawScale.aa = b.DrawScale[i.aa],
-               b.DrawScale.prev.aa = b.DrawScale.prev[i.aa],
+               b.DrawScale.aa = .cubfitsEnv$all.DrawScale$b[i.aa],
+               b.DrawScale.prev.aa = .cubfitsEnv$all.DrawScale$b.prev[i.aa],
                reu13.df.aa = reu13.df.obs[[i.aa]])
            })
 

@@ -3,8 +3,9 @@
 ### For method controls.
 .CF.CT <- list(
   model = c("roc", "nsef", "rocnsef"),          # main models
-  type.p = c("lognormal_RW",
-             "lognormal_fix",
+  type.p = c("lognormal_fix",
+             "lognormal_RW",
+             "lognormal_bias_RW",
              "lognormal_MH",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
@@ -25,7 +26,9 @@
   b.DrawScale = 1,                 # drawing scale for b if random walk
   p.DrawScale = 0.1,               # drawing scale for p if random walk
   phi.DrawScale = 1,               # random walk scale for phi
-  phi.DrawScale.pred = 1           # random walk scale for phi.pred
+  phi.pred.DrawScale = 1,          # random walk scale for phi.pred
+  bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
+  estimate.bias.Phi = FALSE        # if estimate bias of phi during MCMC
 )
 
 ### For optimization.

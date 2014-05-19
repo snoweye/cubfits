@@ -14,7 +14,7 @@ get.my.pPropTypeNoObs <- function(type){
 ### Draw Gibbs Sampler given current status for lognormal prior around fixed
 ### mean of log expression.
 my.pPropTypeNoObs.lognormal_fix <- function(n.G, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
+    p.Curr, hp.param){
   ### Dispatch.
   nu.Phi.Curr <- p.Curr[1]
   sigma.Phi.Curr <- p.Curr[2]

@@ -10,12 +10,9 @@
 ###   * accept:   boolean vector indicating if each proposal was accepted
 
 my.drawPhiConditionalAllPred <- function(phi.Curr1, y, n, b,
-    p.Curr, phi.DrawScale.pred = 1, phi.DrawScale.pred.prev = 1,
-    reu13.df = NULL){
+    p.Curr, reu13.df = NULL){
   ### Propose new phi.
-  prop <- .cubfitsEnv$my.proposePhiAllPred(phi.Curr1,
-            phi.DrawScale.pred = phi.DrawScale.pred,
-            phi.DrawScale.pred.prev = phi.DrawScale.pred.prev)
+  prop <- .cubfitsEnv$my.proposePhiAllPred(phi.Curr1)
 
   ### Calculate acceptance prob.
   lpCurr <- .cubfitsEnv$my.logPosteriorAllPred(

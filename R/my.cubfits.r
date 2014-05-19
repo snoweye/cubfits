@@ -1,8 +1,8 @@
 ### Function to run MCMC inference for following model:
-###   Given phi, n, b; across n.G genes:
-###     phi    ~ rlnorm(n.G, mu.Phi, sigma.Phi)
-###     phi.Obs ~ rlnorm(n.G, log(phi), sigmaW)
-###     y    ~ for(aa) rmultinom(n.G, invmlogit( phi * b[[aa]] ), n[[aa]] )
+### Given phi, n, b; across n.G genes:
+###   phi     ~ rlnorm(n.G, mu.Phi, sigma.Phi)
+###   phi.Obs ~ rlnorm(n.G, log(phi), sigmaW)
+###   y       ~ for(aa) rmultinom(n.G, invmlogit( phi * b[[aa]] ), n[[aa]] )
 ###
 ### Expects phi.Obs as vector of length n.G.
 ### 
@@ -36,21 +36,9 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   my.ncoef <- my.function$my.ncoef
 
 ### Check Data ###
-  ### check phi.Obs is well-behaved
-  if(!(all(is.finite(phi.Obs)) && all(phi.Obs > 0))){
-    .cubfitsEnv$my.stop("phi.Obs is invalid.")
-  }
-  if(abs(mean(phi.Obs) - 1) > 1e-8 && .CF.CONF$scale.phi){
-    .cubfitsEnv$my.stop(paste("mean(phi.Obs) =", mean(phi.Obs)))
-  }
-  if(!is.null(phi.Init)){
-    if(!(all(is.finite(phi.Init)) && all(phi.Init > 0))){
-      .cubfitsEnv$my.stop("phi.Init is invalid.")
-    }
-    if(abs(mean(phi.Init) - 1) > 1e-8 && .CF.CONF$scale.phi){
-      .cubfitsEnv$my.stop(paste("mean(phi.Init) =", mean(phi.Init)))
-    }
-  }
+  ### check phi.* is well-behaved
+  my.check.data(phi.Obs = phi.Obs, phi.Init = phi.Init)
+
   ### Check if sort by ORF and length.
   my.check.rearrange(reu13.df.obs, y, n, phi.Obs = phi.Obs, phi.Init = phi.Init)
 
@@ -66,13 +54,26 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   if(model.Phi == "logmixture"){
     nPrior <- 1 + 3 * p.nclass
   }
+  if(.CF.CONF$estimate.bias.Phi){
+    nPrior <- nPrior + 1                    # one more for bias.Phi
+  }
 
   ### Storages for saving posterior samples.
-  b.Mat <- my.generate.list(NA, nBparams, nSave)    # S/M
+  b.Mat <- my.generate.list(NA, nBparams, nSave)    # log(mu) and Delta.t
   p.Mat <- my.generate.list(NA, nPrior, nSave)      # prior parameters
   phi.Mat <- my.generate.list(NA, n.G, nSave)       # E[Phi | Phi^{obs}]
 
 ### Initial Parameters ###
+  ### Initial values for p first since scaling may change phi.Obs.
+  p.Init <- my.pInit(p.Init, phi.Obs, model.Phi[1],
+                     p.nclass = p.nclass, cub.method = "fits")
+
+  ### Scaling.
+  if(.CF.CONF$estimate.bias.Phi){
+    phi.Obs.org <- phi.Obs
+    phi.Obs <- phi.Obs / sum(phi.Obs)    # scale to mean 1
+  }
+
   ### Initial values for b.
   bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Obs, y, n)
   bRInitList <- lapply(bInitList, function(B){ B$R })
@@ -87,15 +88,17 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   }
   bInitVec <- unlist(bInit)
 
-  ### Initial values for p.
-  p.Init <- my.pInit(p.Init, phi.Obs, model.Phi[1],
-                     p.nclass = p.nclass, cub.method = "fits")
-
   ### Initial values for training phi.
   if(is.null(phi.Init)){
     phi.Init <- phi.Obs * exp(init.phi.Scale * p.Init[1] * rnorm(n.G))
   }
 
+  ### Push scaling back.
+  if(.CF.CONF$estimate.bias.Phi){
+    phi.Obs <- phi.Obs.org
+  }
+
+### Set current step ###
   ### Set current step for b.
   b.Mat[[1]] <- bInitVec
   b.Curr <- bInit
@@ -115,22 +118,25 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
                    hp.Init = p.Init[-1])
 
 ### MCMC here ###
+  ### Get length for acceptance and adaptive storage.
+  n.p <- 1
+  if(.CF.CONF$estimate.bias.Phi){
+    n.p <- n.p + 1
+  }
+
   ### Set acceptance rate storage.
-  my.set.acceptance(nSave, n.aa, n.p = 1,
-                    n.G = n.G)
+  my.set.acceptance(nSave, n.aa, n.p = n.p, n.G = n.G)
 
   ### Set adaptive storage.
+  if(.CF.CONF$estimate.bias.Phi){
+    ### Bias of phi is coupled with p parameters.
+    p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
+  }
   my.set.adaptive(nSave,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
-                  n.p = 1, p.DrawScale = p.DrawScale,
+                  n.p = n.p, p.DrawScale = p.DrawScale,
                   n.G = n.G, phi.DrawScale = phi.DrawScale,
                   adaptive = adaptive[1])
-  b.DrawScale <- .cubfitsEnv$DrawScale$b[[1]]
-  b.DrawScale.prev <- b.DrawScale
-  p.DrawScale <- .cubfitsEnv$DrawScale$p[[1]]
-  p.DrawScale.prev <- p.DrawScale
-  phi.DrawScale <- .cubfitsEnv$DrawScale$phi[[1]]
-  phi.DrawScale.prev <- phi.DrawScale
 
   ### Run MCMC iterations
   my.verbose(verbose, 0, report)
@@ -141,41 +147,25 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     ### Step 1: Update b using M-H step
     bUpdate <- .cubfitsEnv$my.drawBConditionalAll(
                  b.Curr, phi.Curr, y, n, reu13.df.obs,
-                 bRInitList = bRInitList,
-                 b.DrawScale = b.DrawScale,
-                 b.DrawScale.prev = b.DrawScale.prev)
+                 bRInitList = bRInitList)
     b.Curr <- lapply(bUpdate, function(U){ U$bNew })
 
     ### Step 2: Draw other parameters.
     p.Curr <- .cubfitsEnv$my.pPropType(
-                n.G, log.phi.Obs, phi.Curr, p.Curr, hp.param,
-                p.DrawScale = p.DrawScale,
-                p.DrawScale.prev = p.DrawScale.prev)
+                n.G, log.phi.Obs, phi.Curr, p.Curr, hp.param)
 
     ### Step 3: Update phi using M-H step.
     phi.Curr <- my.drawPhiConditionalAll(
                   phi.Curr, phi.Obs, y, n, b.Curr, p.Curr,
-                  phi.DrawScale = phi.DrawScale,
-                  phi.DrawScale.prev = phi.DrawScale.prev,
                   reu13.df = reu13.df.obs)
 
     ### Step A: Update scaling factor.
-    b.DrawScale.prev <- b.DrawScale
-    p.DrawScale.prev <- p.DrawScale
-    phi.DrawScale.prev <- phi.DrawScale
-    if(iter %/% .CF.AC$renew.iter + 1 != .cubfitsEnv$curr.renew){
-      ### For each E[b].
-      b.DrawScale <- .cubfitsEnv$my.update.DrawScale(
-                       "b", b.DrawScale,
-                       update.curr.renew = FALSE)
-      ### For prior.
-      p.DrawScale <- .cubfitsEnv$my.update.DrawScale(
-                       "p", p.DrawScale,
-                       update.curr.renew = FALSE)
-      ### For each E[Phi | Phi^{obs}].
-      phi.DrawScale <- .cubfitsEnv$my.update.DrawScale(
-                         "phi", phi.DrawScale,
-                         update.curr.renew = TRUE)
+    if(iter %/% .CF.AC$renew.iter + 1 == .cubfitsEnv$curr.renew){
+      my.copy.adaptive()
+    } else{
+      .cubfitsEnv$my.update.DrawScale("b", update.curr.renew = FALSE)
+      .cubfitsEnv$my.update.DrawScale("p", update.curr.renew = FALSE)
+      .cubfitsEnv$my.update.DrawScale("phi", update.curr.renew = TRUE)
     }
 
     ### Dump parameters out.

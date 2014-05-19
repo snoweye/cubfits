@@ -41,7 +41,9 @@ phi.DrawScale <- run.info$phi.DrawScale
 .CF.CT$adaptive <- run.info$adaptive
 
 ### Run.
-phi.init.PM <- phi.init.PM / mean(phi.init.PM)
+if(.CF.CONF$scale.phi){
+  phi.init.PM <- phi.init.PM / mean(phi.init.PM)
+}
 ret <- cubappr(reu13.df.obs, phi.init.PM, y, n,
                nIter = nIter, burnin = burnin,
                # bInit = bInit,

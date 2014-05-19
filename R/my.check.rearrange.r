@@ -2,7 +2,7 @@
 
 my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     reu13.df.pred = NULL, y.pred = NULL, n.pred = NULL,
-    phi.Init = NULL, phi.Init.pred = NULL){
+    phi.Init = NULL, phi.pred.Init = NULL){
   n.aa <- length(reu13.df.obs)
   names.aa <- names(reu13.df.obs)
 
@@ -153,13 +153,13 @@ my.check.rearrange <- function(reu13.df.obs, y, n, phi.Obs = NULL,
     }
   }
 
-  ### Check phi.Init.pred.
-  if(!is.null(phi.Init.pred)){
-    if(any(order(names(phi.Init.pred)) != 1:length(phi.Init.pred))){
-      stop("phi.Init.pred is not sorted in ORF.")
+  ### Check phi.pred.Init.
+  if(!is.null(phi.pred.Init)){
+    if(any(order(names(phi.pred.Init)) != 1:length(phi.pred.Init))){
+      stop("phi.pred.Init is not sorted in ORF.")
     }
-    if(!is.double(phi.Init.pred)){
-      stop("phi.Init.pred should be in double.")
+    if(!is.double(phi.pred.Init)){
+      stop("phi.pred.Init should be in double.")
     }
   }
 

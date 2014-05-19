@@ -12,7 +12,7 @@
               b.DrawScale = .CF.CONF$b.DrawScale,
           p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
               p.DrawScale = .CF.CONF$p.DrawScale,
-          phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
+          phi.pred.DrawScale = .CF.CONF$phi.pred.DrawScale,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1],
           verbose = .CF.DP$verbose,
@@ -34,7 +34,7 @@
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{sigma.Phi}.}
-  \item{phi.DrawScale.pred}{scaling factor for adaptive MCMC with random walks
+  \item{phi.pred.DrawScale}{scaling factor for adaptive MCMC with random walks
                             when drawing new Phi of predicted set.}
   \item{model}{model to be fitted, currently "roc" only.}
   \item{model.Phi}{prior model for Phi, currently "lognormal".}

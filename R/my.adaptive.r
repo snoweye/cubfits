@@ -6,7 +6,7 @@ my.set.adaptive <- function(nSave,
     n.aa = NULL, b.DrawScale = NULL,
     n.p = NULL, p.DrawScale = NULL,
     n.G = NULL, phi.DrawScale = NULL,
-    n.G.pred = NULL, phi.DrawScale.pred = NULL,
+    n.G.pred = NULL, phi.pred.DrawScale = NULL,
     renew.iter = .CF.AC$renew.iter, adaptive = .CF.CT$adaptive[1]){
   ### Check.
   if(adaptive == "none"){
@@ -24,6 +24,12 @@ my.set.adaptive <- function(nSave,
                                 p = list(),
                                 phi = list(), phi.pred = list())
 
+  ### Assign default to .cubfitsEnv as global variables.
+  .cubfitsEnv$all.DrawScale <- list(b = NULL, b.prev = NULL,
+                                    p = NULL, p.prev = NULL,
+                                    phi = NULL, phi.prev = NULL,
+                                    phi.pred = NULL, phi.pred.prev = NULL)
+
   ### For adaptive rate in parameters.
   if(!is.null(n.aa)){
     for(i.renew in 1:total.renew){
@@ -36,6 +42,10 @@ my.set.adaptive <- function(nSave,
         stop("length of b.DrawScale is incorrect.")
       }
     }
+
+    ### Update scaling factors.
+    .cubfitsEnv$all.DrawScale$b <- .cubfitsEnv$DrawScale$b[[1]]
+    .cubfitsEnv$all.DrawScale$b.prev <- .cubfitsEnv$all.DrawScale$b
   }
 
   ### For adaptive rate in prior
@@ -50,6 +60,10 @@ my.set.adaptive <- function(nSave,
         stop("length of p.DrawScale is incorrect.")
       }
     }
+
+    ### Update scaling factors.
+    .cubfitsEnv$all.DrawScale$p <- .cubfitsEnv$DrawScale$p[[1]]
+    .cubfitsEnv$all.DrawScale$p.prev <- .cubfitsEnv$all.DrawScale$p
   }
 
   ### For adaptive rate in expectations.
@@ -64,6 +78,10 @@ my.set.adaptive <- function(nSave,
         stop("length of phi.DrawScale is incorrect.")
       }
     }
+
+    ### Update scaling factors.
+    .cubfitsEnv$all.DrawScale$phi <- .cubfitsEnv$DrawScale$phi[[1]]
+    .cubfitsEnv$all.DrawScale$phi.prev <- .cubfitsEnv$all.DrawScale$phi
   }
 
   ### For adaptive rate in predictions.
@@ -71,15 +89,19 @@ my.set.adaptive <- function(nSave,
     for(i.renew in 1:total.renew){
       .cubfitsEnv$adaptive$phi.pred[[i.renew]] <- rep(0L, n.G.pred)
 
-      if(length(phi.DrawScale.pred) == 1){
-        .cubfitsEnv$DrawScale$phi.pred[[i.renew]] <- rep(phi.DrawScale.pred,
+      if(length(phi.pred.DrawScale) == 1){
+        .cubfitsEnv$DrawScale$phi.pred[[i.renew]] <- rep(phi.pred.DrawScale,
                                                          n.G.pred)
-      } else if(length(phi.DrawScale.pred) == n.G.pred){
-        .cubfitsEnv$DrawScale$phi.pred[[i.renew]] <- phi.DrawScale.pred
+      } else if(length(phi.pred.DrawScale) == n.G.pred){
+        .cubfitsEnv$DrawScale$phi.pred[[i.renew]] <- phi.pred.DrawScale
       } else{
-        stop("length of phi.DrawScale.pred is incorrect.")
+        stop("length of phi.pred.DrawScale is incorrect.")
       }
     }
+
+    ### Update scaling factors.
+    .cubfitsEnv$all.DrawScale$phi.pred <- .cubfitsEnv$DrawScale$phi.pred[[1]]
+    .cubfitsEnv$all.DrawScale$phi.pred.prev <- .cubfitsEnv$all.DrawScale$phi.pred
   }
 
   invisible()
@@ -90,5 +112,16 @@ my.set.adaptive <- function(nSave,
 my.update.adaptive <- function(var.name, accept){
   .cubfitsEnv$adaptive[[var.name]][[.cubfitsEnv$curr.renew]] <-
     .cubfitsEnv$adaptive[[var.name]][[.cubfitsEnv$curr.renew]] + accept
+
   invisible()
 } # End of my.update.adaptive().
+
+### copy adaptive information.
+my.copy.adaptive <- function(){
+  .cubfitsEnv$all.DrawScale$b.prev <- .cubfitsEnv$all.DrawScale$b
+  .cubfitsEnv$all.DrawScale$p.prev <- .cubfitsEnv$all.DrawScale$p
+  .cubfitsEnv$all.DrawScale$phi.prev <- .cubfitsEnv$all.DrawScale$phi
+  .cubfitsEnv$all.DrawScale$phi.pred.prev <- .cubfitsEnv$all.DrawScale$phi.pred
+
+  invisible()
+} # End of my.copy.adaptive().

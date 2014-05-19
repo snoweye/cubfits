@@ -34,13 +34,19 @@ phi.init.SCUO <- scuo.random(SCUO, meanlog = -simulation$sdlog^2 / 2,
 names(phi.init.SCUO) <- names(phi.Obs)
 
 ### Run more scuo initial.
-phi.init.SCUO.emp <- log(SCUO / mean(SCUO))
+if(.CF.CONF$scale.phi){
+  phi.init.SCUO.emp <- log(SCUO / mean(SCUO))
+} else{
+  phi.init.SCUO.emp <- log(SCUO)
+}
 phi.init.SCUO.emp <- exp(phi.init.SCUO / sd(phi.init.SCUO) * simulation$sdlog)
 names(phi.init.SCUO.emp) <- names(phi.Obs)
 
 ### Scale to Mean 1.
-phi.init.PM <- phi.init.PM / mean(phi.init.PM)
-phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+if(.CF.CONF$scale.phi){
+  phi.init.PM <- phi.init.PM / mean(phi.init.PM)
+  phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+}
 
 ### Save.
 if(comm.rank() == 0){

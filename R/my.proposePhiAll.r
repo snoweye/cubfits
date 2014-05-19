@@ -24,11 +24,10 @@ get.my.proposePhiAll <- function(type){
 ###   * lir      :   log importance ratio for given draw = 0
 
 ### Draw random walk given current status for new E[Phi].
-my.proposePhiAll.RW_Norm <- function(phi.Curr1, phi.DrawScale = 1,
-    phi.DrawScale.prev = 1){
-  propScale <- phi.DrawScale
+my.proposePhiAll.RW_Norm <- function(phi.Curr1){
+  propScale <- .cubfitsEnv$all.DrawScale$phi
   log.phi.Curr1 <- log(phi.Curr1)
-  propScale1 <- phi.DrawScale.prev
+  propScale1 <- .cubfitsEnv$all.DrawScale$phi.prev
 
   # phi.Prop <- exp(log.phi.Curr1 + rnorm(length(phi.Curr1)) * propScale)
   # lir <- dlnorm(phi.Prop, log.phi.Curr1, propScale1, log = TRUE) -

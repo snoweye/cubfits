@@ -1,5 +1,16 @@
+2014-05-19: Ver 0.1-1
+  * Add bias random walk, adjust prior data structures, and modify logL.
+
+2014-05-18: Ver 0.1-0
+  * On CRAN.
 
 ======================= Log Before Release =====================================
+2014-05-16: Ver 0.1-1
+  * Add bias adjustment.
+
+2014-05-15: Ver 0.1-0
+  * Add random walk back...
+
 2014-05-05:
   * Change random walk to M-H algorithm with restriction to hyper-parameters.
 

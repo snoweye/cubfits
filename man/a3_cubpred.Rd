@@ -17,8 +17,8 @@
               p.DrawScale = .CF.CONF$p.DrawScale,
           phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
               phi.DrawScale = .CF.CONF$phi.DrawScale,
-          phi.Init.pred = NULL,
-              phi.DrawScale.pred = .CF.CONF$phi.DrawScale.pred,
+          phi.pred.Init = NULL,
+              phi.pred.DrawScale = .CF.CONF$phi.pred.DrawScale,
           model = .CF.CT$model[1], model.Phi = .CF.CT$model.Phi[1],
           adaptive = .CF.CT$adaptive[1],
           verbose = .CF.DP$verbose,
@@ -46,8 +46,8 @@
   \item{init.phi.Scale}{for initial phi if \code{phi.Init = NULL}.}
   \item{phi.DrawScale}{scaling factor for adaptive MCMC with random walks
                        when drawing new Phi.}
-  \item{phi.Init.pred}{initial values for Phi of predicted set.}
-  \item{phi.DrawScale.pred}{as \code{phi.DrawScale} but for predicted set.}
+  \item{phi.pred.Init}{initial values for Phi of predicted set.}
+  \item{phi.pred.DrawScale}{as \code{phi.DrawScale} but for predicted set.}
   \item{model}{model to be fitted, currently "roc" only.}
   \item{model.Phi}{prior model for Phi, currently "lognormal".}
   \item{adaptive}{adaptive method of MCMC for proposing new \code{\link{b}}
@@ -71,7 +71,7 @@
   \code{b.Mat} for mutation and selection coefficients of \code{\link{b}},
   \code{p.Mat} for hyper-parameters,
   \code{phi.Mat} for expected expression values Phi, and
-  \code{phi.Mat.pred} for predictive expression values Phi.
+  \code{phi.pred.Mat} for predictive expression values Phi.
   All lists have \code{(burnin + nIter) / iterThin + 1} elements,
   and each element contains the output of each iteration.
 

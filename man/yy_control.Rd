@@ -55,14 +55,16 @@
     \code{.CF.CONF} controls the initial and draw scaling. 
     It currently includes
     \tabular{ll}{
-      \code{scale.phi}          \tab if phi were scaled to mean 1\cr
-      \code{init.b.Scale}       \tab initial b scale \cr
-      \code{init.phi.Scale}     \tab initial phi scale \cr
-      \code{p.nclass}           \tab number of classes if mixture phi \cr
-      \code{b.DrawScale}        \tab drawing scale for b if random walk \cr
-      \code{p.DrawScale}        \tab drawing scale for p if random walk \cr
-      \code{phi.DrawScale}      \tab random walk scale for phi \cr
-      \code{phi.DrawScale.pred} \tab random walk scale for phi.pred
+      \code{scale.phi}               \tab if phi were scaled to mean 1 \cr
+      \code{init.b.Scale}            \tab initial b scale \cr
+      \code{init.phi.Scale}          \tab initial phi scale \cr
+      \code{p.nclass}                \tab number of classes if mixture phi \cr
+      \code{b.DrawScale}             \tab drawing scale for b if random walk \cr
+      \code{p.DrawScale}             \tab drawing scale for p if random walk \cr
+      \code{phi.DrawScale}           \tab random walk scale for phi \cr
+      \code{phi.pred.DrawScale}      \tab random walk scale for phi.pred \cr
+      \code{bias.Phi.DrawScale}      \tab random walk scale for bias.Phi \cr
+      \code{estimate.bias.Phi}       \tab if estimate bias of phi during MCMC
     }
 
   \item
