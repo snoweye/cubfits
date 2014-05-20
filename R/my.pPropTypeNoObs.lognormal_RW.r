@@ -3,14 +3,18 @@
 ### Draw inv-/gamma for lognormal priors (nu.Phi, sigma.Phi) around current
 ### mean of log expression.
 my.pPropTypeNoObs.lognormal_RW <- function(n.G, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
+    p.Curr, hp.param){
   ### Dispatch.
   nu.Phi.Curr <- p.Curr[1]
   sigma.Phi.Curr <- p.Curr[2]
+  p.DrawScale <- .cubfitsEnv$all.DrawScale$p[1]
+  p.DrawScale.prev <- .cubfitsEnv$all.DrawScale$p.prev[1]
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.propose.sigma.Phi.RW(sigma.Phi.Curr, p.DrawScale[1],
-                                      p.DrawScale.prev[1])
+  proplist <- my.propose.sigma.Phi.RW(
+                sigma.Phi.Curr,
+                sigma.Phi.DrawScale = p.DrawScale,
+                sigma.Phi.DrawScale.prev = p.DrawScale.prev)
 
   ### M-H step.
   list.Curr <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)

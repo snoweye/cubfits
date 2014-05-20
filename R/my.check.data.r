@@ -7,7 +7,8 @@ my.check.data <- function(phi.Obs = NULL, phi.Init = NULL,
     if(!(all(is.finite(phi.Obs)) && all(phi.Obs > 0))){
       .cubfitsEnv$my.stop("phi.Obs is invalid.")
     }
-    if(abs(mean(phi.Obs) - 1) > 1e-8 && .CF.CONF$scale.phi){
+    if(abs(mean(phi.Obs) - 1) > 1e-8 && .CF.CONF$scale.phi &&
+       !.CF.CONF$estimate.bias.Phi){
       .cubfitsEnv$my.stop(paste("mean(phi.Obs) =", mean(phi.Obs)))
     }
   }

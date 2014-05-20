@@ -19,8 +19,10 @@ my.pPropType.lognormal_RW <- function(n.G, log.phi.Obs, phi.Curr,
                        rate = sum((log.phi.Obs - log.phi.Curr)^2) / 2))
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.propose.sigma.Phi.RW(sigma.Phi.Curr, p.DrawScale,
-                                      p.DrawScale.prev)
+  proplist <- my.propose.sigma.Phi.RW(
+                sigma.Phi.Curr,
+                sigma.Phi.DrawScale = p.DrawScale,
+                sigma.Phi.DrawScale.prev = p.DrawScale.prev)
 
   ### M-H step.
   list.Curr <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
@@ -38,7 +40,8 @@ my.pPropType.lognormal_RW <- function(n.G, log.phi.Obs, phi.Curr,
 
 ### Propose sigma.Phi in log scale via random walk.
 my.propose.sigma.Phi.RW <- function(sigma.Phi.Curr,
-    sigma.Phi.DrawScale = 1, sigma.Phi.DrawScale.prev = 1){
+    sigma.Phi.DrawScale = .CF.CONF$sigma.Phi.DrawScale,
+    sigma.Phi.DrawScale.prev = .CF.CONF$sigma.Phi.DrawScale){
   ### Draw from proposal.
   sigma.Phi.New <- exp(rnorm(1, mean = log(sigma.Phi.Curr),
                                 sd = sigma.Phi.DrawScale))

@@ -2,7 +2,7 @@
 
 ### Draw prior for log mixture normal distribtuion.
 my.pPropTypeNoObs.logmixture <- function(n.G, phi.Curr,
-    p.Curr, hp.param, p.DrawScale = 0.1, p.DrawScale.prev = 0.1){
+    p.Curr, hp.param){
   ### Dispatch.
   paramlog.Curr <- p.Curr
   log.phi.Curr <- log(phi.Curr)

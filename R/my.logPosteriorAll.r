@@ -75,7 +75,7 @@ my.logPosteriorAll.lognormal_bias <- function(phi, phi.Obs, y, n, b, p.Curr,
   sigmaW <- p.Curr[1]
   nu.Phi <- p.Curr[2]
   sigma.Phi <- p.Curr[3]
-  bias.Phi <- p.Curr[length(p.Curr)]
+  bias.Phi <- p.Curr[4]
 
   ### Return.
   log.phi <- log(phi) + bias.Phi

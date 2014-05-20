@@ -20,16 +20,20 @@ my.pPropType.lognormal_bias_RW <- function(n.G, log.phi.Obs, phi.Curr,
                        rate = sum((log.phi.Obs - log.phi.Curr)^2) / 2))
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.propose.sigma.Phi.RW(sigma.Phi.Curr, p.DrawScale[1],
-                                      p.DrawScale.prev[1])
+  proplist <- my.propose.sigma.Phi.RW(
+                sigma.Phi.Curr,
+                sigma.Phi.DrawScale = p.DrawScale[1],
+                sigma.Phi.DrawScale.prev = p.DrawScale.prev[1])
 
   ### M-H step for hyperparameters.
   list.Curr <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
   ret <- my.draw.lognormal.hp.MH(proplist, list.Curr, phi.Curr)
 
   ### Propose bias.Phi.
-  proplist <- my.propose.bias.Phi.RW(bias.Phi.Curr, p.DrawScale[2],
-                                     p.DrawScale.prev[2])
+  proplist <- my.propose.bias.Phi.RW(
+                bias.Phi.Curr,
+                bias.Phi.DrawScale = p.DrawScale[2],
+                bias.Phi.DrawScale.prev = p.DrawScale.prev[2])
 
   ### M-H step for hyperparameters of bias.
   list.Curr <- list(bias.Phi = bias.Phi.Curr,
@@ -50,10 +54,10 @@ my.pPropType.lognormal_bias_RW <- function(n.G, log.phi.Obs, phi.Curr,
 
 ### Propose bias.Phi in log scale via random walk.
 my.propose.bias.Phi.RW <- function(bias.Phi.Curr,
-    bias.Phi.DrawScale = 0.1, bias.Phi.DrawScale.prev = 0.1){
+    bias.Phi.DrawScale = .CF.CONF$bias.Phi.DrawScale,
+    bias.Phi.DrawScale.prev = .CF.CONF$bias.Phi.DrawScale){
   ### Draw from proposcal.
-  bias.Phi.New <- rnorm(1, mean = log(bias.Phi.Curr),
-                           sd = bias.Phi.DrawScale)
+  bias.Phi.New <- rnorm(1, mean = bias.Phi.Curr, sd = bias.Phi.DrawScale)
 
   ### Compute log ratio of prior since lognormal is not symmetric.
   lir <- dlnorm(exp(bias.Phi.New), meanlog = bias.Phi.Curr,
@@ -71,12 +75,17 @@ my.propose.bias.Phi.RW <- function(bias.Phi.Curr,
 my.draw.lognormal_bias.hp.MH <- function(proplist, list.Curr, log.phi.Obs,
     phi.Curr){
   ### Compute probability ratio.
-  lpr <- sum(dlnorm(log.phi.Obs,
-                    meanlog = list.Curr$nu.Phi + proplist$bias.Phi,
-                    sdlog = list.Curr$sigma.Phi, log = TRUE)) -
-         sum(dlnorm(log.phi.Obs,
-                    meanlog = list.Curr$nu.Phi + list.Curr$bias.Phi,
-                    sdlog = list.Curr$sigma.Phi, log = TRUE))
+  ### Since this fact, we can use dnorm in this function
+  ### x <- 0.5; log.x <- log(x)
+  ### mu <- 0.1; sd <- 0.3
+  ### dnorm(log.x, mu, sd, log = TRUE) - log.x
+  ### dlnorm(x, mu, sd, log = TRUE)
+  lpr <- sum(dnorm(log.phi.Obs,
+                   mean = list.Curr$nu.Phi + proplist$bias.Phi,
+                   sd = list.Curr$sigma.Phi, log = TRUE)) -
+         sum(dnorm(log.phi.Obs,
+                   mean = list.Curr$nu.Phi + list.Curr$bias.Phi,
+                   sd = list.Curr$sigma.Phi, log = TRUE))
 
   ### log Acceptance probability.
   logAcceptProb <- lpr - proplist$lir

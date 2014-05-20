@@ -27,6 +27,7 @@
   p.DrawScale = 0.1,               # drawing scale for p if random walk
   phi.DrawScale = 1,               # random walk scale for phi
   phi.pred.DrawScale = 1,          # random walk scale for phi.pred
+  sigma.Phi.DrawScale = 1,         # random wasl scale for sigma.Phi
   bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
   estimate.bias.Phi = FALSE        # if estimate bias of phi during MCMC
 )
@@ -59,8 +60,8 @@
   renew.iter = 100,                # per renewing iterations
   target.accept.lower = 0.25,      # target acceptance lower bound
   target.accept.upper = 0.5,       # target acceptance upper bound
-  scale.increase = 1.1,            # 10% more
-  scale.decrease = 0.9,            # 10% less
+  scale.increase = 1.2,            # 10% more
+  scale.decrease = 0.8,            # 10% less
   sigma2.lower = 0.01,             # lower bound of sigma^2
   sigma2.upper = 100               # upper bound of sigma^2
 )
