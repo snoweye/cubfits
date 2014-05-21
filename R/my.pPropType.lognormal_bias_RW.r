@@ -59,11 +59,13 @@ my.propose.bias.Phi.RW <- function(bias.Phi.Curr,
   ### Draw from proposcal.
   bias.Phi.New <- rnorm(1, mean = bias.Phi.Curr, sd = bias.Phi.DrawScale)
 
-  ### Compute log ratio of prior since lognormal is not symmetric.
-  lir <- dlnorm(exp(bias.Phi.New), meanlog = bias.Phi.Curr,
-                sdlog = bias.Phi.DrawScale, log = TRUE) -
-         dlnorm(exp(bias.Phi.Curr), meanlog = bias.Phi.New,
-                sdlog = bias.Phi.DrawScale.prev, log = TRUE)
+  ### Compute log ratio of prior.
+  if(bias.Phi.DrawScale != bias.Phi.DrawScale.prev){
+    lir <- dnorm(bias.Phi.New, bias.Phi.Curr,
+                 sd = bias.Phi.DrawScale, log = TRUE) -
+           dnorm(bias.Phi.Curr, bias.Phi.New,
+                 sd = bias.Phi.DrawScale.prev, log = TRUE)
+  }
 
   ### Return.
   ret <- list(bias.Phi = as.numeric(bias.Phi.New),
@@ -76,10 +78,9 @@ my.draw.lognormal_bias.hp.MH <- function(proplist, list.Curr, log.phi.Obs,
     phi.Curr){
   ### Compute probability ratio.
   ### Since this fact, we can use dnorm in this function
-  ### x <- 0.5; log.x <- log(x)
-  ### mu <- 0.1; sd <- 0.3
-  ### dnorm(log.x, mu, sd, log = TRUE) - log.x
-  ### dlnorm(x, mu, sd, log = TRUE)
+  ### x <- 1.5; m <- 2; s <- 3
+  ### dnorm(log(phi), m, s, log = TRUE) - log(phi) ==
+  ###   dlnorm(phi, m, s, log = TRUE)
   lpr <- sum(dnorm(log.phi.Obs,
                    mean = list.Curr$nu.Phi + proplist$bias.Phi,
                    sd = list.Curr$sigma.Phi, log = TRUE)) -

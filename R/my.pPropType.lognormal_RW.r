@@ -42,16 +42,31 @@ my.pPropType.lognormal_RW <- function(n.G, log.phi.Obs, phi.Curr,
 my.propose.sigma.Phi.RW <- function(sigma.Phi.Curr,
     sigma.Phi.DrawScale = .CF.CONF$sigma.Phi.DrawScale,
     sigma.Phi.DrawScale.prev = .CF.CONF$sigma.Phi.DrawScale){
+  ### Dispatch.
+  log.sigma.Phi.Curr <- log(sigma.Phi.Curr)
+
   ### Draw from proposal.
-  sigma.Phi.New <- exp(rnorm(1, mean = log(sigma.Phi.Curr),
-                                sd = sigma.Phi.DrawScale))
+  log.sigma.Phi.New <- rnorm(1, mean = log.sigma.Phi.Curr,
+                                sd = sigma.Phi.DrawScale)
+  sigma.Phi.New <- exp(log.sigma.Phi.New)
   nu.Phi.New <- -sigma.Phi.New^2 / 2
 
+  ### Check if drawing from the same scale.
+  lir <- 0    # since symmetric random walk.
+  if(sigma.Phi.DrawScale != sigma.Phi.DrawScale.prev){
+    ### Calculate importance ratio since random walk scale was changed.
+    lir <- dnorm(log.sigma.Phi.New, log.sigma.Phi.Curr,
+                 sd = sigma.Phi.DrawScale) -
+           dnorm(log.sigma.Phi.Curr, log.sigma.Phi.New,
+                 sd = sigma.Phi.DrawScale.prev)
+  }
+
   ### Compute log ratio of prior since lognormal is not symmetric.
-  lir <- dlnorm(sigma.Phi.New, meanlog = log(sigma.Phi.Curr),
-                sdlog = sigma.Phi.DrawScale, log = TRUE) -
-         dlnorm(sigma.Phi.Curr, meanlog = log(sigma.Phi.New),
-                sdlog = sigma.Phi.DrawScale.prev, log = TRUE)
+  ### Is this wrong? Or, do I assume sigma.Phi ~ LN(?, ?).
+  # lir <- dlnorm(sigma.Phi.New, meanlog = log(sigma.Phi.Curr),
+  #               sdlog = sigma.Phi.DrawScale, log = TRUE) -
+  #        dlnorm(sigma.Phi.Curr, meanlog = log(sigma.Phi.New),
+  #               sdlog = sigma.Phi.DrawScale.prev, log = TRUE)
 
   ### Return.
   ret <- list(nu.Phi = as.numeric(nu.Phi.New),

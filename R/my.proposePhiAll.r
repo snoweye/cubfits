@@ -14,7 +14,7 @@ get.my.proposePhiAll <- function(type){
 } # End of get.my.proposePhiAll().
 
 
-### Assumes phi.Curr1, are vectors of length # of genes;
+### Assumes phi.Curr, are vectors of length # of genes;
 ### b, y, n are lists of lenght number of aas.
 ###
 ### Currently using random walk.
@@ -24,41 +24,68 @@ get.my.proposePhiAll <- function(type){
 ###   * lir      :   log importance ratio for given draw = 0
 
 ### Draw random walk given current status for new E[Phi].
-my.proposePhiAll.RW_Norm <- function(phi.Curr1){
+my.proposePhiAll.RW_Norm <- function(phi.Curr){
   propScale <- .cubfitsEnv$all.DrawScale$phi
-  log.phi.Curr1 <- log(phi.Curr1)
-  propScale1 <- .cubfitsEnv$all.DrawScale$phi.prev
+  log.phi.Curr <- log(phi.Curr)
+  propScale.prev <- .cubfitsEnv$all.DrawScale$phi.prev
 
-  # phi.Prop <- exp(log.phi.Curr1 + rnorm(length(phi.Curr1)) * propScale)
-  # lir <- dlnorm(phi.Prop, log.phi.Curr1, propScale1, log = TRUE) -
-  #        dlnorm(phi.Curr1, log(phi.Prop), propScale, log = TRUE)
-  logphi.Prop <- log.phi.Curr1 + rnorm(length(phi.Curr1)) * propScale
-  phi.Prop <- exp(logphi.Prop)
-  ### Too slow
-  # lir <- lapply(1:length(phi.Curr1),
+  ### This is wrong. No need to compute this since logPosteriorAll.*()
+  ### takes care of priors and Jacobin already.
+  ###
+  # phi.Prop <- exp(log.phi.Curr + rnorm(length(phi.Curr)) * propScale)
+  # lir <- dlnorm(phi.Prop, log.phi.Curr, propScale.prev, log = TRUE) -
+  #        dlnorm(phi.Curr, log(phi.Prop), propScale, log = TRUE)
+  log.phi.Prop <- log.phi.Curr + rnorm(length(phi.Curr)) * propScale
+  phi.Prop <- exp(log.phi.Prop)
+
+  ### This is wrong. No need to compute this since logPosteriorAll.*()
+  ### takes care of priors and Jacobin already.
+  ###
+  ### This is too slow.
+  # lir <- lapply(1:length(phi.Curr),
   #          function(i.orf){
-  #            dlnorm(phi.Prop[i.orf], log.phi.Curr1[i.orf], propScale1[i.orf],
+  #            dlnorm(phi.Prop[i.orf], log.phi.Curr[i.orf], propScale.prev[i.orf],
   #                   log = TRUE) -
-  #            dlnorm(phi.Curr1[i.orf], logphi.Prop[i.orf], propScale[i.orf],
+  #            dlnorm(phi.Curr[i.orf], log.phi.Prop[i.orf], propScale[i.orf],
   #                   log = TRUE)
   #          })
   # lir <- do.call("c", lir)
 
+  ### This is wrong. No need to compute this since logPosteriorAll.*()
+  ### takes care of priors and Jacobin already.
+  ###
   ### Faster since the next relations of normal and log normal
   ### x <- 1.5; m <- 2; s <- 3
-  ### dnorm(log(phi), m, s, log = TRUE) - log(phi)
-  ### dlnorm(phi, m, s, log = TRUE)
-  lir <- -logphi.Prop + log.phi.Curr1
-  id <- which(propScale1 != propScale)
+  ### dnorm(log(phi), m, s, log = TRUE) - log(phi) ==
+  ###   dlnorm(phi, m, s, log = TRUE)
+  # lir <- -log.phi.Prop + log.phi.Curr
+  # id <- which(propScale.prev != propScale)
+  # if(length(id) > 0){
+  #   tmp <- lapply(id,
+  #            function(i.orf){
+  #              dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf],
+  #                    propScale.prev[i.orf], log = TRUE) -
+  #              dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf],
+  #                    propScale[i.orf], log = TRUE)
+  #            })
+  #   lir[id] <- lir[id] + do.call("c", tmp)
+  # }
+
+  ### This is correct. Only need to compute this when scaling terms are changed.
+  ### logPosteriorAll.*() still takes care of priors and Jacobin already.
+  ### Check if drawing from the same scale.
+  lir <- rep(0, length(log.phi.Prop))    # since symmetric random walk.
+  id <- which(propScale.prev != propScale)
   if(length(id) > 0){
+    ### Calculate importance ratio since random walk scale was changed.
     tmp <- lapply(id,
              function(i.orf){
-               dnorm(logphi.Prop[i.orf], log.phi.Curr1[i.orf], propScale1[i.orf],
-                     log = TRUE) -
-               dnorm(log.phi.Curr1[i.orf], logphi.Prop[i.orf], propScale[i.orf],
-                     log = TRUE)
+               dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf],
+                     propScale[i.orf], log = TRUE) -
+               dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf],
+                     propScale.prev[i.orf], log = TRUE)
              })
-    lir[id] <- lir[id] + do.call("c", tmp)
+    lir[id] <- do.call("c", tmp)
   }
 
   ret <- list(phi.Prop = phi.Prop, lir = lir)

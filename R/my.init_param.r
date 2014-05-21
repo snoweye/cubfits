@@ -16,15 +16,6 @@ my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
         bias.Phi.Init <- mean(log(phi.Obs)) - nu.Phi.Init
         ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init, bias.Phi.Init)
       }
-
-      ### Overwrite .CF.PARAM$hp.gamma.shape and .CF.PARAM$hp.gamma.scale
-      ### using an informative flat prior. This only affects when
-      ### .CF.CT$type.p = "lognormal_MH" which needs to specify hyperparameters.
-      if(.CF.PARAM$hp.overwrite){
-        .CF.PARAM$hp.gamma.shape <- sigma.Phi.Init^2 /
-                                    .CF.PARAM$hp.gamma.inflate
-        .CF.PARAM$hp.gamma.scale <- .CF.PARAM$hp.gamma.inflate
-      }
     } else if(model.Phi[1] == "logmixture"){
       if(p.nclass <= 1){
         stop("p.nclass > 1")

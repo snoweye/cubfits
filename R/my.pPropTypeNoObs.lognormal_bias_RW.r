@@ -3,5 +3,5 @@
 
 my.pPropTypeNoObs.lognormal_bias_RW <- function(n.G, phi.Curr,
     p.Curr, hp.param){
-  my.stop("It is no sense to estimate bias without phi.")
+  .cubfitsEnv$my.stop("It is no sense to estimate bias without phi.")
 } # my.pPropTypeNoObs.lognormal_bias_RW().

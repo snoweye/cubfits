@@ -6,7 +6,6 @@
   type.p = c("lognormal_fix",
              "lognormal_RW",
              "lognormal_bias_RW",
-             "lognormal_MH",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi
@@ -71,15 +70,5 @@
   # phi.meanlog = -0.441473,         # yassour mean for log(phi)
   # phi.sdlog = 1.393285,            # yassour sd for log(phi)
   phi.meanlog = -1.125,            # mean of log(phi), -s^2/2
-  phi.sdlog = 1.5,                 # sd of log(phi)
-  # hp.gamma.mean = 0.966,           # yassour mean for sdlog
-  # hp.gamma.sd = 0.01375,           # yassour sd for sdlog
-  # hp.gamma.var = 0.0001890625,     # yassour var for sdlog
-  hp.gamma.shape = 4935.701,       # 0.966^2 / 0.0001890625
-  hp.gamma.scale = 0.0001957169,   # 0.0001890625 / 0.966
-  hp.gamma.inflate = 1.2,          # inflate gamma variance if overwrite
-  hp.overwrite = TRUE              # if allow my.pInit() to overwrite
+  phi.sdlog = 1.5                  # sd of log(phi)
 )
-### Gamma has mean = alpha * beta and var = alpha * beta^2
-### where alpha and beta are the shape and scale parameters in R,
-### resepectively.

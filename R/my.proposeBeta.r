@@ -16,6 +16,7 @@ my.propose.ID_Norm <- function(mu.prev, mu, R){
 } # End of my.propose.ID_Norm().
 
 
+### In this case, mu.prev == mu since my.drawBConditionalAll.RW_Norm() set this.
 my.propose.RW_Norm <- function(mu.prev, mu, R,
     b.DrawScale.aa, b.DrawScale.prev.aa){
   ### Draw from proposal.
@@ -23,11 +24,13 @@ my.propose.RW_Norm <- function(mu.prev, mu, R,
   prop <- mu + backsolve(R * b.DrawScale.aa, zProp)
 
   ### Check if drawing from the same scale.
-  if(b.DrawScale.aa == b.DrawScale.prev.aa){
-    lir <- 0    # since symmetric random walk.
-  } else{
-    ### Calculate importance ratio since scaling was changed.
-    zPrev <- (R * b.DrawScale.prev.aa) %*% (mu.prev - mu)
+  lir <- 0    # since symmetric random walk.
+  if(b.DrawScale.aa != b.DrawScale.prev.aa){
+    ### Calculate importance ratio since random walk scale was changed.
+    ### This is wrong.
+    # zPrev <- (R * b.DrawScale.prev.aa) %*% (mu.prev - mu)
+    zPrev <- (R * b.DrawScale.prev.aa) %*% (mu.prev - prop)
+
     lir <- -1/2 * (sum(zProp * zProp) - sum(zPrev * zPrev))
   }
 

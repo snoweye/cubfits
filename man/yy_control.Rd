@@ -126,11 +126,7 @@
     It currently includes
     \tabular{ll}{
       \code{phi.meanlog}      \tab mean of phi in loca scale \cr
-      \code{phi.sdlog}        \tab standard deviation of phi in loca scale \cr
-      \code{hp.gamma.shape}   \tab hyperparameters of gamma distribution \cr
-      \code{hp.gamma.scale}   \tab hyperparameters of gamma distribution \cr
-      \code{hp.gamma.inflate} \tab inflate gamma variance if overwrite \cr
-      \code{hp.overwrite}     \tab if allow \code{my.pInit()} to overwrite
+      \code{phi.sdlog}        \tab standard deviation of phi in loca scale
     }
 
   \item

@@ -33,6 +33,7 @@ my.drawBConditionalFit.RW_Norm <- function(bFitaa, baa, phi, yaa, naa,
   R <- bRInitList.aa
   proplist <- my.propose.RW_Norm(baa, bHat, R,
                                  b.DrawScale.aa, b.DrawScale.prev.aa)
+
   ### M-H step.
   ret <- my.drawBConditionalFit.MH(proplist, baa, phi, yaa, naa,
                                    reu13.df.aa = reu13.df.aa)

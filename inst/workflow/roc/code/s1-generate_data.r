@@ -31,6 +31,8 @@ if(file.exists(fn.in)){
 EPhi <- phi.Obs
 if(simulation$EPhi){
   EPhi <- rlnorm(length(phi.Obs))
+  ### For simulation based on yassour's output if available.
+  # EPhi <- rlnorm(length(phi.Obs), meanlog = -sdlog^2 / 2, sdlog = sdlog)
 }
 names(EPhi) <- names(phi.Obs)
 
