@@ -62,7 +62,6 @@ case.names <- paste(model, "_", case.names, sep = "")
 run.info <- list()
 run.info$nIter <- 4000
 run.info$burnin <- 1000
-run.info$phi.DrawScale <- 1
 
 ### For configuration.
 run.info$dump <- FALSE

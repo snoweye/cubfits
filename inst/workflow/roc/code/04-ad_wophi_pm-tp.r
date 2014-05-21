@@ -27,7 +27,6 @@ load(fn.in)
 ### Initial.
 nIter <- run.info$nIter
 burnin <- run.info$burnin 
-phi.DrawScale <- run.info$phi.DrawScale
 
 ### For configuration.
 .CF.DP$dump <- run.info$dump
@@ -42,7 +41,6 @@ if(.CF.CONF$scale.phi){
 ret <- cubappr(reu13.df.obs, phi.init.PM, y, n,
                nIter = nIter, burnin = burnin,
                p.nclass = p.nclass,
-               phi.DrawScale = phi.DrawScale,
                model = model, verbose = TRUE, report = 10)
 
 ### Dump results.
@@ -51,7 +49,7 @@ if(comm.rank() == 0){
   print(ret.time)
 
   fn.out <- paste(prefix$output, case.name, "/output_mcmc.rda", sep = "")
-  save(list = c("nIter", "burnin", "phi.DrawScale", "ret", "ret.time"),
+  save(list = c("nIter", "burnin", "ret", "ret.time"),
        file = fn.out)
 
   fn.out <- paste(prefix$output, case.name, "/output_env.rda", sep = "")

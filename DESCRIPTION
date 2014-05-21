@@ -25,7 +25,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        yeast genome and gene expression data of Yassour (2009).
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
-Packaged: 2014-05-21 20:15:25 UTC; snoweye
+Packaged: 2014-05-21 23:04:44 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

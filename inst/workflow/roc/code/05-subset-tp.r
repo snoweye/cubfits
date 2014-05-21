@@ -49,12 +49,12 @@ all.jobs <- function(i.job){
   rownames(p.mcmc) <- names(ret$p.Mat[[1]])
 
   ### This is a risky matching by names since R use $ for lazy matching,
-  ### though it is fine for "phi.Mat.pred" when "phi.Mat" is missing.
+  ### though it is fine for "phi.pred.Mat" when "phi.Mat" is missing.
   # phi.mcmc <- do.call("cbind", ret$phi.Mat[range$subset])
   # rownames(phi.mcmc) <- names(ret$phi.Mat[[1]])
   if(is.null(ret[["phi.Mat"]])){
-    phi.mcmc <- do.call("cbind", ret[["phi.Mat.pred"]][range$subset])
-    rownames(phi.mcmc) <- names(ret[["phi.Mat.pred"]][[1]])
+    phi.mcmc <- do.call("cbind", ret[["phi.pred.Mat"]][range$subset])
+    rownames(phi.mcmc) <- names(ret[["phi.pred.Mat"]][[1]])
   } else{
     phi.mcmc <- do.call("cbind", ret[["phi.Mat"]][range$subset])
     rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])

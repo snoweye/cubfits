@@ -38,6 +38,9 @@ my.pPropType.lognormal_bias_RW <- function(n.G, log.phi.Obs, phi.Curr,
   ### M-H step for hyperparameters of bias.
   list.Curr <- list(bias.Phi = bias.Phi.Curr,
                     nu.Phi = ret$nu.Phi, sigma.Phi = ret$sigma.Phi)
+  ### ret$nu.Phi and ret$sigma.Phi are in common of bias.Phi.Curr and
+  ### proplist$bias.Phi, so there is no need to make a copy in proplist.
+  ### However, both ret$nu.Phi and ret$sigma.Phi should be returned at the end.
   ret.bias <- my.draw.lognormal_bias.hp.MH(proplist, list.Curr, log.phi.Obs,
                                            phi.Curr)
 
