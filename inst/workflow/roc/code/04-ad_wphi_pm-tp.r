@@ -38,6 +38,9 @@ if(.CF.CONF$scale.phi){
   phi.Obs <- phi.Obs / mean(phi.Obs)
   phi.init.PM <- phi.init.PM / mean(phi.init.PM)
 }
+if(.CF.CONF$estimate.bias.Phi){
+  phi.init.PM <- phi.init.PM / mean(phi.init.PM)
+}
 ret <- cubfits(reu13.df.obs, phi.Obs, y, n,
                nIter = nIter, burnin = burnin,
                p.nclass = p.nclass,
