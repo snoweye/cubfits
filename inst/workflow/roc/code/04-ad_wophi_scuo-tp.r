@@ -39,7 +39,7 @@ burnin <- run.info$burnin
 if(.CF.CT$model.Phi == "logmixture"){
   phi.init.SCUO <- phi.init.SCUO.emp    ### lognormal fails
 }
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scal.phi){
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,

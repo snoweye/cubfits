@@ -34,9 +34,7 @@ pdf(fn.out, width = 16, height = 11)
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, workflow.name)
-  text(0.5, 0.2, "bin: true phi")
-  par(mar = c(0, 0, 0, 0))
+  text(0.5, 0.5, paste(workflow.name, ", bin: true phi", sep = ""))
 
   ### Plot results.
   for(i.aa in 1:length(aa.names)){

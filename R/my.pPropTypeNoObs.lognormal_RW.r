@@ -11,14 +11,14 @@ my.pPropTypeNoObs.lognormal_RW <- function(n.G, phi.Curr,
   p.DrawScale.prev <- .cubfitsEnv$all.DrawScale$p.prev[1]
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.propose.sigma.Phi.RW(
+  proplist <- my.proposesigmaPhi(
                 sigma.Phi.Curr,
                 sigma.Phi.DrawScale = p.DrawScale,
                 sigma.Phi.DrawScale.prev = p.DrawScale.prev)
 
   ### M-H step.
   list.Curr <- list(nu.Phi = nu.Phi.Curr, sigma.Phi = sigma.Phi.Curr)
-  ret <- my.draw.lognormal.hp.MH(proplist, list.Curr, phi.Curr)
+  ret <- my.drawRestrictHP(proplist, list.Curr, phi.Curr)
 
   ### Update prior's acceptance and adaptive.
   my.update.acceptance("p", ret$accept)

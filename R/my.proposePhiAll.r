@@ -29,18 +29,9 @@ my.proposePhiAll.RW_Norm <- function(phi.Curr){
   log.phi.Curr <- log(phi.Curr)
   propScale.prev <- .cubfitsEnv$all.DrawScale$phi.prev
 
-  ### This is wrong. No need to compute this since logPosteriorAll.*()
-  ### takes care of priors and Jacobin already.
-  ###
-  # phi.Prop <- exp(log.phi.Curr + rnorm(length(phi.Curr)) * propScale)
-  # lir <- dlnorm(phi.Prop, log.phi.Curr, propScale.prev, log = TRUE) -
-  #        dlnorm(phi.Curr, log(phi.Prop), propScale, log = TRUE)
   log.phi.Prop <- log.phi.Curr + rnorm(length(phi.Curr)) * propScale
   phi.Prop <- exp(log.phi.Prop)
 
-  ### This is wrong. No need to compute this since logPosteriorAll.*()
-  ### takes care of priors and Jacobin already.
-  ###
   ### This is too slow.
   # lir <- lapply(1:length(phi.Curr),
   #          function(i.orf){
@@ -51,44 +42,23 @@ my.proposePhiAll.RW_Norm <- function(phi.Curr){
   #          })
   # lir <- do.call("c", lir)
 
-  ### This is wrong. No need to compute this since logPosteriorAll.*()
-  ### takes care of priors and Jacobin already.
-  ###
   ### Faster since the next relations of normal and log normal
   ### x <- 1.5; m <- 2; s <- 3
   ### dnorm(log(phi), m, s, log = TRUE) - log(phi) ==
   ###   dlnorm(phi, m, s, log = TRUE)
-  # lir <- -log.phi.Prop + log.phi.Curr
-  # id <- which(propScale.prev != propScale)
-  # if(length(id) > 0){
-  #   tmp <- lapply(id,
-  #            function(i.orf){
-  #              dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf],
-  #                    propScale.prev[i.orf], log = TRUE) -
-  #              dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf],
-  #                    propScale[i.orf], log = TRUE)
-  #            })
-  #   lir[id] <- lir[id] + do.call("c", tmp)
-  # }
-
-  ### This is correct. Only need to compute this when scaling terms are changed.
-  ### logPosteriorAll.*() still takes care of priors and Jacobin already.
-  ### Check if drawing from the same scale.
-  lir <- rep(0, length(log.phi.Prop))    # since symmetric random walk.
+  lir <- -log.phi.Prop + log.phi.Curr    # Jacobin
   id <- which(propScale.prev != propScale)
   if(length(id) > 0){
-    ### Calculate importance ratio since random walk scale was changed.
     tmp <- lapply(id,
              function(i.orf){
                dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf],
-                     propScale[i.orf], log = TRUE) -
+                     propScale.prev[i.orf], log = TRUE) -
                dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf],
-                     propScale.prev[i.orf], log = TRUE)
+                     propScale[i.orf], log = TRUE)
              })
-    lir[id] <- do.call("c", tmp)
+    lir[id] <- lir[id] + do.call("c", tmp)
   }
 
   ret <- list(phi.Prop = phi.Prop, lir = lir)
   ret
 } # End of my.proposePhiAll.RW_Norm().
-

@@ -71,7 +71,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   ### Scaling.
   if(.CF.CONF$estimate.bias.Phi){
     phi.Obs.org <- phi.Obs
-    phi.Obs <- phi.Obs / sum(phi.Obs)    # scale to mean 1
+    phi.Obs <- phi.Obs / mean(phi.Obs)    # scale to mean 1
   }
 
   ### Initial values for b.

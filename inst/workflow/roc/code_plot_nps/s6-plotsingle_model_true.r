@@ -65,9 +65,8 @@ for(i.case in case.names){
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.5,
-         paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
-    text(0.5, 0.2, "bin: true Phi")
-    par(mar = c(0, 0, 0, 0))
+         paste(workflow.name, ", ", get.case.main(i.case, model),
+               ", bin: true Phi", sep = ""))
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){

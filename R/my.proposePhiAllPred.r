@@ -29,17 +29,15 @@ get.my.proposePhiAllPred <- function(type){
 my.proposePhiAllPred.RW_Norm <- function(phi.Curr){
   propScale <- .cubfitsEnv$all.DrawScale$phi.pred
   log.phi.Curr <- log(phi.Curr)
-  propScale1 <- .cubfitsEnv$all.DrawScale$phi.pred.prev
+  propScale.prev <- .cubfitsEnv$all.DrawScale$phi.pred.prev
 
-  # phi.Prop <- exp(log.phi.Curr + rnorm(length(phi.Curr)) * propScale)
-  # lir <- dlnorm(phi.Prop, log.phi.Curr, propScale1, log = TRUE) -
-  #        dlnorm(phi.Curr, log(phi.Prop), propScale, log = TRUE)
   log.phi.Prop <- log.phi.Curr + rnorm(length(phi.Curr)) * propScale
   phi.Prop <- exp(log.phi.Prop)
+
   ### Too slow
   # lir <- lapply(1:length(phi.Curr),
   #          function(i.orf){
-  #            dlnorm(phi.Prop[i.orf], log.phi.Curr[i.orf], propScale1[i.orf],
+  #            dlnorm(phi.Prop[i.orf], log.phi.Curr[i.orf], propScale.prev[i.orf],
   #                   log = TRUE) -
   #            dlnorm(phi.Curr[i.orf], log.phi.Prop[i.orf], propScale[i.orf],
   #                   log = TRUE)
@@ -50,15 +48,15 @@ my.proposePhiAllPred.RW_Norm <- function(phi.Curr){
   ### x <- 1.5; m <- 2; s <- 3
   ### dnorm(log(phi), m, s, log = TRUE) - log(phi) ==
   ###   dlnorm(phi, m, s, log = TRUE)
-  lir <- -log.phi.Prop + log.phi.Curr 
-  id <- which(propScale1 != propScale)
+  lir <- -log.phi.Prop + log.phi.Curr   # Jacobin
+  id <- which(propScale.prev != propScale)
   if(length(id) > 0){
     tmp <- lapply(id,
              function(i.orf){
-               dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf], propScale1[i.orf],
-                     log = TRUE) -
-               dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf], propScale[i.orf],
-                     log = TRUE)
+               dnorm(log.phi.Prop[i.orf], log.phi.Curr[i.orf],
+                     propScale.prev[i.orf], log = TRUE) -
+               dnorm(log.phi.Curr[i.orf], log.phi.Prop[i.orf],
+                     propScale[i.orf], log = TRUE)
              })
     lir[id] <- lir[id] + do.call("c", tmp)
   }

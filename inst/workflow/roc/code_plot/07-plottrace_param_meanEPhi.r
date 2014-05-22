@@ -65,6 +65,11 @@ for(i.case in case.names){
   }
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
+
   ### For original plots.
   ret.b.Mat <- ret$b.Mat
   ret.phi.Mat <- ret$phi.Mat

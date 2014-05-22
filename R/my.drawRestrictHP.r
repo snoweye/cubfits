@@ -1,16 +1,16 @@
 ### Do the M-H on lognormal hyper-parameters.
-my.draw.lognormal.hp.MH <- function(proplist, list.Curr, phi.Curr){
+my.drawRestrictHP <- function(proplist, list.Curr, phi.Curr){
   ### Compute probability ratio of likelihood.
   lpr <- sum(dlnorm(phi.Curr, meanlog = proplist$nu.Phi,
                     sdlog = proplist$sigma.Phi, log = TRUE)) -
          sum(dlnorm(phi.Curr, meanlog = list.Curr$nu.Phi,
                     sdlog = list.Curr$sigma.Phi, log = TRUE))
 
-  ### Should the prior  be \pi(sigma.Phi^2) \propto 1?
-  # lpr <- lpr + 0
-  ### Or, shoudl the prior be \pi(sigma.Phi^2) \propto 1 / sigma.Phi^2 ?
-  ### i.e. log \pi(sigma.Phi^2) \propto 2 * log(sigma.Phi)
-  lpr <- lpr + 2 * (proplist$sigma.Phi - list.Curr$sigma.Phi)
+  ### The prior \pi(sigma.Phi^2) \propto 1.
+  lpr <- lpr + 0
+  ### Or, should the prior be \pi(sigma.Phi^2) \propto 1 / sigma.Phi^2 ?
+  ### i.e. log \pi(sigma.Phi^2) \propto -2 * log(sigma.Phi)
+  # lpr <- lpr - 2 * (proplist$sigma.Phi - list.Curr$sigma.Phi)
 
   ### log Acceptance probability.
   logAcceptProb <- lpr - proplist$lir
@@ -32,5 +32,4 @@ my.draw.lognormal.hp.MH <- function(proplist, list.Curr, phi.Curr){
 
   ### Return.
   ret
-} # End of my.draw.lognormal.hp.MH().
-
+} # End of my.drawRestrictHP().

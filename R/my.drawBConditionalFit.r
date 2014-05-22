@@ -16,7 +16,7 @@ my.drawBConditionalFit.ID_Norm <- function(bFitaa, baa, phi, yaa, naa,
   ### Propose new beta.
   bHat <- bFitaa$coefficients
   R <- bFitaa$R
-  proplist <- my.propose.ID_Norm(baa, bHat, R)
+  proplist <- my.proposeB.ID_Norm(baa, bHat, R)
 
   ### M-H step.
   ret <- my.drawBConditionalFit.MH(proplist, baa, phi, yaa, naa,
@@ -31,8 +31,8 @@ my.drawBConditionalFit.RW_Norm <- function(bFitaa, baa, phi, yaa, naa,
   ### Propose new beta.
   bHat <- bFitaa
   R <- bRInitList.aa
-  proplist <- my.propose.RW_Norm(baa, bHat, R,
-                                 b.DrawScale.aa, b.DrawScale.prev.aa)
+  proplist <- my.proposeB.RW_Norm(baa, bHat, R,
+                                  b.DrawScale.aa, b.DrawScale.prev.aa)
 
   ### M-H step.
   ret <- my.drawBConditionalFit.MH(proplist, baa, phi, yaa, naa,

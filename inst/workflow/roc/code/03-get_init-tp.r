@@ -55,7 +55,8 @@ if(comm.rank() == 0){
   print(ret.time)
 
   fn.out <- paste(prefix$data, "init_", model, ".rda", sep = "")
-  list.save <- c("fitlist", "phi.init.PM", "phi.init.SCUO", "phi.init.SCUO.emp",
+  list.save <- c("fitlist", "phi.init.PM", "phi.init.SCUO",
+                 "phi.init.SCUO.emp",
                  "ret.time", "comm.size")
   save(list = list.save, file = fn.out)
 } 

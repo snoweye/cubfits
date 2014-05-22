@@ -8,7 +8,6 @@ ex.train$phi.Obs <- ex.train$phi.Obs / mean(ex.train$phi.Obs)
 ret.time <- system.time({
   ret <- cubfits(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
                  nIter = 10, burnin = 10,
-                 phi.DrawScale = 0.01,
                  verbose = TRUE, report = 5,
                  model = "nsef", adaptive = "simple")
 })

@@ -33,6 +33,9 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
 
 ### Overwirte conditions
   .CF.CONF$estimate.bias.Phi <- FALSE        # No sense to be TRUE
+  if(.CF.CONF$type.p[1] == "lognormal_bias"){
+    .CF.CONF$type.p <- "lognormal_RW"
+  }
 
 ### Setup functions ###
   ### Setup function pointers by type or model.
@@ -72,9 +75,6 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
   ### Initial values for p first since scaling may change phi.Obs.
   p.Init <- my.pInit(p.Init, phi.Init, model.Phi[1],
                      p.nclass = p.nclass, cub.method = "appr")
-  if(.CF.CONF$estimate.bias.Phi){
-    phi.Init <- phi.Init / sum(phi.Init)    # scale to mean 1
-  }
 
   ### Initial values for b.
   bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)

@@ -34,7 +34,9 @@ burnin <- run.info$burnin
 .CF.CT$adaptive <- run.info$adaptive
 
 ### Run.
-phi.init.true <- phi.init.true / mean(phi.init.true)
+if(.CF.CONF$scale.phi){
+  phi.init.true <- phi.init.true / mean(phi.init.true)
+}
 ret <- cubappr(reu13.df.obs, phi.init.true, y, n,
                nIter = nIter, burnin = burnin,
                bInit = bInit,

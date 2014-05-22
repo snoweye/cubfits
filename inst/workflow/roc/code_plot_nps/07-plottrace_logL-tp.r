@@ -28,6 +28,11 @@ all.jobs <- function(i.job){
   cat(i.job, ": ", i.case, ", load: ", fn.in, "\n", sep = "")
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
+
   if("sigmaW" %in% rownames(ret$p.Mat[[1]])){
     logL <- lapply(1:length(ret$phi.Mat),
                    function(i.iter){

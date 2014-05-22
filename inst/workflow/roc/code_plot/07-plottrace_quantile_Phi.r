@@ -25,6 +25,11 @@ for(i.case in case.names){
   }
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
+
   ### Find genes by quantile.
   ret.phi.Mat <- ret$phi.Mat
   ret.phi.Mat.scaled <- lapply(ret.phi.Mat, function(x) x / mean(x))

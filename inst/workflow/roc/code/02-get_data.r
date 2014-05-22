@@ -43,6 +43,8 @@ phi <- phi[order(phi$ORF),]
 if(.CF.CONF$scale.phi){
   phi.scale <- mean(phi[, 2])
   phi[, 2] <- phi[, 2] / phi.scale
+} else{
+  phi.scale <- 1
 }
 
 ### Convert to string and get SCUO after subsetting and reordering.

@@ -12,7 +12,10 @@ my.init.function <- function(model = .CF.CT$model[1],
     type.p <- "logmixture"
   }
   if(.CF.CONF$estimate.bias.Phi){
-    type.p <- "lognormal_bias_RW"
+    type.p <- "lognormal_bias"
+  }
+  if(type.p == "lognormal_bias"){
+    .CF.CONF$estimate.bias.Phi <- TRUE
   }
 
   ### Check.

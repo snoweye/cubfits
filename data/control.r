@@ -5,7 +5,7 @@
   model = c("roc", "nsef", "rocnsef"),          # main models
   type.p = c("lognormal_fix",
              "lognormal_RW",
-             "lognormal_bias_RW",
+             "lognormal_bias",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi

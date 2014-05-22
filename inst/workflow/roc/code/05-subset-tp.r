@@ -52,13 +52,12 @@ all.jobs <- function(i.job){
   ### though it is fine for "phi.pred.Mat" when "phi.Mat" is missing.
   # phi.mcmc <- do.call("cbind", ret$phi.Mat[range$subset])
   # rownames(phi.mcmc) <- names(ret$phi.Mat[[1]])
+  ### Since my.appr() cases don't have phi.Mat but have phi.pred.Mat
   if(is.null(ret[["phi.Mat"]])){
-    phi.mcmc <- do.call("cbind", ret[["phi.pred.Mat"]][range$subset])
-    rownames(phi.mcmc) <- names(ret[["phi.pred.Mat"]][[1]])
-  } else{
-    phi.mcmc <- do.call("cbind", ret[["phi.Mat"]][range$subset])
-    rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])
+    ret$phi.Mat <- ret$phi.pred.Mat
   }
+  phi.mcmc <- do.call("cbind", ret[["phi.Mat"]][range$subset])
+  rownames(phi.mcmc) <- names(ret[["phi.Mat"]][[1]])
 
   ### Dump posterior distributions.
   fn.out <- paste(prefix$subset, i.case, ".rda", sep = "")

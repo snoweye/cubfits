@@ -97,6 +97,10 @@ for(i.case in case.names){
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
   load(fn.in)
 
+  ### Since my.appr() doesn't have phi.Mat, but have phi.pred.Mat
+  if(is.null(ret[["phi.Mat"]])){
+    ret$phi.Mat <- ret$phi.pred.Mat
+  }
 
   ### Set layout.
   fn.out <- paste(prefix$plot.multi, "true_", i.case, ".pdf", sep = "")

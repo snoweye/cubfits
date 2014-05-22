@@ -26,7 +26,6 @@ y <- gen.y(seqstring.nsef, aa.names = aa.names)
 ret.time <- system.time({
   ret <- cubfits(reu13.df, phi.Obs, y, n,
                  nIter = 10, burnin = 10,
-                 phi.DrawScale = 0.01,
                  verbose = TRUE, report = 5,
                  model = "nsef", adaptive = "simple")
 })
