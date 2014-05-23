@@ -88,6 +88,7 @@ p.nclass <- 2
 
 ### CAUTION: for extra changes globally.
 # suppressMessages(library(cubfits, quietly = TRUE))
+# .CF.CT$init.fit <- "current"
 # .CF.CT$init.fit <- "RW_Norm"
 # .CF.CT$type.p <- "lognormal_fix"
 # .CF.CT$type.p <- "lognormal_RW"
