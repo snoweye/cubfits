@@ -28,7 +28,8 @@ pdf(fn.out, width = 16, height = 11)
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, paste(workflow.name, ", bin: observed phi", sep = ""))
+  text(0.5, 0.6, paste(workflow.name, ", bin: observed phi", sep = ""))
+  text(0.5, 0.4, date(), cex = 0.6)
   par(mar = c(0, 0, 0, 0))
 
   ### Plot results.

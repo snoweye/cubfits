@@ -34,11 +34,10 @@ burnin <- run.info$burnin
 .CF.CT$adaptive <- run.info$adaptive
 
 ### Run.
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scale.phi.Obs){
   phi.Obs <- phi.Obs / mean(phi.Obs)
-  phi.init.true <- phi.init.true / mean(phi.init.true)
 }
-if(.CF.CONF$estimate.bias.Phi){
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
   phi.init.true <- phi.init.true / mean(phi.init.true)
 }
 ret <- cubfits(reu13.df.obs, phi.Obs, y, n,

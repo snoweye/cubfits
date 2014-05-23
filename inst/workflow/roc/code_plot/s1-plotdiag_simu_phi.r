@@ -24,6 +24,7 @@ pdf(fn.out, width = 5, height = 5)
   plotprxy(EPhi, phi.Obs, main = "True vs Observed",
            xlab = "Phi True", ylab = "Observed")
   mtext(workflow.name, line = 3, cex = 0.6)
+  mtext(date(), line = 2.5, cex = 0.4)
 dev.off()
 
 

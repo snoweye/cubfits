@@ -11,7 +11,7 @@ my.pPropTypeNoObs.lognormal_RW <- function(n.G, phi.Curr,
   p.DrawScale.prev <- .cubfitsEnv$all.DrawScale$p.prev[1]
 
   ### Propose sigma.Phi.Curr.
-  proplist <- my.proposesigmaPhi(
+  proplist <- my.proposesigmaPhi.RW_Norm(
                 sigma.Phi.Curr,
                 sigma.Phi.DrawScale = p.DrawScale,
                 sigma.Phi.DrawScale.prev = p.DrawScale.prev)

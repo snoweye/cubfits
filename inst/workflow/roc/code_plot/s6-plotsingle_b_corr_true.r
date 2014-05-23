@@ -73,6 +73,7 @@ for(i.case in case.names){
                 xlim = xlim, ylim = ylim,
                 xlab = "True", ylab = "Estimated",
                 main = "log(mu)", workflow.name = title)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### Plot Delta.t.
@@ -91,5 +92,6 @@ for(i.case in case.names){
                 xlim = xlim, ylim = ylim,
                 xlab = "True", ylab = "Estimated",
                 main = "Delta.t", workflow.name = title)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }

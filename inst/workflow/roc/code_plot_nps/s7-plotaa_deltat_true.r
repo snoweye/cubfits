@@ -72,12 +72,13 @@ for(i.case in case.names){
   fn.out <- paste(prefix$plot.nps.AA, i.case, "_deltat.phi_nps.pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
     nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-                 rep(1, 5), c(1, 8, 8, 8, 8), respect = FALSE)
+                 rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5,
+    text(0.5, 0.6,
          paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""))
+    text(0.5, 0.4, date(), cex = 0.6)
     par(mar = c(5.1, 4.1, 4.1, 2.1))
 
     for(i.aa in aa.names){

@@ -94,4 +94,5 @@ p.nclass <- 2
 # .CF.CT$type.p <- "lognormal_fix"
 # .CF.CT$type.p <- "lognormal_RW"
 # .CF.CT$model.Phi <- "logmixture"
-# .CF.CONF$scale.phi <- FALSE
+# .CF.CONF$scale.phi.Obs <- FALSE
+# .CF.CONF$estimate.bias.Phi <- TRUE

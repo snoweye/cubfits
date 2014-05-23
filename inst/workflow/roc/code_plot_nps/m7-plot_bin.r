@@ -78,10 +78,11 @@ for(i.match in 1:nrow(match.case)){
     ### Plot title.
     par(mar = c(0, 0, 0, 0))
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5,
+    text(0.5, 0.6,
          paste(workflow.name, ", ", match.case[i.match, 1], " vs ",
                match.case[i.match, 2], ", bin: posterior mean of Phi",
                sep = ""))
+    text(0.5, 0.4, date(), cex = 0.6)
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){

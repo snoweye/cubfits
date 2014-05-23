@@ -36,11 +36,10 @@ burnin <- run.info$burnin
 if(.CF.CT$model.Phi == "logmixture"){
   phi.init.SCUO <- phi.init.SCUO.emp
 }
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scale.phi.Obs){
   phi.Obs <- phi.Obs / mean(phi.Obs)
-  phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
-if(.CF.CONF$estimate.bias.Phi){
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
 ret <- cubfits(reu13.df.obs, phi.Obs, y, n,

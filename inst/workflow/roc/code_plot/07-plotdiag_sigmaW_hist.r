@@ -37,6 +37,7 @@ for(i.case in case.names){
                 xlab = "std. err. of measurement errors", main = i.case)
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
     abline(v = p.PM[1], col = 2)
     text(p.PM[1] + 0.05 * diff(range(ret$breaks)),
          max(ret$counts) * 1.01, sprintf("%.4f", p.PM[1]),

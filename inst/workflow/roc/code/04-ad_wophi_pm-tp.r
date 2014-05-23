@@ -33,9 +33,13 @@ burnin <- run.info$burnin
 .CF.DP$prefix.dump <- run.info$prefix.dump
 .CF.CT$parallel <- run.info$parallel
 .CF.CT$adaptive <- run.info$adaptive
+.CF.CONF$estimate.bias.Phi <- FALSE
+if(.CF.CT$type.p[1] == "lognormal_bias"){
+  .CF.CT$type.p[1] <- "lognormal_RW"
+}
 
 ### Run.
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
   phi.init.PM <- phi.init.PM / mean(phi.init.PM)
 }
 ret <- cubappr(reu13.df.obs, phi.init.PM, y, n,

@@ -38,6 +38,7 @@ for(i.case in case.names){
              main = paste(i.case, " posterior mean", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### Plot posterior median.
@@ -52,6 +53,7 @@ for(i.case in case.names){
              main = paste(i.case, " posterior median", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### Plot posterior log10 mean.
@@ -66,6 +68,7 @@ for(i.case in case.names){
              main = paste(i.case, " posterior log10 mean", sep = ""))
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 

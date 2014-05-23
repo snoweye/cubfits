@@ -26,7 +26,7 @@ load(fn.in)
 ### Load bInit from previous summarized MCMC outputs.
 fn.in <- paste(prefix$subset, model, "_ad_wphi_scuo_PM.rda", sep = "")
 load(fn.in)
-bInit <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
+# bInit <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
 phi.init.SCUO <- phi.PM
 
 ### Change initial for fitsappr.
@@ -38,9 +38,13 @@ burnin <- run.info$burnin
 .CF.DP$prefix.dump <- run.info$prefix.dump
 .CF.CT$parallel <- run.info$parallel
 .CF.CT$adaptive <- run.info$adaptive
+.CF.CONF$estimate.bias.Phi <- FALSE
+if(.CF.CT$type.p[1] == "lognormal_bias"){
+  .CF.CT$type.p[1] <- "lognormal_RW"
+}
 
 ### Run.
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimates.bias.Phi){
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,

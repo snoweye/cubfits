@@ -96,6 +96,7 @@ if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
                 main = "roc_ad_pm", add.lm = TRUE,
                 workflow.name = workflow.name)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -108,5 +109,6 @@ if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
                 main = "roc_ad_scuo", add.lm = TRUE,
                 workflow.name = workflow.name)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }

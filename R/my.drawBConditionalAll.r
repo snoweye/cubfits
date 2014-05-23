@@ -18,7 +18,7 @@ my.drawBConditionalAll.current <- function(b.Curr, phi.Curr, y, n, reu13.df.obs,
     bRInitList = NULL){
   ### Note that phi.new = phi.Curr is the E[Phi] rather than phi.Obs.
   b.Fit <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n,
-                                        phi.new = phi.Curr, coefstart = b.Curr)
+                                         phi.new = phi.Curr, coefstart = b.Curr)
 
   ### Based on the above new fits of parameters to draw new beta.
   ret <- lapply(1:length(reu13.df.obs),

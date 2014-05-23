@@ -95,6 +95,7 @@ if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
                 main = "roc_ad_pm", workflow.name = workflow.name)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -106,5 +107,6 @@ if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
                 main = "roc_ad_scuo", workflow.name = workflow.name)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }

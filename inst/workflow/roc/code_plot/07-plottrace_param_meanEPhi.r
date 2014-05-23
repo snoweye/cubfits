@@ -80,6 +80,7 @@ for(i.case in case.names){
     plottrace.param(ret.b.Mat, names.b, names.aa, id.intercept,
                     workflow.name, i.case, model,
                     bInit = bInit, param = "logmu")
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### For deltat.
@@ -88,6 +89,7 @@ for(i.case in case.names){
     plottrace.param(ret.b.Mat, names.b, names.aa, id.slop,
                     workflow.name, i.case, model,
                     bInit = bInit, param = "deltat")
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### For mean EPhi.
@@ -96,6 +98,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 6, height = 4)
     plottrace.meanEPhi(ret.phi.Mat,
                        workflow.name, i.case, model)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
   ### For scaled plots.
@@ -114,6 +117,6 @@ for(i.case in case.names){
                     paste(workflow.name, ", scaled", sep = ""),
                     i.case, model,
                     bInit = bInit.scaled, param = "deltat")
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
-

@@ -49,6 +49,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (pm, posterior mean)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -62,6 +63,7 @@ if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (scuo, posterior mean)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -76,6 +78,7 @@ if(!is.null(phi.mean[[3]]) && !is.null(phi.mean[[1]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (pm, posterior median)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
@@ -89,6 +92,7 @@ if(!is.null(phi.mean[[4]]) && !is.null(phi.mean[[2]])){
              ylab = "Production Rate without phi (log10)",
              main = "fits vs appr (scuo, posterior median)")
     mtext(workflow.name, line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 

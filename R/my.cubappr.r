@@ -31,12 +31,6 @@ my.cubappr <- function(reu13.df.obs, phi.Init, y, n,
     iterThin = .CF.DP$iterThin,
     report = .CF.DP$report){
 
-### Overwirte conditions
-  .CF.CONF$estimate.bias.Phi <- FALSE        # No sense to be TRUE
-  if(.CF.CONF$type.p[1] == "lognormal_bias"){
-    .CF.CONF$type.p <- "lognormal_RW"
-  }
-
 ### Setup functions ###
   ### Setup function pointers by type or model.
   my.function <- my.init.function(model = model[1], model.Phi = model.Phi[1],

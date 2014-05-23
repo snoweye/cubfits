@@ -34,7 +34,7 @@ phi.init.SCUO <- scuo.random(SCUO, meanlog = -simulation$sdlog^2 / 2,
 names(phi.init.SCUO) <- names(phi.Obs)
 
 ### Run more scuo initial.
-if(.CF.CONF$scale.phi){
+if(.CF.CONF$scale.phi.Obs){
   phi.init.SCUO.emp <- log(SCUO / mean(SCUO))
 } else{
   phi.init.SCUO.emp <- log(SCUO)
@@ -42,10 +42,12 @@ if(.CF.CONF$scale.phi){
 phi.init.SCUO.emp <- exp(phi.init.SCUO / sd(phi.init.SCUO) * simulation$sdlog)
 names(phi.init.SCUO.emp) <- names(phi.Obs)
 
-### Scale to Mean 1.
-if(.CF.CONF$scale.phi){
+### Scale to Mean 1, since here phi is for initial values.
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
+  ### No scaling for initial values, but may estimate.bias.Phi
   phi.init.PM <- phi.init.PM / mean(phi.init.PM)
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
+  phi.init.SCUO.emp <- phi.init.SCUO.emp / mean(phi.init.SCUO.emp)
 }
 
 ### Save.

@@ -18,7 +18,7 @@
 
 ### For configuration of initial and draw scaling.
 .CF.CONF <- list(
-  scale.phi = TRUE,                # if phi were scaled to mean 1
+  scale.phi.Obs = TRUE,            # if phi.Obs were scaled to mean 1
   init.b.Scale = 1,                # initial b scale
   init.phi.Scale = 1,              # initial phi scale
   p.nclass = 2,                    # # of classes if mixture phi

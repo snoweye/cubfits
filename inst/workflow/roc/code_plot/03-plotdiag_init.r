@@ -16,11 +16,12 @@ load(fn.in)
 fn.out <- paste(prefix$plot.diag, "prxy_init.pdf", sep = "")
 pdf(fn.out, width = 8, height = 9)
   nf <- layout(matrix(c(1, 1, 2:5), nrow = 3, ncol = 2, byrow = TRUE),
-               c(1, 1), c(1, 8, 8), respect = FALSE)
+               c(1, 1), c(2, 8, 8), respect = FALSE)
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, workflow.name)
+  text(0.5, 0.6, workflow.name)
+  text(0.5, 0.4, date(), cex = 0.6)
   par(mar = c(5.1, 4.1, 4.1, 2.1))
 
   ### Plot rests.

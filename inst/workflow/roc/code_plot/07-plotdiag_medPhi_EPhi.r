@@ -29,6 +29,7 @@ for(i.case in case.names){
              main = "By Iteration")
     mtext(paste(workflow.name, ", ", get.case.main(i.case, model), sep = ""),
           line = 3, cex = 0.6)
+    mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
 
