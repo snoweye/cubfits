@@ -116,7 +116,7 @@ for(i.case in case.names){
     x.label <- bInit.negsel$b.negsel.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
-                main = "Delta.t", add.lm = TRUE)
+                main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
 
     ### Plot log(mu).
     x <- bInit.negsel$b.logmu.PM
@@ -125,7 +125,7 @@ for(i.case in case.names){
     x.label <- b.logmu.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
-                main = "log(mu)", add.lm = TRUE)
+                main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(EPhi / mean(EPhi)), nclass = 50, plot = FALSE)

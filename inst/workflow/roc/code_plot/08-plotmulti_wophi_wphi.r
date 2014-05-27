@@ -124,7 +124,7 @@ for(i.match in 1:nrow(match.case)){
     x.label <- b.negsel.label.list[[1]]
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
                 xlab = "With Phi", ylab = "Without Phi",
-                main = "Delta.t", add.lm = TRUE)
+                main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
 
     ### Plot log(mu).
     x <- b.logmu[[2]]
@@ -134,7 +134,7 @@ for(i.match in 1:nrow(match.case)){
     x.label <- b.logmu.label.list[[1]]
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
                 xlab = "With Phi", ylab = "Without Phi",
-                main = "log(mu)", add.lm = TRUE)
+                main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(phi.pm[[2]] / mean(phi.pm[[2]])),

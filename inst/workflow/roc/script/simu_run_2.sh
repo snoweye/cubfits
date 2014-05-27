@@ -17,7 +17,7 @@ ALL_OUT=`Rscript -e 'source("00-set_env.r");cat(prefix$all.out)'`
 CODE_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code)'`
 CODE_PLOT_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code.plot)'`
 
-### Plotting for fake data only.
+### Plot for fake data only.
 Rscript ${CODE_PLOT_PATH}/s1-plotdiag_simu_phi.r > \
           ${ALL_OUT}/log/s1-plotdiag_simu_phi 2>&1 &
 Rscript ${CODE_PLOT_PATH}/s2-plotdiag_bin_true.r > \
@@ -25,7 +25,7 @@ Rscript ${CODE_PLOT_PATH}/s2-plotdiag_bin_true.r > \
 Rscript ${CODE_PLOT_PATH}/s3-plotdiag_bin_est.r > \
           ${ALL_OUT}/log/s3-plotdiag_bin_est 2>&1 &
 
-### Plotting.
+### Plot.
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_bin_est.r > \
           ${ALL_OUT}/log/03-plotdiag_bin_est 2>&1 &
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
@@ -36,10 +36,12 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
 NP=5
 mpiexec -np ${NP} Rscript ${CODE_PATH}/05-subset-tp.r > \
                             ${ALL_OUT}/log/05-subset-tp 2>&1
-Rscript ${CODE_PATH}/05-subset_tsv.r > \
+
+### Dump tsv files.
+Rscript ${CODE_PLOT_PATH}/05-subset_tsv.r > \
           ${ALL_OUT}/log/05-subset_tsv 2>&1 &
 
-### Plotting fitted results.
+### Plot fitted results.
 Rscript ${CODE_PLOT_PATH}/s6-plotsingle_model_true.r > \
           ${ALL_OUT}/log/s6-plotsingle_model_true 2>&1 &
 Rscript ${CODE_PLOT_PATH}/06-plotsingle_model.r > \
@@ -49,7 +51,7 @@ Rscript ${CODE_PLOT_PATH}/06-plotsingle_prxy.r > \
 Rscript ${CODE_PLOT_PATH}/06-plotsingle_prxy_wci.r > \
           ${ALL_OUT}/log/06-plotsingle_prxy_wci 2>&1 &
 
-### Plotting diagnoses.
+### Plot diagnoses.
 Rscript ${CODE_PLOT_PATH}/07-plotdiag_scuo_cai.r > \
           ${ALL_OUT}/log/07-plotdiag_scuo_cai 2>&1 &
 Rscript ${CODE_PLOT_PATH}/07-plotdiag_accept_hist.r > \
@@ -65,7 +67,7 @@ Rscript ${CODE_PLOT_PATH}/07-plotdiag_EPhi_hist.r > \
 Rscript ${CODE_PLOT_PATH}/07-plotdiag_medPhi_EPhi.r > \
           ${ALL_OUT}/log/07-plotdiag_medPhi_EPhi 2>&1 &
 
-### Plotting traces.
+### Plot traces.
 Rscript ${CODE_PLOT_PATH}/07-plottrace_param_meanEPhi.r > \
           ${ALL_OUT}/log/07-plottrace_param_meanEPhi 2>&1 &
 Rscript ${CODE_PLOT_PATH}/07-plottrace_prior.r > \
@@ -73,7 +75,7 @@ Rscript ${CODE_PLOT_PATH}/07-plottrace_prior.r > \
 Rscript ${CODE_PLOT_PATH}/07-plottrace_quantile_Phi.r > \
           ${ALL_OUT}/log/07-plottrace_quantile_Phi 2>&1 &
 
-### Plotting for fake data only.
+### Plot for fake data only.
 Rscript ${CODE_PLOT_PATH}/s6-plotsingle_b_corr_true.r > \
           ${ALL_OUT}/log/s6-plotsingle_b_corr_true 2>&1 &
 Rscript ${CODE_PLOT_PATH}/s6-plotsingle_prxy_true.r > \
@@ -83,7 +85,7 @@ Rscript ${CODE_PLOT_PATH}/s6-plotsingle_prxy_true_wci.r > \
 Rscript ${CODE_PLOT_PATH}/s6-plotsingle_scu_mscu.r > \
           ${ALL_OUT}/log/s6-plotsingle_scu_mscu 2>&1 &
 
-### Plotting for matched cases only.
+### Plot for matched cases only.
 Rscript ${CODE_PLOT_PATH}/m6-plot_b_corr.r > \
           ${ALL_OUT}/log/m6-plot_b_corr 2>&1 &
 Rscript ${CODE_PLOT_PATH}/m6-plot_b_corr_negsel.r > \
@@ -95,7 +97,7 @@ Rscript ${CODE_PLOT_PATH}/m6-plot_prxy_wci.r > \
 Rscript ${CODE_PLOT_PATH}/m7-plot_bin.r > \
           ${ALL_OUT}/log/m7-plot_bin 2>&1 &
 
-### Plotting for multiple figures.
+### Plot for multiple figures.
 Rscript ${CODE_PLOT_PATH}/s7-plotaa_deltat_true.r > \
           ${ALL_OUT}/log/s7-plotaa_deltat_true 2>&1 &
 Rscript ${CODE_PLOT_PATH}/s8-plotmulti_true.r > \

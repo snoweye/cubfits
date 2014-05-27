@@ -7,10 +7,18 @@ source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
+fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")
+load(fn.in)
 
 ### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
+
+### Get a compartable one for phi.Obs.
+init.function(model = model)
+phi.Obs.scaled <- phi.Obs / mean(phi.Obs)
+fitlist <- fitMultinom(reu13.df.obs, phi.Obs.scaled, y, n)
+predict.roc.0 <- prop.model.roc(fitlist, phi.Obs.lim)
 
 ### Load all data.
 ret.all <- NULL
@@ -22,6 +30,8 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   # if(!file.exists(fn.in)){
   #   cat("File not found: ", fn.in, "\n", sep = "")
@@ -68,7 +78,7 @@ for(i.match in 1:nrow(match.case)){
             lim.bin[2] + (lim.bin[2] - lim.bin[1]) / 8)
 
   ### Plot bin and model for measurements.
-  fn.out <- paste(prefix$plot.nps.match, "bin_", match.case[i.match, 1], "_",
+  fn.out <- paste(prefix$plot.match, "bin_", match.case[i.match, 1], "_",
                   match.case[i.match, 2], ".pdf", sep = "")
   pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
@@ -80,8 +90,8 @@ for(i.match in 1:nrow(match.case)){
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     text(0.5, 0.6,
          paste(workflow.name, ", ", match.case[i.match, 1], " vs ",
-               match.case[i.match, 2], ", bin: posterior mean of Phi",
-               sep = ""))
+               match.case[i.match, 2],
+               ", bin: posterior mean of Phi", sep = ""))
     text(0.5, 0.4, date(), cex = 0.6)
 
     ### Plot results.
@@ -109,17 +119,22 @@ for(i.match in 1:nrow(match.case)){
       axis(3, tck = 0.02, labels = FALSE)
       axis(4, tck = 0.02, labels = FALSE)
 
-      #### Add the first model.
+      ### Add the first model.
       u.codon <- sort(unique(tmp.obs$codon))
       color <- cubfits:::get.color(u.codon)
 
       tmp.roc <- predict.roc.1[[i.aa]]
       plotaddmodel(tmp.roc, 1, u.codon, color)
+
+      ### Add the logistic regression.
+      tmp.roc <- predict.roc.0[[i.aa]]
+      plotaddmodel(tmp.roc, 3, u.codon, color)
     }
 
     ### Add label.
-    model.label <- paste(model, c("without phi", "with phi"), sep = " ")
-    model.lty <- 2:1
+    model.label <- paste(model,
+                         c("without phi", "with phi", "logistics"), sep = " ")
+    model.lty <- c(2:1, 3)
     plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
          xlim = c(0, 1), ylim = c(0, 1))
     legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)

@@ -36,6 +36,7 @@ mkdir ${ALL_OUT}/subset
 mkdir ${ALL_OUT}/log
 mkdir ${ALL_OUT}/log_nps
 mkdir ${ALL_OUT}/table
+mkdir ${ALL_OUT}/table_nps
 
 mkdir ${ALL_OUT}/plot
 mkdir ${ALL_OUT}/plot/diag

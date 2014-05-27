@@ -17,7 +17,10 @@ prefix$all.out <- "./all.out/"
 prefix$data <- paste(prefix$all.out, "data/", sep = "")
 prefix$subset <- paste(prefix$all.out, "subset/", sep = "")
 prefix$output <- paste(prefix$all.out, "output/", sep = "")
+
+### For table.
 prefix$table <- paste(prefix$all.out, "table/", sep = "")
+prefix$table.nps <- paste(prefix$all.out, "table_nps/", sep = "")
 
 ### For ploting.
 prefix$plot <- paste(prefix$all.out, "plot/", sep = "")

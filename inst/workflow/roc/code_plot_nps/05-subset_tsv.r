@@ -7,11 +7,16 @@ source("00-set_env.r")
 
 ### Get all cases.
 for(i.case in case.names){
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     next
   }
   load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   next
+  # }
+  # load(fn.in)
 
   all.names <- names(b.PM)
   id.intercept <- grep("log.mu", all.names)
@@ -34,12 +39,12 @@ for(i.case in case.names){
   order.id <- order(ret$AA, ret$CODON)
   ret <- ret[order.id,] 
 
-  fn.out <- paste(prefix$table, "param_", i.case, "_PM_scaling.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "param_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### Dump phi.
   ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM)
 
-  fn.out <- paste(prefix$table, "phi_", i.case, "_PM_scaling.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "phi_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 }

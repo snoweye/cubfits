@@ -32,7 +32,7 @@ NP=7
 mpiexec -np ${NP} Rscript ${CODE_PATH}/03-get_init-tp.r > \
                             ${ALL_OUT}/log/03-get_init-tp 2>&1
 
-### Plotting.
+### Plot.
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_bin_est.r > \
           ${ALL_OUT}/log/03-plotdiag_bin_est 2>&1 &
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
