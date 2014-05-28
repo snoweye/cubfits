@@ -59,10 +59,10 @@
   renew.iter = 100,                # per renewing iterations
   target.accept.lower = 0.25,      # target acceptance lower bound
   target.accept.upper = 0.5,       # target acceptance upper bound
-  scale.increase = 1.2,            # 10% more
-  scale.decrease = 0.8,            # 10% less
-  sigma2.lower = 0.01,             # lower bound of sigma^2
-  sigma2.upper = 100               # upper bound of sigma^2
+  scale.increase = 1.2,            # 20% more
+  scale.decrease = 0.8,            # 20% less
+  sigma.lower = 1e-4,              # lower bound of sigma
+  sigma.upper = 1e4                # upper bound of sigma
 )
 
 ### For parameters as reestimated for Yeast according to Yassour's data.

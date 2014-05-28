@@ -34,7 +34,7 @@ my.update.DrawScale.simple <- function(var.name, update.curr.renew = TRUE){
   invisible()
 } # End of my.update.DrawScale().
 
-my.DrawScale.scaling <- function(var.name, curr.window){
+my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale = 1){
   if(curr.window > 2){
     prev.scale <- .cubfitsEnv$DrawScale[[var.name]][[curr.window - 1]]
     prev.accept <- .cubfitsEnv$adaptive[[var.name]][[curr.window - 1]] /
@@ -86,8 +86,14 @@ my.DrawScale.scaling <- function(var.name, curr.window){
   }
 
   ### Replace too small and too large numbers.
-  ret[ret > .CF.AC$sigma2.upper] <- .CF.AC$sigma2.upper
-  ret[ret < .CF.AC$sigma2.lower] <- .CF.AC$sigma2.lower
+  ret[ret > .CF.AC$sigma.upper] <- .CF.AC$sigma.upper
+  ret[ret < .CF.AC$sigma.lower] <- .CF.AC$sigma.lower
+
+  ### Replace weird situations back to default values.
+  if(curr.window > 2){
+    ret[(curr.accept == 0 & prev.accept == 0) |
+        (curr.accept == 1 & prev.accept == 1)] <- default.DrawScale 
+  }
 
   ret
 } # End of my.DrawScale.scaling().

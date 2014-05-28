@@ -18,32 +18,55 @@ for(i.case in case.names){
   # }
   # load(fn.in)
 
-  all.names <- names(b.PM)
-  id.intercept <- grep("log.mu", all.names)
-  id.slop <- grep("Delta.t", all.names)
+  ### For log.mu.
+  all.names <- names(b.logmu.PM)
+  id.var <- grep("log.mu", all.names)
 
-  log.mu <- b.PM[id.intercept]
-  Delta.t <- b.PM[id.slop]
+  AA <- gsub("(.)\\.(.*)", "\\1", b.logmu.label)
+  CODON <- gsub("(.)\\.(.*)", "\\2", b.logmu.label)
 
-  AA <- gsub("(.)\\.(.*)", "\\1", b.label)
-  CODON <- gsub("(.)\\.(.*)", "\\2", b.label)
-  
-  ret <- data.frame(AA = AA, CODON = CODON, Delta.t = Delta.t, log.mu = log.mu)
+  tmp.PM <- b.logmu.PM[id.var]
+  tmp.CI <- b.logmu.ci.PM[id.var,]
+  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM,
+                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[length(tmp)],
-                      Delta.t = 0, log.mu = 0)
+                      Mean = 0, CI.025 = 0, CI.975 = 0)
     ret <- rbind(ret, tmp)
   }
-
   order.id <- order(ret$AA, ret$CODON)
   ret <- ret[order.id,] 
 
-  fn.out <- paste(prefix$table.nps, "param_", i.case, "_PM.tsv", sep = "")
+  fn.out <- paste(prefix$table, "logmu_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
-  ### Dump phi.
-  ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM)
+  ### For Delta.t.
+  all.names <- names(b.negsel.PM)
+  id.var <- grep("Delta.t", all.names)
+
+  AA <- gsub("(.)\\.(.*)", "\\1", b.negsel.label)
+  CODON <- gsub("(.)\\.(.*)", "\\2", b.negsel.label)
+
+  tmp.PM <- b.negsel.PM[id.var]
+  tmp.CI <- b.negsel.ci.PM[id.var,]
+  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM,
+                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
+  for(i.aa in unique(AA)){
+    tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
+    tmp <- data.frame(AA = i.aa, CODON = tmp[length(tmp)],
+                      Mean = 0, CI.025 = 0, CI.975 = 0)
+    ret <- rbind(ret, tmp)
+  }
+  order.id <- order(ret$AA, ret$CODON)
+  ret <- ret[order.id,] 
+
+  fn.out <- paste(prefix$table.nps, "deltat_", i.case, "_PM.tsv", sep = "")
+  write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
+
+  ### For E[Phi].
+  ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM, Median = phi.MED,
+                    CI.025 = phi.CI[, 1], CI.975 = phi.CI[, 2])
 
   fn.out <- paste(prefix$table.nps, "phi_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)

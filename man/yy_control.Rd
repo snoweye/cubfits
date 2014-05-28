@@ -109,10 +109,10 @@
       \code{renew.iter}          \tab per renewing iterations \cr
       \code{target.accept.lower} \tab target acceptance lower bound \cr
       \code{target.accept.upper} \tab target acceptance upper bound \cr
-      \code{scale.increase}      \tab 10\% more \cr
-      \code{scale.decrease}      \tab 10\% less \cr
-      \code{sigma2.lower}        \tab lower bound of sigma^2 \cr
-      \code{sigma2.upper}        \tab upper bound of sigma^2
+      \code{scale.increase}      \tab increase scaling more \cr
+      \code{scale.decrease}      \tab increase scaling less \cr
+      \code{sigma.lower}         \tab lower bound of sigma \cr
+      \code{sigma.upper}         \tab upper bound of sigma
     }
 
   \item

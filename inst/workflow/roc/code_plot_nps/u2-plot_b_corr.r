@@ -37,25 +37,45 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
 
       width <- xlim[2] - xlim[1]
       height <- ylim[2] - ylim[1]
-      text(xlim[1] + width * 0.01, ylim[2] - height * 0.05,
+      text(xlim[1] - width * 0.04, ylim[2] - height * 0.05,
            parse(text = paste("y == ", a, " + ", b, " * x", sep = "")),
            pos = 4, cex = 0.5)
 
-      text(xlim[1] + width * 0.01, ylim[2] - height * 0.10,
+      text(xlim[1] - width * 0.04, ylim[2] - height * 0.10,
            parse(text = paste("R^2 == ",
                               sprintf("%.4f", R2), sep = "")),
            pos = 4, cex = 0.5)
 
-      ### Add 95% CI for Delta.t
+      ### Add 95% CI.
       if(add.ci){
-        tmp <- summary(m.1)
-        CI.95 <- tmp$coefficients[2, 1] +
-                 qt(c(0.025, 0.975), tmp$df[2]) * tmp$coefficients[2, 2]
+        text(xlim[1] - width * 0.04, ylim[2] - height * 0.15,
+             "95% CI ",
+             pos = 4, cex = 0.5)
 
-        text(xlim[1] + width * 0.01, ylim[2] - height * 0.15,
-             paste("95% CI for Delta.t: ",
+        tmp <- summary(m.1)
+
+        ### For intercept.
+        CI.95 <- tmp$coefficients[1, 1] +
+                 qt(c(0.025, 0.975), tmp$df[2]) * tmp$coefficients[1, 2]
+        text(xlim[1] - width * 0.02, ylim[2] - height * 0.20,
+             paste("intercept: ",
                    sprintf("(%.4f, %.4f)", CI.95[1], CI.95[2]), sep = ""),
              pos = 4, cex = 0.5)
+
+        ### For slop.
+        CI.95 <- tmp$coefficients[2, 1] +
+                 qt(c(0.025, 0.975), tmp$df[2]) * tmp$coefficients[2, 2]
+        text(xlim[1] - width * 0.02, ylim[2] - height * 0.25,
+             paste("slop: ",
+                   sprintf("(%.4f, %.4f)", CI.95[1], CI.95[2]), sep = ""),
+             pos = 4, cex = 0.5)
+
+        ### For LRT.
+        # lrt.pvalue <- 0
+        # text(xlim[1] - width * 0.02, ylim[2] - height * 0.30,
+        #      paste("LRT p-value: "
+        #            sprintf("%.4f", lrt.pvalue), sep = ""),
+        #      pos = 4, cex = 0.5)
       }
     }
   }

@@ -26,14 +26,13 @@ for(i.case in case.names){
   CODON <- gsub("(.)\\.(.*)", "\\2", b.logmu.label)
 
   tmp.PM <- b.logmu.PM[id.var]
-  tmp.MED <- b.logmu.MED[id.var]
-  tmp.CI <- b.logmu.CI[id.var,]
-  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM, Median = tmp.MED,
+  tmp.CI <- b.logmu.ci.PM[id.var,]
+  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM,
                     CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[length(tmp)],
-                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0)
+                      Mean = 0, CI.025 = 0, CI.975 = 0)
     ret <- rbind(ret, tmp)
   }
   order.id <- order(ret$AA, ret$CODON)
@@ -41,7 +40,6 @@ for(i.case in case.names){
 
   fn.out <- paste(prefix$table, "logmu_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
-
 
   ### For Delta.t.
   all.names <- names(b.negsel.PM)
@@ -51,14 +49,13 @@ for(i.case in case.names){
   CODON <- gsub("(.)\\.(.*)", "\\2", b.negsel.label)
 
   tmp.PM <- b.negsel.PM[id.var]
-  tmp.MED <- b.negsel.MED[id.var]
-  tmp.CI <- b.negsel.CI[id.var,]
-  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM, Median = tmp.MED,
+  tmp.CI <- b.negsel.ci.PM[id.var,]
+  ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM,
                     CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[length(tmp)],
-                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0)
+                      Mean = 0, CI.025 = 0, CI.975 = 0)
     ret <- rbind(ret, tmp)
   }
   order.id <- order(ret$AA, ret$CODON)
@@ -66,7 +63,6 @@ for(i.case in case.names){
 
   fn.out <- paste(prefix$table, "deltat_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
-
 
   ### For E[Phi].
   ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM, Median = phi.MED,

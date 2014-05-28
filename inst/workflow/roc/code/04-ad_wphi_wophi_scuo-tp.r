@@ -44,7 +44,7 @@ if(.CF.CT$type.p[1] == "lognormal_bias"){
 }
 
 ### Run.
-if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimates.bias.Phi){
+if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,
