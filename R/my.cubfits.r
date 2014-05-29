@@ -75,16 +75,18 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   }
 
   ### Initial values for b.
+  bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
+  bRInitList <- lapply(bInitList, function(B){ B$R })
   if(is.null(bInit)){
-    bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
-    bRInitList <- lapply(bInitList, function(B){ B$R })
     bInit <- lapply(bInitList,
                function(B){
                  B$coefficients +
                  init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
                })
   } else{
-    bRInitList <- lapply(bInit, function(B){ B$R })
+    if(!is.null(bInit[[1]]$R)){
+      bRInitList <- lapply(bInit, function(B){ B$R })
+    }
     bInit <- lapply(bInit, function(B){ B$coefficients })
   }
   bInitVec <- unlist(bInit)
@@ -164,9 +166,15 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     if(iter %/% .CF.AC$renew.iter + 1 == .cubfitsEnv$curr.renew){
       my.copy.adaptive()
     } else{
-      .cubfitsEnv$my.update.DrawScale("b", update.curr.renew = FALSE)
-      .cubfitsEnv$my.update.DrawScale("p", update.curr.renew = FALSE)
-      .cubfitsEnv$my.update.DrawScale("phi", update.curr.renew = TRUE)
+      .cubfitsEnv$my.update.DrawScale(
+        "b", update.curr.renew = FALSE,
+        default.DrawScale = .CF.CONFAC$b.DrawScale)
+      .cubfitsEnv$my.update.DrawScale(
+        "p", update.curr.renew = FALSE,
+        default.DrawScale = .CF.CONFAC$p.DrawScale)
+      .cubfitsEnv$my.update.DrawScale(
+        "phi", update.curr.renew = TRUE,
+        default.DrawScale = .CF.CONF$phi.DrawScale)
     }
 
     ### Dump parameters out.

@@ -11,15 +11,18 @@ get.my.update.DrawScale <- function(adaptive){
 
 
 ### No adaptive.
-my.update.DrawScale.none <- function(var.name, update.curr.renew = TRUE){
+my.update.DrawScale.none <- function(var.name, update.curr.renew = TRUE,
+    default.DrawScale = 1){
   invisible()
 } # End of my.update.DrawScale.none().
 
 
 ### Update scaling factors for every gene.
-my.update.DrawScale.simple <- function(var.name, update.curr.renew = TRUE){
+my.update.DrawScale.simple <- function(var.name, update.curr.renew = TRUE,
+    default.DrawScale = 1){
   ### Update new scaling factors.
-  ret <- my.DrawScale.scaling(var.name, .cubfitsEnv$curr.renew)
+  ret <- my.DrawScale.scaling(var.name, .cubfitsEnv$curr.renew,
+                              default.DrawScale)
 
   ### Update global.
   .cubfitsEnv$all.DrawScale[[var.name]] <- ret
@@ -90,9 +93,15 @@ my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale = 1){
   ret[ret < .CF.AC$sigma.lower] <- .CF.AC$sigma.lower
 
   ### Replace weird situations back to default values.
-  if(curr.window > 2){
-    ret[(curr.accept == 0 & prev.accept == 0) |
-        (curr.accept == 1 & prev.accept == 1)] <- default.DrawScale 
+  if(curr.window > 2 && .CF.AC$reset.default){
+    ### Check bounds.
+    id.scale <- (curr.scale == .CF.AC$sigma.upper &
+                 prev.scale == .CF.AC$sigma.upper) |
+                (curr.scale == .CF.AC$sigma.lower &
+                 prev.scale == .CF.AC$sigma.lower)
+    id.accept <- (curr.accept == 0 & prev.accept == 0) |
+                  (curr.accept == 1 & prev.accept == 1)
+    ret[id.scale & id.accept] <- default.DrawScale 
   }
 
   ret

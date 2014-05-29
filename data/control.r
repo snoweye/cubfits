@@ -61,8 +61,9 @@
   target.accept.upper = 0.5,       # target acceptance upper bound
   scale.increase = 1.2,            # 20% more
   scale.decrease = 0.8,            # 20% less
-  sigma.lower = 1e-4,              # lower bound of sigma
-  sigma.upper = 1e4                # upper bound of sigma
+  sigma.lower = 1e-6,              # lower bound of sigma
+  sigma.upper = 1e6,               # upper bound of sigma
+  reset.default = TRUE             # reset to default if bounds were reached
 )
 
 ### For parameters as reestimated for Yeast according to Yassour's data.

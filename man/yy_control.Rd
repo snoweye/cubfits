@@ -112,7 +112,8 @@
       \code{scale.increase}      \tab increase scaling more \cr
       \code{scale.decrease}      \tab increase scaling less \cr
       \code{sigma.lower}         \tab lower bound of sigma \cr
-      \code{sigma.upper}         \tab upper bound of sigma
+      \code{sigma.upper}         \tab upper bound of sigma \cr
+      \code{reset.default}       \tab rest to default if bounds were reached
     }
 
   \item
