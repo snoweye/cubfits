@@ -40,7 +40,7 @@ if(.CF.CT$type.p[1] == "lognormal_bias"){
 }
 
 ### Run.
-if(.CF.CT$model.Phi == "logmixture"){
+if(.CF.CT$model.Phi[1] == "logmixture"){
   phi.init.SCUO <- phi.init.SCUO.emp    ### lognormal fails
 }
 if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){

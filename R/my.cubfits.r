@@ -168,13 +168,13 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     } else{
       .cubfitsEnv$my.update.DrawScale(
         "b", update.curr.renew = FALSE,
-        default.DrawScale = .CF.CONFAC$b.DrawScale)
+        default.DrawScale = .CF.AC$b.DrawScale)
       .cubfitsEnv$my.update.DrawScale(
         "p", update.curr.renew = FALSE,
-        default.DrawScale = .CF.CONFAC$p.DrawScale)
+        default.DrawScale = .CF.AC$p.DrawScale)
       .cubfitsEnv$my.update.DrawScale(
         "phi", update.curr.renew = TRUE,
-        default.DrawScale = .CF.CONF$phi.DrawScale)
+        default.DrawScale = .CF.AC$phi.DrawScale)
     }
 
     ### Dump parameters out.

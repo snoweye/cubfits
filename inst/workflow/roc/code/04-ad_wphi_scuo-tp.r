@@ -33,7 +33,7 @@ burnin <- run.info$burnin
 .CF.CT$adaptive <- run.info$adaptive
 
 ### Run.
-if(.CF.CT$model.Phi == "logmixture"){
+if(.CF.CT$model.Phi[1] == "logmixture"){
   phi.init.SCUO <- phi.init.SCUO.emp
 }
 if(.CF.CONF$scale.phi.Obs){
