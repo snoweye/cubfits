@@ -28,7 +28,7 @@ Rscript ${CODE_PATH}/02-get_data.r > \
           ${ALL_OUT}/log/02-get_data 2>&1
 
 ### Get initial values.
-NP=7
+NP=5
 mpiexec -np ${NP} Rscript ${CODE_PATH}/03-get_init-tp.r > \
                             ${ALL_OUT}/log/03-get_init-tp 2>&1
 
@@ -39,7 +39,7 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
           ${ALL_OUT}/log/03-plotdiag_init 2>&1 &
 
 ### Run MCMC.
-NP=7
+NP=5
 nohup mpiexec -np ${NP} Rscript ${CODE_PATH}/04-ad_wophi_pm-tp.r > \
                                   ${ALL_OUT}/log/04-ad_wophi_pm-tp 2>&1 &
 RUN_1=$!
