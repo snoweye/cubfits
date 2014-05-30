@@ -9,7 +9,7 @@
   The model can be fitted by MCMC or multinomial logistic regression.
 }
 \usage{
-  prop.model.roc(bInit, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
+  prop.model.roc(b.Init, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
                  nclass = 40, x.log10 = TRUE)
 
   plotmodel(ret.model, main = NULL,
@@ -20,7 +20,7 @@
                x.log10 = TRUE)
 }
 \arguments{
-  \item{bInit}{a \code{\link{b}} object.}
+  \item{b.Init}{a \code{\link{b}} object.}
   \item{phi.Obs.lim}{range of \code{phi.Obs}.}
   \item{phi.Obs.scale}{optional scaling factor.}
   \item{nclass}{number of binning classes across the range of \code{phi.Obs}.}

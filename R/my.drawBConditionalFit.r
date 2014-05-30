@@ -26,11 +26,11 @@ my.drawBConditionalFit.ID_Norm <- function(bFitaa, baa, phi, yaa, naa,
 
 ### Draw new beta from random walk.
 my.drawBConditionalFit.RW_Norm <- function(bFitaa, baa, phi, yaa, naa,
-    bRInitList.aa, b.DrawScale.aa = 1, b.DrawScale.prev.aa = 1,
+    b.RInitList.aa, b.DrawScale.aa = 1, b.DrawScale.prev.aa = 1,
     reu13.df.aa = NULL){
   ### Propose new beta.
   bHat <- bFitaa
-  R <- bRInitList.aa
+  R <- b.RInitList.aa
   proplist <- my.proposeB.RW_Norm(baa, bHat, R,
                                   b.DrawScale.aa, b.DrawScale.prev.aa)
 

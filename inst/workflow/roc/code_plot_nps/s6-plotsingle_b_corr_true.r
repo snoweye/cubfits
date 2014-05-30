@@ -16,7 +16,7 @@ if(file.exists(fn.in)){
   stop(paste(fn.in, " is not found.", sep = ""))
 }
 
-bInit <- convert.b.to.bVec(Eb)
+b.Init <- convert.b.to.bVec(Eb)
 
 ### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
@@ -36,7 +36,7 @@ for(i.aa in aa.names){
 all.names <- b.names 
 id.slop <- grep("Delta.t", all.names)
 scale.EPhi <- mean(EPhi)
-bInit[id.slop] <- bInit[id.slop] * scale.EPhi
+b.Init[id.slop] <- b.Init[id.slop] * scale.EPhi
 
 for(i.case in case.names){
   title <- paste(workflow.name, ", ", get.case.main(i.case, model), sep = "")
@@ -57,7 +57,7 @@ for(i.case in case.names){
 
   ### Plot log(mu)
   id.intercept <- grep("log.mu", all.names)
-  x <- bInit[id.intercept]
+  x <- b.Init[id.intercept]
   y <- b.PM[id.intercept]
   xlim <- my.range(x)
   ylim <- my.range(y)
@@ -76,7 +76,7 @@ for(i.case in case.names){
 
   ### Plot Delta.t.
   id.slop <- grep("Delta.t", all.names)
-  x <- bInit[id.slop]
+  x <- b.Init[id.slop]
   y <- b.PM[id.slop]
   xlim <- my.range(x)
   ylim <- my.range(y)

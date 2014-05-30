@@ -17,7 +17,7 @@ if(file.exists(fn.in)){
   stop(paste(fn.in, " is not found.", sep = ""))
 }
 
-bInit <- convert.b.to.bVec(Eb)
+b.Init <- convert.b.to.bVec(Eb)
 
 ### Load initial.
 fn.in <- paste(prefix$data, "/pre_process.rda", sep = "")
@@ -40,8 +40,8 @@ all.names <- b.names
 id.slop <- grep("Delta.t", all.names)
 
 ### Convert true to negsel and delta.t only.
-tmp <- get.negsel(bInit, id.slop, aa.names, label)
-bInit <- tmp$b.negsel.PM
+tmp <- get.negsel(b.Init, id.slop, aa.names, label)
+b.Init <- tmp$b.negsel.PM
 label.negsel.true <- tmp$b.negsel.label
 
 
@@ -87,7 +87,7 @@ for(i.case in case.names){
 
       plot.aa.allinone(i.aa, id.label, tl.codon,      ### For AA.
                        label.negsel.true,             ### For label.
-                       bInit, EPhi,                   ### For true.
+                       b.Init, EPhi,                   ### For true.
                        b.mcmc, t.phi.mcmc,            ### For unscaled results.
                        b.negsel.PM, phi.PM,           ### For scaled results.
                        workflow.name, i.case, model)

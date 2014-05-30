@@ -16,7 +16,7 @@
 ### All genes have observations.
 my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     nIter = 1000, burnin = 100,
-    bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+    b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
         b.DrawScale = .CF.CONF$b.DrawScale,
     p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
         p.DrawScale = .CF.CONF$p.DrawScale,
@@ -75,21 +75,21 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   }
 
   ### Initial values for b.
-  bInitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
-  bRInitList <- lapply(bInitList, function(B){ B$R })
-  if(is.null(bInit)){
-    bInit <- lapply(bInitList,
-               function(B){
-                 B$coefficients +
-                 init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
-               })
+  b.InitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
+  b.RInitList <- lapply(b.InitList, function(B){ B$R })
+  if(is.null(b.Init)){
+    b.Init <- lapply(b.InitList,
+                function(B){
+                  B$coefficients +
+                  init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
+                })
   } else{
-    if(!is.null(bInit[[1]]$R)){
-      bRInitList <- lapply(bInit, function(B){ B$R })
+    if(!is.null(b.Init[[1]]$R)){
+      b.RInitList <- lapply(b.Init, function(B){ B$R })
     }
-    bInit <- lapply(bInit, function(B){ B$coefficients })
+    b.Init <- lapply(b.Init, function(B){ B$coefficients })
   }
-  bInitVec <- unlist(bInit)
+  b.InitVec <- unlist(b.Init)
 
   ### Initial values for training phi.
   if(is.null(phi.Init)){
@@ -103,8 +103,8 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
 
 ### Set current step ###
   ### Set current step for b.
-  b.Mat[[1]] <- bInitVec
-  b.Curr <- bInit
+  b.Mat[[1]] <- b.InitVec
+  b.Curr <- b.Init
 
   ### Set current step for p.
   p.Mat[[1]] <- p.Init 
@@ -150,7 +150,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     ### Step 1: Update b using M-H step
     bUpdate <- .cubfitsEnv$my.drawBConditionalAll(
                  b.Curr, phi.Curr, y, n, reu13.df.obs,
-                 bRInitList = bRInitList)
+                 b.RInitList = b.RInitList)
     b.Curr <- lapply(bUpdate, function(U){ U$bNew })
 
     ### Step 2: Draw other parameters.
@@ -167,14 +167,8 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
       my.copy.adaptive()
     } else{
       .cubfitsEnv$my.update.DrawScale(
-        "b", update.curr.renew = FALSE,
-        default.DrawScale = .CF.AC$b.DrawScale)
-      .cubfitsEnv$my.update.DrawScale(
-        "p", update.curr.renew = FALSE,
-        default.DrawScale = .CF.AC$p.DrawScale)
-      .cubfitsEnv$my.update.DrawScale(
-        "phi", update.curr.renew = TRUE,
-        default.DrawScale = .CF.AC$phi.DrawScale)
+        c("b", "p", "phi"),
+        c(.CF.AC$b.DrawScale, .CF.AC$p.DrawScale, .CF.AC$phi.DrawScale))
     }
 
     ### Dump parameters out.
@@ -188,8 +182,13 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat"))
   } ### MCMC end.
 
+### Check acceptance of last renew iteration.
+  my.check.acceptance(c("b", "p", "phi"))
+
 ### Return ###
-  ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat)
+  ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
+              b.Init = b.Init, b.RInit = b.RInitList,
+              p.Init = p.Init, phi.Init = phi.Init)
   ret
 } # End of my.cubfits().
 

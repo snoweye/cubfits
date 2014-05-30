@@ -22,7 +22,7 @@ if(file.exists(fn.in)){
 fn.in <- paste(prefix$param, "small_length.rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
-  eval(parse(text = paste("bInit <- bInitList.", model, sep = "")))
+  eval(parse(text = paste("b.Init <- b.InitList.", model, sep = "")))
 } else{
   stop(paste(fn.in, " is not found.", sep = ""))
 }
@@ -36,8 +36,8 @@ if(simulation$EPhi){
 }
 names(EPhi) <- names(phi.Obs)
 
-### Generate E[b] or set to bInit.
-Eb <- bInit
+### Generate E[b] or set to b.Init.
+Eb <- b.Init
 if(simulation$Eb){
   Eb <- lapply(Eb, function(x){
                      tmp <- list()
@@ -49,7 +49,7 @@ if(simulation$Eb){
                      tmp
                    })
 }
-names(Eb) <- names(bInit)
+names(Eb) <- names(b.Init)
 
 ### For Yassour 2009 only. EPhi and simu.phi.Obs are overwrote.
 # GM <- apply(yassour[, -1], 1, function(x) exp(mean(log(x[x != 0]))))

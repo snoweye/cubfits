@@ -23,10 +23,10 @@ if(!file.exists(fn.out)){
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-### Load bInit from previous summarized MCMC outputs.
+### Load b.Init from previous summarized MCMC outputs.
 fn.in <- paste(prefix$subset, model, "_ad_wphi_scuo_PM.rda", sep = "")
 load(fn.in)
-# bInit <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
+# b.Init <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
 phi.init.SCUO <- phi.PM
 
 ### Change initial for fitsappr.
@@ -49,7 +49,7 @@ if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
 }
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,
                nIter = nIter, burnin = burnin,
-               # bInit = bInit,
+               # b.Init = b.Init,
                p.nclass = p.nclass,
                model = model, verbose = TRUE, report = 10)
 
@@ -65,6 +65,8 @@ if(comm.rank() == 0){
   fn.out <- paste(prefix$output, case.name, "/output_env.rda", sep = "")
   save(list = ls(envir = .cubfitsEnv),
        file = fn.out, envir = .cubfitsEnv)
+
+  warnings()
 }
 
 finalize()

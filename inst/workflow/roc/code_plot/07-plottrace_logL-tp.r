@@ -37,12 +37,12 @@ all.jobs <- function(i.job){
     logL <- lapply(1:length(ret$phi.Mat),
                    function(i.iter){
                      xx <- ret$phi.Mat[[i.iter]]
-                     bInit <- convert.bVec.to.b(ret$b.Mat[[i.iter]],
+                     b.Init <- convert.bVec.to.b(ret$b.Mat[[i.iter]],
                                                 names(reu13.df.obs),
                                                 model = model)
-                     bInit <- lapply(bInit, function(B) B$coefficients)
+                     b.Init <- lapply(b.Init, function(B) B$coefficients)
                      sigmaWsq <- ret$p.Mat[[i.iter]][1]^2
-                     tmp <- .cubfitsEnv$my.logLAll(xx, phi.Obs, y, n, bInit,
+                     tmp <- .cubfitsEnv$my.logLAll(xx, phi.Obs, y, n, b.Init,
                                                    sigmaWsq,
                                                    reu13.df = reu13.df.obs)
                      sum(tmp)
@@ -51,11 +51,11 @@ all.jobs <- function(i.job){
     logL <- lapply(1:length(ret$phi.Mat),
                    function(i.iter){
                      xx <- ret$phi.Mat[[i.iter]]
-                     bInit <- convert.bVec.to.b(ret$b.Mat[[i.iter]],
+                     b.Init <- convert.bVec.to.b(ret$b.Mat[[i.iter]],
                                                 names(reu13.df.obs),
                                                 model = model)
-                     bInit <- lapply(bInit, function(B) B$coefficients)
-                     tmp <- .cubfitsEnv$my.logLAllPred(xx, y, n, bInit,
+                     b.Init <- lapply(b.Init, function(B) B$coefficients)
+                     tmp <- .cubfitsEnv$my.logLAllPred(xx, y, n, b.Init,
                                                        reu13.df = reu13.df.obs)
                      sum(tmp)
                   })
@@ -67,15 +67,15 @@ all.jobs <- function(i.job){
   fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   load(fn.in)
 
-  bInit <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
-  bInit <- lapply(bInit, function(B) B$coefficients)
+  b.Init <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
+  b.Init <- lapply(b.Init, function(B) B$coefficients)
 
   if("sigmaW" %in% rownames(p.PM)){
     sigmaWsq <- p.PM[1]^2
-    tmp <- .cubfitsEnv$my.logLAll(phi.PM, phi.Obs, y, n, bInit, sigmaWsq,
+    tmp <- .cubfitsEnv$my.logLAll(phi.PM, phi.Obs, y, n, b.Init, sigmaWsq,
                                   reu13.df = reu13.df.obs)
   } else{
-    tmp <- .cubfitsEnv$my.logLAllPred(phi.PM, y, n, bInit,
+    tmp <- .cubfitsEnv$my.logLAllPred(phi.PM, y, n, b.Init,
                                       reu13.df = reu13.df.obs)
   }
   logL.PM <- sum(tmp)

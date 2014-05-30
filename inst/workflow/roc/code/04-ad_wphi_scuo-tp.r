@@ -60,6 +60,8 @@ if(comm.rank() == 0){
   fn.out <- paste(prefix$output, case.name, "/output_env.rda", sep = "")
   save(list = ls(envir = .cubfitsEnv),
        file = fn.out, envir = .cubfitsEnv)
+
+  warnings()
 }
 
 finalize()

@@ -125,21 +125,21 @@ convert.bVec.to.b <- function(bVec, aa.names, model = .CF.CT$model[1]){
   }
 
   ### Compute mutation and elong
-  bInit <- list()
+  b.Init <- list()
   id <- 0
   for(aa in aa.names){
     n.synonymous.codon <- length(synonymous.codon[[aa]]) - 1
     tl.params <- n.coef * n.synonymous.codon
 
-    bInit[[aa]]$coefficients <- bVec[id + (1:tl.params)]
-    bInit[[aa]]$coef.mat <- matrix(bVec[id + (1:tl.params)],
+    b.Init[[aa]]$coefficients <- bVec[id + (1:tl.params)]
+    b.Init[[aa]]$coef.mat <- matrix(bVec[id + (1:tl.params)],
                                    nrow = n.coef, byrow = TRUE)
-    colnames(bInit[[aa]]$coef.mat) <- synonymous.codon[[aa]][1:n.synonymous.codon]
-    rownames(bInit[[aa]]$coef.mat) <- coef.names
+    colnames(b.Init[[aa]]$coef.mat) <- synonymous.codon[[aa]][1:n.synonymous.codon]
+    rownames(b.Init[[aa]]$coef.mat) <- coef.names
 
     id <- id + tl.params
   }
 
-  bInit
+  b.Init
 } # End of convert.bVec.to.b().
 

@@ -9,7 +9,7 @@ get.case.main <- function(i.case, model){
   } else if(i.case == paste(model, "_ad_wphi_true", sep = "")){
     i.case.main <- paste(model, ": with phi.Obs, start: True", sep = "")
   } else if(i.case == paste(model, "_ad_wphi_bInit", sep = "")){
-    i.case.main <- paste(model, ": with phi.Obs, start: bInit", sep = "")
+    i.case.main <- paste(model, ": with phi.Obs, start: b.Init", sep = "")
 
   ### cases without phi.
   } else if(i.case == paste(model, "_ad_wophi_pm", sep = "")){
@@ -19,7 +19,7 @@ get.case.main <- function(i.case, model){
   } else if(i.case == paste(model, "_ad_wophi_true", sep = "")){
     i.case.main <- paste(model, ": without phi.Obs, start: True", sep = "")
   } else if(i.case == paste(model, "_ad_wophi_bInit", sep = "")){
-    i.case.main <- paste(model, ": without phi.Obs, start: bInit", sep = "")
+    i.case.main <- paste(model, ": without phi.Obs, start: b.Init", sep = "")
 
   ### cases without phi following with phi.
   } else if(i.case == paste(model, "_ad_wphi_wophi_pm", sep = "")){

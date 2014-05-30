@@ -1,22 +1,22 @@
 ### This file contains functions generating sequences for simulation studies.
 
-simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
+simu.orf <- function(n, b.Init, phi.Obs = NULL, AA.prob = NULL,
     orf.length = NULL, orf.names = NULL, model = .CF.CT$model){
   ### Check n.
   if(n <= 0){
     stop("n should be a positive integer.")
   }
 
-  ### Check bInit.
-  if(!is.list(bInit)){
-    stop("bInit should be a list.")
+  ### Check b.Init.
+  if(!is.list(b.Init)){
+    stop("b.Init should be a list.")
   }
-  if(!all(names(bInit) %in% .CF.GV$amino.acid.split)){
-    stop("names of bInit is incorrect.")
+  if(!all(names(b.Init) %in% .CF.GV$amino.acid.split)){
+    stop("names of b.Init is incorrect.")
   }
-  tmp <- do.call("c", lapply(bInit, function(i.b) is.matrix(i.b$coef.mat)))
+  tmp <- do.call("c", lapply(b.Init, function(i.b) is.matrix(i.b$coef.mat)))
   if(!all(tmp)){
-    stop("bInit[[i]]$coef.mat should be in matrix format for all i.")
+    stop("b.Init[[i]]$coef.mat should be in matrix format for all i.")
   }
 
   ### Check phi.Obs
@@ -32,10 +32,10 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
 
   ### Check AA.prob.
   if(is.null(AA.prob)){
-    AA.prob <- rep(1, length(bInit))
+    AA.prob <- rep(1, length(b.Init))
   }
-  if(length(AA.prob) != length(bInit)){
-    stop("AA.prob should be corresponding to bInit.")
+  if(length(AA.prob) != length(b.Init)){
+    stop("AA.prob should be corresponding to b.Init.")
   }
   if(all(AA.prob > 0)){
     AA.prob <- AA.prob / sum(AA.prob)
@@ -69,7 +69,7 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
 
   ### Run the function.
   ret <- lapply(1:n, function(i.n){
-                       simu.orf.model(orf.length[i.n], bInit, phi.Obs[i.n],
+                       simu.orf.model(orf.length[i.n], b.Init, phi.Obs[i.n],
                                       AA.prob)
                      })
   names(ret) <- orf.names
@@ -77,8 +77,8 @@ simu.orf <- function(n, bInit, phi.Obs = NULL, AA.prob = NULL,
 } # End of simu.orf().
 
 
-simu.orf.rocnsef <- function(orf.length, bInit, phi.Obs, AA.prob){
-  aa <- names(bInit)
+simu.orf.rocnsef <- function(orf.length, b.Init, phi.Obs, AA.prob){
+  aa <- names(b.Init)
   if(length(aa) == 0){
     stop("AA names are not found.")
   }
@@ -97,7 +97,7 @@ simu.orf.rocnsef <- function(orf.length, bInit, phi.Obs, AA.prob){
       ret[i.aa] <- scodon
     } else{
       x <- cbind(1, phi.Obs, phi.Obs * i.aa)
-      exponent <- x %*% bInit[[orf[i.aa]]]$coef.mat
+      exponent <- x %*% b.Init[[orf[i.aa]]]$coef.mat
       scodon.prob <- my.inverse.mlogit(exponent)
       ret[i.aa] <- sample(scodon, 1, prob = scodon.prob)
     }
@@ -107,14 +107,14 @@ simu.orf.rocnsef <- function(orf.length, bInit, phi.Obs, AA.prob){
   ret
 } # End of simu.orf.rocnsef().
 
-simu.orf.roc <- function(orf.length, bInit, phi.Obs, AA.prob){
-  aa <- names(bInit)
+simu.orf.roc <- function(orf.length, b.Init, phi.Obs, AA.prob){
+  aa <- names(b.Init)
   if(length(aa) == 0){
     stop("AA names are not found.")
   }
   orf <- sample(aa, orf.length, replace = TRUE, prob = AA.prob)
 
-  if("Z" %in% names(bInit)){
+  if("Z" %in% names(b.Init)){
     synonymous.codon <- .CF.GV$synonymous.codon.split
   } else{
     synonymous.codon <- .CF.GV$synonymous.codon
@@ -129,7 +129,7 @@ simu.orf.roc <- function(orf.length, bInit, phi.Obs, AA.prob){
         ret[id] <- scodon
       } else{
         x <- cbind(1, phi.Obs)
-        exponent <- x %*% bInit[[aa[i.aa]]]$coef.mat
+        exponent <- x %*% b.Init[[aa[i.aa]]]$coef.mat
         scodon.prob <- my.inverse.mlogit(exponent) 
         ret[id] <- sample(scodon, sum(id), replace = TRUE, prob = scodon.prob)
       }
@@ -140,8 +140,8 @@ simu.orf.roc <- function(orf.length, bInit, phi.Obs, AA.prob){
   ret
 } # End of simu.orf.roc().
 
-simu.orf.nsef <- function(orf.length, bInit, phi.Obs, AA.prob){
-  aa <- names(bInit)
+simu.orf.nsef <- function(orf.length, b.Init, phi.Obs, AA.prob){
+  aa <- names(b.Init)
   if(length(aa) == 0){
     stop("AA names are not found.")
   }
@@ -160,7 +160,7 @@ simu.orf.nsef <- function(orf.length, bInit, phi.Obs, AA.prob){
       ret[i.aa] <- scodon
     } else{
       x <- cbind(1, phi.Obs * i.aa)
-      exponent <- x %*% bInit[[orf[i.aa]]]$coef.mat
+      exponent <- x %*% b.Init[[orf[i.aa]]]$coef.mat
       scodon.prob <- my.inverse.mlogit(exponent)
       ret[i.aa] <- sample(scodon, 1, prob = scodon.prob)
     }

@@ -8,14 +8,14 @@
   including fake ORFs and expression values.
 }
 \usage{
-  simu.orf(n, bInit, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL,
+  simu.orf(n, b.Init, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL,
            orf.names = NULL, model = .CF.CT$model)
   simu.phi.Obs(Phi, sigmaW.lim = 1)
   simu.mixnormerr(n, param)
 }
 \arguments{
   \item{n}{number of ORFs or sequences.}
-  \item{bInit}{parameters of mutation and selection of format
+  \item{b.Init}{parameters of mutation and selection of format
                \code{\link{b}}.}
   \item{phi.Obs}{an object of format \code{\link{phi.Obs}}.}
   \item{AA.prob}{proportion of amino acids.}
@@ -27,7 +27,7 @@
   \item{param}{as in \code{\link{dmixnormerr}()}}
 }
 \details{
-  \code{simu.orf()} generates ORFs or sequences based on the \code{bInit}
+  \code{simu.orf()} generates ORFs or sequences based on the \code{b.Init}
   and \code{phi.Obs}.
 
   If \code{phi.Obs} is omitted, then standard log normal random variables
@@ -73,7 +73,7 @@ suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 # Generate sequences.
-da.roc <- simu.orf(length(ex.train$phi.Obs), bInit$roc,
+da.roc <- simu.orf(length(ex.train$phi.Obs), b.Init$roc,
                    phi.Obs = ex.train$phi.Obs, model = "roc")
 names(da.roc) <- names(ex.train$phi.Obs)
 write.fasta(da.roc, names(da.roc), "toy_roc.fasta")

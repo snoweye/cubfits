@@ -16,13 +16,13 @@ fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
 ### True SCU.
-bInit <- convert.b.to.bVec(Eb)
-all.names <- names(bInit)
+b.Init <- convert.b.to.bVec(Eb)
+all.names <- names(b.Init)
 id.slop <- grep("Delta.t", all.names)
 scale.EPhi <- mean(EPhi)
-bInit[id.slop] <- bInit[id.slop] * scale.EPhi
+b.Init[id.slop] <- b.Init[id.slop] * scale.EPhi
 EPhi <- EPhi / scale.EPhi
-Eb <- convert.bVec.to.b(bInit, names(reu13.df.obs))
+Eb <- convert.bVec.to.b(b.Init, names(reu13.df.obs))
 SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 for(i.case in case.names){

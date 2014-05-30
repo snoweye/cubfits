@@ -61,6 +61,8 @@ if(comm.rank() == 0){
                  "phi.init.SCUO.emp",
                  "ret.time", "comm.size")
   save(list = list.save, file = fn.out)
+
+  warnings()
 } 
 
 finalize()

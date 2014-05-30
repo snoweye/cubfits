@@ -14,24 +14,24 @@ coef.names <- cubfits:::get.my.coefnames(model)
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
 if(file.exists(fn.in)){
   load(fn.in)
-  bInit <- lapply(Eb, function(x){
+  b.Init <- lapply(Eb, function(x){
                         tmp <- x$coefficients
                         names(tmp) <- rep(coef.names,
                                           eacho = length(tmp) /
                                                   length(coef.names))
                         tmp
                       })
-  bInit <- do.call("c", bInit)
+  b.Init <- do.call("c", b.Init)
 
   ### Get true values and scale accordingly.
-  all.names <- names(bInit)
+  all.names <- names(b.Init)
   id.slop <- grep("Delta.t", all.names)
   scale.EPhi <- mean(EPhi)
-  bInit.scaled <- bInit 
-  bInit.scaled[id.slop] <- bInit.scaled[id.slop] * scale.EPhi
+  b.Init.scaled <- b.Init 
+  b.Init.scaled[id.slop] <- b.Init.scaled[id.slop] * scale.EPhi
 } else{
-  bInit <- NULL
-  bInit.scaled <- NULL
+  b.Init <- NULL
+  b.Init.scaled <- NULL
 }
 
 ### Check split.S.
@@ -79,7 +79,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 12, height = 11)
     plottrace.param(ret.b.Mat, names.b, names.aa, id.intercept,
                     workflow.name, i.case, model,
-                    bInit = bInit, param = "logmu")
+                    b.Init = b.Init, param = "logmu")
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
@@ -88,7 +88,7 @@ for(i.case in case.names){
   pdf(fn.out, width = 12, height = 11)
     plottrace.param(ret.b.Mat, names.b, names.aa, id.slop,
                     workflow.name, i.case, model,
-                    bInit = bInit, param = "deltat")
+                    b.Init = b.Init, param = "deltat")
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
@@ -116,7 +116,7 @@ for(i.case in case.names){
     plottrace.param(ret.b.Mat.scaled, names.b, names.aa, id.slop,
                     paste(workflow.name, ", scaled", sep = ""),
                     i.case, model,
-                    bInit = bInit.scaled, param = "deltat")
+                    b.Init = b.Init.scaled, param = "deltat")
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }

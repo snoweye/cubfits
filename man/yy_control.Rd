@@ -96,7 +96,6 @@
       \code{dump}             \tab if dumping within MCMC \cr
       \code{iter}             \tab iterations per dumping \cr
       \code{prefix.dump}      \tab path and file names of dumping \cr
-      \code{trace.acceptance} \tab if trace acceptance rate \cr
       \code{verbose}          \tab if verbose \cr
       \code{iterThin}         \tab iterations to thin chain \cr
       \code{report}           \tab iterations to report \cr
@@ -107,13 +106,13 @@
     \code{.CF.AC} controls adaptive MCMC. It currently includes
     \tabular{ll}{
       \code{renew.iter}          \tab per renewing iterations \cr
-      \code{target.accept.lower} \tab target acceptance lower bound \cr
-      \code{target.accept.upper} \tab target acceptance upper bound \cr
-      \code{scale.increase}      \tab increase scaling more \cr
-      \code{scale.decrease}      \tab increase scaling less \cr
-      \code{sigma.lower}         \tab lower bound of sigma \cr
-      \code{sigma.upper}         \tab upper bound of sigma \cr
-      \code{reset.default}       \tab rest to default if bounds were reached
+      \code{target.accept.lower} \tab target acceptant rate lower bound \cr
+      \code{target.accept.upper} \tab target acceptant rate upper bound \cr
+      \code{scale.increase}      \tab increase scale size \cr
+      \code{scale.decrease}      \tab decrease scale size \cr
+      \code{sigma.lower}         \tab lower bound of relative scale size \cr
+      \code{sigma.upper}         \tab upper bound of relative scale size \cr
+      \code{reset.to.default}    \tab rest to default if bounds were reached
     }
 
   \item

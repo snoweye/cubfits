@@ -5,7 +5,7 @@ set.seed(1234)
 phi.Obs <- ex.train$phi.Obs / mean(ex.train$phi.Obs)
 
 # Generate sequences.
-da.nsef <- simu.orf(length(phi.Obs), bInit$nsef,
+da.nsef <- simu.orf(length(phi.Obs), b.Init$nsef,
                     phi.Obs = phi.Obs, model = "nsef")
 names(da.nsef) <- names(phi.Obs)
 write.seq(da.nsef, "toy_nsef.fasta")
@@ -16,7 +16,7 @@ seqstring.nsef <- convert.seq.data.to.string(seq.nsef)
 phi <- data.frame(ORF = names(phi.Obs), phi.value = phi.Obs)
 
 # Generate data structures from sequences.
-aa.names <- names(bInit$nsef)
+aa.names <- names(b.Init$nsef)
 reu13.df <- gen.reu13.df(seqstring.nsef, phi, aa.names = aa.names)
 n <- gen.n(seqstring.nsef, aa.names = aa.names)
 y <- gen.y(seqstring.nsef, aa.names = aa.names)

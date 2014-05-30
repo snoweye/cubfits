@@ -3,12 +3,12 @@
 plot.aa.allinone <- function(
     i.aa, id.label, tl.codon,                  ### For AA.
     label.negsel.true,                         ### For label.
-    bInit, EPhi,                               ### For true.
+    b.Init, EPhi,                               ### For true.
     b.mcmc, t.phi.mcmc,                        ### For unscaled results.
     b.negsel.PM, phi.PM,                       ### For scaled results.
     workflow.name, i.case, model){
   ### Get right b for AA.
-  b.AA.true <- bInit[id.label]
+  b.AA.true <- b.Init[id.label]
   b.AA.PM <- matrix(b.mcmc[id.label,], nrow = tl.codon)
   b.AA.PM.scaled <- b.negsel.PM[id.label]
 

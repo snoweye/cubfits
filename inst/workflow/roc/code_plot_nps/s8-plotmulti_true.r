@@ -17,14 +17,14 @@ if(file.exists(fn.in)){
 } else{
   stop(paste(fn.in, " is not found.", sep = ""))
 }
-bInit <- convert.b.to.bVec(Eb)
+b.Init <- convert.b.to.bVec(Eb)
 
 
 ### Load results from collapsed runs for yassour with phi since
 ### wphi_wophi does not need to simulate new sequences.
 # fn.in <- paste(prefix$param, "small_bInit.rda", sep = "")
 # load(fn.in)
-# bInit <- convert.b.to.bVec(bInitList.roc)
+# b.Init <- convert.b.to.bVec(b.InitList.roc)
 # fn.in <- paste(prefix$param, "small_train.rda", sep = "")
 # load(fn.in)
 # EPhi <- phi.Obs
@@ -52,12 +52,12 @@ id.intercept <- grep("log.mu", all.names)
 id.slop <- grep("Delta.t", all.names)
 
 scale.EPhi <- mean(EPhi)
-bInit[id.slop] <- bInit[id.slop] * scale.EPhi
-bInit.negsel <- get.negsel(bInit, id.intercept, id.slop, aa.names, label)
+b.Init[id.slop] <- b.Init[id.slop] * scale.EPhi
+b.Init.negsel <- get.negsel(b.Init, id.intercept, id.slop, aa.names, label)
 
 ### True SCU.
 EPhi <- EPhi / scale.EPhi
-Eb <- convert.bVec.to.b(bInit, aa.names)
+Eb <- convert.bVec.to.b(b.Init, aa.names)
 SCU.true <- calc_scu_values(Eb, y.list, EPhi)
 
 
@@ -111,16 +111,16 @@ for(i.case in case.names){
     new.page(workflow.name, i.case, model)
 
     ### Plot Delta.t.
-    x <- bInit.negsel$b.negsel.PM
+    x <- b.Init.negsel$b.negsel.PM
     y <- b.negsel.PM
     y.ci <- b.negsel.ci.PM
-    x.label <- bInit.negsel$b.negsel.label
+    x.label <- b.Init.negsel$b.negsel.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
                 main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
 
     ### Plot log(mu).
-    x <- bInit.negsel$b.logmu.PM
+    x <- b.Init.negsel$b.logmu.PM
     y <- b.logmu.PM
     y.ci <- b.logmu.ci.PM
     x.label <- b.logmu.label

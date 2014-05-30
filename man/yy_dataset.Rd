@@ -1,5 +1,5 @@
 \name{Datasets}
-\alias{bInit}
+\alias{b.Init}
 \alias{ex.test}
 \alias{ex.train}
 \docType{data}
@@ -8,7 +8,7 @@
   Examples of toy data to test and demonstrate \pkg{cubfits}.
 }
 \usage{
-  bInit
+  b.Init
   ex.test
   ex.train
 }
@@ -16,7 +16,7 @@
   All are in list formats.
 }
 \details{
-  \code{bInit} contains two sets (\code{roc} and \code{rocnse}) of
+  \code{b.Init} contains two sets (\code{roc} and \code{rocnse}) of
   initial coefficients including mutation and selection parameters for
   3 amino acids 'A', 'C', and 'D' in \code{matrix} format.
   Both sets are in \code{\link{b}} format.
@@ -47,7 +47,7 @@
 \dontrun{
 suppressMessages(library(cubfits, quietly = TRUE))
 
-str(bInit)
+str(b.Init)
 str(ex.test)
 str(ex.train)
 }

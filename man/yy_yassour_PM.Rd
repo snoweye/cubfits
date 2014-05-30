@@ -15,7 +15,7 @@
 }
 \format{
   These are \code{list}'s containing several posterior means:
-  \code{E.Phi} for expected expression, \code{bInitList.roc} for parameters,
+  \code{E.Phi} for expected expression, \code{b.InitList.roc} for parameters,
   \code{AA.prob} for proportion of amino acids, \code{sigmaW} for
   standard error of measure errors, and \code{gene.length} for
   gene length.
@@ -24,7 +24,7 @@
   \code{yassour.PM.fits} and \code{yassour.PM.appr} are the MCMC output
   of with/without observed expression, respectively.
   Both contain posterior means of expected expressions and coefficient
-  parameters: \code{E.Phi} and \code{bInitList.roc} are
+  parameters: \code{E.Phi} and \code{b.InitList.roc} are
   scaled results such that each MCMC iteration has mean 1 at \code{E.Phi}.
 
   \code{yassour.info} contains sequences information (Yeast):

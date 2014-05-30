@@ -21,7 +21,7 @@ if(file.exists(fn.in)){
   comm.stop(paste(fn.in, " is not found.", sep = ""))
 }
 phi.init.true <- EPhi
-bInit <- Eb
+b.Init <- Eb
 
 ### Initial.
 nIter <- run.info$nIter
@@ -43,7 +43,7 @@ if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
 }
 ret <- cubappr(reu13.df.obs, phi.init.true, y, n,
                nIter = nIter, burnin = burnin,
-               bInit = bInit,
+               b.Init = b.Init,
                model = model, verbose = TRUE, report = 10)
 
 ### Dump results.
@@ -58,6 +58,8 @@ if(comm.rank() == 0){
   fn.out <- paste(prefix$output, case.name, "/output_env.rda", sep = "")
   save(list = ls(envir = .cubfitsEnv),
        file = fn.out, envir = .cubfitsEnv)
+
+  warnings()
 }
 
 finalize()

@@ -1,7 +1,7 @@
 ### Wrapper of find.prop.model.roc().
-prop.model.roc <- function(bInit, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
+prop.model.roc <- function(b.Init, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
     nclass = 40, x.log10 = TRUE){
-  aa.names <- names(bInit)
+  aa.names <- names(b.Init)
   if("Z" %in% aa.names){
     synonymous.codon <- .CF.GV$synonymous.codon.split[aa.names]
   } else{
@@ -10,7 +10,7 @@ prop.model.roc <- function(bInit, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
 
   ### Compute mutation and elong
   for(i.aa in aa.names){
-    bInit[[i.aa]]$u.codon <- synonymous.codon[[i.aa]]
+    b.Init[[i.aa]]$u.codon <- synonymous.codon[[i.aa]]
   }
 
   ### For SCUO w/o phi.Obs simulations, the prior fixes the mean of phi.Obs at
@@ -29,33 +29,33 @@ prop.model.roc <- function(bInit, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
   }
 
   ### Call find.prop.model.roc().
-  ret <- find.prop.model.roc(bInit, phi.bin, phi.Obs.scale)
+  ret <- find.prop.model.roc(b.Init, phi.bin, phi.Obs.scale)
   ret
 } # End of prop.model.roc().
 
 
 ### Summarize by amino acid for bInint could be from MCMC outputs.
-find.prop.model.roc <- function(bInit, phi.bin, phi.Obs.scale = 1){
-  u.aa <- unique(names(bInit))
+find.prop.model.roc <- function(b.Init, phi.bin, phi.Obs.scale = 1){
+  u.aa <- unique(names(b.Init))
   x <- cbind(1, phi.bin)
 
   predict.roc <- list()
   for(aa in u.aa){
-    exponent <- x %*% bInit[[aa]]$coef.mat
+    exponent <- x %*% b.Init[[aa]]$coef.mat
     scodon.prob <- my.inverse.mlogit(exponent)
     predict.roc[[aa]] <- cbind(scodon.prob, phi.bin * phi.Obs.scale)
     predict.roc[[aa]] <- as.data.frame(predict.roc[[aa]],
                                        stringsAsFactors = FALSE)
 
-    u.codon <- bInit[[aa]]$u.codon
+    u.codon <- b.Init[[aa]]$u.codon
     colnames(predict.roc[[aa]]) <- c(u.codon, "center")
 
     ### Add attr for u.codon.star
-    if(all(bInit[[aa]]$coef.mat[2,] < 0)){
+    if(all(b.Init[[aa]]$coef.mat[2,] < 0)){
       u.codon[length(u.codon)] <- paste(u.codon[length(u.codon)], "*", sep = "")
     } else{
-      id.max <- which.max(bInit[[aa]]$coef.mat[2,])
-      u.codon.max <- colnames(bInit[[aa]]$coef.mat)[id.max]
+      id.max <- which.max(b.Init[[aa]]$coef.mat[2,])
+      u.codon.max <- colnames(b.Init[[aa]]$coef.mat)[id.max]
       u.codon[u.codon == u.codon.max] <- paste(u.codon.max, "*")
     }
     attr(predict.roc[[aa]], "u.codon.star") <- u.codon

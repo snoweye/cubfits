@@ -1,6 +1,6 @@
 suppressMessages(library(cubfits, quietly = TRUE))
 
-b <- bInit$roc
+b <- b.Init$roc
 phi.Obs <- ex.train$phi.Obs
 y <- ex.train$y
 y.list <- convert.y.to.list(y)

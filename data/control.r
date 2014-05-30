@@ -47,7 +47,6 @@
   dump = FALSE,                    # if dumping within MCMC
   iter = 1000,                     # iterations per dumping
   prefix.dump = "dump_",           # path and file names of dumping
-  trace.acceptance = TRUE,         # if trace acceptance rate
   verbose = FALSE,                 # if verbose
   iterThin = 1,                    # iterations to thin chain
   report = 10,                     # iterations to report
@@ -57,13 +56,13 @@
 ### For addaptive control.
 .CF.AC <- list(
   renew.iter = 100,                # per renewing iterations
-  target.accept.lower = 0.25,      # target acceptance lower bound
-  target.accept.upper = 0.5,       # target acceptance upper bound
-  scale.increase = 1.2,            # 20% more
-  scale.decrease = 0.8,            # 20% less
-  sigma.lower = 1e-6,              # lower bound of sigma
-  sigma.upper = 1e6,               # upper bound of sigma
-  reset.default = TRUE             # reset to default if bounds were reached
+  target.accept.lower = 0.25,      # target acceptant rate lower bound
+  target.accept.upper = 0.5,       # target acceptant rate upper bound
+  scale.increase = 1.2,            # increase scale size
+  scale.decrease = 0.8,            # decrease scale size
+  sigma.lower = 1e-2,              # lower bound of relative scale size
+  sigma.upper = 1e2,               # upper bound of relative scale size
+  reset.to.default = FALSE         # reset to default if bounds were reached
 )
 
 ### For parameters as reestimated for Yeast according to Yassour's data.

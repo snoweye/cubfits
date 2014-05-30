@@ -8,7 +8,7 @@
 \usage{
   cubfits(reu13.df.obs, phi.Obs, y, n,
           nIter = 1000, burnin = 100,
-          bInit = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
+          b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
               b.DrawScale = .CF.CONF$b.DrawScale,
           p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
               p.DrawScale = .CF.CONF$p.DrawScale,
@@ -26,8 +26,8 @@
   \item{n}{a \code{\link{n}} object, total codon counts.}
   \item{nIter}{number of iterations after burn-in iterations.}
   \item{burnin}{number of burn-in iterations.}
-  \item{bInit}{initial values for parameters \code{\link{b}}.}
-  \item{init.b.Scale}{for initial \code{\link{b}} if \code{bInit = NULL}.}
+  \item{b.Init}{initial values for parameters \code{\link{b}}.}
+  \item{init.b.Scale}{for initial \code{\link{b}} if \code{b.Init = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
@@ -70,7 +70,7 @@
   further via other MCMC packages such as \pkg{coda}.
 }
 \note{
-  Note that \code{phi.Obs} need to be normalized to mean 1.
+  Note that \code{phi.Init} need to be normalized to mean 1.
 
   \code{p.DrawScale} may cause scaling prior if adaptive MCMC is used, and
   it can result in non-exits of equilibrium distribution.

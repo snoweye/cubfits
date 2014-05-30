@@ -1,5 +1,5 @@
 plottrace.param <- function(ret.b.Mat, names.b,
-    names.aa, id.plot, workflow.name, i.case, model, bInit = NULL,
+    names.aa, id.plot, workflow.name, i.case, model, b.Init = NULL,
     param = c("logmu", "deltat")){
   if(param[1] == "logmu"){
     ylab <- "log(mu)"
@@ -38,8 +38,8 @@ plottrace.param <- function(ret.b.Mat, names.b,
       lines(x = x, y = trace[, i.codon], col = .CF.PT$color[i.codon])
     }
 
-    if(!is.null(bInit)){
-      for(i.b in bInit[id.tmp]){
+    if(!is.null(b.Init)){
+      for(i.b in b.Init[id.tmp]){
         abline(h = i.b, lty = 2)
       }
     }

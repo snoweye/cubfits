@@ -21,13 +21,13 @@ my.proposeB.RW_Norm <- function(mu.prev, mu, R,
     b.DrawScale.aa, b.DrawScale.prev.aa){
   ### Draw from proposal.
   zProp <- rnorm(length(mu))
-  prop <- mu + backsolve(R * b.DrawScale.aa, zProp)
+  prop <- mu + backsolve(R / b.DrawScale.aa, zProp)
 
   ### Check if drawing from the same scale.
   lir <- 0    # no jacobin since no transformation
   if(b.DrawScale.aa != b.DrawScale.prev.aa){
     ### Calculate importance ratio since random walk scale was changed.
-    zPrev <- (R * b.DrawScale.prev.aa) %*% (mu.prev - prop)
+    zPrev <- (R / b.DrawScale.prev.aa) %*% (mu.prev - prop)
     lir <- -1/2 * (sum(zProp * zProp) - sum(zPrev * zPrev))
   }
 

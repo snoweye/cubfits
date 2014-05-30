@@ -11,33 +11,32 @@ get.my.update.DrawScale <- function(adaptive){
 
 
 ### No adaptive.
-my.update.DrawScale.none <- function(var.name, update.curr.renew = TRUE,
-    default.DrawScale = 1){
+my.update.DrawScale.none <- function(var.names, default.DrawScales){
   invisible()
 } # End of my.update.DrawScale.none().
 
 
 ### Update scaling factors for every gene.
-my.update.DrawScale.simple <- function(var.name, update.curr.renew = TRUE,
-    default.DrawScale = 1){
-  ### Update new scaling factors.
-  ret <- my.DrawScale.scaling(var.name, .cubfitsEnv$curr.renew,
-                              default.DrawScale)
+my.update.DrawScale.simple <- function(var.names, default.DrawScales){
+  for(i in 1:length(var.names)){
+    ### Update new scaling factors.
+    ret <- my.DrawScale.scaling(var.names[i], .cubfitsEnv$curr.renew,
+                                default.DrawScales[i])
 
-  ### Update global.
-  .cubfitsEnv$all.DrawScale[[var.name]] <- ret
+    ### Update global.
+    .cubfitsEnv$all.DrawScale[[var.names[i]]] <- ret
 
-  ### Update curr.renew to global.
-  .cubfitsEnv$DrawScale[[var.name]][[.cubfitsEnv$curr.renew + 1]] <- ret
-
-  if(update.curr.renew){
-    .cubfitsEnv$curr.renew <- .cubfitsEnv$curr.renew + 1
+    ### Update curr.renew to global.
+    .cubfitsEnv$DrawScale[[var.names[i]]][[.cubfitsEnv$curr.renew + 1]] <- ret
   }
+
+  ### Update current window.
+  .cubfitsEnv$curr.renew <- .cubfitsEnv$curr.renew + 1
 
   invisible()
 } # End of my.update.DrawScale().
 
-my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale = 1){
+my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale){
   if(curr.window > 2){
     prev.scale <- .cubfitsEnv$DrawScale[[var.name]][[curr.window - 1]]
     prev.accept <- .cubfitsEnv$adaptive[[var.name]][[curr.window - 1]] /
@@ -48,20 +47,28 @@ my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale = 1){
                  .CF.AC$renew.iter
   ret <- curr.scale
 
+  if(var.name == "b"){
+    .cubfitsEnv$my.cat("- b: rbind(curr.scale, curr.accept)\n")
+    .cubfitsEnv$my.print(rbind(curr.scale, curr.accept))
+  }
+
   ### Smaller than the target.lower.
   id <- which(curr.accept <= .CF.AC$target.accept.lower)
   if(length(id) > 0){
     tmp <- .CF.AC$scale.decrease
+    # tmp <- .CF.AC$scale.increase
     if(curr.window > 2){
       tmp <- lapply(id, function(i){
-                 if((curr.accept[i] < prev.accept[i] &&
-                     curr.scale[i] < prev.scale[i]) ||
-                    (curr.accept[i] > prev.accept[i] &&
-                     curr.scale[i] > prev.scale[i])){
-                    .CF.AC$scale.increase
-                 } else{
-                    .CF.AC$scale.decrease
-                 }
+                 # if((curr.accept[i] < prev.accept[i] &&
+                 #     curr.scale[i] < prev.scale[i]) ||
+                 #    (curr.accept[i] > prev.accept[i] &&
+                 #     curr.scale[i] > prev.scale[i])){
+                 #    .CF.AC$scale.increase
+                 # } else{
+                 #    .CF.AC$scale.decrease
+                 # }
+                 .CF.AC$scale.decrease
+                 #.CF.AC$scale.increase
                })
       tmp <- do.call("c", tmp)
     }
@@ -72,37 +79,65 @@ my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale = 1){
   id <- which(curr.accept >= .CF.AC$target.accept.upper)
   if(length(id) > 0){
     tmp <- .CF.AC$scale.increase
+    # tmp <- .CF.AC$scale.decrease
     if(curr.window > 2){
       tmp <- lapply(id, function(i){
-                 if((curr.accept[i] < prev.accept[i] &&
-                     curr.scale[i] < prev.scale[i]) ||
-                    (curr.accept[i] > prev.accept[i] &&
-                     curr.scale[i] > prev.scale[i])){
-                    .CF.AC$scale.decrease
-                 } else{
-                    .CF.AC$scale.increase
-                 }
+                 # if((curr.accept[i] < prev.accept[i] &&
+                 #     curr.scale[i] < prev.scale[i]) ||
+                 #    (curr.accept[i] > prev.accept[i] &&
+                 #     curr.scale[i] > prev.scale[i])){
+                 #    .CF.AC$scale.decrease
+                 # } else{
+                 #    .CF.AC$scale.increase
+                 # }
+                 .CF.AC$scale.increase
+                 # .CF.AC$scale.decrease
                })
       tmp <- do.call("c", tmp)
     }
     ret[id] <- curr.scale[id] * tmp
   }
 
-  ### Replace too small and too large numbers.
-  ret[ret > .CF.AC$sigma.upper] <- .CF.AC$sigma.upper
-  ret[ret < .CF.AC$sigma.lower] <- .CF.AC$sigma.lower
+  ### Replace too small and too large numbers, relatively.
+  upper.DrawScale <- .CF.AC$sigma.upper * default.DrawScale
+  lower.DrawScale <- .CF.AC$sigma.lower * default.DrawScale
+  ret[ret >= upper.DrawScale] <- upper.DrawScale
+  ret[ret <= lower.DrawScale] <- lower.DrawScale
 
-  ### Replace weird situations back to default values.
-  if(curr.window > 2 && .CF.AC$reset.default){
+  ### Check weird situations and set back to default values if applicable.
+  if(curr.window > 2){
     ### Check bounds.
-    id.scale <- (curr.scale == .CF.AC$sigma.upper &
-                 prev.scale == .CF.AC$sigma.upper) |
-                (curr.scale == .CF.AC$sigma.lower &
-                 prev.scale == .CF.AC$sigma.lower)
-    id.accept <- (curr.accept == 0 & prev.accept == 0) |
-                  (curr.accept == 1 & prev.accept == 1)
-    ret[id.scale & id.accept] <- default.DrawScale 
+    id.scale.lower <- curr.scale <= lower.DrawScale &
+                        prev.scale <= lower.DrawScale
+    id.scale.upper <- curr.scale >= upper.DrawScale &
+                        prev.scale >= upper.DrawScale
+    id.accept.0 <- curr.accept == 0 & prev.accept == 0
+    id.accept.1 <- curr.accept == 1 & prev.accept == 1
+    accept.lower <- sum(curr.accept < .CF.AC$target.accept.lower)
+    accept.upper <- sum(curr.accept > .CF.AC$target.accept.upper)
+
+    ### Print.
+    .cubfitsEnv$my.cat("- var.name: ", var.name, "\n", sep = "")
+    .cubfitsEnv$my.cat("    scale bound reached #: lower = ",
+                       sum(id.scale.lower), ", upper = ",
+                       sum(id.scale.upper), "\n", sep = "")
+    .cubfitsEnv$my.cat("    ill acceptance #: none = ",
+                       sum(id.accept.0), ", all = ",
+                       sum(id.accept.1), "\n", sep = "")
+    .cubfitsEnv$my.cat("    acceptance NOT in range #: lower = ", accept.lower,
+                       ", upper = ", accept.upper,
+                       ", total = ", accept.lower + accept.upper,
+                       "\n", sep = "")
+    ### Reset if any.
+    if(.CF.AC$reset.to.default){
+      id.reset <- (id.scale.lower | id.scale.upper) &
+                  (id.accept.0 | id.accept.1)
+      ret[id.reset] <- default.DrawScale 
+
+      .cubfitsEnv$my.cat("    reset #: ", sum(id.reset), "\n", sep = "")
+    }
   }
 
   ret
 } # End of my.DrawScale.scaling().
+
