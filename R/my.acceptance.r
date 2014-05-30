@@ -39,12 +39,17 @@ my.check.acceptance <- function(var.names){
   for(i.var.name in var.names){
     curr.accept <- .cubfitsEnv$adaptive[[i.var.name]][[curr.window]] /
                    .CF.AC$renew.iter
+    id.accept.0 <- curr.accept == 0
+    id.accept.1 <- curr.accept == 1
     accept.lower <- sum(curr.accept < .CF.AC$target.accept.lower)
     accept.upper <- sum(curr.accept > .CF.AC$target.accept.upper)
 
     ### Print.
     .cubfitsEnv$my.cat("- var.name: ", i.var.name, "\n", sep = "")
-    .cubfitsEnv$my.cat("  last renew NOT in range #: lower = ", accept.lower,
+    .cubfitsEnv$my.cat("    ill acceptance #: none = ",
+                       sum(id.accept.0), ", all = ",
+                       sum(id.accept.1), "\n", sep = "")
+    .cubfitsEnv$my.cat("    last renew NOT in range #: lower = ", accept.lower,
                        ", upper = ", accept.upper,
                        ", total = ", accept.lower + accept.upper,
                        "\n", sep = "")
