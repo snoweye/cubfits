@@ -55,47 +55,13 @@ my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale){
   ### Smaller than the target.lower.
   id <- which(curr.accept <= .CF.AC$target.accept.lower)
   if(length(id) > 0){
-    tmp <- .CF.AC$scale.decrease
-    # tmp <- .CF.AC$scale.increase
-    if(curr.window > 2){
-      tmp <- lapply(id, function(i){
-                 # if((curr.accept[i] < prev.accept[i] &&
-                 #     curr.scale[i] < prev.scale[i]) ||
-                 #    (curr.accept[i] > prev.accept[i] &&
-                 #     curr.scale[i] > prev.scale[i])){
-                 #    .CF.AC$scale.increase
-                 # } else{
-                 #    .CF.AC$scale.decrease
-                 # }
-                 .CF.AC$scale.decrease
-                 #.CF.AC$scale.increase
-               })
-      tmp <- do.call("c", tmp)
-    }
-    ret[id] <- curr.scale[id] * tmp
+    ret[id] <- curr.scale[id] * rep(.CF.AC$scale.decrease, length(id))
   }
 
   ### Larger than the target.upper.
   id <- which(curr.accept >= .CF.AC$target.accept.upper)
   if(length(id) > 0){
-    tmp <- .CF.AC$scale.increase
-    # tmp <- .CF.AC$scale.decrease
-    if(curr.window > 2){
-      tmp <- lapply(id, function(i){
-                 # if((curr.accept[i] < prev.accept[i] &&
-                 #     curr.scale[i] < prev.scale[i]) ||
-                 #    (curr.accept[i] > prev.accept[i] &&
-                 #     curr.scale[i] > prev.scale[i])){
-                 #    .CF.AC$scale.decrease
-                 # } else{
-                 #    .CF.AC$scale.increase
-                 # }
-                 .CF.AC$scale.increase
-                 # .CF.AC$scale.decrease
-               })
-      tmp <- do.call("c", tmp)
-    }
-    ret[id] <- curr.scale[id] * tmp
+    ret[id] <- curr.scale[id] * rep(.CF.AC$scale.increase, length(id))
   }
 
   ### Replace too small and too large numbers, relatively.
@@ -128,14 +94,6 @@ my.DrawScale.scaling <- function(var.name, curr.window, default.DrawScale){
                        ", upper = ", accept.upper,
                        ", total = ", accept.lower + accept.upper,
                        "\n", sep = "")
-    ### Reset if any.
-    if(.CF.AC$reset.to.default){
-      id.reset <- (id.scale.lower | id.scale.upper) &
-                  (id.accept.0 | id.accept.1)
-      ret[id.reset] <- default.DrawScale 
-
-      .cubfitsEnv$my.cat("    reset #: ", sum(id.reset), "\n", sep = "")
-    }
   }
 
   ret

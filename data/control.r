@@ -61,8 +61,7 @@
   scale.increase = 1.2,            # increase scale size
   scale.decrease = 0.8,            # decrease scale size
   sigma.lower = 1e-2,              # lower bound of relative scale size
-  sigma.upper = 1e2,               # upper bound of relative scale size
-  reset.to.default = FALSE         # reset to default if bounds were reached
+  sigma.upper = 1e2                # upper bound of relative scale size
 )
 
 ### For parameters as reestimated for Yeast according to Yassour's data.

@@ -70,7 +70,6 @@ run.info$burnin <- 1000
 run.info$dump <- FALSE
 run.info$prefix.dump <- paste(prefix$output, "tmp/dump_", sep = "")
 run.info$parallel <- "task.pull"
-run.info$adaptive <- "simple"
 
 ### For MCMC.
 range <- list()
@@ -97,6 +96,7 @@ p.nclass <- 2
 # .CF.CT$init.fit <- "RW_Norm"
 # .CF.CT$type.p <- "lognormal_fix"
 # .CF.CT$type.p <- "lognormal_RW"
+# .CF.CT$type.p <- "lognormal_bias"
 # .CF.CT$model.Phi <- "logmixture"
 # .CF.CONF$scale.phi.Obs <- FALSE
 # .CF.CONF$estimate.bias.Phi <- TRUE

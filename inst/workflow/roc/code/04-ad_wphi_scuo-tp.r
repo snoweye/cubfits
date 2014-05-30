@@ -30,7 +30,6 @@ burnin <- run.info$burnin
 .CF.DP$dump <- run.info$dump
 .CF.DP$prefix.dump <- run.info$prefix.dump
 .CF.CT$parallel <- run.info$parallel
-.CF.CT$adaptive <- run.info$adaptive
 
 ### Run.
 if(.CF.CT$model.Phi[1] == "logmixture"){

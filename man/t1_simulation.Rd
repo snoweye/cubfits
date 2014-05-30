@@ -10,7 +10,7 @@
 \usage{
   simu.orf(n, b.Init, phi.Obs = NULL, AA.prob = NULL, orf.length = NULL,
            orf.names = NULL, model = .CF.CT$model)
-  simu.phi.Obs(Phi, sigmaW.lim = 1)
+  simu.phi.Obs(Phi, sigmaW.lim = 1, bias.Phi = 0)
   simu.mixnormerr(n, param)
 }
 \arguments{
@@ -24,6 +24,7 @@
   \item{model}{model to be simulated.}
   \item{Phi}{expression values (potentially true expression).}
   \item{sigmaW.lim}{std of measurement errors (between Phi and phi.Obs).}
+  \item{bias.Phi}{bias (in log scale) for observed phi.}
   \item{param}{as in \code{\link{dmixnormerr}()}}
 }
 \details{

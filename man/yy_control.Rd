@@ -111,8 +111,7 @@
       \code{scale.increase}      \tab increase scale size \cr
       \code{scale.decrease}      \tab decrease scale size \cr
       \code{sigma.lower}         \tab lower bound of relative scale size \cr
-      \code{sigma.upper}         \tab upper bound of relative scale size \cr
-      \code{reset.to.default}    \tab rest to default if bounds were reached
+      \code{sigma.upper}         \tab upper bound of relative scale size
     }
 
   \item

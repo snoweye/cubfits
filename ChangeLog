@@ -1,8 +1,8 @@
+2014-05-30: Ver 0.1-1
+  * Add bias.Phi to simulation.
+
 2014-05-19: Ver 0.1-1
   * Add bias random walk, adjust prior data structures, and modify logL.
-
-2014-05-18: Ver 0.1-0
-  * On CRAN.
 
 ======================= Log Before Release =====================================
 2014-05-16: Ver 0.1-1
