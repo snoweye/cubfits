@@ -78,7 +78,7 @@ for(i.match in 1:nrow(match.case)){
             lim.bin[2] + (lim.bin[2] - lim.bin[1]) / 8)
 
   ### Plot bin and model for measurements.
-  fn.out <- paste(prefix$plot.match, "bin_", match.case[i.match, 1], "_",
+  fn.out <- paste(prefix$plot.nps.match, "bin_", match.case[i.match, 1], "_",
                   match.case[i.match, 2], ".pdf", sep = "")
   pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
