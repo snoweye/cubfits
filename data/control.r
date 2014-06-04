@@ -56,8 +56,8 @@
 ### For addaptive control.
 .CF.AC <- list(
   renew.iter = 100,                # per renewing iterations
-  target.accept.lower = 0.25,      # target acceptant rate lower bound
-  target.accept.upper = 0.5,       # target acceptant rate upper bound
+  target.accept.lower = 0.2,       # target acceptant rate lower bound
+  target.accept.upper = 0.3,       # target acceptant rate upper bound
   scale.increase = 1.2,            # increase scale size
   scale.decrease = 0.8,            # decrease scale size
   sigma.lower = 1e-2,              # lower bound of relative scale size
