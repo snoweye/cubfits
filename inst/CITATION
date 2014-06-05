@@ -7,11 +7,11 @@ citEntry(
                       as.person("Russell Zaretzki"),
                       as.person("William Howell"),
                       as.person("Drew Schmidt"),
-                      as.person("Michael Gilchrist")
+                      as.person("Michael A. Gilchrist")
                      ),
   year = "2014",
   note = "{R} Package, URL http://cran.r-project.org/package=cubfits",
-  textVersion = "Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., and Gilchrist, M. (2014) cubfits: Codon Usage Bias Fits. R Package, URL http://cran.r-project.org/package=cubfits",
+  textVersion = "Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., and Gilchrist, M.A. (2014) cubfits: Codon Usage Bias Fits. R Package, URL http://cran.r-project.org/package=cubfits",
   key = "Chen2014cubfitspackage"
 )
 
@@ -22,10 +22,10 @@ citEntry(
                       as.person("Russell Zaretzki"),
                       as.person("William Howell"),
                       as.person("Drew Schmidt"),
-                      as.person("Michael Gilchrist")
+                      as.person("Michael A. Gilchrist")
                      ),
   year = "2014",
   note = "{R} Vignette, URL http://cran.r-project.org/package=cubfits",
-  textVersion = "Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., and Gilchrist, M. (2014) A Quick Guide for the cubfits Package. R Vignette, URL http://cran.r-project.org/package=cubfits",
+  textVersion = "Chen, W.-C., Zaretzki, R., Howell, W., Schmidt, D., and Gilchrist, M.A. (2014) A Quick Guide for the cubfits Package. R Vignette, URL http://cran.r-project.org/package=cubfits",
   key = "Chen2014cubfitsvignette"
 )

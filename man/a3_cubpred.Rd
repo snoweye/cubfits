@@ -90,7 +90,7 @@
 \references{
   \url{https://github.com/snoweye/cubfits/}
 
-  Shah P. and Gilchrist MA.
+  Shah P. and Gilchrist M.A.
     ``Explaining complex codon usage patterns
       with selection for translational efficiency, mutation bias, and genetic
       drift''
