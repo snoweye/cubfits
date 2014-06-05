@@ -1,4 +1,4 @@
-### This script collect the poster means of MCMC runs.
+### This script collect the posterior means of MCMC runs.
 
 rm(list = ls())
 
@@ -62,6 +62,19 @@ for(i.case in case.names){
   ret <- ret[order.id,] 
 
   fn.out <- paste(prefix$table, "deltat_", i.case, "_PM.tsv", sep = "")
+  write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
+
+  ### For prior.
+  param.name <- c("sigmaW", "m.Phi", "s.Phi", "bias.Phi")
+  if(length(grep("wophi", i.case)) > 0){
+    param.name <- param.name[-which(param.name == "sigmaW")]
+  }
+  if(!.CF.CONF$estimate.bias.Phi){
+    param.name <- param.name[-which(param.name == "bias.Phi")]
+  }
+  ret <- data.frame(param = param.name, Mean = p.PM, Median = p.MED,
+                    CI.025 = p.CI[, 1], CI.975 = p.CI[, 2])
+  fn.out <- paste(prefix$table, "prior_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### For E[Phi].
