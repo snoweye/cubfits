@@ -3,27 +3,29 @@
 \label{sec:speedup}
 \addcontentsline{toc}{section}{\thesection. Speedup (Aside)}
 
-The main bottleneck of \pkg{cubfits} is at calls to \code{fitMultinom*()} or
+The main bottleneck of \pkg{cubfits} is in calls to \code{fitMultinom*()} or
 \code{my.fitMultinom*()}. The reasons are that
 \begin{itemize}
-\item models assume conditional independent of amino acids, and
-\item tedious to parallelize within \code{VGAM::vglm()} function.\footnote{
-As long as number of sequences is not too large and summarized statistics is
+\item models assume conditional independence of amino acids, and
+\item it is tedious to extract parallelism within the 
+\code{VGAM::vglm()} function.\footnote{
+As long as the number of sequences is not too large and summary statistics are
 used, there is no need to consider this approach. Although this can lead to
-huge improvement of speedup, the cost may be too high that needs to rewrite
-whole \code{vglm()} and reorganize data structures.
+huge improvement in speed, it may require the need to rewrite all of
+\code{vglm()} and reorganize data structures, which is highly non-trivial.
 }
 \end{itemize}
-Fortunately, carefully utilize summarized data structures can avoid some
-burdens and boost the MCMC computing a lot. For example, sorting by ORF's
-names before MCMC may avoid subset a \code{data.frame} in some computing, and
-further computing can be moved to \proglang{C} easily.
+Fortunately, by carefully utilizing summarized data structures, one can avoid 
+some burdens and boost the MCMC computation significantly. For example, 
+sorting by ORF's names before MCMC may avoid subsetting a \code{data.frame} in 
+some cases, and further computation can be easily moved to \proglang{C}.
 
-Further, \pkg{cubfits} consider three ways of parallel computations to
+Further, \pkg{cubfits} offers three ways of parallelizing computations to
 speedup computations, including
 \code{parallel::mclapply()}, \code{pbdMPI::task.pull()}, and
-\code{pbdMPI::pbdLapply()}. Note that only \pkg{pbdMPI} functions are tested
-thoroughly in \pkg{cubfits} by default.
+\code{pbdMPI::pbdLapply()}. Note that only \pkg{pbdMPI} functions have
+received the most thorough testing in \pkg{cubfits}.  We now briefly describe 
+these three approaches.
 
 
 \subsection[mclapply]{mclapply}
@@ -31,96 +33,101 @@ thoroughly in \pkg{cubfits} by default.
 \addcontentsline{toc}{subsection}{\thesubsection. mclapply}
 
 The function \code{mclapply()}
-is a default function in \pkg{parallel} and particularly useful for
-multi-cores and shared memory machines, but only for Unix-like systems such
+is a function in the \pkg{parallel} package and is particularly useful for
+multi-core/shared memory machines; however, as it relies on the system's 
+\code{fork} utility, it is only available for Unix-like systems such
 as Linux and Mac OS.
-In Windows system, this function is the same as \code{lapply()} since
-forking mechanism differs from Unix-like systems.
-\code{mclapply()} is a parallel version of \code{lapply()}, and is
-easy to migrate from \code{lapply()}. So, this is first basic way to
-speedup \pkg{cubfits}.
+On Windows systems, this function is identical to \code{lapply()}.
+As the name implies, \code{mclapply()} is a parallel version of \proglang{R}'s 
+own \code{lapply()}, and as such it is usually trivial to migrate to 
+\code{mclapply()} from code using \code{lapply()}.
 
-We consider to split jobs (tasks) in the level of 20 amino acids since the
-conditional independence. Even though, the computation bottleneck held by some
-amino acids that have more synonymous codons than others, e.g. Leucine (Leu/L)
-has 6 synonymous codons. This means that 20 jobs are not homogeneous and Leu
-probably needs the longest computing in those \code{fitMultinom*()} calls.
-Therefore, we consider to use the option \code{mc.preschedule = FALSE} set to
-\code{mclapply()}, and limit the number of cores to 4 or 5. In such a way, we
-gain the performance economically.
+With this approach in \pkg{cubfits}, we split the work into jobs (tasks) at the 
+level of 20 amino acids, because of the conditional independence assumption. 
+However, the computation is not evenly distributed across amino acids, as some
+have more synonymous codons than others; e.g. Leucine (Leu/L)
+has 6 synonymous codons. In other words, the 20 jobs are not homogeneous (and 
+as an aside, Leucine generally needs the most computing in those 
+\code{fitMultinom*()} calls).  Therefore, we use the \code{mclapply()} option 
+\code{mc.preschedule = FALSE}, and limit the number of cores to 4 or 5. In 
+doing so, we are able to somewhat overcome this computational imbalance.
 
-However, in the warning section of \code{mclapply()} help page, it says
-{\it \_strongly discouraged\_} to use these functions in GUI or embedded
-environments, ...
-For small tests, \code{mclapply()} is working well and efficient
-in \pkg{cubfits}. Normally, less sequences and shorter MCMC iterations.
-\pkg{cubfits} did observe some crashes occasionally
-when using \code{mclapply()} for longer runs of MCMC, such as in a
-work flow.
+The warning section of the \code{mclapply()} help page notes that it is
+\textit{\_strongly discouraged\_} to use these functions in GUI or embedded
+environments.  For small tests, i.e. those with fewer sequences and 
+shorter MCMC iterations, the \code{mclapply()} 
+approach works well and with reasonable efficiency in \pkg{cubfits}. 
+However, we did observe some occasional crashes when using this approach for 
+longer runs of MCMC, such as in a work flow.
 
 
 \subsection[task.pull]{task.pull}
 \label{sec:task.pull}
 \addcontentsline{toc}{subsection}{\thesubsection. task.pull}
 
-If GUI or embedded environments were not the main targets, then a stable way
-to speedup \pkg{cubfits} would be an idea way to aim for.
-\pkg{pbdMPI} is designed in single program multiple data (SPMD) framework,
-and is a simpler approach to parallelize codes.
-Although only batch model is allowed in \pkg{pbdMPI},
-one of the benefits is that it is not limited in multi-cores and
-shared memory machines, and can be applied on most systems provided a
-MPI library is installed.
-See \citet{Chen2012pbdMPIvignette} for more details of installation of a
-MPI library and \pkg{pbdMPI}.
+% If GUI or embedded environments were not the main targets, then a stable way
+% to speed up \pkg{cubfits} would be an idea way to aim for.
+The \pkg{pbdMPI} package is designed in single program multiple data (SPMD) 
+framework, and is a simpler approach to parallelize codes than the perhaps more 
+familiar manager/worker paradigm.
+Although only batch computing (i.e., no interactivity) is allowed in 
+\pkg{pbdMPI}, one of the benefits is that it is not strictly limited to
+shared memory machines, and can be applied on most systems with an MPI library 
+installed.  See \citet{Chen2012pbdMPIvignette} for details on 
+installing an MPI library and \pkg{pbdMPI}.
 
-The task pull is a simple way and has similar idea as
-\code{mc.preschedule = FALSE} in \code{mclapply()} that gain
-performance economically for non-homogeneous jobs.
-\code{task.pull()} in \pkg{pbdMPI} is a simple implementation that can boost
-\code{fitMultinom*()} functions, and has similar syntax as \code{mclapply()}.
-Currently, \pkg{cubfits} is mainly tested under this way.
+The task pull is a simple parallelism strategy and is very similar to 
+\code{mc.preschedule = FALSE} in \code{mclapply()}; in particular, this 
+approach gains performance economically for non-homogeneous jobs.
+\code{task.pull()} in \pkg{pbdMPI} is a convenient implementation that can 
+boost the performance of \code{fitMultinom*()} functions, and has similar 
+syntax as \code{mclapply()}.  
 
 
 \subsection[pbdLapply]{pbdLapply}
 \label{sec:pbdLapply}
 \addcontentsline{toc}{subsection}{\thesubsection. pbdLapply}
 
-For some cases, task pull is not economic nor efficient. For example, in
-\pkg{cubfits} needs to initial expected expression level of each sequences
-via a call to \code{estimatePhiAll*()}. On average, this is a pretty much
-spending the same computation on all sequences. Therefore, task pull on 5,000
-sequences may not a good idea since extra 5,000 calls for requesting unfinished
-sequences are unavoidable in the task pull way.
+For some cases, task pull is neither economical nor efficient. For example, in
+\pkg{cubfits}, one needs to initialize the expected expression level of each 
+sequence via a call to \code{estimatePhiAll*()}. Generally, this performs the 
+same computation on all sequences. Therefore, a task pull on 5,000
+sequences may not be a good idea, since the extra 5,000 calls for requesting 
+unfinished sequences are unavoidable in this approach.
 
 The function \code{pbdLapply()} is similar to set \code{mc.preschedule = TRUE}
-in \code{mclapply()}. The 5,000 sequences are divided by number of cores equally
-likely and processed by each core simultaneously. In such a way, there is no
-call for requesting sequences. Ideally, a good choice of number of cores
-is related to number of sequences. In general, it needs to be tuned with a
-few empirical runs.
+in \code{mclapply()}. The 5,000 sequences are equally divided by the number of 
+cores available for processing and processed by each core simultaneously. 
+As such, there is no call for requesting sequences. A good 
+choice of the number of cores to use is generally related to the number of 
+sequences. However, this needs to be tuned with a few empirical runs for 
+optimal performance.
 
 
 \subsection[Performance]{Performance}
 \label{sec:performance}
 \addcontentsline{toc}{subsection}{\thesubsection. Performance}
 
-Three different ways (\code{mclapply()}, \code{task.pull()}, and
-\code{task.pull()}) are tested on Yeast genome which has about 5346 genes
-and corresponding gene expression. Average run time of 200 iterations of
-\code{cubfits()} are recorded in different number of cores. Then, the
-speedup of parallelization is defined as each run time of given cores divides
-the run time of one core of \code{mclapply()}.
+The above three methods of parallelizing \pkg{cubfits} calls,  
+(\code{mclapply()}, \code{task.pull()}, and
+\code{task.pull()}), have all been tested on a Yeast genome which has about 
+5346 genes and corresponding gene expression. The average run times of 200 
+iterations of \code{cubfits()} are recorded in different numbers of cores. 
+The speedup via parallelization is defined as the run time of one core of 
+\code{mclapply()} divided by the run time of the parallel version.
 
-Figure~\ref{fig:speedup} shows \code{task.pull()} is the best approach
-although it needs one more core for task management. There is no best
-choice for number of cores, but seven cores of \code{task.pull()} is pretty
-much reach a bottleneck. The performance degradation of eight cores
-of \code{pbdLapply()} is due to the unbalance pre-assignment of amino acid,
-e.g. Leu and Arg are probably assigned to the same core.
-The performance of \code{mclapply()} is surprisingly not well which may be
-due to memory copying between forking mechanism and
-\code{mc.preschedule = FALSE}.
+Figure~\ref{fig:speedup} shows that for this test, \code{task.pull()} is the 
+best approach, although it needs an additional core for task management. 
+There is no obvious best choice for number of cores, but after about seven 
+cores, \code{task.pull()} is beginning to level out.  The 
+performance degradation of \code{pbdLapply()} at 8 cores is due to the 
+unbalanced pre-assignment of amino acids; e.g. Leu and Arg, both 
+computationally expensive amino acids, may be assigned to the same core.
+The performance of \code{mclapply()} is surprisingly poor by comparison, which 
+may be due to memory copying between th eforking mechanism and 
+\code{mc.preschedule = FALSE}. 
+%%% FIXME fock is copy on write at the OS level; you sure about this reasoning?
+
 
 \begin{figure}[ht]
 \centering

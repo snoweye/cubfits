@@ -3,13 +3,13 @@
 \label{sec:main_functions}
 \addcontentsline{toc}{section}{\thesection. Main Functions}
 
-The \pkg{cubfits} package mainly composes with three main functions
+The \pkg{cubfits} package is composed of three main functions:
 \begin{enumerate}
-\item \code{cubfits()} fits models for sequences with observed $\phi$ values
-      (expression levels) and measurement errors,
-\item \code{cubappr()} approximates models for sequence without any observed
+\item \code{cubfits()} fits models for sequences with observed $\phi$ 
+      (expression level) values and measurement errors,
+\item \code{cubappr()} approximates models for sequences without any observed
       $\phi$ values, and
-\item \code{cubpred()} fits model for sequences with observed $\phi$ values
+\item \code{cubpred()} fits models for sequences with observed $\phi$ values
       and measurement errors, and then predicts $\phi$ values for sequences
       without observations.
 \end{enumerate}
@@ -23,19 +23,19 @@ See package's help pages for details of other input options.\footnote{
 \label{sec:demonstrtions}
 \addcontentsline{toc}{subsection}{\thesubsection. Demonstrations}
 
-The \pkg{cubfits} provides quick examples for three main functions:
+The \pkg{cubfits} package provides quick examples for its three main functions:
 \begin{Code}
 > demo(roc.train, 'cubfits')    # for cubfits()
 > demo(roc.appr, 'cubfits')     # for cubappr()
 > demo(roc.pred, 'cubfits')     # for cubpred()
 \end{Code}
 These \pkg{cubfits} demos perform short MCMC runs
-and analyze toy datasets (\code{ex.train} and \code{ex.test}) for
+and analyze toy datasets (\code{ex.train} and \code{ex.test}) for the
 Ribosome Overhead Cost (ROC) model~\citep{Shah2011}
 which is shown in Figure~\ref{fig:plotbin}. The toy datasets have only 100
-short sequences and 3 amino acids are considered.
+short sequences, and only 3 amino acids are considered.
 
-For a standard data analysis, the minimum process basically includes that
+For a standard data analysis, the process essentially consists of:
 \begin{enumerate}
 \item reading sequences and expressions files,
 \item converting to appropriate data structures,
@@ -43,14 +43,14 @@ For a standard data analysis, the minimum process basically includes that
 \item summarizing MCMC outputs, and
 \item plotting predictions.
 \end{enumerate}
-The \pkg{cubfits} also provides an example using simulated data:
+The \pkg{cubfits} package also provides an example using simulated data:
 \begin{Code}
 > demo(simu.roc, 'cubfits')     # cubfits() is called.
 \end{Code}
 Note that this demo will generate a fake sequence file (\code{toy_roc.fasta})
-in FASTA format at working directory, and
-read it back (for testing). Also, it converts the data into correct format
-needed by \code{cubfits()}, then runs MCMC and generates a plot.
+in FASTA format in the working directory, and (for testing)
+read it back. Also, it converts the data into the correct format
+needed by \code{cubfits()}, and finally runs MCMC and generates a plot.
 
 
 \subsection[Generic Functions (Aside)]{Generic Functions (Aside)}
@@ -60,46 +60,45 @@ needed by \code{cubfits()}, then runs MCMC and generates a plot.
 Note that the three main functions are wrappers of other generic functions that
 perform parameter initializations, propose new parameters, compute
 MCMC acceptance/rejection ratio, and more.
-The function \code{init.function()} is to initial generic functions that
+The function \code{init.function()} initializes generic functions that
 will be called by the three main functions.
 Although \code{init.function()} is called within each of three main
 functions to setup the generic functions, it also needs to be called before
 using other utility functions, such as \code{fitMultinom()}, see
 Section~\ref{sec:misc} for examples.
 
-Companying with control variables such as \code{.CF.CT} and \code{.CF.OP},
+Accompanying control variables such as \code{.CF.CT} and \code{.CF.OP},
 the \code{init.function()} will dispatch the
 corresponding generic functions into a default environment \code{.cubfitsEnv},
-and other main functions may call those generic functions dynamically.
+allowing other main functions may call those generic functions dynamically.
 
-Note that generic functions in original \proglang{R} design only depend on
-input object types rather than options.
-However, this design of \pkg{cubfits} has several good purposes:
+Note that generic functions in \proglang{R} typically only depend on
+input object types.  However, the design in \pkg{cubfits} has 
+several advantages:
 \begin{itemize}
-\item functions are clearer by making well data structures and
+\item functions are clearer by making good use of data structures and
       simplifying options,
-\item extensions are easier by adding more genetic functions rather than
-      changing main functions, and
+\item extensions are easier to create; simply add more generic functions 
+      rather than changing main functions, and
 \item performance is more efficient by avoiding extra
       conditional checks such as \code{if(...)\{...\} else\{...\}}
       in every iteration.
 \end{itemize}
-Also, the design can avoid tedious CRAN checks since there is some restrictions
-of accessing \code{.GlobalEnv}.
-
-For example, \code{.cubfitsEnv$my.fitMultinomAll()} is called in several
+Also, the design can avoid tedious CRAN checks since there are some restrictions
+in accessing \code{.GlobalEnv}. For example, 
+\code{.cubfitsEnv$my.fitMultinomAll()} is called in several
 internal functions to fit multinomial logistic regression in every MCMC
 iterations. In particular, it has four generic functions:
 \begin{enumerate}
-\item \code{my.fitMultinomAll.lapply()} ueses \code{lapply()} in serial version,
+\item \code{my.fitMultinomAll.lapply()} ueses \code{lapply()} in the serial version,
 \item \code{my.fitMultinomAll.mclapply()} uses \code{parallel::mclapply()}
-      in multi-cores and shared memory machines,
+      in shared memory machines,
 \item \code{my.fitMultinomAll.task.pull()} uses \code{pbdMPI::task.pull()}
       in distributed clusters, and
 \item \code{my.fitMultinomAll.pbdLapply()} uses \code{pbdMPI::pbdLapply()}
-      in distributed clusters but only efficient for homogeneous tasks.
+      in distributed clusters, but is only efficient for homogeneous tasks.
 \end{enumerate}
 Through \code{init.function()}, there is no need to check which generic
-function should be called within MCMC step, and there is no need to worry
-serial or parallel methods when designing a MCMC algorithm.
+function should be called within the MCMC step, and there is no need to worry
+about serial or parallel details when designing a MCMC algorithm.
 
