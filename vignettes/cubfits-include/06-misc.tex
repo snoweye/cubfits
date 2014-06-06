@@ -9,9 +9,9 @@
 \addcontentsline{toc}{subsection}{\thesubsection. Multinomial Logistic Regression}
 
 
-\code{fitMultinom()} is an utility function which can fit a ROC model with
-$\phi$ values assuming no measurement errors as in~\cite{Shah2011}.
-A typical usage is as the following
+\code{fitMultinom()} is a utility function which can fit an ROC model with
+$\phi$ values, assuming no measurement errors as in~\citet{Shah2011}.
+A typical usage is:
 \begin{Code}
 > demo(fitMultinom, 'cubfit')
 \end{Code}
@@ -47,16 +47,16 @@ except empirical binning.
 \end{figure}
 
 {\color{red} \bf Important:}
-Note that \code{init.function(model = "roc")} is to initial generic functions
+Note that \code{init.function(model = "roc")} initializes generic functions
 for the ROC model and \code{fitMultinom()} can access corresponding generic
-functions from environment \code{.cubfitsEnv}. The generic function then
-perform multinomial logistic regression on the input summarized statistics,
+functions from the \code{.cubfitsEnv} environment. The generic function then
+performs multinomial logistic regression on the input summarized statistics,
 and \code{VGAM::vglm()} can fit and return parameter estimations.
-Therefore, there is only need to initial once before MCMC iterations, such as
+Therefore, there is only need to initialize once before MCMC iterations, such as
 the three main function in Section~\ref{sec:main_functions}. For performance
-issue, all calls within MCMC iterations should access generic functions, such
-as via \code{.cubfitEnv$fitMultinom()} regardless models. Do *NOT*
-access this function, \code{fitMultinom()}, within any MCMC iteration.
+issues, all calls within MCMC iterations should access generic functions, such
+as via \code{.cubfitEnv$fitMultinom()} regardless of the model. Do \textbf{NOT}
+access \code{fitMultinom()} within any MCMC iteration. %%% FIXME why?
 
 
 
@@ -65,10 +65,11 @@ access this function, \code{fitMultinom()}, within any MCMC iteration.
 \label{sec:asl}
 \addcontentsline{toc}{subsection}{\thesubsection. Asymmetric Laplace Distribution}
 
-As the regular \proglang{R} functions for different distributions,
-\pkg{cubfits} provides analog functions for asymmetric Laplace distribution
+As with the regular \proglang{R} functions for different distributions 
+(\code{dnorm()}, \code{pnorm()}, etc.),
+\pkg{cubfits} provides analogous functions for asymmetric Laplace distribution
 (ASL) such as \code{rasl()}, \code{dasl()}, \code{pasl()}, and \code{qasl()}.
-See \citep{KKP2001} for more details of ASL.
+See \citep{KKP2001} for more details about the ASL distribution.
 Finding a MLE numerically is possible for ASL random samples and
 is implemented in the \code{asl.optim()}.
 
@@ -84,18 +85,18 @@ in Figures~\ref{fig:asl} which can be done as the next.
 > demo(yassour.asl, 'cubfits')
 \end{Code}
 
-Further, I also used mixture normal models to fit the same data using the EM
-algorithm implemented in \pkg{EMCluster}~\citep{EMCluster}.
-Figures~\ref{fig:mixture} shows the fits
-for $K = 1, 2,\ldots, 6$ components of mixture normal models
-which can be done as the next.
+Further, I also used normal mixture models to fit the same data using the EM
+algorithm implemented in the \pkg{EMCluster}~\citep{EMCluster} package.
+Figure~\ref{fig:mixture} shows the fits
+for $K = 1, 2,\ldots, 6$ components of normal mixture models,
+which can be done via a call to
 \begin{Code}
 > demo(yassour.mixture, 'cubfits')
 \end{Code}
 
 Table~\ref{tab:asl_mixture}
 provides some details for model comparison. Note that $K=6$ has
-a smaller log likelihood than $K=5$ that means the EM algorithm
+a smaller log likelihood than $K=5$.  This means that the EM algorithm
 converges to local optimum and may indicate an overestimated number of
 components. $K = 4$ is the best choice among all models by the smallest
 BIC.
