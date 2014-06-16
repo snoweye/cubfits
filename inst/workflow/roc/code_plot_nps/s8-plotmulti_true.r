@@ -9,6 +9,7 @@ source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot.nps, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot.nps, "u5-new_page.r", sep = ""))
+source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
@@ -118,13 +119,18 @@ for(i.case in case.names){
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
                 main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
+    x.label.focal <- x.label
 
     ### Plot log(mu).
     x <- b.Init.negsel$b.logmu.PM
     y <- b.logmu.PM
     y.ci <- b.logmu.ci.PM
     x.label <- b.logmu.label
-    plot.b.corr(x, y, x.label, y.ci = y.ci,
+    ### Adjust focal codons if needed and dispatch after adjusting.
+    new.order <- adjust.focal.codon(y, x.label, x.label.focal, y.ci = y.ci)
+    y <- new.order$y
+    y.ci <- new.order$y.ci
+    plot.b.corr(x, y, x.label.focal, y.ci = y.ci,
                 xlab = "True", ylab = "Estimated",
                 main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
 

@@ -9,6 +9,7 @@ source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot, "u5-new_page.r", sep = ""))
+source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
@@ -125,6 +126,7 @@ for(i.match in 1:nrow(match.case)){
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
                 xlab = "With Phi", ylab = "Without Phi",
                 main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
+    x.label.focal <- x.label
 
     ### Plot log(mu).
     x <- b.logmu[[2]]
@@ -132,7 +134,11 @@ for(i.match in 1:nrow(match.case)){
     x.ci <- b.logmu.ci[[2]]
     y.ci <- b.logmu.ci[[1]]
     x.label <- b.logmu.label.list[[1]]
-    plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
+    ### Adjust focal codons if needed and dispatch after adjusting.
+    new.order <- adjust.focal.codon(y, x.label, x.label.focal, y.ci = y.ci)
+    y <- new.order$y
+    y.ci <- new.order$y.ci
+    plot.b.corr(x, y, x.label.focal, x.ci = x.ci, y.ci = y.ci,
                 xlab = "With Phi", ylab = "Without Phi",
                 main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
 
