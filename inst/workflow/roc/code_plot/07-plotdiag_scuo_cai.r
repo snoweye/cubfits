@@ -46,7 +46,7 @@ if(file.exists(fn.in)){
   pdf(fn.out, width = 4, height = 4)
     plotprxy(SCUO, CAI$CAI, log10.x = FALSE, log10.y = FALSE,
              xlab = "SCUO", ylab = "CAI", main = "SCUO vs CAI")
-    mtext(workflow, line = 3, cex = 0.6)
+    mtext(workflow.name, line = 3, cex = 0.6)
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }

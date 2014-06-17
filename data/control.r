@@ -2,10 +2,10 @@
 
 ### For method controls.
 .CF.CT <- list(
-  model = c("roc", "nsef", "rocnsef"),          # main models
-  type.p = c("lognormal_fix",
+  model = c("roc"),                             # main models
+  type.p = c("lognormal_bias",
+             "lognormal_fix",
              "lognormal_RW",
-             "lognormal_bias",
              "logmixture"),                     # proposal for hyperparameters
   type.Phi = c("RW_Norm"),                      # proposal for Phi
   model.Phi = c("lognormal", "logmixture"),     # prior of Phi
@@ -18,7 +18,7 @@
 
 ### For configuration of initial and draw scaling.
 .CF.CONF <- list(
-  scale.phi.Obs = TRUE,            # if phi.Obs were scaled to mean 1
+  scale.phi.Obs = FALSE,           # if phi.Obs were scaled to mean 1
   init.b.Scale = 1,                # initial b scale
   init.phi.Scale = 1,              # initial phi scale
   p.nclass = 2,                    # # of classes if mixture phi
@@ -28,7 +28,7 @@
   phi.pred.DrawScale = 1,          # random walk scale for phi.pred
   sigma.Phi.DrawScale = 1,         # random wasl scale for sigma.Phi
   bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
-  estimate.bias.Phi = FALSE        # if estimate bias of phi during MCMC
+  estimate.bias.Phi = TRUE         # if estimate bias of phi during MCMC
 )
 
 ### For optimization.

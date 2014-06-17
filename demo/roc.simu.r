@@ -24,14 +24,14 @@ y <- gen.y(seqstring.roc, aa.names = aa.names)
 # Run codon fits.
 .CF.AC$renew.iter <- 3
 ret.time <- system.time({
-  ret <- cubfits(reu13.df, phi.Obs, y, n,
+  ret <- cubfits(reu13.df, ex.train$phi.Obs, y, n,
                  nIter = 10, burnin = 10,
                  verbose = TRUE, report = 5,
                  model = "roc", adaptive = "simple")
 })
 
 x <- rowMeans(do.call("cbind", ret$phi.Mat)[, 11:20])
-y <- phi.Obs
+y <- ex.train$phi.Obs
 plotprxy(x, y)
 
 x <- log10(x / mean(x))

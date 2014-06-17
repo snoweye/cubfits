@@ -103,6 +103,14 @@ all.jobs <- function(i.job){
   b.logmu.ci.PM <- ret$b.logmu.ci.PM
   b.logmu.label <- ret$b.logmu.label
 
+  ### Negative selection by median.
+  ret <- get.negsel(b.MED, id.intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
+  b.negsel.MED <- ret$b.negsel.PM
+  ### log.mu
+  b.logmu.MED <- ret$b.logmu.PM
+
   ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
@@ -110,8 +118,8 @@ all.jobs <- function(i.job){
        p.PM, p.STD, p.CI, p.MED,
        phi.PM, phi.STD, phi.CI, phi.MED,
        phi.PM.log10, phi.STD.log10, phi.CI.log10,
-       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
-       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.MED, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.MED, b.logmu.label,
        file = fn.out)
 
   ### Thinning.
@@ -167,14 +175,22 @@ all.jobs <- function(i.job){
   b.logmu.ci.PM <- ret$b.logmu.ci.PM
   b.logmu.label <- ret$b.logmu.label
 
+  ### Negative selection by median.
+  ret <- get.negsel(b.MED, id.intercept, id.slop, aa.names, b.label,
+                    b.ci.PM = b.ci.PM)
+  ### Delta.t
+  b.negsel.MED <- ret$b.negsel.PM
+  ### log.mu
+  b.logmu.MED <- ret$b.logmu.PM
+
   ### Dump summarized results.
   fn.out <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   cat(i.job, ": ", i.case, ", dump: ", fn.out, "\n", sep = "")
   save(b.PM, b.STD, b.ci.PM, b.MED, b.label,
        phi.PM, phi.STD, phi.CI, phi.MED,
        phi.PM.log10, phi.STD.log10, phi.CI.log10,
-       b.negsel.PM, b.negsel.ci.PM, b.negsel.label,
-       b.logmu.PM, b.logmu.ci.PM, b.logmu.label,
+       b.negsel.PM, b.negsel.ci.PM, b.negsel.MED, b.negsel.label,
+       b.logmu.PM, b.logmu.ci.PM, b.logmu.MED, b.logmu.label,
        file = fn.out)
 
   return(c(comm.rank(), i.job))

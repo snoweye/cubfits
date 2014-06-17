@@ -23,7 +23,7 @@ phi.pred.Init <- phi.pred.Init / mean(phi.pred.Init)
 # Run
 .CF.AC$renew.iter <- 3
 ret.time <- system.time({
-  ret <- cubpred(ex.train$reu13.df, phi.Obs, ex.train$y, ex.train$n,
+  ret <- cubpred(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
                  ex.test$reu13.df, ex.test$y, ex.test$n,
                  nIter = 10, burnin = 10,
                  phi.pred.Init = phi.pred.Init,

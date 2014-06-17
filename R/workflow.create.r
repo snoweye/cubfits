@@ -1,7 +1,7 @@
 ### For work flows only.
 
 get.workflow <- function(dir.name = "workflow/",
-    model = c("roc", "nsef"), pkg = "cubfits"){
+    model = c("roc"), pkg = "cubfits"){
   dir.name <- paste(dir.name, model[1], "/", sep = "")
   file.path <- tools::file_path_as_absolute(
                  system.file(dir.name, package = "cubfits"))
