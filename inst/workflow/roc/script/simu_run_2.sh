@@ -17,6 +17,16 @@ ALL_OUT=`Rscript -e 'source("00-set_env.r");cat(prefix$all.out)'`
 CODE_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code)'`
 CODE_PLOT_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code.plot)'`
 
+### Check parallel.
+NP=5
+PARALLEL=`Rscript -e 'source("00-set_env.r");cat(run.info$parallel)'`
+if [ "$PARALLEL" = "task.pull" ] || [ "$PARALLEL" = "pbdLapply" ]; then
+  MPI_EXEC="mpiexec -np ${NP}"
+else
+  MPI_EXEC=
+fi
+
+
 ### Plot for fake data only.
 Rscript ${CODE_PLOT_PATH}/s1-plotdiag_simu_phi.r > \
           ${ALL_OUT}/log/s1-plotdiag_simu_phi 2>&1 &
@@ -31,11 +41,9 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_bin_est.r > \
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
           ${ALL_OUT}/log/03-plotdiag_init 2>&1 &
 
-
 ### Subset MCMC results.
-NP=5
-mpiexec -np ${NP} Rscript ${CODE_PATH}/05-subset-tp.r > \
-                            ${ALL_OUT}/log/05-subset-tp 2>&1
+${MPI_EXEC} Rscript ${CODE_PATH}/05-subset-tp.r > \
+                      ${ALL_OUT}/log/05-subset-tp 2>&1
 
 ### Dump tsv files.
 Rscript ${CODE_PLOT_PATH}/05-subset_tsv.r > \

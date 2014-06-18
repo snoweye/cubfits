@@ -4,7 +4,7 @@ suppressMessages(library(cubfits, quietly = TRUE))
 
 ### Load environment and set data.
 source("00-set_env.r")
-source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 fn.in <- paste(prefix$data, "init_", model, ".rda", sep = "")

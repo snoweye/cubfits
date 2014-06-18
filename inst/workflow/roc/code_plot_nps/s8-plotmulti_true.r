@@ -9,7 +9,7 @@ source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
 source(paste(prefix$code.plot.nps, "u2-plot_b_corr.r", sep = ""))
 source(paste(prefix$code.plot.nps, "u5-new_page.r", sep = ""))
-source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load true Phi.
 fn.in <- paste(prefix$data, "simu_true_", model, ".rda", sep = "")
@@ -117,8 +117,17 @@ for(i.case in case.names){
     y.ci <- b.negsel.ci.PM
     x.label <- b.Init.negsel$b.negsel.label
     plot.b.corr(x, y, x.label, y.ci = y.ci,
-                xlab = "True", ylab = "Estimated",
-                main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "True", ylab = "Estimated", main = "Delta.t",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(Delta[t]), " , true")),
+          side = 1, line = 3)
+    if(length(grep("wophi", i.case)) > 0){
+      mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
+            side = 2, line = 3)
+    } else{
+      mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
+            side = 2, line = 3)
+    }
     x.label.focal <- x.label
 
     ### Plot log(mu).
@@ -131,8 +140,17 @@ for(i.case in case.names){
     y <- new.order$y
     y.ci <- new.order$y.ci
     plot.b.corr(x, y, x.label.focal, y.ci = y.ci,
-                xlab = "True", ylab = "Estimated",
-                main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "True", ylab = "Estimated", main = "log(mu)",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(M), " , true")),
+          side = 1, line = 3)
+    if(length(grep("wophi", i.case)) > 0){
+      mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
+            side = 2, line = 3)
+    } else{
+      mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
+            side = 2, line = 3)
+    }
 
     ### Overlap two histograms.
     p.1 <- hist(log10(EPhi / mean(EPhi)), nclass = 50, plot = FALSE)

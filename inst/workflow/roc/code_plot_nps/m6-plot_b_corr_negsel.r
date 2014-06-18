@@ -6,7 +6,7 @@ rm(list = ls())
 suppressMessages(library(cubfits, quietly = TRUE))
 
 source("00-set_env.r")
-source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u2-plot_b_corr.r", sep = ""))
 
 if(length(case.names) < 4){
   stop("Need 4 cases to match with.")

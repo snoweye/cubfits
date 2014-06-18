@@ -67,6 +67,7 @@ run.info$burnin <- 1000
 ### For configuration.
 run.info$dump <- FALSE
 run.info$prefix.dump <- paste(prefix$output, "tmp/dump_", sep = "")
+# run.info$parallel <- "lapply"
 run.info$parallel <- "task.pull"
 
 ### For MCMC.

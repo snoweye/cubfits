@@ -124,8 +124,12 @@ for(i.match in 1:nrow(match.case)){
     y.ci <- b.negsel.ci[[1]]
     x.label <- b.negsel.label.list[[1]]
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "With Phi", ylab = "Without Phi", main = "Delta.t",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(Delta[t]), "  with ", italic(X[obs]))),
+          side = 1, line = 2, cex = 0.8)
+    mtext(expression(paste(italic(Delta[t]), "  without ", italic(X[obs]))),
+          side = 2, line = 2, cex = 0.8)
     x.label.focal <- x.label
 
     ### Plot log(mu).
@@ -139,8 +143,12 @@ for(i.match in 1:nrow(match.case)){
     y <- new.order$y
     y.ci <- new.order$y.ci
     plot.b.corr(x, y, x.label.focal, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "With Phi", ylab = "Without Phi", main = "log(mu)",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(M), "  with ", italic(X[obs]))),
+          side = 1, line = 2, cex = 0.8)
+    mtext(expression(paste(italic(M), "  without ", italic(X[obs]))),
+          side = 2, line = 2, cex = 0.8)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(phi.pm[[2]] / mean(phi.pm[[2]])),
@@ -153,7 +161,8 @@ for(i.match in 1:nrow(match.case)){
          xlab = "Production Rate (log10)",
          main = "Expression (Posterior Mean)")
     plot(p.2, col = "#FF000050", xlim = xlim, ylim = ylim, add = TRUE)
-    legend(xlim[1], ylim[2], c("With Phi", "Without Phi"),
+    legend(xlim[1], ylim[2],
+           c("With Phi", "Without Phi"),
            pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
     ### Overlap two histograms.

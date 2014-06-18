@@ -23,14 +23,22 @@ fi
 CODE_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code)'`
 CODE_PLOT_PATH=`Rscript -e 'source("00-set_env.r");cat(prefix$code.plot)'`
 
+### Check parallel.
+NP=5
+PARALLEL=`Rscript -e 'source("00-set_env.r");cat(run.info$parallel)'`
+if [ "$PARALLEL" = "task.pull" ] || [ "$PARALLEL" = "pbdLapply" ]; then
+  MPI_EXEC="mpiexec -np ${NP}"
+else
+  MPI_EXEC=
+fi
+
 ### Read in fake data or real data.
 Rscript ${CODE_PATH}/02-get_data.r > \
           ${ALL_OUT}/log/02-get_data 2>&1
 
 ### Get initial values.
-NP=5
-mpiexec -np ${NP} Rscript ${CODE_PATH}/03-get_init-tp.r > \
-                            ${ALL_OUT}/log/03-get_init-tp 2>&1
+${MPI_EXEC} Rscript ${CODE_PATH}/03-get_init-tp.r > \
+                      ${ALL_OUT}/log/03-get_init-tp 2>&1
 
 ### Plot.
 Rscript ${CODE_PLOT_PATH}/03-plotdiag_bin_est.r > \
@@ -39,20 +47,19 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
           ${ALL_OUT}/log/03-plotdiag_init 2>&1 &
 
 ### Run MCMC.
-NP=5
-nohup mpiexec -np ${NP} Rscript ${CODE_PATH}/04-ad_wophi_pm-tp.r > \
-                                  ${ALL_OUT}/log/04-ad_wophi_pm-tp 2>&1 &
+nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-ad_wophi_pm-tp.r > \
+                            ${ALL_OUT}/log/04-ad_wophi_pm-tp 2>&1 &
 RUN_1=$!
-nohup mpiexec -np ${NP} Rscript ${CODE_PATH}/04-ad_wophi_scuo-tp.r > \
-                                  ${ALL_OUT}/log/04-ad_wophi_scuo-tp 2>&1 &
+nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-ad_wophi_scuo-tp.r > \
+                            ${ALL_OUT}/log/04-ad_wophi_scuo-tp 2>&1 &
 RUN_2=$!
 wait $RUN_1
 wait $RUN_2
-nohup mpiexec -np ${NP} Rscript ${CODE_PATH}/04-ad_wphi_pm-tp.r > \
-                                  ${ALL_OUT}/log/04-ad_wphi_pm-tp 2>&1 &
+nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-ad_wphi_pm-tp.r > \
+                            ${ALL_OUT}/log/04-ad_wphi_pm-tp 2>&1 &
 RUN_3=$!
-nohup mpiexec -np ${NP} Rscript ${CODE_PATH}/04-ad_wphi_scuo-tp.r > \
-                                  ${ALL_OUT}/log/04-ad_wphi_scuo-tp 2>&1 &
+nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-ad_wphi_scuo-tp.r > \
+                            ${ALL_OUT}/log/04-ad_wphi_scuo-tp 2>&1 &
 RUN_4=$!
 wait $RUN_3
 wait $RUN_4

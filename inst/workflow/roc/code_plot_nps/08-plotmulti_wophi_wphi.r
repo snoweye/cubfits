@@ -5,11 +5,11 @@ rm(list = ls())
 suppressMessages(library(cubfits, quietly = TRUE))
 
 source("00-set_env.r")
-source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u0-get_case_main.r", sep = ""))
 source(paste(prefix$code, "u1-get_negsel.r", sep = ""))
-source(paste(prefix$code.plot, "u2-plot_b_corr.r", sep = ""))
-source(paste(prefix$code.plot, "u5-new_page.r", sep = ""))
-source(paste(prefix$code.plot, "u6-adjust_focal_codon.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u2-plot_b_corr.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u5-new_page.r", sep = ""))
+source(paste(prefix$code.plot.nps, "u6-adjust_focal_codon.r", sep = ""))
 
 ### Load data.
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
@@ -124,8 +124,12 @@ for(i.match in 1:nrow(match.case)){
     y.ci <- b.negsel.ci[[1]]
     x.label <- b.negsel.label.list[[1]]
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "Delta.t", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "With Phi", ylab = "Without Phi", main = "Delta.t",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
+          side = 1, line = 3)
+    mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
+          side = 2, line = 3)
     x.label.focal <- x.label
 
     ### Plot log(mu).
@@ -139,8 +143,12 @@ for(i.match in 1:nrow(match.case)){
     y <- new.order$y
     y.ci <- new.order$y.ci
     plot.b.corr(x, y, x.label.focal, x.ci = x.ci, y.ci = y.ci,
-                xlab = "With Phi", ylab = "Without Phi",
-                main = "log(mu)", add.lm = TRUE, add.ci = TRUE)
+                # xlab = "With Phi", ylab = "Without Phi", main = "log(mu)",
+                add.lm = TRUE, add.ci = TRUE)
+    mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
+          side = 1, line = 3)
+    mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
+          side = 2, line = 3)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(phi.pm[[2]] / mean(phi.pm[[2]])),
