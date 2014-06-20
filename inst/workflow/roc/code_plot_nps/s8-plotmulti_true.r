@@ -120,13 +120,13 @@ for(i.case in case.names){
                 # xlab = "True", ylab = "Estimated", main = "Delta.t",
                 add.lm = TRUE, add.ci = TRUE)
     mtext(expression(paste(italic(Delta[t]), " , true")),
-          side = 1, line = 3)
+          side = 1, line = 2.5, cex = 0.8)
     if(length(grep("wophi", i.case)) > 0){
       mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
-            side = 2, line = 3)
+            side = 2, line = 2.5, cex = 0.8)
     } else{
       mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
-            side = 2, line = 3)
+            side = 2, line = 2.5, cex = 0.8)
     }
     x.label.focal <- x.label
 
@@ -143,13 +143,13 @@ for(i.case in case.names){
                 # xlab = "True", ylab = "Estimated", main = "log(mu)",
                 add.lm = TRUE, add.ci = TRUE)
     mtext(expression(paste(italic(M), " , true")),
-          side = 1, line = 3)
+          side = 1, line = 2.5, cex = 0.8)
     if(length(grep("wophi", i.case)) > 0){
       mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
-            side = 2, line = 3)
+            side = 2, line = 2.5, cex = 0.8)
     } else{
       mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
-            side = 2, line = 3)
+            side = 2, line = 2.5, cex = 0.8)
     }
 
     ### Overlap two histograms.

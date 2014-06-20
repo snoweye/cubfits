@@ -127,9 +127,9 @@ for(i.match in 1:nrow(match.case)){
                 # xlab = "With Phi", ylab = "Without Phi", main = "Delta.t",
                 add.lm = TRUE, add.ci = TRUE)
     mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
-          side = 1, line = 3)
+          side = 1, line = 2.5, cex = 0.8)
     mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
-          side = 2, line = 3)
+          side = 2, line = 2.5, cex = 0.8)
     x.label.focal <- x.label
 
     ### Plot log(mu).
@@ -146,9 +146,9 @@ for(i.match in 1:nrow(match.case)){
                 # xlab = "With Phi", ylab = "Without Phi", main = "log(mu)",
                 add.lm = TRUE, add.ci = TRUE)
     mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
-          side = 1, line = 3)
+          side = 1, line = 2.5, cex = 0.8)
     mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
-          side = 2, line = 3)
+          side = 2, line = 2.5, cex = 0.8)
 
     ### Overlap two histograms.
     p.1 <- hist(log10(phi.pm[[2]] / mean(phi.pm[[2]])),

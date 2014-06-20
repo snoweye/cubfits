@@ -42,7 +42,8 @@ for(i.case in case.names){
   ### To adjust to similar range of phi.Obs.
   ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
-  predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
+  EPhi.lim <- range(c(phi.Obs.lim, phi.PM))
+  predict.roc <- prop.model.roc(b.PM, EPhi.lim)
 
   ret.all[[i.case]] <- list(ret.EPhi = ret.EPhi, predict.roc = predict.roc)
 }
@@ -72,10 +73,7 @@ for(i.match in 1:nrow(match.case)){
 
   ### Fix xlim at log10 scale.
   lim.bin <- range(log10(ret.EPhi.2[[1]]$center))
-  lim.model <- range(log10(predict.roc.1[[1]]$center),
-                     log10(predict.roc.2[[1]]$center))
-  xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 8,
-            lim.bin[2] + (lim.bin[2] - lim.bin[1]) / 8)
+  xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
   ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.nps.match, "bin_", match.case[i.match, 1], "_",
@@ -101,11 +99,11 @@ for(i.match in 1:nrow(match.case)){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 2, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -131,17 +129,30 @@ for(i.match in 1:nrow(match.case)){
       plotaddmodel(tmp.roc, 3, u.codon, color)
     }
 
+    ### Add histogram.
+    hist(log10(phi.Obs), freq = TRUE, main = "", xlab = "", ylab = "",
+         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+    box()
+    axis(1)
+    axis(4)
+    axis(1, tck = 0.02, labels = FALSE)
+    axis(2, tck = 0.02, labels = FALSE)
+    axis(3, tck = 0.02, labels = FALSE)
+    axis(4, tck = 0.02, labels = FALSE)
+
     ### Add label.
     model.label <- paste(model,
-                         c("without phi", "with phi", "logistics"), sep = " ")
+                         c(expression(paste("Without ", X[obs], sep = "")),
+                           expression(paste("With ", X[obs], sep = "")),
+                           "Logistics"), sep = " ")
     model.lty <- c(2:1, 3)
-    plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-         xlim = c(0, 1), ylim = c(0, 1))
-    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+           model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Estimated Production Rate (log10)")
+    text(0.5, 0.5,
+         expression(paste(log[10], "(Estimated Production Rate)", sep = "")))
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

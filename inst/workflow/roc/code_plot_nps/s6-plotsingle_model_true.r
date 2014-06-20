@@ -43,6 +43,8 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+
+  ### Subset of mcmc output with scaling.
   # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
   # if(!file.exists(fn.in)){
   #   cat("File not found: ", fn.in, "\n", sep = "")
@@ -51,11 +53,16 @@ for(i.case in case.names){
   # load(fn.in)
 
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
-  predict.roc <- prop.model.roc(b.PM, EPhi.true.lim)
+  EPhi.lim <- range(c(EPhi.true.lim, EPhi))
+  predict.roc <- prop.model.roc(b.PM, EPhi.lim)
+
+  ### Fix xlim at log10 scale.
+  lim.bin <- range(log10(ret.EPhi.true[[1]]$center))
+  xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
   ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.nps.single, "bin_merge_true_",
-                  i.case, "_nps.pdf", sep = "")
+                  i.case, ".pdf", sep = "")
   pdf(fn.out, width = 16, height = 11)
     mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
                   nrow = 6, ncol = 5, byrow = TRUE)
@@ -68,13 +75,14 @@ for(i.case in case.names){
          paste(workflow.name, ", ", get.case.main(i.case, model),
                ", bin: true Phi", sep = ""))
     text(0.5, 0.4, date(), cex = 0.6)
+    par(mar = c(0, 0, 0, 0))
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){
       tmp.obs <- ret.EPhi.true[[i.aa]]
       tmp.roc <- predict.roc[[i.aa]]
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-              lty = 1, axes = FALSE)
+              lty = 1, axes = FALSE, xlim = xlim)
       box()
       text(0, 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
@@ -109,6 +117,17 @@ for(i.case in case.names){
       }
     }
 
+    ### Add histogram.
+    hist(log10(EPhi.true), freq = TRUE, main = "", xlab = "", ylab = "",
+         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+    box()
+    axis(1)
+    axis(4)
+    axis(1, tck = 0.02, labels = FALSE)
+    axis(2, tck = 0.02, labels = FALSE)
+    axis(3, tck = 0.02, labels = FALSE)
+    axis(4, tck = 0.02, labels = FALSE)
+
     ### Add label.
     model.label <- "MCMC Posterior"
     model.lty <- 1
@@ -120,20 +139,21 @@ for(i.case in case.names){
       model.label <- c(model.label, "True Model")
       model.lty <- c(model.lty, 3)
     }
-    plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-         xlim = c(0, 1), ylim = c(0, 1))
-    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+           model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
     if(exists("Eb")){
-      text(0.5, 0.5, "True Production Rate (log10)")
+      text(0.5, 0.5,
+           expression(paste(log[10], "(True Production Rate)", sep = "")))
     } else{
-      text(0.5, 0.5, "Estimated Production Rate (log10)")
+      text(0.5, 0.5,
+           expression(paste(log[10], "(Estimated Production Rate)", sep = "")))
     }
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Propotion", srt = 90)
+    text(0.5, 0.5, "Codon Frequency", srt = 90)
   dev.off()
 }

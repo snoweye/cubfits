@@ -43,7 +43,7 @@ pdf(fn.out, width = 16, height = 11)
     if(i.aa %in% c(1, 6, 11, 16)){
       axis(2)
     }
-    if(i.aa %in% 15:19){
+    if(i.aa %in% 16:19){
       axis(1)
     }
     if(i.aa %in% 1:5){

@@ -24,11 +24,10 @@ phi.Obs.lim <- range(c(phi.Obs, EPhi))
 ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
 predict.roc <- prop.model.roc(Eb, phi.Obs.lim)
 
+### For phiObs.
 ### Fix xlim at log10 scale.
 lim.bin <- range(log10(ret.phi.Obs[[1]]$center))
-lim.model <- range(log10(predict.roc[[1]]$center))
-xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 4,
-          max(lim.bin[2], lim.model[2]))
+xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
 ### Plot bin and model.
 fn.out <- paste(prefix$plot.diag, "bin_true_phiObs.pdf", sep = "")
@@ -50,11 +49,11 @@ pdf(fn.out, width = 16, height = 11)
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = 3, axes = FALSE, xlim = xlim)
     box()
-    text(0, 1, aa.names[i.aa], cex = 1.5)
+    text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
     if(i.aa %in% c(1, 6, 11, 16)){
       axis(2)
     }
-    if(i.aa %in% 15:19){
+    if(i.aa %in% 16:19){
       axis(1)
     }
     if(i.aa %in% 1:5){
@@ -69,24 +68,40 @@ pdf(fn.out, width = 16, height = 11)
     axis(4, tck = 0.02, labels = FALSE)
   }
 
+  ### Add histogram.
+  hist(log10(phi.Obs), freq = TRUE, main = "", xlab = "", ylab = "",
+       xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+  box()
+  axis(1)
+  axis(4)
+  axis(1, tck = 0.02, labels = FALSE)
+  axis(2, tck = 0.02, labels = FALSE)
+  axis(3, tck = 0.02, labels = FALSE)
+  axis(4, tck = 0.02, labels = FALSE)
+
   ### Add label.
   model.label <- c("True Model")
   model.lty <- 3
-  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1))
-  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+  legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+         model.label, lty = model.lty, box.lty = 0)
 
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "True Production Rate (log10)")
+  text(0.5, 0.5,
+       expression(paste(log[10], "(True Observed Production Rate)", sep = "")))
 
   ### Plot ylab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "Propotion", srt = 90)
+  text(0.5, 0.5, "Codon Frequency", srt = 90)
 dev.off()
 
 ### Compute.
 ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi)
+
+### For EPhi.
+### Fix xlim at log10 scale.
+lim.bin <- range(log10(ret.EPhi[[1]]$center))
+xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
 ### Plot bin and model.
 fn.out <- paste(prefix$plot.diag, "bin_true_EPhi.pdf", sep = "")
@@ -108,11 +123,11 @@ pdf(fn.out, width = 16, height = 11)
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = 3, axes = FALSE, xlim = xlim)
     box()
-    text(0, 1, aa.names[i.aa], cex = 1.5)
+    text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
     if(i.aa %in% c(1, 6, 11, 16)){
       axis(2)
     }
-    if(i.aa %in% 15:19){
+    if(i.aa %in% 16:19){
       axis(1)
     }
     if(i.aa %in% 1:5){
@@ -127,18 +142,29 @@ pdf(fn.out, width = 16, height = 11)
     axis(4, tck = 0.02, labels = FALSE)
   }
 
+  ### Add histogram.
+  hist(log10(EPhi), freq = TRUE, main = "", xlab = "", ylab = "",
+       xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+  box()
+  axis(1)
+  axis(4)
+  axis(1, tck = 0.02, labels = FALSE)
+  axis(2, tck = 0.02, labels = FALSE)
+  axis(3, tck = 0.02, labels = FALSE)
+  axis(4, tck = 0.02, labels = FALSE)
+
   ### Add label.
   model.label <- c("True Model")
   model.lty <- 3
-  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1))
-  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+  legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+         model.label, lty = model.lty, box.lty = 0)
 
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "True Production Rate (log10)")
+  text(0.5, 0.5,
+       expression(paste(log[10], "(True Production Rate)", sep = "")))
 
   ### Plot ylab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "Propotion", srt = 90)
+  text(0.5, 0.5, "Codon Frequency", srt = 90)
 dev.off()

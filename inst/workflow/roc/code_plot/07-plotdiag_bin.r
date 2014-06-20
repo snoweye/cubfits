@@ -33,13 +33,13 @@ for(i.case in case.names){
   ### To adjust to similar range of phi.Obs.
   ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
-  predict.roc <- prop.model.roc(b.PM, phi.Obs.lim)
+  EPhi.lim <- range(c(phi.Obs.lim, phi.PM))
+  predict.roc <- prop.model.roc(b.PM, EPhi.lim)
 
+### For phiObs.
   ### Fix xlim at log10 scale.
   lim.bin <- range(log10(ret.phi.Obs[[1]]$center))
-  lim.model <- range(log10(predict.roc[[1]]$center))
-  xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 4,
-            max(lim.bin[2], lim.model[2]))
+  xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
   ### Plot bin and model for measurements.
   fn.out <- paste(prefix$plot.diag, "bin_pred_phiObs_", i.case, ".pdf", sep = "")
@@ -63,11 +63,11 @@ for(i.case in case.names){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -82,21 +82,37 @@ for(i.case in case.names){
       axis(4, tck = 0.02, labels = FALSE)
     }
 
+    ### Add histogram.
+    hist(log10(phi.Obs), freq = TRUE, main = "", xlab = "", ylab = "",
+         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+    box()
+    axis(1)
+    axis(4)
+    axis(1, tck = 0.02, labels = FALSE)
+    axis(2, tck = 0.02, labels = FALSE)
+    axis(3, tck = 0.02, labels = FALSE)
+    axis(4, tck = 0.02, labels = FALSE)
+
     ### Add label.
     model.label <- c("MCMC Posterior")
     model.lty <- 1
-    plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-         xlim = c(0, 1), ylim = c(0, 1))
-    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+           model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Estimated Production Rate (log10)")
+    text(0.5, 0.5,
+         expression(paste(log[10], "(Observed Production Rate)", sep = "")))
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Propotion", srt = 90)
+    text(0.5, 0.5, "Codon Frequency", srt = 90)
   dev.off()
+
+### For EPhi.
+  ### Fix xlim at log10 scale.
+  lim.bin <- range(log10(ret.EPhi[[1]]$center))
+  xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
 
   ### Plot bin and model for predictions.
   fn.out <- paste(prefix$plot.diag, "bin_pred_EPhi_", i.case, ".pdf", sep = "")
@@ -120,11 +136,11 @@ for(i.case in case.names){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -139,19 +155,30 @@ for(i.case in case.names){
       axis(4, tck = 0.02, labels = FALSE)
     }
 
+    ### Add histogram.
+    hist(log10(phi.PM), freq = TRUE, main = "", xlab = "", ylab = "",
+         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+    box()
+    axis(1)
+    axis(4)
+    axis(1, tck = 0.02, labels = FALSE)
+    axis(2, tck = 0.02, labels = FALSE)
+    axis(3, tck = 0.02, labels = FALSE)
+    axis(4, tck = 0.02, labels = FALSE)
+
     ### Add label.
     model.label <- c("MCMC Posterior")
     model.lty <- 1
-    plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-         xlim = c(0, 1), ylim = c(0, 1))
-    legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+           model.label, lty = model.lty, box.lty = 0)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Estimated Production Rate (log10)")
+    text(0.5, 0.5,
+         expression(paste(log[10], "(Estimated Production Rate)", sep = "")))
 
     ### Plot ylab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-    text(0.5, 0.5, "Propotion", srt = 90)
+    text(0.5, 0.5, "Codon Frequency", srt = 90)
   dev.off()
 }

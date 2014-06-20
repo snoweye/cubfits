@@ -24,6 +24,10 @@ aa.names <- names(reu13.df.obs)
 ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi)
 predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
+### Fix xlim at log10 scale.
+lim.bin <- range(log10(ret.EPhi[[1]]$center))
+xlim <- c(lim.bin[1] - diff(lim.bin) / 4, lim.bin[2] + diff(lim.bin) / 4)
+
 ### Plot bin and model for measurements.
 fn.out <- paste(prefix$plot.diag, "bin_est_EPhi.pdf", sep = "")
 pdf(fn.out, width = 16, height = 11)
@@ -42,13 +46,13 @@ pdf(fn.out, width = 16, height = 11)
     tmp.obs <- ret.EPhi[[i.aa]]
     tmp.roc <- predict.roc[[i.aa]]
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
-            lty = 2, axes = FALSE)
+            lty = 2, axes = FALSE, xlim = xlim)
     box()
-    text(0, 1, aa.names[i.aa], cex = 1.5)
+    text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
     if(i.aa %in% c(1, 6, 11, 16)){
       axis(2)
     }
-    if(i.aa %in% 15:19){
+    if(i.aa %in% 16:19){
       axis(1)
     }
     if(i.aa %in% 1:5){
@@ -63,18 +67,29 @@ pdf(fn.out, width = 16, height = 11)
     axis(4, tck = 0.02, labels = FALSE)
   }
 
+  ### Add histogram.
+  hist(log10(EPhi), freq = TRUE, main = "", xlab = "", ylab = "",
+       xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
+  box()
+  axis(1)
+  axis(4)
+  axis(1, tck = 0.02, labels = FALSE)
+  axis(2, tck = 0.02, labels = FALSE)
+  axis(3, tck = 0.02, labels = FALSE)
+  axis(4, tck = 0.02, labels = FALSE)
+
   ### Add label.
   model.label <- c("Logistic Regression")
   model.lty <- 2
-  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1))
-  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+  legend(xlim[1] + 0.1 * diff(xlim), 0.8,
+         model.label, lty = model.lty, box.lty = 0)
 
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "Estimated Production Rate (log10)")
+  text(0.5, 0.5,
+       expression(paste(log[10], "(True Production Rate)", sep = "")))
 
   ### Plot ylab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "Propotion", srt = 90)
+  text(0.5, 0.5, "Codon Frequency", srt = 90)
 dev.off()
