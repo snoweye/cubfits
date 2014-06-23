@@ -68,21 +68,19 @@ pdf(fn.out, width = 16, height = 11)
   }
 
   ### Add histogram.
-  hist(log10(EPhi), freq = TRUE, main = "", xlab = "", ylab = "",
-       xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
-  box()
+  p.1 <- hist(log10(EPhi), xlim = xlim, nclass = 40, plot = FALSE)
+  hist.ylim <- range(p.1$counts)
+  hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
+  plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
+       axes = FALSE)
   axis(1)
   axis(4)
-  axis(1, tck = 0.02, labels = FALSE)
-  axis(2, tck = 0.02, labels = FALSE)
-  axis(3, tck = 0.02, labels = FALSE)
-  axis(4, tck = 0.02, labels = FALSE)
 
   ### Add label.
   model.label <- c("Logistic Regression")
   model.lty <- 2
-  legend(xlim[1] + 0.1 * diff(xlim), 0.8,
-         model.label, lty = model.lty, box.lty = 0)
+  legend(xlim[1], hist.ylim[2],
+         model.label, lty = model.lty, box.lty = 0, cex = 0.8)
 
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

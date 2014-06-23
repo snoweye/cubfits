@@ -45,12 +45,12 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  # if(!file.exists(fn.in)){
-  #   cat("File not found: ", fn.in, "\n", sep = "")
-  #   next
-  # }
-  # load(fn.in)
+  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  if(!file.exists(fn.in)){
+    cat("File not found: ", fn.in, "\n", sep = "")
+    next
+  }
+  load(fn.in)
 
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   EPhi.lim <- range(c(EPhi.true.lim, EPhi))
@@ -75,7 +75,6 @@ for(i.case in case.names){
          paste(workflow.name, ", ", get.case.main(i.case, model),
                ", bin: true Phi", sep = ""))
     text(0.5, 0.4, date(), cex = 0.6)
-    par(mar = c(0, 0, 0, 0))
 
     ### Plot results.
     for(i.aa in 1:length(aa.names)){
@@ -84,11 +83,11 @@ for(i.case in case.names){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -118,15 +117,13 @@ for(i.case in case.names){
     }
 
     ### Add histogram.
-    hist(log10(EPhi.true), freq = TRUE, main = "", xlab = "", ylab = "",
-         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
-    box()
+    p.1 <- hist(log10(EPhi.true), xlim = xlim, nclass = 40, plot = FALSE)
+    hist.ylim <- range(p.1$counts)
+    hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
+    plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
+         axes = FALSE)
     axis(1)
     axis(4)
-    axis(1, tck = 0.02, labels = FALSE)
-    axis(2, tck = 0.02, labels = FALSE)
-    axis(3, tck = 0.02, labels = FALSE)
-    axis(4, tck = 0.02, labels = FALSE)
 
     ### Add label.
     model.label <- "MCMC Posterior"
@@ -139,8 +136,8 @@ for(i.case in case.names){
       model.label <- c(model.label, "True Model")
       model.lty <- c(model.lty, 3)
     }
-    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
-           model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1], hist.ylim[2],
+           model.label, lty = model.lty, box.lty = 0, cex = 0.8)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)

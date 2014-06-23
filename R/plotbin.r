@@ -52,9 +52,12 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
         } else{
           freq.bar <- ret.bin.codon$freq.std[i.center]
         }
+        tmp.y <- ret.bin.codon$freq.mean[i.center] + c(-1, 1) * freq.bar
+        tmp.y[tmp.y < 0] <- 0
+        tmp.y[tmp.y > 1] <- 1
         lines(
           list(x = rep(ret.bin.codon$center[i.center], 2),
-               y = ret.bin.codon$freq.mean[i.center] + c(-1, 1) * freq.bar),
+               y = tmp.y),
           col = color[i.codon], lwd = 0.8)
       }
     }

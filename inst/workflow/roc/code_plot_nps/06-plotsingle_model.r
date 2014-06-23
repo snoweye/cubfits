@@ -89,7 +89,7 @@ for(i.case in case.names){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
@@ -123,15 +123,13 @@ for(i.case in case.names){
     }
 
     ### Add histogram.
-    hist(log10(phi.Obs), freq = TRUE, main = "", xlab = "", ylab = "",
-         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
-    box()
+    p.1 <- hist(log10(phi.Obs), xlim = xlim, nclass = 40, plot = FALSE)
+    hist.ylim <- range(p.1$counts)
+    hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
+    plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
+         axes = FALSE)
     axis(1)
     axis(4)
-    axis(1, tck = 0.02, labels = FALSE)
-    axis(2, tck = 0.02, labels = FALSE)
-    axis(3, tck = 0.02, labels = FALSE)
-    axis(4, tck = 0.02, labels = FALSE)
 
     ### Add label.
     model.label <- "MCMC Posterior"
@@ -144,8 +142,8 @@ for(i.case in case.names){
       model.label <- c(model.label, "True Model")
       model.lty <- c(model.lty, 3)
     }
-    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
-           model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1], hist.ylim[2],
+           model.label, lty = model.lty, box.lty = 0, cex = 0.8)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -191,11 +189,11 @@ for(i.case in case.names){
       plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
               lty = 1, axes = FALSE, xlim = xlim)
       box()
-      text(0, 1, aa.names[i.aa], cex = 1.5)
+      text(mean(xlim), 1, aa.names[i.aa], cex = 1.5)
       if(i.aa %in% c(1, 6, 11, 16)){
         axis(2)
       }
-      if(i.aa %in% 15:19){
+      if(i.aa %in% 16:19){
         axis(1)
       }
       if(i.aa %in% 1:5){
@@ -225,15 +223,13 @@ for(i.case in case.names){
     }
 
     ### Add histogram.
-    hist(log10(phi.PM), freq = TRUE, main = "", xlab = "", ylab = "",
-         xlim = xlim, ylim = c(0, 1), nclass = 40, axes = FALSE)
-    box()
+    p.1 <- hist(log10(phi.PM), xlim = xlim, nclass = 40, plot = FALSE)
+    hist.ylim <- range(p.1$counts)
+    hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
+    plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
+         axes = FALSE)
     axis(1)
     axis(4)
-    axis(1, tck = 0.02, labels = FALSE)
-    axis(2, tck = 0.02, labels = FALSE)
-    axis(3, tck = 0.02, labels = FALSE)
-    axis(4, tck = 0.02, labels = FALSE)
 
     ### Add label.
     model.label <- "MCMC Posterior"
@@ -246,8 +242,8 @@ for(i.case in case.names){
       model.label <- c(model.label, "True Model")
       model.lty <- c(model.lty, 3)
     }
-    legend(xlim[1] + 0.1 * diff(xlim), 0.8,
-           model.label, lty = model.lty, box.lty = 0)
+    legend(xlim[1], hist.ylim[2],
+           model.label, lty = model.lty, box.lty = 0, cex = 0.8)
 
     ### Plot xlab.
     plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
