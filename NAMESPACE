@@ -63,7 +63,9 @@ export(
   "dmixnormerr",
 # Cedric
   "plotCUB",
-  "plotTraces"
+  "plotTraces",
+  "plotExpectedPhiTrace",
+  "plotPTraces"
 )
 
 # Converting
