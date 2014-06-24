@@ -1,3 +1,31 @@
+plotPTraces <- function(ret.p.Mat)
+{
+  ret.p.Mat <- do.call("rbind", ret.p.Mat)
+  n.traces <- dim(ret.p.Mat)[2]
+  if(n.traces==2)
+  {
+    ylabs <- c("log(M)", expression("log(s"[phi]*")"))
+  }else{
+    ylabs <- c(expression("log(s"[epsilon]*")"), "log(M)", expression("log(s"[phi]*")"), "log(K)")
+  }
+  
+  par(oma=c(1,1,2,1), mgp=c(2,1,0), mar = c(3,4,2,1), mfrow=c(2, ceiling(n.traces/2) ))
+  for(i in 1:n.traces)
+  {
+    plot(ret.p.Mat[, i], xlab="iteration", ylab=ylabs[i])
+  }
+}
+
+plotExpectedPhiTrace <- function(phi.Mat, 
+                                 main=expression(paste("Trace E[", phi, "]", sep="")), 
+                                 xlab="iteration", ylab=expression(paste("E[", phi, "]", sep="")))
+{
+  
+  phi.Mat <- do.call("cbind", phi.Mat)
+  phi.Mat <- colMeans(phi.Mat)
+  
+  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main)  
+}
 
 plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000, rescale=F,
                      main="CUB", model.label=c("True Model"), model.lty=1)
