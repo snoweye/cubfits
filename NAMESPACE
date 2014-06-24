@@ -60,7 +60,10 @@ export(
   "cp.workflow",
 # MLE for mixnorm.
   "mixnormerr.optim",
-  "dmixnormerr"
+  "dmixnormerr",
+# Cedric
+  "plotCUB",
+  "plotTraces"
 )
 
 # Converting
