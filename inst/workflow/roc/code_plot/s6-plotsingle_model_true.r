@@ -116,6 +116,14 @@ for(i.case in case.names){
       }
     }
 
+    ### For cases with less aa.
+    i.aa <- 19 - i.aa
+    if(i.aa > 0){
+      for(i.plot in 1:i.aa){
+        plot(NULL, NULL, xlab = "", ylab = "", main = "", axes = FALSE)
+      }
+    }
+
     ### Add histogram.
     p.1 <- hist(log10(EPhi.true), xlim = xlim, nclass = 40, plot = FALSE)
     hist.ylim <- range(p.1$counts)
