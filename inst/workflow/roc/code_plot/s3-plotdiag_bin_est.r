@@ -67,6 +67,15 @@ pdf(fn.out, width = 16, height = 11)
     axis(4, tck = 0.02, labels = FALSE)
   }
 
+  ### For cases with less aa.
+  i.aa <- 19 - i.aa
+  if(i.aa > 0){
+    for(i.plot in 1:i.aa){
+      plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1),
+           xlab = "", ylab = "", main = "", axes = FALSE)
+    }
+  }
+
   ### Add histogram.
   p.1 <- hist(log10(EPhi), xlim = xlim, nclass = 40, plot = FALSE)
   hist.ylim <- range(p.1$counts)
