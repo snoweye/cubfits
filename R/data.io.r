@@ -15,6 +15,7 @@ read.seq <- function(file.name, forceDNAtolower = FALSE,
 read.phi.df <- function(file.name, header = TRUE, sep = "\t", quote = ""){
   ret <- read.table(file.name, header = header, sep = sep, quote = quote,
                     stringsAsFactors = FALSE)
+  ret$phi <- as.double(ret$phi)
   ret
 } # End of read.phi.df().
 
@@ -24,6 +25,7 @@ write.seq <- function(seq.data, file.name){
 } # End of write.seq().
 
 write.phi.df <- function(phi.df, file.name){
+  phi.df$phi <- as.double(phi.df$phi)
   write.table(phi.df, file.name, quote = FALSE, sep = "\t", row.names = FALSE)
   invisible()
 } # End of write.phi.df().
