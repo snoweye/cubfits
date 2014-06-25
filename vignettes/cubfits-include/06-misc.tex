@@ -56,7 +56,7 @@ Therefore, there is only need to initialize once before MCMC iterations, such as
 the three main function in Section~\ref{sec:main_functions}. For performance
 issues, all calls within MCMC iterations should access generic functions, such
 as via \code{.cubfitEnv$fitMultinom()} regardless of the model. Do \textbf{NOT}
-access \code{fitMultinom()} within any MCMC iteration. %%% FIXME why?
+access \code{fitMultinom()} within any MCMC iteration.
 
 
 

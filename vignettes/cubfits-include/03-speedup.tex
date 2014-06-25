@@ -108,9 +108,9 @@ optimal performance.
 \label{sec:performance}
 \addcontentsline{toc}{subsection}{\thesubsection. Performance}
 
-The above three methods of parallelizing \pkg{cubfits} calls,  
+The three methods of parallelizing \pkg{cubfits} calls,  
 (\code{mclapply()}, \code{task.pull()}, and
-\code{task.pull()}), have all been tested on a Yeast genome which has about 
+\code{pbdLapply()}), have all been tested on a Yeast genome which has about 
 5346 genes and corresponding gene expression. The average run times of 200 
 iterations of \code{cubfits()} are recorded in different numbers of cores. 
 The speedup via parallelization is defined as the run time of one core of 

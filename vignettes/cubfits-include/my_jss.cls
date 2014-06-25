@@ -11,7 +11,8 @@
 \def\maketitle{
    {\centering
    {\LARGE\bf \@title\par}
-   \vskip 0.2in plus 1fil minus 0.1in
+   % \vskip 0.2in plus 1fil minus 0.1in
+   \vskip 0.2in
    {
        \def\and{\unskip\enspace{\rm and}\enspace}%
        \def\And{\end{tabular}\hss \egroup \hskip 1in plus 2fil

@@ -11,9 +11,10 @@ The \pkg{cubfits} package is built with some useful work flows,
 including
 \begin{enumerate}
 \item \code{simu} for simulation studies,
-\item \code{wphi} for sequences with expression levels and measurement errors,
-      and
-\item \code{wophi} for sequences without expression levels.
+\item \code{wphi} for sequences with expression levels ($\phi$) and
+                  measurement errors,
+\item \code{wophi} for sequences without expression levels, and
+\item \code{wphi_wophi} for model validation.
 \end{enumerate}
 We share these work flows as templates which may be useful for further
 research. A quick way to obtain a default work flow is by calling
@@ -21,6 +22,37 @@ research. A quick way to obtain a default work flow is by calling
 work flows. Note however that these are only tested privately under a 
 Linux environment, and are merely served as templates. None of them are 
 checked by CRAN.
+
+Figure~\ref{fig:workflows} depicts the analysis process and how \pkg{cubfits}
+functions play behind work flows.
+\begin{itemize}
+\item
+input: FASTA file and gene expression for
+       ``with'' $\phi$ work flow (\code{wphi}),
+\item
+execute: major functions \code{cubfits()} and \code{cubappr()} in parallel,
+\item
+output: save \code{.rda} files for post processing,
+\item
+post process: subset MCMC iterations and precompute statistics,
+\item
+diagnosis: generate plots,
+\item
+summary: obtain parameters for ``with'' $\phi$ work flow, and
+\item
+feedback: utilize ``with'' $\phi$ results to initial
+          ``without'' $\phi$ work flow (\code{wophi}).
+\end{itemize}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5.5in]{cubfits-include/figure/workflows}
+\caption{\code{wphi} work flow is mainly based on \code{cubfits()} and it's
+outputs can be initial values for \code{wophi} work flow mainly based on
+\code{cubappr()}. Note that \code{wphi} needs both sequence and expression
+data, while \code{wophi} only needs sequence.
+}
+\label{fig:workflows}
+\end{figure}
 
 The work flows are stored in the package directory
 \code{cubfits/inst/workflow/} and installed in
