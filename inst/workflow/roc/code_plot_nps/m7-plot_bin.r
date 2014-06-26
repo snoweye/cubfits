@@ -40,7 +40,8 @@ for(i.case in case.names){
   # load(fn.in)
 
   ### To adjust to similar range of phi.Obs.
-  ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
+  ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM,
+                           bin.class = run.info$bin.class)
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   EPhi.lim <- range(c(phi.Obs.lim, phi.PM))
   predict.roc <- prop.model.roc(b.PM, EPhi.lim)

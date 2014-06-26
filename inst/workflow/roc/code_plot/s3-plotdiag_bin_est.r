@@ -21,7 +21,8 @@ if(file.exists(fn.in)){
 ### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
-ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi)
+ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi,
+                         bin.class = run.info$bin.class)
 predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
 ### Fix xlim at log10 scale.

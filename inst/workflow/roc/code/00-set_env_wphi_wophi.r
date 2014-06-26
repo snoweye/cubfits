@@ -70,6 +70,13 @@ run.info$prefix.dump <- paste(prefix$output, "tmp/dump_", sep = "")
 # run.info$parallel <- "lapply"
 run.info$parallel <- "task.pull"
 
+### For binning plots
+run.info$bin.class <- NULL
+# run.info$bin.class <- c(0, seq(0.05, 0.95, length = 20), 1)
+# run.info$bin.class <- c(seq(0, 0.1, by = 0.02),
+#                         seq(0.1, 0.9, by = 0.1),
+#                         seq(0.9, 1, by = 0.02))
+
 ### For MCMC.
 range <- list()
 range$subset <- 3001:5000

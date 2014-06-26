@@ -7,7 +7,7 @@
   along with expression levels empirically.
 }
 \usage{
-  prop.bin.roc(reu13.df, phi.Obs = NULL, nclass = 20)
+  prop.bin.roc(reu13.df, phi.Obs = NULL, nclass = 20, bin.class = NULL)
 
   plotbin(ret.bin, ret.model = NULL, main = NULL,
           xlab = "Production Rate (log10)", ylab = "Proportion",
@@ -17,6 +17,8 @@
   \item{reu13.df}{a \code{\link{reu13.df}} object.}
   \item{phi.Obs}{a \code{\link{phi.Obs}} object.}
   \item{nclass}{number of binning classes across the range of \code{phi.Obs}.}
+  \item{bin.class}{binning proportion, e.g.
+                   \code{c(0, seq(0.05, 0.95, length = nclass), 1)}.}
 
   \item{ret.bin}{binning results from \code{\link{prop.bin.roc}()}.}
   \item{ret.model}{model results from \code{\link{prop.model.roc}()}.}

@@ -21,7 +21,8 @@ phi.Obs <- phi.Obs * phi.scale
 phi.Obs.lim <- range(c(phi.Obs, EPhi))
 
 ### Compute.
-ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
+ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs,
+                            bin.class = run.info$bin.class)
 predict.roc <- prop.model.roc(Eb, phi.Obs.lim)
 
 ### For phiObs.
@@ -103,7 +104,8 @@ pdf(fn.out, width = 16, height = 11)
 dev.off()
 
 ### Compute.
-ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi)
+ret.EPhi <- prop.bin.roc(reu13.df.obs, EPhi,
+                         bin.class = run.info$bin.class)
 
 ### For EPhi.
 ### Fix xlim at log10 scale.

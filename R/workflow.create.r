@@ -9,7 +9,7 @@ get.workflow <- function(dir.name = "workflow/",
 } # End of get.workflow().
 
 cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
-    model = c("roc", "nsef"), pkg = "cubfits", to = NULL, code = FALSE){
+    model = c("roc"), pkg = "cubfits", to = NULL, code = FALSE){
   ### Check OS.
   if(Sys.info()["sysname"] == "Windows"){
     stop("Non of work flows supports windows system.")

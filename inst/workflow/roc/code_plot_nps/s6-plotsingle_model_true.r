@@ -19,7 +19,8 @@ EPhi.true <- EPhi
 ### Arrange data.
 EPhi.true.lim <- range(EPhi.true)
 aa.names <- names(reu13.df.obs)
-ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
+ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true,
+                              bin.class = run.info$bin.class)
 noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
 tmp <- convert.b.to.bVec(fitlist)
