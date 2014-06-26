@@ -19,16 +19,16 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   ### Plot posterior mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_wci_", i.case, ".pdf", sep = "")
+                  "prxy_wci_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.PM,
@@ -44,7 +44,7 @@ for(i.case in case.names){
 
   ### Plot posterior median.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_wci_med_", i.case, ".pdf", sep = "")
+                  "prxy_wci_med_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, phi.MED,
@@ -60,7 +60,7 @@ for(i.case in case.names){
 
   ### Plot posterior log10 mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_wci_log10_", i.case, ".pdf", sep = "")
+                  "prxy_wci_log10_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: predicted, y-axis: observed.
     plotprxy(phi.Obs, 10^(phi.PM.log10),

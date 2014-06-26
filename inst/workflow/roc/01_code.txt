@@ -13,16 +13,13 @@ For files under ./code and ./code_plot
 - ./code/s*-*.r
   Extra codes for simulation only.
 
-- ./code/m*-*.r
-  Extra codes for matching cases.
-
-- ./code/u*-*.r
-  Utility functions for other codes.
-
 - ./code_plot/*-plot*.r
   Mainly for summarizing and plotting the outputs of work flows.
 
-- ./code_plot_ns/*-plot*.r
-  Non scaling in post processing.
+- ./code_plot_nps/*-plot*.r
+  No scaling in post processing.
   Mainly for summarizing and plotting the outputs of work flows.
 
+- ./code_plot_ps/*-plot*.r
+  Scaling in post processing.
+  Mainly for summarizing and plotting the outputs of work flows.

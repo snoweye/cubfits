@@ -8,6 +8,9 @@ model <- "roc"
 file.data.fasta <- "genome.fasta"
 file.data.tsv <- ""
 
+### Specify output file name.
+fn.out.prefix <- "roc_"
+
 ### For default path.
 prefix <- list()
 prefix$root <- "./"
@@ -20,7 +23,7 @@ prefix$output <- paste(prefix$all.out, "output/", sep = "")
 
 ### For table.
 prefix$table <- paste(prefix$all.out, "table/", sep = "")
-prefix$table.nps <- paste(prefix$all.out, "table_nps/", sep = "")
+prefix$table.ps <- paste(prefix$table, "table_ps/", sep = "")
 
 ### For ploting.
 prefix$plot <- paste(prefix$all.out, "plot/", sep = "")
@@ -31,20 +34,20 @@ prefix$plot.trace <- paste(prefix$all.out, "plot/trace/", sep = "")
 prefix$plot.AA <- paste(prefix$all.out, "plot/AA/", sep = "")
 
 ### For ploting without scaling.
-prefix$plot.nps <- paste(prefix$all.out, "plot_nps/", sep = "")
-prefix$plot.nps.diag <- paste(prefix$all.out, "plot_nps/diag/", sep = "")
-prefix$plot.nps.match <- paste(prefix$all.out, "plot_nps/match/", sep = "")
-prefix$plot.nps.single <- paste(prefix$all.out, "plot_nps/single/", sep = "")
-prefix$plot.nps.trace <- paste(prefix$all.out, "plot_nps/trace/", sep = "")
-prefix$plot.nps.AA <- paste(prefix$all.out, "plot_nps/AA/", sep = "")
+prefix$plot.ps <- paste(prefix$plot, "plot_ps/", sep = "")
+prefix$plot.ps.diag <- paste(prefix$plot, "plot_ps/diag/", sep = "")
+prefix$plot.ps.match <- paste(prefix$plot, "plot_ps/match/", sep = "")
+prefix$plot.ps.single <- paste(prefix$plot, "plot_ps/single/", sep = "")
+prefix$plot.ps.trace <- paste(prefix$plot, "plot_ps/trace/", sep = "")
+prefix$plot.ps.AA <- paste(prefix$plot, "plot_ps/AA/", sep = "")
 
 ### For code.
 prefix$code <- paste(cubfits::get.workflow(model = model), "/",
                      "code/", sep = "")
 prefix$code.plot <- paste(cubfits::get.workflow(model = model), "/",
                           "code_plot/", sep = "")
-prefix$code.plot.nps <- paste(cubfits::get.workflow(model = model), "/",
-                             "code_plot_nps/", sep = "")
+prefix$code.plot.ps <- paste(cubfits::get.workflow(model = model), "/",
+                             "code_plot_ps/", sep = "")
 
 ### Specify data files.
 file.data <- list()
@@ -56,7 +59,7 @@ if(exists("file.data.tsv") && file.data.tsv != ""){
 }
 
 ### All case names.
-case.names <- c("ad_wophi_scuo")
+case.names <- c("wophi_scuo")
 case.names <- paste(model, "_", case.names, sep = "")
 
 ### Basic information.

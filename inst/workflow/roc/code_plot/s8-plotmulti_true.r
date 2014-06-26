@@ -82,7 +82,7 @@ for(i.case in case.names){
   }
 
 
-  ### mcmc output.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   load(fn.in)
 
@@ -91,8 +91,8 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # load(fn.in)
 
   ### All mcmc outputs.
   fn.in <- paste(prefix$output, i.case, "/output_mcmc.rda", sep = "")
@@ -103,8 +103,9 @@ for(i.case in case.names){
     ret$phi.Mat <- ret$phi.pred.Mat
   }
 
+
   ### Set layout.
-  fn.out <- paste(prefix$plot.multi, "true_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.multi, "true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 6, height = 10)
 
 ### New page.
@@ -118,13 +119,13 @@ for(i.case in case.names){
     plot.b.corr(x, y, x.label, y.ci = y.ci,
                 # xlab = "True", ylab = "Estimated", main = "Delta.t",
                 add.lm = TRUE, add.ci = TRUE)
-    mtext(expression(paste(italic(Delta[t]), "  true")),
+    mtext(expression(paste(italic(Delta[t]), " , true")),
           side = 1, line = 2.5, cex = 0.8)
     if(length(grep("wophi", i.case)) > 0){
-      mtext(expression(paste(italic(Delta[t]), "  without ", italic(X[obs]))),
+      mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
             side = 2, line = 2.5, cex = 0.8)
     } else{
-      mtext(expression(paste(italic(Delta[t]), "  with ", italic(X[obs]))),
+      mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
             side = 2, line = 2.5, cex = 0.8)
     }
     x.label.focal <- x.label
@@ -141,13 +142,13 @@ for(i.case in case.names){
     plot.b.corr(x, y, x.label.focal, y.ci = y.ci,
                 # xlab = "True", ylab = "Estimated", main = "log(mu)",
                 add.lm = TRUE, add.ci = TRUE)
-    mtext(expression(paste(italic(M), "  true")),
+    mtext(expression(paste(italic(M), " , true")),
           side = 1, line = 2.5, cex = 0.8)
     if(length(grep("wophi", i.case)) > 0){
-      mtext(expression(paste(italic(M), "  without ", italic(X[obs]))),
+      mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
             side = 2, line = 2.5, cex = 0.8)
     } else{
-      mtext(expression(paste(italic(M), "  with ", italic(X[obs]))),
+      mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
             side = 2, line = 2.5, cex = 0.8)
     }
 
@@ -175,7 +176,7 @@ for(i.case in case.names){
     legend(xlim[1], ylim[2], c("True", "Predicted"),
            pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
-    ### Plot SCU
+    ### Plot SCU.
     b <- convert.bVec.to.b(b.PM, aa.names)
     SCU <- calc_scu_values(b, y.list, phi.PM)
 
@@ -184,7 +185,7 @@ for(i.case in case.names){
              ylab = "Predicted SCU (log10)",
              main = "SCU (Posterior Mean)")
 
-    ### Plot mSCU
+    ### Plot mSCU.
     plotprxy(SCU.true$mSCU, SCU$mSCU,
              log10.x = FALSE, log10.y = FALSE,
              xlab = "True mSCU",

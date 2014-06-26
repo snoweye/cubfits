@@ -23,9 +23,9 @@ b.Init <- convert.b.to.bVec(Eb)
 fn.in <- paste(prefix$data, "/pre_process.rda", sep = "")
 load(fn.in)
 
-### Get AA and synonymous codons.
+# Get AA and synonymous codons.
 aa.names <- names(reu13.df.obs)
-coef.names <- cubfits:::get.my.coefnames(model)
+ceof.names <- cubfits:::get.my.coefnames(model)
 label <- NULL
 b.names <- NULL
 for(i.codon in aa.names){
@@ -35,7 +35,7 @@ for(i.codon in aa.names){
   b.names <- c(b.names, rep(coef.names, each = length(tmp)))
 }
 
-### Get id.slop.
+# Get id.slop.
 all.names <- b.names
 id.slop <- grep("Delta.t", all.names)
 
@@ -64,12 +64,12 @@ for(i.case in case.names){
   b.mcmc <- do.call("cbind", tmp)
 
   ### Load scaled posterior mean (negsel).
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # load(fn.in)
 
   ### Plot.
   t.phi.mcmc <- t(phi.mcmc)
-  fn.out <- paste(prefix$plot.AA, i.case, "_deltat.phi.pdf", sep = "")
+  fn.out <- paste(prefix$plot.AA, i.case, "_deltat.phi_nps.pdf", sep = "")
   pdf(fn.out, width = 12, height = 11)
     nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
                  rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)

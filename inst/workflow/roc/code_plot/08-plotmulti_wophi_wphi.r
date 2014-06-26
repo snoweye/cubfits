@@ -26,9 +26,9 @@ for(i.aa in aa.names){
 
 ### Get possible match cases. wophi fits vs wphi fits on wphi EPhi.
 match.case <- rbind(
-  c("ad_wophi_scuo", "ad_wphi_scuo"),
-  c("ad_wphi_wophi_scuo", "ad_wphi_scuo"),
-  c("ad_wophi_scuo", "ad_wphi_pm")
+  c("wophi_scuo", "wphi_scuo"),
+  c("wphi_wophi_scuo", "wphi_scuo"),
+  c("wophi_scuo", "wphi_pm")
 )
 match.case <- matrix(paste(model, match.case, sep = "_"), ncol = 2)
 
@@ -63,12 +63,12 @@ for(i.match in 1:nrow(match.case)){
     load(fn.in)
 
     ### Subset of mcmc output with scaling.
-    fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-    if(!file.exists(fn.in)){
-      cat("File not found: ", fn.in, "\n", sep = "")
-      next
-    }
-    load(fn.in)
+    # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+    # if(!file.exists(fn.in)){
+    #   cat("File not found: ", fn.in, "\n", sep = "")
+    #   next
+    # }
+    # load(fn.in)
 
     ### Reassign.
     phi.pm[[i.case]] <- phi.PM
@@ -108,7 +108,7 @@ for(i.match in 1:nrow(match.case)){
 
 
   ### Set layout.
-  case.main <- paste(match.case[i.match, 1], " vs ",
+  case.main <- paste(match.case[i.match, 1], " ",
                      match.case[i.match, 2], sep = "")
   fn.out <- paste(prefix$plot.multi, match.case[i.match, 1], "_",
                   match.case[i.match, 2], ".pdf", sep = "")
@@ -126,9 +126,9 @@ for(i.match in 1:nrow(match.case)){
     plot.b.corr(x, y, x.label, x.ci = x.ci, y.ci = y.ci,
                 # xlab = "With Phi", ylab = "Without Phi", main = "Delta.t",
                 add.lm = TRUE, add.ci = TRUE)
-    mtext(expression(paste(italic(Delta[t]), "  with ", italic(X[obs]))),
+    mtext(expression(paste(italic(Delta[t]), " , with ", italic(X[obs]))),
           side = 1, line = 2.5, cex = 0.8)
-    mtext(expression(paste(italic(Delta[t]), "  without ", italic(X[obs]))),
+    mtext(expression(paste(italic(Delta[t]), " , without ", italic(X[obs]))),
           side = 2, line = 2.5, cex = 0.8)
     x.label.focal <- x.label
 
@@ -145,9 +145,9 @@ for(i.match in 1:nrow(match.case)){
     plot.b.corr(x, y, x.label.focal, x.ci = x.ci, y.ci = y.ci,
                 # xlab = "With Phi", ylab = "Without Phi", main = "log(mu)",
                 add.lm = TRUE, add.ci = TRUE)
-    mtext(expression(paste(italic(M), "  with ", italic(X[obs]))),
+    mtext(expression(paste(italic(M), " , with ", italic(X[obs]))),
           side = 1, line = 2.5, cex = 0.8)
-    mtext(expression(paste(italic(M), "  without ", italic(X[obs]))),
+    mtext(expression(paste(italic(M), " , without ", italic(X[obs]))),
           side = 2, line = 2.5, cex = 0.8)
 
     ### Overlap two histograms.
@@ -161,8 +161,7 @@ for(i.match in 1:nrow(match.case)){
          xlab = "Production Rate (log10)",
          main = "Expression (Posterior Mean)")
     plot(p.2, col = "#FF000050", xlim = xlim, ylim = ylim, add = TRUE)
-    legend(xlim[1], ylim[2],
-           c("With Phi", "Without Phi"),
+    legend(xlim[1], ylim[2], c("With Phi", "Without Phi"),
            pch = c(15, 15), col = c("#0000FF50", "#FF000050"), cex = 0.8)
 
     ### Overlap two histograms.

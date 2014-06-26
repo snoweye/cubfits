@@ -6,7 +6,7 @@ source("00-set_env.r")
 source(paste(prefix$code.plot, "u0-get_case_main.r", sep = ""))
 
 for(i.case in case.names){
-  ### Subset of mcmc output.
+  ### mcmc output.
   fn.in <- paste(prefix$subset, i.case, ".rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -14,7 +14,7 @@ for(i.case in case.names){
   }
   load(fn.in)
 
-  ### Subset of mcmc output with scaling.
+  ### Subset of mcmc output.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   if(!file.exists(fn.in)){
     cat("File not found: ", fn.in, "\n", sep = "")
@@ -23,17 +23,17 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   phi.mcmc.1 <- rowMeans(phi.mcmc[, -1] != phi.mcmc[, -ncol(phi.mcmc)])
 
   ### Plot Phi_g.
-  fn.out <- paste(prefix$plot.diag, "acceptvsPhi_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.diag, "acceptvsPhi_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plot(log10(phi.PM / mean(phi.PM)), phi.mcmc.1,
          xlab = "Predicted Expression (log10)", ylab = "acceptance",

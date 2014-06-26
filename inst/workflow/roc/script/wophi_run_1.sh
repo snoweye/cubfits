@@ -47,8 +47,8 @@ Rscript ${CODE_PLOT_PATH}/03-plotdiag_init.r > \
           ${ALL_OUT}/log/03-plotdiag_init 2>&1 &
 
 ### Run MCMC.
-nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-ad_wophi_scuo-tp.r > \
-                            ${ALL_OUT}/log/04-ad_wophi_scuo-tp 2>&1 &
+nohup ${MPI_EXEC} Rscript ${CODE_PATH}/04-wophi_scuo-tp.r > \
+                            ${ALL_OUT}/log/04-wophi_scuo-tp 2>&1 &
 RUN_1=$!
 
 ### Wait to finish all jobs.

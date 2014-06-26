@@ -32,12 +32,12 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   ### To adjust to similar range of phi.Obs.
   ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM,
@@ -51,11 +51,11 @@ for(i.case in case.names){
 
 ### Get possible match cases. wophi fits vs wphi fits on wphi EPhi.
 match.case <- rbind(
-  c("ad_wophi_pm", "ad_wphi_pm"),
-  c("ad_wophi_scuo", "ad_wphi_scuo"),
-  c("ad_wophi_true", "ad_wphi_true"),
-  c("ad_wphi_wophi_pm", "ad_wphi_pm"),
-  c("ad_wphi_wophi_scuo", "ad_wphi_scuo")
+  c("wophi_pm", "wphi_pm"),
+  c("wophi_scuo", "wphi_scuo"),
+  c("wophi_true", "wphi_true"),
+  c("wphi_wophi_pm", "wphi_pm"),
+  c("wphi_wophi_scuo", "wphi_scuo")
 )
 match.case <- matrix(paste(model, match.case, sep = "_"), ncol = 2)
 

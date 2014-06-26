@@ -33,21 +33,19 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-
-  ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   b <- convert.bVec.to.b(b.PM, names(reu13.df.obs))
   SCU <- calc_scu_values(b, y.list, phi.PM)
 
   ### Plot SCU.
   fn.out <- paste(prefix$plot.single,
-                  "scu_true_", i.case, ".pdf", sep = "")
+                  "scu_true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plotprxy(SCU.true$SCU, SCU$SCU,
              xlab = "True SCU (log10)",
@@ -59,7 +57,7 @@ for(i.case in case.names){
 
   ### Plot mSCU.
   fn.out <- paste(prefix$plot.single,
-                  "mscu_true_", i.case, ".pdf", sep = "")
+                  "mscu_true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plotprxy(SCU.true$mSCU, SCU$mSCU,
              log10.x = FALSE, log10.y = FALSE,
