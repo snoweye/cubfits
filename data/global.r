@@ -3,7 +3,6 @@
 .CF.GV <- list(
   amino.acid = c("A", "C", "D", "E", "F", "G", "H", "I", "K", "L",
                  "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y"),
-
   synonymous.codon = list(
     A = c("GCA", "GCC", "GCG", "GCT"),
     C = c("TGC", "TGT"),
@@ -29,7 +28,8 @@
   ),
 
   amino.acid.split = c("A", "C", "D", "E", "F", "G", "H", "I", "K", "L",
-                       "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "Z"),
+                       "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y",
+                       "Z"),
   synonymous.codon.split = list(
     A = c("GCA", "GCC", "GCG", "GCT"),
     C = c("TGC", "TGT"),
