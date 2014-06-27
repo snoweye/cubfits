@@ -1,30 +1,31 @@
-plotPTraces <- function(ret.p.Mat)
+plotPTraces <- function(ret.p.Mat, main="Hyperparameter Traces", lty=1)
 {
   ret.p.Mat <- do.call("rbind", ret.p.Mat)
   n.traces <- dim(ret.p.Mat)[2]
   if(n.traces==2)
   {
-    ylabs <- c("log(M)", expression("log(s"[phi]*")"))
+    ylabs <- c("M", expression("s"[phi]))
   }else{
-    ylabs <- c(expression("log(s"[epsilon]*")"), "log(M)", expression("log(s"[phi]*")"), "log(K)")
+    ylabs <- c(expression("s"[epsilon]), "M", expression("s"[phi]), "K")
   }
   
   par(oma=c(1,1,2,1), mgp=c(2,1,0), mar = c(3,4,2,1), mfrow=c(2, ceiling(n.traces/2) ))
   for(i in 1:n.traces)
   {
-    plot(ret.p.Mat[, i], xlab="iteration", ylab=ylabs[i])
+    plot(ret.p.Mat[, i], xlab="Iteration", ylab=ylabs[i], lty=1)
   }
+  title(main=main, outer=T)
 }
 
 plotExpectedPhiTrace <- function(phi.Mat, 
                                  main=expression(paste("Trace E[", phi, "]", sep="")), 
-                                 xlab="iteration", ylab=expression(paste("E[", phi, "]", sep="")))
+                                 xlab="Iteration", ylab=expression(paste("E[", phi, "]", sep="")), lty=1)
 {
   
   phi.Mat <- do.call("cbind", phi.Mat)
   phi.Mat <- colMeans(phi.Mat)
   
-  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main)  
+  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, lty=1)  
 }
 
 plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000, rescale=F,
@@ -36,7 +37,7 @@ plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000
   phi.bin.lim <- range(c(phi.bin, estim.phi))
   
   lbound <- length(ret.b.Mat)-n.use.iter
-  ubound <- length(ret.b.Mat)
+  bound <- length(ret.b.Mat)
   b.mat <- do.call(cbind, ret.b.Mat[lbound:ubound])
   Eb <- rowMeans(b.mat)
   Eb <- convert.bVec.to.b(Eb, aa.names)
