@@ -12,7 +12,7 @@ plotPTraces <- function(ret.p.Mat, main="Hyperparameter Traces", lty=1)
   par(oma=c(1,1,2,1), mgp=c(2,1,0), mar = c(3,4,2,1), mfrow=c(2, ceiling(n.traces/2) ))
   for(i in 1:n.traces)
   {
-    plot(ret.p.Mat[, i], xlab="Iteration", ylab=ylabs[i], lty=1)
+    plot(ret.p.Mat[, i], xlab="Iteration", ylab=ylabs[i], type="l", lty=1)
   }
   title(main=main, outer=T)
 }
@@ -25,7 +25,7 @@ plotExpectedPhiTrace <- function(phi.Mat,
   phi.Mat <- do.call("cbind", phi.Mat)
   phi.Mat <- colMeans(phi.Mat)
   
-  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, lty=1)  
+  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, type="l", lty=1)  
 }
 
 plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000, rescale=F,
