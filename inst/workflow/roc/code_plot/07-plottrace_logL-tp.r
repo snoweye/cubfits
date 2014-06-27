@@ -64,8 +64,8 @@ all.jobs <- function(i.job){
   ### Load logL mean results.
   fn.in <- paste(prefix$subset, i.case, "_PM.rda", sep = "")
   load(fn.in)
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # load(fn.in)
 
   b.Init <- convert.bVec.to.b(b.PM, names(reu13.df.obs), model = model)
   b.Init <- lapply(b.Init, function(B) B$coefficients)
@@ -85,7 +85,7 @@ all.jobs <- function(i.job){
   ylim <- range(range(logL), logL.PM)
 
   ### Trace of logL.
-  fn.out <- paste(prefix$plot.trace, "logL_", i.case, ".pdf", sep = "")
+  fn.out <- paste(prefix$plot.trace, "logL_", i.case, "_nps.pdf", sep = "")
   cat(i.job, ": ", i.case, ", plot: ", fn.out, "\n", sep = "")
   pdf(fn.out, width = 6, height = 4)
     plot(NULL, NULL, xlim = xlim, ylim = ylim,

@@ -10,7 +10,7 @@ if(length(case.names) < 4){
   stop("Need 4 cases to match with.")
 }
 
-### Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
+### Ordered by "wophi_pm", "wophi_scuo", "wphi_pm", and "wphi_scuo".
 phi.mean <- list(NULL, NULL, NULL, NULL)
 phi.median <- list(NULL, NULL, NULL, NULL)
 phi.std <- list(NULL, NULL, NULL, NULL)
@@ -24,12 +24,12 @@ for(i.case in 1:4){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   phi.mean[[i.case]] <- phi.PM
   phi.median[[i.case]] <- phi.MED

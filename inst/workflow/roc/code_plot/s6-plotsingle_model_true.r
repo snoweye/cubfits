@@ -19,7 +19,8 @@ EPhi.true <- EPhi
 ### Arrange data.
 EPhi.true.lim <- range(EPhi.true)
 aa.names <- names(reu13.df.obs)
-ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true)
+ret.EPhi.true <- prop.bin.roc(reu13.df.obs, EPhi.true,
+                              bin.class = run.info$bin.class)
 noerror.roc <- prop.model.roc(fitlist, EPhi.true.lim)
 
 tmp <- convert.b.to.bVec(fitlist)
@@ -120,7 +121,8 @@ for(i.case in case.names){
     i.aa <- 19 - i.aa
     if(i.aa > 0){
       for(i.plot in 1:i.aa){
-        plot(NULL, NULL, xlab = "", ylab = "", main = "", axes = FALSE)
+        plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1),
+             xlab = "", ylab = "", main = "", axes = FALSE)
       }
     }
 

@@ -32,7 +32,7 @@ if(file.exists(fn.in)){
   SCUO <- calc_scuo_values(y.scuo)$SCUO
 
   ### A fake SCUO is used.
-  phi <- data.frame(ORF = names(seq.string), phi = SCUO)
+  phi <- data.frame(ORF = names(seq.string), phi = as.double(SCUO))
 }
 
 ### Check and reorder.

@@ -31,7 +31,7 @@ The \pkg{cubfits} package provides quick examples for its three main functions:
 \end{Code}
 These \pkg{cubfits} demos perform short MCMC runs
 and analyze toy datasets (\code{ex.train} and \code{ex.test}) for the
-Ribosome Overhead Cost (ROC) model~\citep{Shah2011}
+Ribosome Overhead Cost (ROC)~\citep{Shah2011}
 which is shown in Figure~\ref{fig:plotbin}. The toy datasets have only 100
 short sequences, and only 3 amino acids are considered.
 
@@ -53,9 +53,82 @@ read it back. Also, it converts the data into the correct format
 needed by \code{cubfits()}, and finally runs MCMC and generates a plot.
 
 
-\subsection[Generic Functions (Aside)]{Generic Functions (Aside)}
+\subsection[Modeling ROC]{Modeling ROC}
+\label{sec:roc_model}
+\addcontentsline{toc}{subsection}{\thesubsection. Modeling ROC}
+
+\pkg{cubfits}~\citep{Chen2014cubfitspackage} utilizes a
+Bayesian hierarchical model for codon useage bias
+(CUB)~\citep{Gilchrist2007,Shah2011,Wallace2013,Gilchrist2014}.
+The CUB model for ROC is
+\begin{eqnarray}
+\vec{y}_{ga} &
+    \sim & Multinom(n_{ga}, \vec{p}_{a}),
+    \label{eqn:glm} \\
+\vec{p}_{a} & = &
+    mlogit^{-1}(\log(\vec{\mu}_{a}) + \vec{\Delta_t}_{a} \phi_g),
+    \label{eqn:link_fcn} \\
+\log(\phi_{g, obs}) & \sim &
+    N(\log(\phi_g) + \log(K_{bias}), \sigma^2_{obs}),  \mbox{ and }
+    \label{eqn:prior_lv1} \\
+\log(\phi_g) & \sim &
+    N(-\sigma^2_{\phi}/2, \sigma^2_{\phi}).
+    \label{eqn:prior_lv2}
+\end{eqnarray}
+Given gene $g$ and amino acid $a$,
+$\vec{y}_{ga}$ is synonymous codon counts
+following a multinomial distribution with parameters
+$n_{ga}$ for total codons and $\vec{p}_{a}$ for probability of
+synonymous codons.
+The $mlogit^{-1}$ is an inversed multivariate logit
+function of $\vec{\mu}_{a}$ mutation rate and $\vec{\Delta_t}_{a}$
+elongation time. $\phi_g$ is protein production rate 
+and $\phi_{g,obs}$ is observed expression.
+$K_{bias}$ and $\sigma^2_{obs}$ are measurement bias and
+error, respectively. $\sigma^2_{\phi}$ is dispersion of $\log(\phi_g)$.
+We assume independence of amino acids and independence of genes, and both
+contribute information to the CUB model.
+
+The package implements MCMC algorithms of CUB model in three main functions.
+\code{cubfits()} estimate model parameters for sequence with $\phi_{g,obs}$
+and implements Equations~(\ref{eqn:glm}) to~(\ref{eqn:prior_lv2}).
+\code{cubappr()} predicts expression for sequences without $\phi_{g,obs}$
+that skips Equations~(\ref{eqn:prior_lv1}).
+\code{cubpred()} estimates parameters for sequences with $\phi_{g,obs}$
+and predicts expression for sequences without $\phi_{g,obs}$.
+All functions can take options set by global objects such as
+MCMC conditions and auxiliary control variables
+
+Figure~\ref{fig:bayesian_model} displays dependence of the model.
+The extended Bayesian hierarchical model with measurement errors
+for predicting protein synthesis rates ``with'' or ``without''
+gene expression ($\phi$) is abstracted in the dependence graph:
+\begin{itemize}
+\item
+data hierarchy is in blue boxes,
+\item
+observed sequences are in a green solid circle, 
+\item
+gene expressions (may be ignored) are in a green dashed circle,
+\item
+unknown parameters to be estimated are in red dashed circles,
+\item
+prior parameters (may be restricted) are in the black circle, and
+\item
+parallelization within MCMC is in red dashed lines.
+\end{itemize}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=5.5in]{cubfits-include/figure/bayesian_model}
+\caption{Dependence plot of ROC model (after \citep{Wallace2013}).}
+\label{fig:bayesian_model}
+\end{figure}
+
+
+
+\subsection[Generic Functions]{Generic Functions}
 \label{sec:generic_functions}
-\addcontentsline{toc}{subsection}{\thesubsection. Generic Functions (Aside)}
+\addcontentsline{toc}{subsection}{\thesubsection. Generic Functions}
 
 Note that the three main functions are wrappers of other generic functions that
 perform parameter initializations, propose new parameters, compute

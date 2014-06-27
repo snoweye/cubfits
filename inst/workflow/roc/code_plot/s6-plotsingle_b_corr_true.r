@@ -48,14 +48,12 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-
-  ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   ### Plot log(mu)
   id.intercept <- grep("log.mu", all.names)
@@ -66,7 +64,7 @@ for(i.case in case.names){
   y.ci <- b.ci.PM[id.intercept,]
 
   fn.out <- paste(prefix$plot.single, "corr_true_logmu_", i.case,
-                  ".pdf", sep = "")
+                  "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plot.b.corr(x, y, b.label,
                 y.ci = y.ci,
@@ -85,7 +83,7 @@ for(i.case in case.names){
   y.ci <- b.ci.PM[id.slop,]
 
   fn.out <- paste(prefix$plot.single, "corr_true_deltat_", i.case,
-                  ".pdf", sep = "")
+                  "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     plot.b.corr(x, y, b.label,
                 y.ci = y.ci,

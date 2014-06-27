@@ -28,18 +28,16 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
-  ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
-
-  ### plot posterior mean.
+  ### Plot posterior mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_", i.case, ".pdf", sep = "")
+                  "prxy_true_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, phi.PM,
@@ -54,7 +52,7 @@ for(i.case in case.names){
 
   ### plot posterior median.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_med_", i.case, ".pdf", sep = "")
+                  "prxy_true_med_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, phi.MED,
@@ -67,9 +65,9 @@ for(i.case in case.names){
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 
-  ### plot posterior log10 mean.
+  ### Plot posterior log10 mean.
   fn.out <- paste(prefix$plot.single,
-                  "prxy_true_log10_", i.case, ".pdf", sep = "")
+                  "prxy_true_log10_", i.case, "_nps.pdf", sep = "")
   pdf(fn.out, width = 5, height = 5)
     ### x-axis: true, y-axis: predicted.
     plotprxy(Phi, 10^(phi.PM.log10),

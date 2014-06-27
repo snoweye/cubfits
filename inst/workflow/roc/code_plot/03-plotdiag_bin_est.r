@@ -15,7 +15,8 @@ load(fn.in)
 ### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
-ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
+ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs,
+                            bin.class = run.info$bin.class)
 predict.roc <- prop.model.roc(fitlist, phi.Obs.lim)
 
 ### Fix xlim at log10 scale.

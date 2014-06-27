@@ -11,7 +11,8 @@ load(fn.in)
 ### Arrange data.
 phi.Obs.lim <- range(phi.Obs)
 aa.names <- names(reu13.df.obs)
-ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs)
+ret.phi.Obs <- prop.bin.roc(reu13.df.obs, phi.Obs,
+                            bin.class = run.info$bin.class)
 
 for(i.case in case.names){
   ### Subset of mcmc output.
@@ -23,15 +24,16 @@ for(i.case in case.names){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   ### To adjust to similar range of phi.Obs.
-  ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM)
+  ret.EPhi <- prop.bin.roc(reu13.df.obs, phi.PM,
+                           bin.class = run.info$bin.class)
   b.PM <- convert.bVec.to.b(b.PM, aa.names)
   EPhi.lim <- range(c(phi.Obs.lim, phi.PM))
   predict.roc <- prop.model.roc(b.PM, EPhi.lim)

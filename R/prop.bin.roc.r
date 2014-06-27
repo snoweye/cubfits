@@ -1,5 +1,6 @@
 ### Wrapper of find.prop.bin.roc().
-prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20){
+prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
+    bin.class = NULL){
   if(is.null(phi.Obs)){
     n.aa <- length(reu13.df)
     tmp.ORF <- lapply(1:n.aa, function(i.aa) unique(reu13.df[[i.aa]]$ORF))
@@ -24,7 +25,10 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20){
                            stringsAsFactors = FALSE)
 
   ### Call find.prop.bin.roc().
-  phi.bin <- as.vector(quantile(phi.Obs, c(0, seq(0.05, 0.95, length = nclass), 1)))
+  if(is.null(bin.class)){
+    bin.class <- c(0, seq(0.05, 0.95, length = nclass), 1)
+  }
+  phi.bin <- as.vector(quantile(phi.Obs, bin.class))
   ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin)
   ret
 } # End of prop.bin.roc().

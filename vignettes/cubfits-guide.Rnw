@@ -1,8 +1,8 @@
 %\VignetteIndexEntry{cubfits-guide}
 
-\documentclass[article,shortnames,nojss]{cubfits-include/jss}
+\documentclass[article,shortnames,nojss]{jss}
 
-\newcommand{\pkgver}{0.1-0}
+\newcommand{\pkgver}{0.1-2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,8 +12,8 @@
 \author{
 \begin{minipage}{6in}
 \centering
-Wei-Chen Chen$^1$, Russell Zaretzki$^2$, William Howell$^1$, \\
-Drew Schmidt$^3$, and Michael A. Gilchrist$^{1,4}$
+Wei-Chen Chen$^1$, Russell Zaretzki$^{2,4}$, William Howell$^1$, \\
+Cedric Landerer$^1$, Drew Schmidt$^3$, and Michael A. Gilchrist$^{1,4}$
 \end{minipage}
 \\
 \\
@@ -77,6 +77,7 @@ Knoxville, TN, USA \\
 %% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\input{./cubfits-include/my_jss.cls}
 \input{./cubfits-include/00-preamble}
 
 \begin{document}

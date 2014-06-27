@@ -12,11 +12,11 @@ for(i.case in case.names){
     next
   }
   load(fn.in)
-  fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, i.case, "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   next
+  # }
+  # load(fn.in)
 
   ### For log.mu.
   all.names <- names(b.logmu.PM)
@@ -39,7 +39,7 @@ for(i.case in case.names){
   order.id <- order(as.character(ret$AA), as.character(ret$CODON))
   ret <- ret[order.id,] 
 
-  fn.out <- paste(prefix$table, "logmu_", i.case, "_PM.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "logmu_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### For Delta.t.
@@ -63,7 +63,7 @@ for(i.case in case.names){
   order.id <- order(as.character(ret$AA), as.character(ret$CODON))
   ret <- ret[order.id,] 
 
-  fn.out <- paste(prefix$table, "deltat_", i.case, "_PM.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "deltat_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### For prior.
@@ -77,13 +77,13 @@ for(i.case in case.names){
   }
   ret <- data.frame(param = param.name, Mean = p.PM, Median = p.MED,
                     CI.025 = p.CI[, 1], CI.975 = p.CI[, 2])
-  fn.out <- paste(prefix$table, "prior_", i.case, "_PM.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "prior_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### For E[Phi].
   ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM, Median = phi.MED,
                     CI.025 = phi.CI[, 1], CI.975 = phi.CI[, 2])
 
-  fn.out <- paste(prefix$table, "phi_", i.case, "_PM.tsv", sep = "")
+  fn.out <- paste(prefix$table.nps, "phi_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 }

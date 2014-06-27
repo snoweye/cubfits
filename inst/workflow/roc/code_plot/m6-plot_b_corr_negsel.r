@@ -16,7 +16,7 @@ if(length(case.names) < 4){
 fn.in <- paste(prefix$data, "pre_process.rda", sep = "")
 load(fn.in)
 
-### Ordered by "ad_wophi_pm", "ad_wophi_scuo", "ad_wphi_pm", and "ad_wphi_scuo".
+### Ordered by "wophi_pm", "wophi_scuo", "wphi_pm", and "wphi_scuo".
 b.ci.org <- list(NULL, NULL, NULL, NULL)
 b.mean.org <- list(NULL, NULL, NULL, NULL)
 label.org <- list(NULL, NULL, NULL, NULL)
@@ -33,12 +33,12 @@ for(i.case in 1:4){
   load(fn.in)
 
   ### Subset of mcmc output with scaling.
-  fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
-  if(!file.exists(fn.in)){
-    cat("File not found: ", fn.in, "\n", sep = "")
-    next
-  }
-  load(fn.in)
+  # fn.in <- paste(prefix$subset, case.names[i.case], "_PM_scaling.rda", sep = "")
+  # if(!file.exists(fn.in)){
+  #   cat("File not found: ", fn.in, "\n", sep = "")
+  #   next
+  # }
+  # load(fn.in)
 
   b.ci[[i.case]] <- b.negsel.ci.PM
   b.mean[[i.case]] <- b.negsel.PM
@@ -94,8 +94,7 @@ if(!is.null(b.mean[[3]]) && !is.null(b.mean[[1]])){
                 x.ci = x.pm.ci, y.ci = y.pm.ci,
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
-                main = "roc_ad_pm", add.lm = TRUE,
-                workflow.name = workflow.name)
+                main = "roc_pm", workflow.name = workflow.name)
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
@@ -107,8 +106,7 @@ if(!is.null(b.mean[[4]]) && !is.null(b.mean[[2]])){
                 x.ci = x.scuo.ci, y.ci = y.scuo.ci,
                 xlim = xlim, ylim = ylim,
                 xlab = "Delta.t with phi", ylab = "Delta.t without phi",
-                main = "roc_ad_scuo", add.lm = TRUE,
-                workflow.name = workflow.name)
+                main = "roc_scuo", workflow.name = workflow.name)
     mtext(date(), line = 2.5, cex = 0.4)
   dev.off()
 }
