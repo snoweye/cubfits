@@ -2,7 +2,7 @@
 
 \documentclass[article,shortnames,nojss]{jss}
 
-\newcommand{\pkgver}{0.1-1}
+\newcommand{\pkgver}{0.1-2}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

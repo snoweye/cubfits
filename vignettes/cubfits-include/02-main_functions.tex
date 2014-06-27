@@ -31,7 +31,7 @@ The \pkg{cubfits} package provides quick examples for its three main functions:
 \end{Code}
 These \pkg{cubfits} demos perform short MCMC runs
 and analyze toy datasets (\code{ex.train} and \code{ex.test}) for the
-Ribosome Overhead Cost (ROC) model~\citep{Shah2011}
+Ribosome Overhead Cost (ROC)~\citep{Shah2011}
 which is shown in Figure~\ref{fig:plotbin}. The toy datasets have only 100
 short sequences, and only 3 amino acids are considered.
 
@@ -53,13 +53,14 @@ read it back. Also, it converts the data into the correct format
 needed by \code{cubfits()}, and finally runs MCMC and generates a plot.
 
 
-\subsection[ROC Model (Aside)]{ROC Model (Aside)}
+\subsection[Modeling ROC]{Modeling ROC}
 \label{sec:roc_model}
-\addcontentsline{toc}{subsection}{\thesubsection. ROC Model (Aside)}
+\addcontentsline{toc}{subsection}{\thesubsection. Modeling ROC}
 
 \pkg{cubfits}~\citep{Chen2014cubfitspackage} utilizes a
 Bayesian hierarchical model for codon useage bias
-(CUB)~\citep{Gilchrist2007,Shah2011,Wallace2013} as
+(CUB)~\citep{Gilchrist2007,Shah2011,Wallace2013,Gilchrist2014}.
+The CUB model for ROC is
 \begin{eqnarray}
 \vec{y}_{ga} &
     \sim & Multinom(n_{ga}, \vec{p}_{a}),
@@ -85,7 +86,8 @@ elongation time. $\phi_g$ is protein production rate
 and $\phi_{g,obs}$ is observed expression.
 $K_{bias}$ and $\sigma^2_{obs}$ are measurement bias and
 error, respectively. $\sigma^2_{\phi}$ is dispersion of $\log(\phi_g)$.
-We assume amino acids and genes are both independent.
+We assume independence of amino acids and independence of genes, and both
+contribute information to the CUB model.
 
 The package implements MCMC algorithms of CUB model in three main functions.
 \code{cubfits()} estimate model parameters for sequence with $\phi_{g,obs}$
@@ -124,9 +126,9 @@ parallelization within MCMC is in red dashed lines.
 
 
 
-\subsection[Generic Functions (Aside)]{Generic Functions (Aside)}
+\subsection[Generic Functions]{Generic Functions}
 \label{sec:generic_functions}
-\addcontentsline{toc}{subsection}{\thesubsection. Generic Functions (Aside)}
+\addcontentsline{toc}{subsection}{\thesubsection. Generic Functions}
 
 Note that the three main functions are wrappers of other generic functions that
 perform parameter initializations, propose new parameters, compute

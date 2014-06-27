@@ -1,7 +1,7 @@
 
-\section[Speedup (Aside)]{Speedup (Aside)}
+\section[Parallel Speedup]{Parallel Speedup}
 \label{sec:speedup}
-\addcontentsline{toc}{section}{\thesection. Speedup (Aside)}
+\addcontentsline{toc}{section}{\thesection. Parallel Speedup}
 
 The main bottleneck of \pkg{cubfits} is in calls to \code{fitMultinom*()} or
 \code{my.fitMultinom*()}. The reasons are that
@@ -28,9 +28,9 @@ received the most thorough testing in \pkg{cubfits}.  We now briefly describe
 these three approaches.
 
 
-\subsection[mclapply]{mclapply}
+\subsection[mclapply()]{\code{mclapply()}}
 \label{sec:mclapply}
-\addcontentsline{toc}{subsection}{\thesubsection. mclapply}
+\addcontentsline{toc}{subsection}{\thesubsection. \code{mclapply()}}
 
 The function \code{mclapply()}
 is a function in the \pkg{parallel} package and is particularly useful for
@@ -61,9 +61,9 @@ However, we did observe some occasional crashes when using this approach for
 longer runs of MCMC, such as in a work flow.
 
 
-\subsection[task.pull]{task.pull}
+\subsection[task.pull()]{\code{task.pull()}}
 \label{sec:task.pull}
-\addcontentsline{toc}{subsection}{\thesubsection. task.pull}
+\addcontentsline{toc}{subsection}{\thesubsection. \code{task.pull()}}
 
 % If GUI or embedded environments were not the main targets, then a stable way
 % to speed up \pkg{cubfits} would be an idea way to aim for.
@@ -84,9 +84,9 @@ boost the performance of \code{fitMultinom*()} functions, and has similar
 syntax as \code{mclapply()}.  
 
 
-\subsection[pbdLapply]{pbdLapply}
+\subsection[pbdLapply()]{\code{pbdLapply()}}
 \label{sec:pbdLapply}
-\addcontentsline{toc}{subsection}{\thesubsection. pbdLapply}
+\addcontentsline{toc}{subsection}{\thesubsection. \code{pbdLapply()}}
 
 For some cases, task pull is neither economical nor efficient. For example, in
 \pkg{cubfits}, one needs to initialize the expected expression level of each 
