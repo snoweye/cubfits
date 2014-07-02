@@ -29,10 +29,12 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
   u.codon <- sort(unique(as.character(ret.bin$codon)))
   u.center <- unique(ret.bin$center)
   color <- get.color(u.codon)
+  color.alpha <- get.color(u.codon, color = .CF.PT$color.alpha)
   ### Reorder R for better legend.
   if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
     u.codon <- u.codon[c(3:6, 1:2)]
     color <- color[c(3:6, 1:2)]
+    color.alpha <- color.alpha[c(3:6, 1:2)]
   }
 
   ### Make an empty plot
@@ -42,9 +44,8 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
   ### Add observed dots for means and whiskers for standard deviations.
   for(i.codon in 1:length(u.codon)){
     ret.bin.codon <- ret.bin[ret.bin$codon == u.codon[i.codon],]
-    points(ret.bin.codon$center,
-           ret.bin.codon$freq.mean,
-           pch = 19, col = color[i.codon], cex = 0.5)
+
+    ### Add vertical lines.
     for(i.center in 1:nrow(ret.bin.codon)){
       if(!is.na(ret.bin.codon$freq.std[i.center])){
         if(stderr){
@@ -58,9 +59,14 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
         lines(
           list(x = rep(ret.bin.codon$center[i.center], 2),
                y = tmp.y),
-          col = color[i.codon], lwd = 0.8)
+          col = color.alpha[i.codon], lwd = 0.8)
       }
     }
+
+    ### Add points.
+    points(ret.bin.codon$center,
+           ret.bin.codon$freq.mean,
+           pch = 19, col = color[i.codon], cex = 0.5)
   }
 
   ### Add modeled lines.

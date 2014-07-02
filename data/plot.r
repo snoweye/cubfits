@@ -18,6 +18,15 @@
             rgb(135, 206, 250, maxColorValue = 255), # sky blue
             # rgb(240, 230, 140, maxColorValue = 255)  # khaki
             rgb(255, 153, 255, maxColorValue = 255)  # khaki
-           )
+           ),
+  color.alpha = c(
+                  rgb(  0,   0, 205, 102, maxColorValue = 255), # bl
+                  rgb(255, 140,   0, 102, maxColorValue = 255), # or
+                  rgb(148,   0, 211, 102, maxColorValue = 255), # vi
+                  rgb( 50, 205,  50, 102, maxColorValue = 255), # gr
+                  rgb(135, 206, 250, 102, maxColorValue = 255), # sky blue
+                  # rgb(240, 230, 140, maxColorValue = 255)  # khaki
+                  rgb(255, 153, 255, 102, maxColorValue = 255)  # khaki
+                 )
 ) # End of .CF.PT.
 
