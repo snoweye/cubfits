@@ -12,7 +12,7 @@ new.page <- function(workflow.name, i.case = 1, model = "roc", case.main = NULL,
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.6, paste(workflow.name, ", ", case.main, sep = ""))
+  text(0.5, 0.6, paste(workflow.name, ", ", case.main, ", PostScale", sep = ""))
   text(0.5, 0.4, date(), cex = 0.6) 
   par(mar = c(5.1, 4.1, 4.1, 2.1))
 

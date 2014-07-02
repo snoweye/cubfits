@@ -140,7 +140,7 @@ for(i.match in 1:nrow(match.case)){
     }
 
     ### Add histogram.
-    p.1 <- hist(log10(phi.Obs), xlim = xlim, nclass = 40, plot = FALSE)
+    p.1 <- hist(log10(phi.Obs), nclass = 40, plot = FALSE)
     hist.ylim <- range(p.1$counts)
     hist.ylim[2] <- hist.ylim[2] + 0.2 * diff(hist.ylim)
     plot(p.1, xlim = xlim, ylim = hist.ylim, main = "", xlab = "", ylab = "",
