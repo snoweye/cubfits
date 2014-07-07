@@ -11,8 +11,8 @@ Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        person("Michael A.", "Gilchrist", role = "aut"),
        person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 3.0.0), methods
-Suggests: seqinr, VGAM, EMCluster
+Depends: R(>= 3.0.0), methods, doSNOW, coda
+Suggests: seqinr, VGAM, EMCluster 
 Enhances: pbdMPI (>= 0.2-2), parallel
 LazyLoad: yes
 LazyData: yes
