@@ -37,7 +37,7 @@ plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000
   phi.bin.lim <- range(c(phi.bin, estim.phi))
   
   lbound <- length(ret.b.Mat)-n.use.iter
-  bound <- length(ret.b.Mat)
+  ubound <- length(ret.b.Mat)
   b.mat <- do.call(cbind, ret.b.Mat[lbound:ubound])
   Eb <- rowMeans(b.mat)
   Eb <- convert.bVec.to.b(Eb, aa.names)

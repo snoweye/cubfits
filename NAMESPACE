@@ -1,4 +1,4 @@
-import(methods)
+import(methods, doSNOW, coda)
 useDynLib(cubfits)
 # exportPattern("^[[:alpha:]]+")
 
@@ -65,7 +65,11 @@ export(
   "plotCUB",
   "plotTraces",
   "plotExpectedPhiTrace",
-  "plotPTraces"
+  "plotPTraces",
+  "appendCUBresults",
+  "readGenome",
+  "cubmultichain",
+  "isConverged"
 )
 
 # Converting
