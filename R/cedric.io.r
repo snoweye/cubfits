@@ -32,3 +32,9 @@ readGenome <- function(fn.genome, ex.sh.aa=0, rm.first.aa=0)
   
   return(seq.string)
 }
+
+## set mean of dataset to 1
+normalize.data.set <- function(data)
+{
+  data <- data/mean(data)
+}
