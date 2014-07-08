@@ -25,7 +25,7 @@ y <- gen.y(seqstring.roc, aa.names = aa.names)
 .CF.AC$renew.iter <- 3
 ret.time <- system.time({
   ret <- cubfits(reu13.df, ex.train$phi.Obs, y, n,
-                 nIter = 10, burnin = 10,
+                 nIter = 20,
                  verbose = TRUE, report = 5,
                  model = "roc", adaptive = "simple")
 })

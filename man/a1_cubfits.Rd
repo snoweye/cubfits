@@ -7,7 +7,7 @@
 }
 \usage{
   cubfits(reu13.df.obs, phi.Obs, y, n,
-          nIter = 1000, burnin = 100,
+          nIter = 1000,
           b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
               b.DrawScale = .CF.CONF$b.DrawScale,
               b.RInit = NULL,
@@ -26,7 +26,6 @@
   \item{y}{a \code{\link{y}} object, codon counts.}
   \item{n}{a \code{\link{n}} object, total codon counts.}
   \item{nIter}{number of iterations after burn-in iterations.}
-  \item{burnin}{number of burn-in iterations.}
   \item{b.Init}{initial values for parameters \code{\link{b}}.}
   \item{init.b.Scale}{for initial \code{\link{b}} if \code{b.Init = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
@@ -55,8 +54,8 @@
   This function correctly and carefully implements a combining version of
   Shah and Gilchrist (2011) and Wallace et al. (2013).
 
-  Total number of MCMC iterations is \code{burnin + nIter + 1}, but the
-  outputs may be thinned to \code{(burnin + nIter) / iterThin + 1}
+  Total number of MCMC iterations is \code{nIter + 1}, but the
+  outputs may be thinned to \code{nIter / iterThin + 1}
   iterations.
 
   Temporary result dumping may be controlled by \code{\link{.CF.DP}}.
@@ -66,7 +65,7 @@
   \code{b.Mat} for mutation and selection coefficients of \code{\link{b}},
   \code{p.Mat} for hyper-parameters, and
   \code{phi.Mat} for expected expression values Phi.
-  All lists are of length \code{(burnin + nIter) / iterThin + 1} and
+  All lists are of length \code{nIter / iterThin + 1} and
   each element contains the output of each iteration.
 
   All lists also can be binded as trace matrices, such as via

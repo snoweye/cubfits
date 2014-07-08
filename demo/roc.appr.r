@@ -11,7 +11,7 @@ phi.Init.appr <- ex.test$phi.Obs / mean(ex.test$phi.Obs)
 .CF.AC$renew.iter <- 3
 ret.time <- system.time({
   ret <- cubappr(ex.test$reu13.df, phi.Init.appr, ex.test$y, ex.test$n,
-                 nIter = 10, burnin = 10,
+                 nIter = 20,
                  verbose = TRUE, report = 5,
                  model = "roc", adaptive = "simple")
 })

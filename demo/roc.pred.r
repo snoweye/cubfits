@@ -25,7 +25,7 @@ phi.pred.Init <- phi.pred.Init / mean(phi.pred.Init)
 ret.time <- system.time({
   ret <- cubpred(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
                  ex.test$reu13.df, ex.test$y, ex.test$n,
-                 nIter = 10, burnin = 10,
+                 nIter = 20,
                  phi.pred.Init = phi.pred.Init,
                  verbose = TRUE, report = 5,
                  model = "roc", adaptive = "simple")
