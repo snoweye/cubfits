@@ -85,13 +85,15 @@ isConverged <- function(chains, niter, epsilon=0.05, thin=10, teston=c("phi", "s
   return(ret)
 }
 
-cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
+cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sphi"),
                           min=0, max=160000, nchains=2, thin=10, eps=0.05, ncores=2, ...)
 {
   cl <- makeCluster(ncores)
   registerDoSNOW(cl)
   
-  ## checking arguments
+  ########################
+  ## checking arguments ##
+  ########################
   if(min > max){
     warning("min iterations > max iterations. setting max = min\n")
     max <- min
@@ -103,7 +105,10 @@ cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
   if(!cubmethod %in% c("cubfits", "cubappr", "cubpred")){
     stop(paste("Unkown method: ", cubmethod, "!\n"))
   }
+  
+  ## arguments for cub methods
   input_list <- as.list(list(...))
+  
   if("p.Init" %in% names(input_list)){
     p.init <- input_list$p.Init
     if(length(p.init) < nchains){
@@ -114,6 +119,14 @@ cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
     p.init <- list(NULL)
     length(p.init) <- nchains  
   }
+  if("b.RInit" %in% names(input_list)){
+    b.rinit <- input_list$b.RInit
+    input_list$b.RInit <- NULL
+  }else{
+    b.rinit <- list(NULL)
+    length(b.rinit) <- nchains  
+  }
+  
   init.phi <- list()
   init.pred.phi <- list()
   if("phi.Init" %in% names(input_list)){
@@ -123,46 +136,54 @@ cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
   if("phi.pred.Init" %in% names(input_list)){
     init.pred.phi <- input_list$phi.pred.Init
     input_list$phi.pred.Init <- NULL
-  }  
-  
+  }
+  if(".CF.CT" %in% names(input_list)){
+    .CF.CT <- input_list$.CF.CT
+    input_list$.CF.CT <- NULL
+  }else{
+    .CF.CT <- eval(parse(text = "cubfits::.CF.CT"))
+  } 
+  if(".CF.CONF" %in% names(input_list)){
+    .CF.CONF <- input_list$.CF.CONF
+    input_list$.CF.CONF <- NULL
+  }else{
+    .CF.CONF <- eval(parse(text = "cubfits::.CF.CONF"))
+  }   
   results <- list()
   length(results) <- nchains
   if(is.null(seeds)){
     seeds <- round(runif(nchains, 1, 100000))
   }
   
-  
+  #############################################################
+  ## running chains in parralel and checking for convergence ##
+  #############################################################
   j <- 1
   gel.res <- 0
   converged <- FALSE
   while(!converged)
   { 
     ## run chains in parallel
-    #for(i in 1:nchains) # for debuging
+    #for(i in nchains:1) # for debuging
     res <- foreach(i = 1:nchains) %dopar%
     {
       suppressMessages(library(cubfits, quietly = TRUE))
       
-      
+      .GlobalEnv$.CF.CT <- .CF.CT
+      .GlobalEnv$.CF.CONF <- .CF.CONF
       set.seed(seeds[i])
       if(cubmethod == "cubfits"){
-        .GlobalEnv$.CF.CT <- eval(parse(text = "cubfits::.CF.CT"))
-        .GlobalEnv$.CF.CONF <- eval(parse(text = "cubfits::.CF.CONF"))
-        .GlobalEnv$.CF.CT$type.p <- "lognormal_bias"
-        .GlobalEnv$.CF.CONF$scale.phi.Obs <- F
-        .GlobalEnv$.CF.CONF$estimate.bias.Phi <- T
-        # cubfits(phi.Init = init.phi[[i]], p.Init = p.init[[i]], input_list)
-        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]])))
+        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
       }else if(cubmethod == "cubappr"){
-        #cubappr(phi.pred.Init = init.phi[[i]], p.Init = p.init[[i]], input_list)
-        do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]])))
+        do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
       }else if(cubmethod == "cubpred"){
-        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]])))
+        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
       }
     }
     ## append chains and get new initial values for restart
     for(i in 1:nchains)
     {
+      
       if(cubmethod == "cubfits" | cubmethod == "cubpred")
       {
         init.phi[[i]] <- normalize.data.set(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
@@ -173,6 +194,13 @@ cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
       }
       p.init[[i]] <- res[[i]]$p.Mat[[length(res[[i]]$p.Mat)]]
       results[[i]] <- appendCUBresults(res[[i]], results[[i]])
+      
+      if(length(results[[i]]$p.Mat) < reset.qr) # reset the "cov" only in the begining
+      {
+        b.rinit[i] <- list(NULL)
+      }else{ # use the same matrix every time after some "burnin"
+        b.rinit[[i]] <- res[[i]]$b.RInit
+      }
     }
     curiter <- length(results[[1]]$p.Mat)
     
