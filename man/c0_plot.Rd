@@ -11,15 +11,15 @@
   plotCUB(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000,
           rescale=F, main="CUB", model.label=c("True Model"), model.lty=1)
 
+  plotPTraces(ret.p.Mat, main="Hyperparameter Traces", lty=1)
+
+  plotExpectedPhiTrace(phi.Mat, 
+                       main=expression(paste("Trace E[", phi, "]", sep="")),
+                       xlab="Iteration",
+                       ylab=expression(paste("E[", phi, "]", sep="")), lty=1)
+
   plotTraces(ret.b.Mat, names.aa, param = c("logmu", "deltat"),
              main="AA parameter trace")
-
-  plotExpectedPhiTrace(phi.Mat,
-                       main=expression(paste("Trace E[", phi, "]", sep="")),
-                       xlab="iteration",
-                       ylab=expression(paste("E[", phi, "]", sep="")))
-
-  plotPTraces(ret.p.Mat)
 }
 \arguments{
   \item{reu13.df.obs}{NTD}
@@ -37,6 +37,7 @@
   \item{param}{NTD}
   \item{phi.Mat}{NTD}
   \item{ret.p.Mat}{NTD}
+  \item{lty}{NTD}
 }
 \details{
   NTD

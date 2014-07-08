@@ -36,7 +36,14 @@ mkdir ${ALL_OUT}/plot/single
 mkdir ${ALL_OUT}/plot/trace
 mkdir ${ALL_OUT}/plot/AA
 mkdir ${ALL_OUT}/plot/multi
-cp -R ${ALL_OUT}/plot ${ALL_OUT}/plot/plot_ps
+# cp -R ${ALL_OUT}/plot ${ALL_OUT}/plot/plot_ps
+mkdir ${ALL_OUT}/plot/plot_ps
+mkdir ${ALL_OUT}/plot/plot_ps/diag
+mkdir ${ALL_OUT}/plot/plot_ps/match
+mkdir ${ALL_OUT}/plot/plot_ps/single
+mkdir ${ALL_OUT}/plot/plot_ps/trace
+mkdir ${ALL_OUT}/plot/plot_ps/AA
+mkdir ${ALL_OUT}/plot/plot_ps/multi
 
 ### For outputs.
 mkdir ${ALL_OUT}/output

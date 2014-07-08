@@ -30,5 +30,8 @@ get.case.main <- function(i.case, model){
   } else{
     i.case.main <- "case.name Not Found"
   }
+
+  ### Return.
+  i.case.main <- paste(i.case.main, ", PostScale", sep = "")
   i.case.main
 }
