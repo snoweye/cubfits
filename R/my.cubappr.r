@@ -21,6 +21,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
     nIter = 1000, burnin = 100,
     b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
         b.DrawScale = .CF.CONF$b.DrawScale,
+        b.RInit = NULL,
     p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
         p.DrawScale = .CF.CONF$p.DrawScale,
     phi.pred.DrawScale = .CF.CONF$phi.pred.DrawScale,
@@ -70,9 +71,13 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   p.Init <- my.pInit(p.Init, phi.pred.Init, model.Phi[1],
                      p.nclass = p.nclass, cub.method = "appr")
 
-  ### Initial values for b.
+  ### Initial values for b and b.R.
   b.InitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.pred.Init, y, n)
-  b.RInitList <- lapply(b.InitList, function(B){ B$R })
+  if(is.null(b.RInit)){
+    b.RInitList <- lapply(b.InitList, function(B){ B$R })
+  } else{
+    b.RInitList <- b.RInit
+  }
   if(is.null(b.Init)){
     b.Init <- lapply(b.InitList,
                function(B){
@@ -86,6 +91,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
     b.Init <- lapply(b.Init, function(B){ B$coefficients })
   }
   b.InitVec <- unlist(b.Init)
+  names(b.RInitList) <- names(reu13.df.obs)
 
 ### Set current step ###
   ### Set current step for b.
