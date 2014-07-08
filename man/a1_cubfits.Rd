@@ -10,6 +10,7 @@
           nIter = 1000, burnin = 100,
           b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
               b.DrawScale = .CF.CONF$b.DrawScale,
+              b.RInit = NULL,
           p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
               p.DrawScale = .CF.CONF$p.DrawScale,
           phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
@@ -30,6 +31,10 @@
   \item{init.b.Scale}{for initial \code{\link{b}} if \code{b.Init = NULL}.}
   \item{b.DrawScale}{scaling factor for adaptive MCMC with random walks
                      when drawing new \code{\link{b}}.}
+  \item{b.RInit}{initial values (in a list) for \code{R} matrices of
+                 parameters \code{\link{b}} yielding from QR decomposition
+                 of \code{vglm()} for the variance-covariance matrix of
+                 \code{\link{b}}.}
   \item{p.Init}{initial values for hyper-parameters.}
   \item{p.nclass}{number of components for \code{model.Phi = "logmixture"}.}
   \item{p.DrawScale}{scaling factor for adaptive MCMC with random walks

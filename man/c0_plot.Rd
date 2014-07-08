@@ -22,28 +22,28 @@
              main="AA parameter trace")
 }
 \arguments{
-  \item{reu13.df.obs}{NTD}
-  \item{ret.b.Mat}{NTD}
-  \item{phi.bin}{NTD}
-  \item{estim.phi}{NTD}
-  \item{n.use.iter}{NTD}
-  \item{rescale}{NTD}
-  \item{main}{NTD}
-  \item{xlab}{NTD}
-  \item{ylab}{NTD}
-  \item{model.label}{NTD}
-  \item{model.lty}{NTD}
-  \item{names.aa}{NTD}
-  \item{param}{NTD}
-  \item{phi.Mat}{NTD}
-  \item{ret.p.Mat}{NTD}
-  \item{lty}{NTD}
+  \item{reu13.df.obs}{under development}
+  \item{ret.b.Mat}{under development}
+  \item{phi.bin}{under development}
+  \item{estim.phi}{under development}
+  \item{n.use.iter}{under development}
+  \item{rescale}{under development}
+  \item{main}{under development}
+  \item{xlab}{under development}
+  \item{ylab}{under development}
+  \item{model.label}{under development}
+  \item{model.lty}{under development}
+  \item{names.aa}{under development}
+  \item{param}{under development}
+  \item{phi.Mat}{under development}
+  \item{ret.p.Mat}{under development}
+  \item{lty}{under development}
 }
 \details{
-  NTD
+  under development
 }
 \value{
-  NTD
+  under development
 }
 \references{
   \url{https://github.com/snoweye/cubfits/}
@@ -52,7 +52,7 @@
   Cedric Landerer \email{cedric.landerer@gmail.com}.
 }
 \seealso{
-  NTD
+  under development
 }
 \examples{
 \dontrun{

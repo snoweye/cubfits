@@ -18,6 +18,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     nIter = 1000, burnin = 100,
     b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
         b.DrawScale = .CF.CONF$b.DrawScale,
+        b.RInit = NULL,
     p.Init = NULL, p.nclass = .CF.CONF$p.nclass,
         p.DrawScale = .CF.CONF$p.DrawScale,
     phi.Init = NULL, init.phi.Scale = .CF.CONF$init.phi.Scale,
@@ -74,9 +75,13 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     phi.Obs <- phi.Obs / mean(phi.Obs)    # scale to mean 1
   }
 
-  ### Initial values for b.
+  ### Initial values for b anb b.R.
   b.InitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Init, y, n)
-  b.RInitList <- lapply(b.InitList, function(B){ B$R })
+  if(is.null(b.RInit)){
+    b.RInitList <- lapply(b.InitList, function(B){ B$R })
+  } else{
+    b.RInitList <- b.RInit
+  }
   if(is.null(b.Init)){
     b.Init <- lapply(b.InitList,
                 function(B){
@@ -90,6 +95,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
     b.Init <- lapply(b.Init, function(B){ B$coefficients })
   }
   b.InitVec <- unlist(b.Init)
+  names(b.RInitList) <- names(reu13.df.obs)
 
   ### Initial values for training phi.
   if(is.null(phi.Init)){

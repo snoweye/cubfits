@@ -146,8 +146,8 @@ cubmultichain <- function(cubmethod, niter, seeds, teston=c("phi", "sphi"),
       
       set.seed(seeds[i])
       if(cubmethod == "cubfits"){
-        .GlobalEnv$.CF.CT <- cubfits::.CF.CT
-        .GlobalEnv$.CF.CONF <- cubfits::.CF.CONF
+        .GlobalEnv$.CF.CT <- eval(parse(text = "cubfits::.CF.CT"))
+        .GlobalEnv$.CF.CONF <- eval(parse(text = "cubfits::.CF.CONF"))
         .GlobalEnv$.CF.CT$type.p <- "lognormal_bias"
         .GlobalEnv$.CF.CONF$scale.phi.Obs <- F
         .GlobalEnv$.CF.CONF$estimate.bias.Phi <- T
