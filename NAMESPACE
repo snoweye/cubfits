@@ -69,6 +69,7 @@ export(
   # "appendCUBresults",
   "readGenome",
   "cubmultichain",
+  "cubsinglechain",
   "isConverged"
 )
 
