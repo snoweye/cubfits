@@ -34,8 +34,9 @@ codon.up2low <- function(x){
 codon2string <- function(i.seq.data){
   ### Check if i.seq.data has length of correct codon triplets.
   tl.i.seq.data <- length(i.seq.data)
-  if(tl.i.seq.data %% 3 != 0){
-    stop(paste("length of", seqinr::getName.SeqFastadna(i.seq.data), "is not a multiple of 3."))
+  if(tl.i.seq.data %% 3 != 0 || tl.i.seq.data < 3){
+    stop(paste("length of", seqinr::getName.SeqFastadna(i.seq.data),
+               "is not a multiple of 3."))
   }
 
   # ret <- lapply(0:(tl.i.seq.data / 3 - 1),
