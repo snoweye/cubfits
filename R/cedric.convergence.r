@@ -1,4 +1,7 @@
 
+
+# append res to to
+# ignore first element of res since it should be the same as the last element in res (taking the last elemen as initial phi for restart)
 appendCUBresults <- function(res, to)
 {
   res.list.length <- length(res$b.Mat)
@@ -12,16 +15,16 @@ appendCUBresults <- function(res, to)
     to$phi.Init <- res$phi.Init
   }
   
-  for(i in 1:res.list.length)
+  for(i in 1:(res.list.length-1)) # ignore first element
   {
-    to$b.Mat[init.list.length + i] <- res$b.Mat[i]
-    to$p.Mat[init.list.length + i] <- res$p.Mat[i]
+    to$b.Mat[init.list.length + i] <- res$b.Mat[(i + 1)]
+    to$p.Mat[init.list.length + i] <- res$p.Mat[(i + 1)]
     
     if("phi.Mat" %in% names(res)){
-      to$phi.Mat[init.list.length + i] <- res$phi.Mat[i]
+      to$phi.Mat[init.list.length + i] <- res$phi.Mat[(i + 1)]
     }
     if("phi.pred.Mat" %in% names(res)){
-      to$phi.pred.Mat[init.list.length + i] <- res$phi.pred.Mat[i]
+      to$phi.pred.Mat[init.list.length + i] <- res$phi.pred.Mat[(i + 1)]
     }
   }
   return(to)
@@ -115,7 +118,7 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
 }
 
 cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"),
-                           min=0, max=160000, thin=10, eps=0.05, ...)
+                           min=0, max=160000, conv.thin=10, eps=0.05, ...)
 {
   ########################
   ## checking arguments ##
@@ -191,11 +194,11 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
     ## append chains and get new initial values for restart
     if(cubmethod == "cubfits" | cubmethod == "cubpred")
     {
-      init.phi <- normalize.data.set(res$phi.Mat[[length(res$phi.Mat)]])
+      init.phi <- normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
     }
     if(cubmethod == "cubappr" | cubmethod == "cubpred")
     {
-      init.pred.phi <- normalize.data.set(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
+      init.pred.phi <- normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
     }
     p.init <- res$p.Mat[[length(res$p.Mat)]]
     results <- appendCUBresults(res, results)
@@ -210,7 +213,7 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
 
     ## Do convergence test
     if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      gelman <- isConverged(results, niter=niter, frac1=frac1, frac2=frac2, epsilon=eps, thin=thin, teston=teston, test="geweke")
+      gelman <- isConverged(results, niter=niter, frac1=frac1, frac2=frac2, epsilon=eps, thin=conv.thin, teston=teston, test="geweke")
       gel.res[j] <- gelman$gelman
       iter.res[j] <- curiter
       cat(paste("Geweke Z score: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
@@ -229,7 +232,7 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
 }
 
 cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sphi"),
-                          min=0, max=160000, nchains=2, thin=10, eps=0.05, ncores=2, ...)
+                          min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
 {
   #require(parallel)
   #require(doParallel)
@@ -332,11 +335,11 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
       
       if(cubmethod == "cubfits" | cubmethod == "cubpred")
       {
-        init.phi[[i]] <- normalize.data.set(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
+        init.phi[[i]] <- normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
       }
       if(cubmethod == "cubappr" | cubmethod == "cubpred")
       {
-        init.pred.phi[[i]] <- normalize.data.set(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
+        init.pred.phi[[i]] <- normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
       }
       p.init[[i]] <- res[[i]]$p.Mat[[length(res[[i]]$p.Mat)]]
       results[[i]] <- appendCUBresults(res[[i]], results[[i]])
@@ -352,7 +355,7 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
     
     ## Do convergence test
     if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      gelman <- isConverged(results, niter, epsilon=eps, thin=thin, teston=teston, test="gelman")
+      gelman <- isConverged(results, niter, epsilon=eps, thin=conv.thin, teston=teston, test="gelman")
       gel.res[j] <- gelman$gelman
       iter.res[j] <- curiter
       cat(paste("Gelman score: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
