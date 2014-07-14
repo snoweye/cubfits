@@ -31,7 +31,6 @@ phi.init.SCUO <- phi.PM
 
 ### Change initial for fitsappr.
 nIter <- run.info$nIter
-burnin <- run.info$burnin 
 
 ### For configuration.
 .CF.DP$dump <- run.info$dump
@@ -47,7 +46,7 @@ if(.CF.CONF$scale.phi.Obs || .CF.CONF$estimate.bias.Phi){
   phi.init.SCUO <- phi.init.SCUO / mean(phi.init.SCUO)
 }
 ret <- cubappr(reu13.df.obs, phi.init.SCUO, y, n,
-               nIter = nIter, burnin = burnin,
+               nIter = nIter,
                # b.Init = b.Init,
                p.nclass = p.nclass,
                model = model, verbose = TRUE, report = 10)
@@ -58,7 +57,7 @@ if(comm.rank() == 0){
   print(ret.time)
 
   fn.out <- paste(prefix$output, case.name, "/output_mcmc.rda", sep = "")
-  save(list = c("nIter", "burnin", "ret", "ret.time"),
+  save(list = c("nIter", "ret", "ret.time"),
        file = fn.out)
 
   fn.out <- paste(prefix$output, case.name, "/output_env.rda", sep = "")

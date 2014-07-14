@@ -6,7 +6,7 @@ set.seed(1234)
 .CF.AC$renew.iter <- 3
 ret.time <- system.time({
   ret <- cubfits(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
-                 nIter = 10, burnin = 10,
+                 nIter = 20,
                  verbose = TRUE, report = 5,
                  model = "roc", adaptive = "simple")
 })

@@ -73,8 +73,10 @@
     It currently includes
     \tabular{ll}{
       \code{amino.acid}             \tab amino acids \cr
+      \code{amino.acid.3}           \tab amino acids \cr
       \code{synonymous.codon}       \tab synonymous codons of amino acids \cr
       \code{amino.acid.split}       \tab amino acid 'S' is split \cr
+      \code{amino.acid.split.3}     \tab amino acid 'S' is split \cr
       \code{synonymous.codon.split} \tab synonymous codons of split amino acid
     }
 

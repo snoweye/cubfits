@@ -20,7 +20,7 @@
 ### no observation in the testing set.
 my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
     reu13.df.pred, y.pred, n.pred,
-    nIter = 1000, burnin = 100,
+    nIter = 1000,
     b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
         b.DrawScale = .CF.CONF$b.DrawScale,
         b.RInit = NULL,
@@ -60,7 +60,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   nsyns <- sapply(y, function(ybit){ dim(ybit)[2] })
                                             # # of synomous codons
   nBparams <- my.ncoef * sum(nsyns - 1)     # total # of regression parameters
-  nSave <- (nIter + burnin) / iterThin + 1  # # of space for iterations
+  nSave <- nIter / iterThin + 1             # # of space for iterations
   nPrior <- 3                               # # of prior parameters
   if(model.Phi == "logmixture"){
     nPrior <- 1 + 3 * p.nclass 
@@ -161,14 +161,14 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   }
 
   ### Set acceptance rate storage.
-  my.set.acceptance(nSave, n.aa, n.p = n.p, n.G = n.G, n.G.pred = n.G.pred)
+  my.set.acceptance(nIter + 1, n.aa, n.p = n.p, n.G = n.G, n.G.pred = n.G.pred)
 
   ### Set adaptive storage.
   if(.CF.CONF$estimate.bias.Phi){
     ### Bias of phi is coupled with p parameters.
     p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
   }
-  my.set.adaptive(nSave,
+  my.set.adaptive(nIter + 1,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
                   n.p = n.p, p.DrawScale = p.DrawScale,
                   n.G = n.G, phi.DrawScale = phi.DrawScale,
@@ -180,7 +180,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.Mat", "phi.pred.Mat"))
 
   ### MCMC start.
-  for(iter in 1:(nIter + burnin)){
+  for(iter in 1:nIter){
     ### Step 1: Update b using M-H step.
     bUpdate <- .cubfitsEnv$my.drawBConditionalAll(
                  b.Curr, phi.Curr, y, n, reu13.df.obs,

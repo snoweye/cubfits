@@ -18,7 +18,7 @@
 
 ### No observation (phi) is required.
 my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
-    nIter = 1000, burnin = 100,
+    nIter = 1000,
     b.Init = NULL, init.b.Scale = .CF.CONF$init.b.Scale,
         b.DrawScale = .CF.CONF$b.DrawScale,
         b.RInit = NULL,
@@ -52,7 +52,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   nsyns <- sapply(y, function(ybit){ dim(ybit)[2] })
                                             # # of synomous codons
   nBparams <- my.ncoef * sum(nsyns - 1)     # total # of regression parameters
-  nSave <- (nIter + burnin) / iterThin + 1  # # of space for iterations
+  nSave <- nIter / iterThin + 1             # # of space for iterations
   nPrior <- 2                               # # of prior parameters
   if(model.Phi == "logmixture"){
     nPrior <- 3 * p.nclass 
@@ -119,14 +119,14 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   }
 
   ### Set acceptance rate storage.
-  my.set.acceptance(nSave, n.aa, n.p = n.p, n.G.pred = n.G)
+  my.set.acceptance(nIter + 1, n.aa, n.p = n.p, n.G.pred = n.G)
 
   ### Set adaptive storage.
   if(.CF.CONF$estimate.bias.Phi){
     ### Bias of phi is coupled with p parameters.
     p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
   }
-  my.set.adaptive(nSave,
+  my.set.adaptive(nIter + 1,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
                   n.p = n.p, p.DrawScale = p.DrawScale,
                   n.G.pred = n.G, phi.pred.DrawScale = phi.pred.DrawScale,
@@ -137,7 +137,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.pred.Mat"))
 
   ### MCMC start.
-  for(iter in 1:(nIter + burnin)){
+  for(iter in 1:nIter){
     ### Step 1: Update b using M-H step.
     bUpdate <- .cubfitsEnv$my.drawBConditionalAll(
                  b.Curr, phi.Curr, y, n, reu13.df.obs,

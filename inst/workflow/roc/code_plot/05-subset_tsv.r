@@ -28,12 +28,13 @@ for(i.case in case.names){
   tmp.PM <- b.logmu.PM[id.var]
   tmp.MED <- b.logmu.MED[id.var]
   tmp.CI <- b.logmu.ci.PM[id.var,]
+  tmp.STD <- b.STD[id.var]
   ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM, Median = tmp.MED,
-                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
+                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2], Std = tmp.STD)
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[which(!(tmp %in% CODON))],
-                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0)
+                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0, Std = 0)
     ret <- rbind(ret, tmp)
   }
   order.id <- order(as.character(ret$AA), as.character(ret$CODON))
@@ -52,12 +53,13 @@ for(i.case in case.names){
   tmp.PM <- b.negsel.PM[id.var]
   tmp.MED <- b.negsel.MED[id.var]
   tmp.CI <- b.negsel.ci.PM[id.var,]
+  tmp.STD <- b.STD[id.var]
   ret <- data.frame(AA = AA, CODON = CODON, Mean = tmp.PM, Median = tmp.MED,
-                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2])
+                    CI.025 = tmp.CI[, 1], CI.975 = tmp.CI[, 2], Std = tmp.STD)
   for(i.aa in unique(AA)){
     tmp <- .CF.GV$synonymous.codon.split[[i.aa]]
     tmp <- data.frame(AA = i.aa, CODON = tmp[which(!(tmp %in% CODON))],
-                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0)
+                      Mean = 0, Median = 0, CI.025 = 0, CI.975 = 0, Std = 0)
     ret <- rbind(ret, tmp)
   }
   order.id <- order(as.character(ret$AA), as.character(ret$CODON))
@@ -76,13 +78,13 @@ for(i.case in case.names){
     param.name <- param.name[-which(param.name == "bias.Phi")]
   }
   ret <- data.frame(param = param.name, Mean = p.PM, Median = p.MED,
-                    CI.025 = p.CI[, 1], CI.975 = p.CI[, 2])
+                    CI.025 = p.CI[, 1], CI.975 = p.CI[, 2], Std = p.STD)
   fn.out <- paste(prefix$table, "prior_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)
 
   ### For E[Phi].
   ret <- data.frame(ORF = names(phi.PM), Mean = phi.PM, Median = phi.MED,
-                    CI.025 = phi.CI[, 1], CI.975 = phi.CI[, 2])
+                    CI.025 = phi.CI[, 1], CI.975 = phi.CI[, 2], Std = phi.STD)
 
   fn.out <- paste(prefix$table, "phi_", i.case, "_PM.tsv", sep = "")
   write.table(ret, file = fn.out, quote = FALSE, sep = "\t", row.names = FALSE)

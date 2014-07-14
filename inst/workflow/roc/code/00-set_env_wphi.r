@@ -63,8 +63,7 @@ case.names <- paste(model, "_", case.names, sep = "")
 
 ### Basic information.
 run.info <- list()
-run.info$nIter <- 4000
-run.info$burnin <- 1000
+run.info$nIter <- 5000
 
 ### For configuration.
 run.info$dump <- FALSE
