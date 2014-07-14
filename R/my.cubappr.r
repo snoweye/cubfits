@@ -119,14 +119,14 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   }
 
   ### Set acceptance rate storage.
-  my.set.acceptance(nSave, n.aa, n.p = n.p, n.G.pred = n.G)
+  my.set.acceptance(nIter + 1, n.aa, n.p = n.p, n.G.pred = n.G)
 
   ### Set adaptive storage.
   if(.CF.CONF$estimate.bias.Phi){
     ### Bias of phi is coupled with p parameters.
     p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
   }
-  my.set.adaptive(nSave,
+  my.set.adaptive(nIter + 1,
                   n.aa = n.aa, b.DrawScale = b.DrawScale,
                   n.p = n.p, p.DrawScale = p.DrawScale,
                   n.G.pred = n.G, phi.pred.DrawScale = phi.pred.DrawScale,
