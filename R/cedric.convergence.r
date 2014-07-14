@@ -313,8 +313,8 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
   while(!converged)
   { 
     ## run chains in parallel
-    for(i in nchains:1) # for debuging
-    #res <- foreach(i = 1:nchains) %dopar%
+    #for(i in nchains:1) # for debuging
+    res <- foreach(i = 1:nchains) %dopar%
     {
       suppressMessages(library(cubfits, quietly = TRUE))
       
