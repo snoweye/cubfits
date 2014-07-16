@@ -15,16 +15,18 @@ appendCUBresults <- function(res, to)
     to$phi.Init <- res$phi.Init
   }
   
-  for(i in 1:(res.list.length-1)) # ignore first element
+  ind <- ifelse(init.list.length == 0, 0, 1)
+  
+  for(i in 1:(res.list.length-ind)) # ignore first element
   {
-    to$b.Mat[init.list.length + i] <- res$b.Mat[(i + 1)]
-    to$p.Mat[init.list.length + i] <- res$p.Mat[(i + 1)]
+    to$b.Mat[init.list.length + i] <- res$b.Mat[(i + ind)]
+    to$p.Mat[init.list.length + i] <- res$p.Mat[(i + ind)]
     
     if("phi.Mat" %in% names(res)){
-      to$phi.Mat[init.list.length + i] <- res$phi.Mat[(i + 1)]
+      to$phi.Mat[init.list.length + i] <- res$phi.Mat[(i + ind)]
     }
     if("phi.pred.Mat" %in% names(res)){
-      to$phi.pred.Mat[init.list.length + i] <- res$phi.pred.Mat[(i + 1)]
+      to$phi.pred.Mat[init.list.length + i] <- res$phi.pred.Mat[(i + ind)]
     }
   }
   return(to)
@@ -90,7 +92,7 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
   }else{
     stop("choosen convergence test can not be found\n")
   }
-
+  
   
   if(test[1] == "gelman")
   {
@@ -109,7 +111,7 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
       result <- diag$z < epsilon 
       ret <- list(isConverged=result, gelman=diag$z)
     }else{ # else is enough here. The correctness of the method was determined above and leaves only two options
-     # univariate test on all phi values
+      # univariate test on all phi values
       result <- sum(diag$z < epsilon) == length(diag$z)
       ret <- list(isConverged=result, gelman=diag$z)
     }    
@@ -139,6 +141,11 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
     input_list$p.Init <- NULL
   }else{
     p.init <- NULL
+  }
+  if("iterThin" %in% names(input_list)){
+    # do nothing, everything is fine
+  }else{
+    input_list$iterThin <- 1
   }
   if("b.RInit" %in% names(input_list)){
     b.rinit <- input_list$b.RInit
@@ -190,15 +197,15 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
     }else if(cubmethod == "cubpred"){
       res <- do.call(cubpred, c(input_list, list(phi.Init = init.phi), list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit)))
     }
-
+    
     ## append chains and get new initial values for restart
     if(cubmethod == "cubfits" | cubmethod == "cubpred")
     {
-      init.phi <- normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
+      init.phi <- cubfits:::normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
     }
     if(cubmethod == "cubappr" | cubmethod == "cubpred")
     {
-      init.pred.phi <- normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
+      init.pred.phi <- cubfits:::normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
     }
     p.init <- res$p.Mat[[length(res$p.Mat)]]
     results <- appendCUBresults(res, results)
@@ -209,8 +216,8 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
     }else{ # use the same matrix every time after some "burnin"
       b.rinit <- res$b.RInit
     }
-    curiter <- length(results$p.Mat)
-
+    curiter <- length(results$p.Mat)*input_list$iterThin
+    
     ## Do convergence test
     if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
       gelman <- isConverged(results, niter=niter, frac1=frac1, frac2=frac2, epsilon=eps, thin=conv.thin, teston=teston, test="geweke")
@@ -220,7 +227,7 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
       converged <- gelman$isConverged
       j <- j + 1
     }
-
+   
     #check if we have at least min iterations
     if(curiter < min){converged <- FALSE}
     #check if max iteration limit is reached
@@ -231,7 +238,7 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
   
 }
 
-cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sphi"),
+cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sphi"), swap=0, swapAt=0.05,
                           min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
 {
   #require(parallel)
@@ -267,12 +274,24 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
     p.init <- list(NULL)
     length(p.init) <- nchains  
   }
+  if("iterThin" %in% names(input_list)){
+    # do nothing, everything is fine
+  }else{
+    input_list$iterThin <- 1
+  }  
   if("b.RInit" %in% names(input_list)){
     b.rinit <- input_list$b.RInit
     input_list$b.RInit <- NULL
   }else{
     b.rinit <- list(NULL)
     length(b.rinit) <- nchains  
+  }
+  if("b.Init" %in% names(input_list)){
+    b.init <- input_list$b.Init
+    input_list$b.Init <- NULL
+  }else{
+    b.init <- list(NULL)
+    length(b.init) <- nchains  
   }
   
   init.phi <- list()
@@ -322,11 +341,11 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
       .GlobalEnv$.CF.CONF <- .CF.CONF
       set.seed(seeds[i])
       if(cubmethod == "cubfits"){
-        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
+        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }else if(cubmethod == "cubappr"){
-        do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
+        do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }else if(cubmethod == "cubpred"){
-        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]])))
+        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }
     }
     ## append chains and get new initial values for restart
@@ -335,11 +354,11 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
       
       if(cubmethod == "cubfits" | cubmethod == "cubpred")
       {
-        init.phi[[i]] <- normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
+        init.phi[[i]] <- cubfits:::normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
       }
       if(cubmethod == "cubappr" | cubmethod == "cubpred")
       {
-        init.pred.phi[[i]] <- normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
+        init.pred.phi[[i]] <- cubfits:::normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
       }
       p.init[[i]] <- res[[i]]$p.Mat[[length(res[[i]]$p.Mat)]]
       results[[i]] <- appendCUBresults(res[[i]], results[[i]])
@@ -351,24 +370,64 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
         b.rinit[[i]] <- res[[i]]$b.RInit
       }
     }
-    curiter <- length(results[[1]]$p.Mat)
-    
+    curiter <- length(results[[1]]$p.Mat)*input_list$iterThin
     ## Do convergence test
     if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
       gelman <- isConverged(results, niter, epsilon=eps, thin=conv.thin, teston=teston, test="gelman")
       gel.res[j] <- gelman$gelman
       iter.res[j] <- curiter
-      cat(paste("Gelman score: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
+      cat(paste("Gelman score at iteration: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
       converged <- gelman$isConverged
       j <- j + 1
     }
+    
+    
+    for(i in 1:nchains)
+    {
+      ## swap bmatrix (deltat, log(mu)) 
+      ## swap them here so the latest convergence check is taken into account
+      #second caluse of if question not evaluated if first is false => no crash if j == 1
+      if( (j > 1) && (swap > 0.0) && (abs(convergence[j, 2] - convergence[j - 1, 2]) < swapAt) )
+      {
+        swapchain <- sample((1:nchain)[-i], 1) # avoid swaping with itself theoretically still possible since I swap in serial
+        cat(paste("swapping", swap*100, "% of b matrix of chain", i, "with b matrix of chain", swapchain, "\n"))
+        b.swaps <- getBInitFromSwapBMat(res[[i]]$b.Mat, res[[swapchain]]$b.Mat, swap)
+        b.init[[i]] <- b.swaps$b.Init1
+        b.init[[swapchain]] <- b.swaps$b.Init2
+      }else{
+        b.init <- list(NULL)
+        length(b.init) <- nchains  
+      }
+    }
+    
     
     #check if we have at least min iterations
     if(curiter < min){converged <- FALSE}
     #check if max iteration limit is reached
     if(curiter > max){converged <- TRUE}
   }
-## return full length chains
-return(list(chains=results, convergence=cbind(iter.res, gel.res)))
+  ## return full length chains
+  return(list(chains=results, convergence=cbind(iter.res, gel.res)))
 }
+
+
+getBInitFromSwapBMat <- function(b.mat1, b.mat2, swap=0.0)
+{
+  lastIndex <- length(b.mat1)
+  numPar <- length(b.mat1[[lastIndex]])
+  swapCount <- round(numPar*swap)
+  
+  toSwap <- sample(1:numPar, swapCount)
+  temp <- b.mat1[[lastIndex]][toSwap]
+  b.mat1[[lastIndex]][toSwap] <- b.mat2[[lastIndex]][toSwap]
+  b.mat2[[lastIndex]][toSwap] <- temp
+  
+  return( list(b.Init1=b.mat1[[lastIndex]], b.Init2=b.mat2[[lastIndex]]) )
+}
+
+
+
+
+
+
 
