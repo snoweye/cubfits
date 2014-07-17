@@ -8,11 +8,11 @@
 }
 \usage{
   cubmultichain(cubmethod, niter, reset.qr, seeds, teston = c("phi", "sphi"),
-                min = 0, max = 160000, nchains = 2, thin = 10, eps = 0.05,
-                ncores = 2, ...)
+                min = 0, max = 160000, nchains = 2, conv.thin = 10,
+                eps = 0.05, ncores = 2, ...)
   cubsinglechain(cubmethod, niter, frac1 = 0.1, frac2 = 0.5, reset.qr,
-                 seed = NULL, teston = c("phi", "sphi"),
-                 min = 0, max = 160000, thin = 10, eps = 0.05, ...)
+                 seed = NULL, teston = c("phi", "sphi"), min = 0,
+                 max = 160000, conv.thin = 10, eps = 0.05, ...)
   isConverged(chains, niter, epsilon = 0.1, thin = 10, frac1 = 0.1,
               frac2 = 0.5, teston = c("phi", "sphi"),
               test = c("gelman", "geweke"))
@@ -24,6 +24,7 @@
   \item{teston}{under development}
   \item{min}{under development}
   \item{max}{under development}
+  \item{conv.thin}{under development}
   \item{nchains}{under development}
   \item{thin}{under development}
   \item{eps}{under development}
