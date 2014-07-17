@@ -6,6 +6,7 @@ appendCUBresults <- function(res, to)
 {
   res.list.length <- length(res$b.Mat)
   init.list.length <- length(to$b.Mat)
+  new.length <- res.list.length + init.list.length
   if(init.list.length == 0)
   {
     to <- list()
@@ -15,20 +16,19 @@ appendCUBresults <- function(res, to)
     to$phi.Init <- res$phi.Init
   }
   
-  ind <- ifelse(init.list.length == 0, 0, 1)
-  
-  for(i in 1:(res.list.length-ind)) # ignore first element
-  {
-    to$b.Mat[init.list.length + i] <- res$b.Mat[(i + ind)]
-    to$p.Mat[init.list.length + i] <- res$p.Mat[(i + ind)]
-    
-    if("phi.Mat" %in% names(res)){
-      to$phi.Mat[init.list.length + i] <- res$phi.Mat[(i + ind)]
-    }
-    if("phi.pred.Mat" %in% names(res)){
-      to$phi.pred.Mat[init.list.length + i] <- res$phi.pred.Mat[(i + ind)]
-    }
+  ind <- ifelse(init.list.length == 0, 1, 2)
+#  s <- system.time({
+  to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
+  to$p.Mat <- c(to$p.Mat, res$p.Mat[ind:res.list.length])
+  to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
+  if("phi.Mat" %in% names(res)){
+    to$phi.Mat <- c(to$phi.Mat, res$phi.Mat[ind:res.list.length])
   }
+  if("phi.pred.Mat" %in% names(res)){
+    to$phi.pred.Mat <- c(to$phi.pred.Mat, res$phi.pred.Mat[ind:res.list.length])
+  }
+#  })
+
   return(to)
 }
 
@@ -321,7 +321,7 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
   if(is.null(seeds)){
     seeds <- round(runif(nchains, 1, 100000))
   }
-  
+  aa.names <- names(input_list$y)
   #############################################################
   ## running chains in parralel and checking for convergence ##
   #############################################################
@@ -343,7 +343,7 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
       if(cubmethod == "cubfits"){
         do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }else if(cubmethod == "cubappr"){
-        do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
+        res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }else if(cubmethod == "cubpred"){
         do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
       }
@@ -378,27 +378,30 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
       iter.res[j] <- curiter
       cat(paste("Gelman score at iteration: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
       converged <- gelman$isConverged
-      j <- j + 1
-    }
-    
-    
-    for(i in 1:nchains)
-    {
-      ## swap bmatrix (deltat, log(mu)) 
-      ## swap them here so the latest convergence check is taken into account
-      #second caluse of if question not evaluated if first is false => no crash if j == 1
-      if( (j > 1) && (swap > 0.0) && (abs(convergence[j, 2] - convergence[j - 1, 2]) < swapAt) )
+      
+      ## only need to swap if a convergence test was done
+        ## swap bmatrix (deltat, log(mu)) 
+        ## swap them here so the latest convergence check is taken into account
+        #second caluse of if question not evaluated if first is false => no crash if j == 1
+      if( (j > 1) && (swap > 0.0) && (abs(gel.res[j] - gel.res[j - 1]) < swapAt) )
       {
-        swapchain <- sample((1:nchain)[-i], 1) # avoid swaping with itself theoretically still possible since I swap in serial
-        cat(paste("swapping", swap*100, "% of b matrix of chain", i, "with b matrix of chain", swapchain, "\n"))
-        b.swaps <- getBInitFromSwapBMat(res[[i]]$b.Mat, res[[swapchain]]$b.Mat, swap)
-        b.init[[i]] <- b.swaps$b.Init1
-        b.init[[swapchain]] <- b.swaps$b.Init2
+        chain.order <- sample(1:nchains, nchains)
+        for(i in chain.order)
+        {
+          swapchain <- sample((1:nchains)[-i], 1) # avoid swaping with itself theoretically still possible since I swap in serial
+          cat(paste("swapping", swap*100, "% of b matrix of chain", i, "with b matrix of chain", swapchain, "\n"))
+          b.swaps <- getBInitFromSwapBMat(res[[i]]$b.Mat, res[[swapchain]]$b.Mat, swap)
+          b.init[[i]] <- convert.bVec.to.b(b.swaps$b.Init1, aa.names)
+          b.init[[swapchain]] <- convert.bVec.to.b(b.swaps$b.Init2, aa.names)
+        }
       }else{
         b.init <- list(NULL)
         length(b.init) <- nchains  
       }
+      j <- j + 1
     }
+    
+    
     
     
     #check if we have at least min iterations
@@ -421,7 +424,7 @@ getBInitFromSwapBMat <- function(b.mat1, b.mat2, swap=0.0)
   temp <- b.mat1[[lastIndex]][toSwap]
   b.mat1[[lastIndex]][toSwap] <- b.mat2[[lastIndex]][toSwap]
   b.mat2[[lastIndex]][toSwap] <- temp
-  
+
   return( list(b.Init1=b.mat1[[lastIndex]], b.Init2=b.mat2[[lastIndex]]) )
 }
 

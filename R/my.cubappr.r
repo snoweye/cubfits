@@ -84,7 +84,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
                  B$coefficients +
                  init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
                })
-  } else{
+  } else{   
     if(!is.null(b.Init[[1]]$R)){
       b.RInitList <- lapply(b.Init, function(B){ B$R })
     }
