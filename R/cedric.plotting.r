@@ -161,7 +161,8 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
 
 
 plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
-{
+{  
+  
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
   names.b <- names(bmat)

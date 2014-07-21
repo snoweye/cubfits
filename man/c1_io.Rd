@@ -6,11 +6,14 @@
 }
 \usage{
   readGenome(fn.genome, ex.sh.aa = 0, rm.first.aa = 0)
+  
+  normalizeDataSet(data)
 }
 \arguments{
-  \item{fn.genome}{under development}
-  \item{ex.sh.aa}{under development}
-  \item{rm.first.aa}{under development}
+  \item{fn.genome}{Fasta file with sequences}
+  \item{ex.sh.aa}{Ignore sequences with a length less than ex.sh.aa. (After removal of the first rm.first.aa amino acids)}
+  \item{rm.first.aa}{Remove the first rm.first.aa amino acids (after start codon)}
+  \item{data}{Vector to be normalized. Means will be set to 1}
 }
 \details{
   under development
@@ -28,9 +31,9 @@
   under development
 }
 \examples{
-\dontrun{
-suppressMessages(library(cubfits, quietly = TRUE))
-
-}
+  \dontrun{
+    suppressMessages(library(cubfits, quietly = TRUE))
+  }
+  seq.string <- readGenome("my_genome.fasta", 150, 10)
 }
 \keyword{cedric}

@@ -120,7 +120,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
 }
 
 cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
-                           growthfactor=0, min=0, max=160000, conv.thin=10, eps=0.05, ...)
+                           growthfactor=0, min=0, max=160000, conv.thin=10, eps=1, ...)
 {
   ########################
   ## checking arguments ##
@@ -220,8 +220,8 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
     
     ## Do convergence test
     if(currSamples > nsamples){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      testSampleSize <- min(nsamples + growthfactor*currSamples, currSamples)
-      gelman <- isConverged(results, niter=testSampleSize, frac1=frac1, frac2=frac2, epsilon=eps, thin=conv.thin, teston=teston, test="geweke")
+      testSampleSize <- min(nsamples + round(growthfactor*currSamples), currSamples)
+      gelman <- isConverged(results, niter=testSampleSize, frac1=frac1, frac2=frac2, eps=eps, thin=conv.thin, teston=teston, test="geweke")
       gel.res[j] <- gelman$gelman
       iter.res[j] <- currSamples
       cat(paste("Geweke Z score after samples: ", sample.res[j], "\t" ,gel.res[j] , "\t test was performed on ", testSampleSize/conv.thin," samples\n", sep=""))
@@ -244,7 +244,7 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
   
 }
 
-cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds, teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
+cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
                           growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
 {
   #require(parallel)
@@ -379,8 +379,8 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds, teston=c("phi", 
     currSamples <- length(results[[1]]$p.Mat)
     ## Do convergence test
     if(currSamples > nsamples){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      testSampleSize <- min(nsamples + growthfactor*currSamples, currSamples)
-      gelman <- isConverged(results, testSampleSize, epsilon=eps, thin=conv.thin, teston=teston, test="gelman")
+      testSampleSize <- min(nsamples + round(growthfactor*currSamples), currSamples)
+      gelman <- isConverged(results, testSampleSize, eps=eps, thin=conv.thin, teston=teston, test="gelman")
       gel.res[j] <- gelman$gelman
       sample.res[j] <- currSamples
       cat(paste("Gelman score after sample: ", sample.res[j], "\t" ,gel.res[j] , "\t test was performed on ", testSampleSize/conv.thin," samples\n", sep=""))

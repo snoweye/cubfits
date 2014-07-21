@@ -7,33 +7,32 @@
   This utility function provides convergence related functions by Cedric.
 }
 \usage{
-  cubmultichain(cubmethod, nsamples, reset.qr, seeds, teston = c("phi", "sphi"),
-                min = 0, max = 160000, nchains = 2, thin = 10, eps = 0.05,
-                ncores = 2, ...)
-  cubsinglechain(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
-                seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
-                growthfactor=0, min=0, max=160000, conv.thin=10, eps=0.05, ...)
-  isConverged(chains, nsamples, eps = 0.1, thin = 10, frac1 = 0.1,
-              frac2 = 0.5, teston = c("phi", "sphi"),
-              test = c("gelman", "geweke"))
+  cubmultichain(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
+                          growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
+                          
+  cubsinglechain(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
+                           growthfactor=0, min=0, max=160000, conv.thin=10, eps=1, ...)
 }
 \arguments{
   \item{cubmethod}{String to choose method. Options are "cubfits", "cubappr", "cubpred"}
-  \item{nsamples}{Number of samples to obtain before checking for convergence}
-  \item{seeds}{Set seed for random number generation}
-  \item{seed}{seed for random number generation}
-  \item{teston}{select data to test convergence on}
+  \item{nsamples}{Number of samples to obtain for convergence check. No check is performed until nsamples is reached}
+  \item{reset.qr}{recalculate QR decomposition matrix of covariance matrix until reset.qr samples are reached}
+  \item{swap}{proportion of b matrix parameters to be swaped between convergence checks}
+  \item{swapAt}{difference (L1-norm) between two consequtive convergence test leading to a swap in the b matrix}
+  \item{seeds}{Vector of seed for random number generation}
+  \item{seed}{Seed for random number generation}
+  \item{teston}{Select data to test convergence on}
+  \item{monitor}{A function to monitor the progress of the MCMC. The fucntions expects the result object and for cubmultichain an index i. 
+  (cubmultichain call: monitor(x,i), cubsinglechain call: monitor(x))}
+  \item{growthfactor}{describes the growth of the window for the convergence test. (nsamples + growthfactor*totalSamples)}
   \item{min}{Minimum samples to be obtained. eps is ignored until number of samples reaches min}
   \item{max}{Maximum samples to be obtained. eps is ignored after max samples is obtained}
-  \item{nchains}{number of chains to run in parallel}
-  \item{thin}{thining of samples before convergence test}
   \item{eps}{Convergence criterium}
+  \item{conv.thin}{thinning of samples before performing convergence test}
+  \item{nchains}{number of chains to run in parallel}
   \item{ncores}{number of cores to use for parallel execution of chains}
   \item{frac1}{fraction of samples at the beginning of set for Geweke test}
   \item{frac2}{fraction of samples at the end of set for Geweke test}
-  \item{reset.qr}{recalculate QR decomposition matrix of covariance matrix until reset.qr samples are reached}
-  \item{chains}{chains to test convergence on}
-  \item{test}{select convergence test. Gelman for multichain convergence and Geweke for Singlechain convergence}
   \item{...}{named arguments for functions "cubfits", "cubappr" or "cubpred"}
 }
 \details{
