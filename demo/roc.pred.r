@@ -22,9 +22,10 @@ phi.pred.Init <- phi.pred.Init / mean(phi.pred.Init)
 
 # Run
 .CF.AC$renew.iter <- 3
-.CF.CT$type.p <- "lognormal_bias"
-.CF.CONF$scale.phi.Obs <- FALSE
-.CF.CONF$estimate.bias.Phi <- TRUE
+# .CF.CT$type.p <- "lognormal_bias"
+# .CF.CONF$scale.phi.Obs <- FALSE
+# .CF.CONF$estimate.bias.Phi <- TRUE
+ ex.train$phi.Obs <- ex.train$phi.Obs / mean(ex.train$phi.Obs)
 ret.time <- system.time({
   ret <- cubpred(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
                  ex.test$reu13.df, ex.test$y, ex.test$n,
