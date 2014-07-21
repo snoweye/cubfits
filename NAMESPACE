@@ -70,8 +70,8 @@ export(
   "readGenome",
   "cubmultichain",
   "cubsinglechain",
-  "normalizeDataSet",
-  "isConverged"
+  "normalizeDataSet"
+  #"isConverged"
 )
 
 # Converting
