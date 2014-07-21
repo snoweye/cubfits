@@ -1,0 +1,44 @@
+
+\section[FAQ]{FAQ}
+\label{sec:faq}
+\addcontentsline{toc}{section}{\thesection. FAQ}
+
+\begin{enumerate}
+
+\item {\bf\code{blue} Q:}
+      What is the main difference of \code{cubfits()}, \code{cubappr()}, and
+      \code{cubpred()}? \\
+      {\bf\color{blue} A:}
+      \code{cubfits()} is the usual MCMC method to estimate parameters where
+      some people call backward simulation.
+      On the other hand, \code{cubappr()} is pure simulation without
+      observations from equilibrium states (if they have been reached.)
+      \code{cubpred()} is more like machine learning techniques, such as
+      cross-validation methods, use part of observations to estimate
+      parameters, and predict the other parts of data.
+
+\item {\bf\color{blue} Q:}
+      Should \code{phi.Obs} be scaled? \\
+      {\bf\color{blue} A:}
+      For \code{cubappr()}, it must be scaled to mean 1 since the function uses
+      as \code{phi.Obs} as initial values of $\phi_g$.
+      For \code{cubfits()} and \code{cubpred()}, it is not necessary. The
+      bias terms should be also estimated if \code{phi.Obs} were not
+      scaled to mean 1. Post scaling of each MCMC iteration should be
+      performed on parameters and prediction of $\phi_g$ to make them
+      comparable with \code{cubappr()} results. However, this may induce
+      bias as well.
+
+\item {\bf\color{blue} Q:}
+      What are configurations to enforce estimating bias of $\phi_g$,
+      $K_{bias}$? \\
+      {\bf\color{blue} A:}
+      The only options currently \pkg{cubfits} have are in next.
+\begin{Code}[title=Configuration]
+  .CF.CT$type.p <- "lognormal_bias"
+  .CF.CT$scale.phi.Obs <- FALSE
+  .CF.CONF$estimate.bias.Phi <- TRUE
+\end{Code}
+
+\end{enumerate}
+

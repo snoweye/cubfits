@@ -4,6 +4,9 @@ suppressMessages(library(cubfits, quietly = TRUE))
 set.seed(1234)
 
 .CF.AC$renew.iter <- 3
+.CF.CT$type.p <- "lognormal_bias"
+.CF.CONF$scale.phi.Obs <- FALSE
+.CF.CONF$estimate.bias.Phi <- TRUE
 ret.time <- system.time({
   ret <- cubfits(ex.train$reu13.df, ex.train$phi.Obs, ex.train$y, ex.train$n,
                  nIter = 20,

@@ -37,6 +37,12 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   my.ncoef <- my.function$my.ncoef
 
 ### Check Data ###
+  ### check phi.Init
+  if(is.null(phi.Init)){
+    phi.Init <- phi.Obs + rlnorm(length(phi.Obs))
+    phi.Init <- phi.Init / mean(phi.Init)
+  }
+
   ### check phi.* is well-behaved
   my.check.data(phi.Obs = phi.Obs, phi.Init = phi.Init)
 
