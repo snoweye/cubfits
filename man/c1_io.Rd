@@ -1,5 +1,6 @@
 \name{Cedric IO Utilities}
 \alias{readGenome}
+\alias{normalizeDataSet}
 \title{Cedric IO Utilities}
 \description{
   This utility function provides basic IO by Cedric.
@@ -32,8 +33,8 @@
 }
 \examples{
   \dontrun{
-    suppressMessages(library(cubfits, quietly = TRUE))
+    library(cubfits)
+    seq.string <- readGenome("my_genome.fasta", 150, 10)
   }
-  seq.string <- readGenome("my_genome.fasta", 150, 10)
 }
 \keyword{cedric}
