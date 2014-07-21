@@ -52,6 +52,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   nsyns <- sapply(y, function(ybit){ dim(ybit)[2] })
                                             # # of synomous codons
   nBparams <- my.ncoef * sum(nsyns - 1)     # total # of regression parameters
+  cat(nBparams)
   nSave <- nIter / iterThin + 1             # # of space for iterations
   nPrior <- 2                               # # of prior parameters
   if(model.Phi == "logmixture"){
@@ -84,7 +85,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
                  B$coefficients +
                  init.b.Scale * backsolve(B$R, rnorm(nrow(B$R)))
                })
-  } else{
+  } else{   
     if(!is.null(b.Init[[1]]$R)){
       b.RInitList <- lapply(b.Init, function(B){ B$R })
     }

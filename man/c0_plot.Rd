@@ -8,36 +8,27 @@
   This utility function provides basic plots by Cedric.
 }
 \usage{
-  plotCUB(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000,
-          rescale=F, main="CUB", model.label=c("True Model"), model.lty=1)
+  plotPTraces(pMat, ...)
+  
+  plotExpectedPhiTrace(phiMat, ...)
+  
+  plotCUB(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, rescale=F,
+                     main="CUB", model.label=c("True Model"), model.lty=1)
 
-  plotPTraces(ret.p.Mat, main="Hyperparameter Traces", lty=1)
-
-  plotExpectedPhiTrace(phi.Mat, 
-                       main=expression(paste("Trace E[", phi, "]", sep="")),
-                       xlab="Iteration",
-                       ylab=expression(paste("E[", phi, "]", sep="")), lty=1)
-
-  plotTraces(ret.b.Mat, names.aa, param = c("logmu", "deltat"),
-             main="AA parameter trace")
+  plotTraces(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
 }
 \arguments{
   \item{reu13.df.obs}{under development}
-  \item{ret.b.Mat}{under development}
-  \item{phi.bin}{under development}
-  \item{estim.phi}{under development}
-  \item{n.use.iter}{under development}
+  \item{phi.bin}{phi values to bin for comparison}
+  \item{n.use.samples}{under development}
   \item{rescale}{under development}
-  \item{main}{under development}
-  \item{xlab}{under development}
-  \item{ylab}{under development}
-  \item{model.label}{under development}
-  \item{model.lty}{under development}
-  \item{names.aa}{under development}
-  \item{param}{under development}
-  \item{phi.Mat}{under development}
-  \item{ret.p.Mat}{under development}
-  \item{lty}{under development}
+  \item{model.label}{Name of model}
+  \item{model.lty}{line type for model}
+  \item{names.aa}{List of amino acids used for estimation}
+  \item{param}{select to plot parameter trace for either log(mu) values or delta t}
+  \item{phiMat}{phi matrix from the output of "cubmultichain", "cubsinglechain", "cubfits", "cubappr", or "cubpred"}
+  \item{bMat}{b matrix from the output of "cubmultichain", "cubsinglechain", "cubfits", "cubappr", or "cubpred"}
+  \item{pMat}{p matrix from the output of "cubmultichain", "cubsinglechain", "cubfits", "cubappr", or "cubpred"}
 }
 \details{
   under development

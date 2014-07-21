@@ -1,44 +1,95 @@
-plotPTraces <- function(ret.p.Mat, main="Hyperparameter Traces", lty=1)
+plotPTraces <- function(pMat, ...)
 {
-  ret.p.Mat <- do.call("rbind", ret.p.Mat)
-  n.traces <- dim(ret.p.Mat)[2]
-  if(n.traces==2)
-  {
-    ylabs <- c("M", expression("s"[phi]))
+  input_list <- as.list(list(...))
+  pMat <- do.call("rbind", pMat)
+  
+  if("main" %in% names(input_list)){
+    main <- input_list$main
+    input_list$main <- NULL
   }else{
-    ylabs <- c(expression("s"[epsilon]), "M", expression("s"[phi]), "K")
+    main <- "Hyperparameter Traces"
+  }
+  if("xlab" %in% names(input_list)){
+    xlab <- input_list$xlab
+    input_list$xlab <- NULL
+  }else{
+    xlab <- "Iteration"
+  }
+  if("ylab" %in% names(input_list)){
+    ylab <- input_list$ylab
+    input_list$ylab <- NULL
+  }else{
+    n.traces <- dim(pMat)[2]
+    if(n.traces==2)
+    {
+      ylabs <- c("M", expression("s"[phi]))
+    }else{
+      ylabs <- c(expression("s"[epsilon]), "M", expression("s"[phi]), "K")
+    }
+  }
+  if("type" %in% names(input_list)){
+    type <- input_list$type
+    input_list$type <- NULL
+  }else{
+    type <- "l"
   }
   
   par(oma=c(1,1,2,1), mgp=c(2,1,0), mar = c(3,4,2,1), mfrow=c(2, ceiling(n.traces/2) ))
   for(i in 1:n.traces)
   {
-    plot(ret.p.Mat[, i], xlab="Iteration", ylab=ylabs[i], type="l", lty=1)
+    do.call(plot, c(input_list, list(x=pMat[, i]), list(xlab=xlab), list(ylab=ylabs[i]), list(type=type)) )
+    #plot(pMat[, i], xlab=xlab, ylab=ylabs[i], type=type)
   }
   title(main=main, outer=T)
 }
 
-plotExpectedPhiTrace <- function(phi.Mat, 
-                                 main=expression(paste("Trace E[", phi, "]", sep="")), 
-                                 xlab="Iteration", ylab=expression(paste("E[", phi, "]", sep="")), lty=1)
+plotExpectedPhiTrace <- function(phiMat, ...)
 {
+  input_list <- as.list(list(...))
   
-  phi.Mat <- do.call("cbind", phi.Mat)
-  phi.Mat <- colMeans(phi.Mat)
+  if("main" %in% names(input_list)){
+    main <- input_list$main
+    input_list$main <- NULL
+  }else{
+    main <- expression(paste("Trace E[", phi, "]", sep=""))
+  }
+  if("xlab" %in% names(input_list)){
+    xlab <- input_list$xlab
+    input_list$xlab <- NULL
+  }else{
+    xlab <- "Iteration"
+  }
+  if("ylab" %in% names(input_list)){
+    ylab <- input_list$ylab
+    input_list$ylab <- NULL
+  }else{
+    ylab <- expression(paste("E[", phi, "]", sep=""))
+  }
+  if("type" %in% names(input_list)){
+    type <- input_list$type
+    input_list$type <- NULL
+  }else{
+    type <- "l"
+  }
+  phiMat <- do.call("cbind", phiMat)
+  phiMat <- colMeans(phiMat)
   
-  plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, type="l", lty=1)  
+  
+  do.call( plot, c(input_list, list(x=phiMat), list(xlab=xlab), list(ylab=ylab), list(main=main), list(type=type)) )
+  #plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, type=type)  
 }
 
-plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000, rescale=F,
+plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, rescale=F,
                      main="CUB", model.label=c("True Model"), model.lty=1)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
   #phi.bin <- phi.bin * phi.scale
-  phi.bin.lim <- range(c(phi.bin, estim.phi))
+  phi.bin.lim <- range(c(phi.bin, phiMat))
   
-  lbound <- length(ret.b.Mat)-n.use.iter
-  ubound <- length(ret.b.Mat)
-  b.mat <- do.call(cbind, ret.b.Mat[lbound:ubound])
+  lbound <- length(bMat)-n.use.samples
+  ubound <- length(bMat)
+  b.mat <- do.call(cbind, bMat[lbound:ubound])
   Eb <- rowMeans(b.mat)
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
@@ -109,11 +160,11 @@ plotCUB <- function(reu13.df.obs, ret.b.Mat, phi.bin, estim.phi, n.use.iter=2000
 
 
 
-plotTraces <- function(ret.b.Mat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
+plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
 {
-  b.mat <- convert.bVec.to.b(ret.b.Mat[[1]], names.aa)
-  b.mat <- convert.b.to.bVec(b.mat)
-  names.b <- names(b.mat)
+  bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
+  bmat <- convert.b.to.bVec(bmat)
+  names.b <- names(bmat)
   id.intercept <- grep("Intercept", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
@@ -128,7 +179,7 @@ plotTraces <- function(ret.b.Mat, names.aa, param = c("logmu", "deltat"), main="
     id.plot[id.slope] <- id.slope
   }  
   
-  x <- 1:length(ret.b.Mat)
+  x <- 1:length(bMat)
   xlim <- range(x)
   
   ### Trace plot.
@@ -144,7 +195,7 @@ plotTraces <- function(ret.b.Mat, names.aa, param = c("logmu", "deltat"), main="
   ### Plot by aa.
   for(i.aa in names.aa){
     id.tmp <- grepl(i.aa, names.b) & id.plot
-    trace <- lapply(1:length(ret.b.Mat), function(i){ ret.b.Mat[[i]][id.tmp] })
+    trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
     
