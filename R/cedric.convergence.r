@@ -32,7 +32,7 @@ appendCUBresults <- function(res, to)
   return(to)
 }
 
-isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.5, teston=c("phi", "sphi"), test=c("gelman", "geweke"))
+isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5, teston=c("phi", "sphi"), test=c("gelman", "geweke"))
 {
   result <- FALSE
   dataobj <- 0
@@ -61,7 +61,7 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
       }else{
         stop("convergence test can not be perfomed on choosen data\n")
       }
-      start <- length(dataobj) - niter
+      start <- max(0, length(dataobj) - nsamples)
       mcmcobj <- mcmc(data=dataobj, start=start, thin=thin)
       list[[i]] <- mcmcobj
     }    
@@ -86,7 +86,7 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
     }else{
       stop("convergence test can not be perfomed on choosen data\n")
     }
-    start <- length(dataobj) - niter
+    start <- length(dataobj) - nsamples
     mcmcobj <- mcmc(data=dataobj, start=start, thin=thin)
     diag <- geweke.diag(mcmcobj, frac1=frac1, frac2=frac2)
   }else{
@@ -98,35 +98,35 @@ isConverged <- function(chains, niter, epsilon=0.1, thin=10, frac1=0.1, frac2=0.
   {
     if(teston[1] == "sphi") # scalar test on s phi
     {
-      result <- abs(diag[[1]][1] - 1) < epsilon 
+      result <- abs(diag[[1]][1] - 1) < eps
       ret <- list(isConverged=result, gelman=diag[[1]][1])
     }else # else is enough here. The correctness of the method was determined above and leaves only two options
     { # multivariate test on all phi values
-      result <- abs(diag$mpsrf - 1) < epsilon
+      result <- abs(diag$mpsrf - 1) < eps
       ret <- list(isConverged=result, gelman=diag$mpsrf)
     }
   }else { # geweke
     if(teston[1] == "sphi") # scalar test on s phi
     {
-      result <- diag$z < epsilon 
+      result <- diag$z < eps
       ret <- list(isConverged=result, gelman=diag$z)
     }else{ # else is enough here. The correctness of the method was determined above and leaves only two options
       # univariate test on all phi values
-      result <- sum(diag$z < epsilon) == length(diag$z)
+      result <- sum(diag$z < eps) == length(diag$z)
       ret <- list(isConverged=result, gelman=diag$z)
     }    
   }
   return(ret)
 }
 
-cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"),
-                           min=0, max=160000, conv.thin=10, eps=0.05, ...)
+cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
+                           growthfactor=0, min=0, max=160000, conv.thin=10, eps=0.05, ...)
 {
   ########################
   ## checking arguments ##
   ########################
   if(min > max){
-    warning("min iterations > max iterations. setting max = min\n")
+    warning("min samples > max samples. setting max = min\n")
     max <- min
   }
   if(!cubmethod %in% c("cubfits", "cubappr", "cubpred")){
@@ -180,7 +180,7 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
   }
   
   #############################################################
-  ## running chains in parralel and checking for convergence ##
+  ## running chain and checking for convergence ##
   #############################################################
   j <- 1
   gel.res <- 0
@@ -216,30 +216,36 @@ cubsinglechain <- function(cubmethod, niter, frac1=0.1, frac2=0.5, reset.qr, see
     }else{ # use the same matrix every time after some "burnin"
       b.rinit <- res$b.RInit
     }
-    curiter <- length(results$p.Mat)*input_list$iterThin
+    currSamples <- length(results$p.Mat)
     
     ## Do convergence test
-    if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      gelman <- isConverged(results, niter=niter, frac1=frac1, frac2=frac2, epsilon=eps, thin=conv.thin, teston=teston, test="geweke")
+    if(currSamples > nsamples){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
+      testSampleSize <- min(nsamples + growthfactor*currSamples, currSamples)
+      gelman <- isConverged(results, niter=testSampleSize, frac1=frac1, frac2=frac2, epsilon=eps, thin=conv.thin, teston=teston, test="geweke")
       gel.res[j] <- gelman$gelman
-      iter.res[j] <- curiter
-      cat(paste("Geweke Z score: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
+      iter.res[j] <- currSamples
+      cat(paste("Geweke Z score after samples: ", sample.res[j], "\t" ,gel.res[j] , "\t test was performed on ", testSampleSize/conv.thin," samples\n", sep=""))
       converged <- gelman$isConverged
       j <- j + 1
     }
-   
+    
+    ## call monitor function if it is desired
+    if(!is.null(monitor))
+    {
+      monitor(res)
+    } 
     #check if we have at least min iterations
-    if(curiter < min){converged <- FALSE}
+    if(currSamples < min){converged <- FALSE}
     #check if max iteration limit is reached
-    if(curiter > max){converged <- TRUE}
+    if(currSamples > max){converged <- TRUE}
   }
   ## return full length chains
   return(list(chains=results, convergence=cbind(iter.res, gel.res))) 
   
 }
 
-cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sphi"), swap=0, swapAt=0.05,
-                          min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
+cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds, teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
+                          growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
 {
   #require(parallel)
   #require(doParallel)
@@ -251,7 +257,7 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
   ## checking arguments ##
   ########################
   if(min > max){
-    warning("min iterations > max iterations. setting max = min\n")
+    warning("min samples > max samples. setting max = min\n")
     max <- min
   }
   if(nchains < 2){
@@ -327,7 +333,7 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
   #############################################################
   j <- 1
   gel.res <- 0
-  iter.res <- 0
+  sample.res <- 0
   converged <- FALSE
   while(!converged)
   { 
@@ -370,20 +376,21 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
         b.rinit[[i]] <- res[[i]]$b.RInit
       }
     }
-    curiter <- length(results[[1]]$p.Mat)*input_list$iterThin
+    currSamples <- length(results[[1]]$p.Mat)
     ## Do convergence test
-    if(curiter > niter){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
-      gelman <- isConverged(results, niter, epsilon=eps, thin=conv.thin, teston=teston, test="gelman")
+    if(currSamples > nsamples){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
+      testSampleSize <- min(nsamples + growthfactor*currSamples, currSamples)
+      gelman <- isConverged(results, testSampleSize, epsilon=eps, thin=conv.thin, teston=teston, test="gelman")
       gel.res[j] <- gelman$gelman
-      iter.res[j] <- curiter
-      cat(paste("Gelman score at iteration: ", iter.res[j], "\t" ,gel.res[j] , "\n", sep=""))
+      sample.res[j] <- currSamples
+      cat(paste("Gelman score after sample: ", sample.res[j], "\t" ,gel.res[j] , "\t test was performed on ", testSampleSize/conv.thin," samples\n", sep=""))
       converged <- gelman$isConverged
       
       ## only need to swap if a convergence test was done
         ## swap bmatrix (deltat, log(mu)) 
         ## swap them here so the latest convergence check is taken into account
         #second caluse of if question not evaluated if first is false => no crash if j == 1
-      if( (j > 1) && (swap > 0.0) && (abs(gel.res[j] - gel.res[j - 1]) < swapAt) )
+      if( (j > 1) && (swap > 0.0) && (swapAt > 0.0) && (abs(gel.res[j] - gel.res[j - 1]) < swapAt) )
       {
         chain.order <- sample(1:nchains, nchains)
         for(i in chain.order)
@@ -402,15 +409,21 @@ cubmultichain <- function(cubmethod, niter, reset.qr, seeds, teston=c("phi", "sp
     }
     
     
-    
+    if(!is.null(monitor))
+    {
+      for(i in 1:nchains)
+      {
+        monitor(res, i)
+      }
+    } 
     
     #check if we have at least min iterations
-    if(curiter < min){converged <- FALSE}
+    if(currSamples < min){converged <- FALSE}
     #check if max iteration limit is reached
-    if(curiter > max){converged <- TRUE}
+    if(currSamples > max){converged <- TRUE}
   }
   ## return full length chains
-  return(list(chains=results, convergence=cbind(iter.res, gel.res)))
+  return(list(chains=results, convergence=cbind(sample.res, gel.res)))
 }
 
 
