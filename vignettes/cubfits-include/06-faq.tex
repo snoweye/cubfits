@@ -5,7 +5,14 @@
 
 \begin{enumerate}
 
-\item {\bf\code{blue} Q:}
+\item {\bf\color{blue} Q:}
+      Should the amino acids and ORFs be sorted for \pkg{cubfits}? \\
+      {\bf\color{blue} A:}
+      Yes. For performance issue, amino acids are coded with one character
+      code, and ORFs and their expression data (if any) should be named.
+      Both should be sorted by their names.
+
+\item {\bf\color{blue} Q:}
       What is the main difference of \code{cubfits()}, \code{cubappr()}, and
       \code{cubpred()}? \\
       {\bf\color{blue} A:}
@@ -39,6 +46,46 @@
   .CF.CT$scale.phi.Obs <- FALSE
   .CF.CONF$estimate.bias.Phi <- TRUE
 \end{Code}
+
+\item {\bf\color{blue} Q:}
+      What is the default environment of \pkg{cubfits}? \\
+      {\bf\color{blue} A:}
+      \code{.cubfitsEnv} will dynamicly store generic functions, while
+      all data are still located in \code{.GlobalEnv}.
+      See Section~\ref{sec:misc} for examples.
+
+\item {\bf\color{blue} Q:}
+      What are the ways to access \pkg{cubfits} functions? \\
+      {\bf\color{blue} A:}
+      There are at least three levels of functions developed in \pkg{cubfits}:
+      \begin{itemize}
+        \item \code{cubfits::function\_name()} or simply \code{function\_name()}
+              (if \pkg{cubfits} is loaded) can access exported major functions
+              of \pkg{cubfits},
+        \item \code{cubfits:::function\_name()}
+              can access unexported internal functions and objects
+              of \pkg{cubfits} (even \pkg{cubfits} is not loaded), and
+        \item \code{.cubfitsEnv$function\_name()}
+              can access generic functions dispatched in the environment
+              \code{.cubfitsEnv} if \code{init\_function()} has been called.
+              (\code{ls(.cubfitsEnv)} can see what have been dispatched.)
+      \end{itemize}
+
+\item {\bf\color{blue} Q:}
+      What is the way to debug \pkg{cubfits} functions? \\
+      {\bf\color{blue} A:}
+      Debugger of negative \proglang{R} may not work well in some cases, so we
+      suggest:
+      \begin{itemize}
+        \item \code{cat()} or \code{print()} and \code{source()}
+              can be useful for non-generic functions, and
+        \item \code{browser()} would be better for generic functions
+              in \code{.cubfitsEnv}.
+      \end{itemize}
+      Note that if you \code{source()} a new code into \proglang{R}, you
+      may still have to overwrite functions in \code{.cubfitEnv} since
+      MCMC iterations heavily access functions from there instead of
+      \code{.GlobalEnv}.
 
 \end{enumerate}
 

@@ -32,6 +32,17 @@ the section above.
 The default data structure for these is an \proglang{R} \code{data.frame}.
 The writing function is mainly for simulation studies.
 
+{\color{red}Warning:}
+ideally, the input objects $\phi$ and ORF sequences should be
+\begin{enumerate}
+\item matched with each other correspondingly by name, and
+\item sorted by name.
+\end{enumerate}
+If not, \code{\%in\%}, subsetting, and \code{sort()} functions can
+post process input data before converting to main data structures.
+We next introduce main data structures followed by conversion functions
+provided in \pkg{cubfits}.
+
 
 \subsection[Main Data Structures]{Main Data Structures}
 \label{sec:main_data_structures}
