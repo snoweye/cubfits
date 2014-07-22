@@ -201,11 +201,11 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
     ## append chains and get new initial values for restart
     if(cubmethod == "cubfits" | cubmethod == "cubpred")
     {
-      init.phi <- cubfits:::normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
+      init.phi <- normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
     }
     if(cubmethod == "cubappr" | cubmethod == "cubpred")
     {
-      init.pred.phi <- cubfits:::normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
+      init.pred.phi <- normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
     }
     p.init <- res$p.Mat[[length(res$p.Mat)]]
     results <- appendCUBresults(res, results)
@@ -360,11 +360,11 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("p
       
       if(cubmethod == "cubfits" | cubmethod == "cubpred")
       {
-        init.phi[[i]] <- cubfits:::normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
+        init.phi[[i]] <- normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
       }
       if(cubmethod == "cubappr" | cubmethod == "cubpred")
       {
-        init.pred.phi[[i]] <- cubfits:::normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
+        init.pred.phi[[i]] <- normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
       }
       p.init[[i]] <- res[[i]]$p.Mat[[length(res[[i]]$p.Mat)]]
       results[[i]] <- appendCUBresults(res[[i]], results[[i]])

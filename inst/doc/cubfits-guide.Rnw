@@ -103,7 +103,8 @@ Knoxville, TN, USA \\
 \input{./cubfits-include/03-speedup}
 \input{./cubfits-include/04-workflows}
 \input{./cubfits-include/05-utilities}
-\input{./cubfits-include/06-misc}
+\input{./cubfits-include/06-faq}
+\input{./cubfits-include/07-misc}
 
 \newpage
 \phantomsection

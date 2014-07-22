@@ -43,6 +43,21 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   my.ncoef <- my.function$my.ncoef
 
 ### Check Data ###
+  ### check phi.Init
+  if(is.null(phi.Init)){
+    phi.Init <- phi.Obs + rlnorm(length(phi.Obs), sdlog = 0.1)
+    phi.Init <- phi.Init / mean(phi.Init)
+  }
+  if(is.null(phi.pred.Init)){
+    meanlog <- mean(log(phi.Init))
+    sdlog <- sd(log(phi.Init))
+    phi.pred.Init.name <- sort(unique(do.call("c", lapply(n, names))))
+    phi.pred.Init <- rlnorm(length(phi.pred.Init.name),
+                            meanlog = meanlog, sdlog = sdlog)
+    phi.pred.Init <- phi.pred.Init / mean(phi.pred.Init)
+    names(phi.pred.Init) <- phi.pred.Init.name
+  }
+
   ### Check phi.* are well-behaved.
   my.check.data(phi.Obs = phi.Obs, phi.Init = phi.Init,
                 phi.pred.Init = phi.pred.Init)

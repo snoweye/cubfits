@@ -49,7 +49,8 @@ feedback: utilize ``with'' $\phi$ results to initial
 \caption{\code{wphi} work flow is mainly based on \code{cubfits()} and it's
 outputs can be initial values for \code{wophi} work flow mainly based on
 \code{cubappr()}. Note that \code{wphi} needs both sequence and expression
-data, while \code{wophi} only needs sequence.
+data, while \code{wophi} only needs sequence. The dashed black line indicate
+\code{wphi\_wophi} work flow combining both \code{wphi} and \code{wophi}.
 }
 \label{fig:workflows}
 \end{figure}
@@ -58,7 +59,8 @@ The work flows are stored in the package directory
 \code{cubfits/inst/workflow/} and installed in
 \code{$\{R_HOME\}/library/cubfits/workflow/}. Therefore, executing the
 following script can regenerate those work flows in three directories
-\code{./01-simu/}, \code{./02-wphi/}, and \code{./03-wophi/}.
+\code{./01-simu/}, \code{./02-wphi/}, \code{03-wophi} and
+\code{./04-wphi\_wophi/}.
 \begin{Command}
 $ mkdir 01-simu
 $ cd 01-simu/
@@ -72,12 +74,15 @@ $ mkdir 03-wophi
 $ cd 03-wophi/
 $ Rscript -e "cubfits::cp.workflow('wophi')"
 $ cd ../
+$ cd 04-wphi_wophi/
+$ Rscript -e "cubfits::cp.workflow('wphi_wophi')"
+$ cd ../
 \end{Command}
 Note that a work flow is mainly coded in shell script and sequentially
 executes analyses via several shell commands and \proglang{R} scripts. The
 analysis \proglang{R} scripts are managed and stored in
-\code{cubfits/inst/workflow/code/} and installed in
-\code{$\{R_HOME\}/library/cubfits/workflow/code/}. Those are served as
+\code{cubfits/inst/workflow/} and installed in
+\code{$\{R_HOME\}/library/cubfits/workflow/}. Those are served as
 templates and can be altered by users (copy scripts to local directory
 and modify as needed.)
 
@@ -91,9 +96,10 @@ This may require up to 30 cores and may take a few hours to finish
 depending on the number of sequences. Please do some testing and adjust
 this file and \code{00-set\_env.r} accordingly before a hero run.
 }
-\item \code{run_2.sh} is for post processing, and
-\item \code{00-set_env.r} is the \proglang{R} script for \pkg{cubfits} 
-configuration.
+\item \code{run_2.sh} is for post processing,
+\item \code{run_2_ps.sh} is for post scaling, and
+\item \code{00-set_env.r} is the configuration \proglang{R} script
+      for \pkg{cubfits}.
 \end{itemize}
 For \code{simu} work flow, one can sequentially execute those shell scripts
 (\code{run_*.sh}) without further changes, and may learn to adjust scripts for 

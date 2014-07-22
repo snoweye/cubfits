@@ -20,10 +20,9 @@ for(i.case in case.names){
   xlim <- range(x)
 
   trace <- do.call("cbind", ret$p.Mat)
-  # p.names <- rownames(trace)
-  # p.names[p.names == "nu.Phi"] <- "m.Phi"
-  # p.names[p.names == "bsig.Phi"] <- "s.Phi"
-  if(nrow(trace) == 3){
+  if(nrow(trace) == 4){
+    p.names <- c("sigmaW", "m.Phi", "s.Phi", "bias.Phi")
+  } else if(nrow(trace) == 3){
     p.names <- c("sigmaW", "m.Phi", "s.Phi")
   } else if(nrow(trace) == 2){
     p.names <- c("m.Phi", "s.Phi")

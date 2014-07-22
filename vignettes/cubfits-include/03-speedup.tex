@@ -116,6 +116,9 @@ iterations of \code{cubfits()} are recorded in different numbers of cores.
 The speedup via parallelization is defined as the run time of one core of 
 \code{mclapply()} divided by the run time of the parallel version.
 
+{\color{red} \bf Warning:} the next test was done with \code{vglm()}
+fits for each MCMC iteration.
+
 Figure~\ref{fig:speedup} shows that for this test, \code{task.pull()} is the 
 best approach, although it needs an additional core for task management. 
 There is no obvious best choice for number of cores, but after about seven 

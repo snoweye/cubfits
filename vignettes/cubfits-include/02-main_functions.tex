@@ -69,11 +69,17 @@ The CUB model for ROC is
     mlogit^{-1}(\log(\vec{\mu}_{a}) + \vec{\Delta_t}_{a} \phi_g),
     \label{eqn:link_fcn} \\
 \log(\phi_{g, obs}) & \sim &
-    N(\log(\phi_g) + \log(K_{bias}), \sigma^2_{obs}),  \mbox{ and }
+    N(\log(\phi_g) + \log(K_{bias}), \sigma^2_{obs}),
     \label{eqn:prior_lv1} \\
-\log(\phi_g) & \sim &
-    N(-\sigma^2_{\phi}/2, \sigma^2_{\phi}).
-    \label{eqn:prior_lv2}
+\phi_g & \sim &
+    \log N(-\sigma^2_{\phi}/2, \sigma_{\phi}),
+    \label{eqn:prior_lv2} \\
+\vec{\mu}_{a}, \vec{\Delta_t}_{a}, \sigma_{\phi}, K_{bias} & \propto &
+    1, \mbox{ and }
+    \label{eqn:prior_lv3} \\
+f(\sigma^2_{obs}) & \propto &
+    1 / \sigma^2_{obs} .
+    \label{eqn:prior_lv4}
 \end{eqnarray}
 Given gene $g$ and amino acid $a$,
 $\vec{y}_{ga}$ is synonymous codon counts
@@ -93,11 +99,13 @@ The package implements MCMC algorithms of CUB model in three main functions.
 \code{cubfits()} estimate model parameters for sequence with $\phi_{g,obs}$
 and implements Equations~(\ref{eqn:glm}) to~(\ref{eqn:prior_lv2}).
 \code{cubappr()} predicts expression for sequences without $\phi_{g,obs}$
-that skips Equations~(\ref{eqn:prior_lv1}).
+that skips Equation~(\ref{eqn:prior_lv1}).
 \code{cubpred()} estimates parameters for sequences with $\phi_{g,obs}$
 and predicts expression for sequences without $\phi_{g,obs}$.
 All functions can take options set by global objects such as
-MCMC conditions and auxiliary control variables
+MCMC conditions and auxiliary control variables, especially the
+prior and hyper-parameters as Equations~(\ref{eqn:prior_lv3})
+and~(\ref{eqn:prior_lv4})
 
 Figure~\ref{fig:bayesian_model} displays dependence of the model.
 The extended Bayesian hierarchical model with measurement errors
