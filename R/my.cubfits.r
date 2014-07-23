@@ -69,6 +69,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   b.Mat <- my.generate.list(NA, nBparams, nSave)    # log(mu) and Delta.t
   p.Mat <- my.generate.list(NA, nPrior, nSave)      # prior parameters
   phi.Mat <- my.generate.list(NA, n.G, nSave)       # E[Phi | Phi^{obs}]
+  logL.Mat <- my.generate.list(NA, 1, nSave)        # logL
 
 ### Initial Parameters ###
   ### Initial values for p first since scaling may change phi.Obs.
@@ -132,6 +133,14 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
                    # hp.sigma.Phi = 1 / sqrt(var(log.phi.Obs)),
                    hp.Init = p.Init[-1])
 
+  ### Set logL.
+  if(.CF.CONF$compute.logL){
+    tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Init,
+                                  p.Curr, reu13.df = reu13.df.obs)
+    logL.Curr <- sum(tmp)
+    logL.Mat[[1]] <- logL.Curr 
+  }
+
 ### MCMC here ###
   ### Get length for acceptance and adaptive storage.
   n.p <- 1
@@ -155,7 +164,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
 
   ### Run MCMC iterations
   my.verbose(verbose, 0, report)
-  .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.Mat"))
+  .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.Mat", "logL.Mat"))
 
   ### MCMC start.
   for(iter in 1:nIter){
@@ -174,6 +183,13 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
                   phi.Curr, phi.Obs, y, n, b.Curr, p.Curr,
                   reu13.df = reu13.df.obs)
 
+    ### Step logL:
+    if(.CF.CONF$compute.logL && (iter %% iterThin) == 0){
+      tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Curr,
+                                    p.Curr, reu13.df = reu13.df.obs)
+      logL.Curr <- sum(tmp)
+    }
+
     ### Step A: Update scaling factor.
     if(iter %/% .CF.AC$renew.iter + 1 == .cubfitsEnv$curr.renew){
       my.copy.adaptive()
@@ -189,9 +205,10 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
       b.Mat[[thinnedIter]] <- do.call("c", b.Curr)
       p.Mat[[thinnedIter]] <- p.Curr
       phi.Mat[[thinnedIter]] <- phi.Curr
+      logL.Mat[[thinnedIter]] <- logL.Curr
     }
     my.verbose(verbose, iter, report)
-    .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat"))
+    .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat", "logL.Mat"))
   } ### MCMC end.
 
 ### Check acceptance of last renew iteration.
@@ -199,6 +216,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
 
 ### Return ###
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
+              logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,
               p.Init = p.Init, phi.Init = phi.Init)
   ret
