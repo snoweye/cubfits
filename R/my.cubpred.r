@@ -88,6 +88,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   b.Mat <- my.generate.list(NA, nBparams, nSave)    # log(mu) and Delta.t
   p.Mat <- my.generate.list(NA, nPrior, nSave)      # prior parameters
   phi.Mat <- my.generate.list(NA, n.G, nSave)       # E[Phi | Phi^{obs}]
+  logL.Mat <- my.generate.list(NA, 1, nSave)        # logL
 
   ### Setup data structures for prediction.
   n.G.pred <- nrow(y.pred[[1]])                     # # of genes for prediction
@@ -168,6 +169,16 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   phi.pred.Mat[[1]] <- phi.pred.Init
   phi.pred.Curr <- phi.pred.Init
 
+  ### Set logL.
+  if(.CF.CONF$compute.logL){
+    tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Init,
+                                  p.Curr, reu13.df = reu13.df.obs)
+    tmpPred <- .cubfitsEnv$my.logLAllPred(phi.pred.Curr, y, n, b.Init,
+                                          reu13.df = reu13.df.pred)
+    logL.Curr <- sum(tmp) + sum(tmpPred)
+    logL.Mat[[1]] <- logL.Curr
+  }
+
 ### MCMC here ###
   ### Get length for acceptance and adaptive storage.
   n.p <- 1
@@ -192,7 +203,8 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
 
   ### Run MCMC iterations.
   my.verbose(verbose, 0, report)
-  .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.Mat", "phi.pred.Mat"))
+  .cubfitsEnv$my.dump(0, list = c("b.Mat", "p.Mat", "phi.Mat", "phi.pred.Mat",
+                                  "logL.Mat"))
 
   ### MCMC start.
   for(iter in 1:nIter){
@@ -216,6 +228,15 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
                        phi.pred.Curr, y.pred, n.pred, b.Curr, p.Curr[-1],
                        reu13.df = reu13.df.pred)
 
+    ### Step logL:
+    if(.CF.CONF$compute.logL && (iter %% iterThin) == 0){
+      tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Curr,
+                                    p.Curr, reu13.df = reu13.df.obs)
+      tmpPred <- .cubfitsEnv$my.logLAllPred(phi.pred.Curr, y, n, b.Curr,
+                                            reu13.df = reu13.df.pred)
+      logL.Curr <- sum(tmp) + sum(tmpPred)
+    }
+
     ### Step A: Update scaling factor.
     if(iter %/% .CF.AC$renew.iter + 1 == .cubfitsEnv$curr.renew){
       my.copy.adaptive()
@@ -233,10 +254,13 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
       p.Mat[[thinnedIter]] <- p.Curr
       phi.Mat[[thinnedIter]] <- phi.Curr
       phi.pred.Mat[[thinnedIter]] <- phi.pred.Curr
+      if(.CF.CONF$compute.logL){
+        logL.Mat[[thinnedIter]] <- logL.Curr
+      }
     }
     my.verbose(verbose, iter, report)
     .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat",
-                                       "phi.pred.Mat"))
+                                       "phi.pred.Mat", "logL.Mat"))
   } ### MCMC end
 
 ### Check acceptance of last renew iteration.
@@ -244,7 +268,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
 
 ### Return ###
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
-              phi.pred.Mat = phi.pred.Mat,
+              phi.pred.Mat = phi.pred.Mat, logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,
               p.Init = p.Init, phi.Init = phi.Init,
               phi.pred.Init = phi.pred.Init)

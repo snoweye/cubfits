@@ -37,6 +37,18 @@
       bias as well.
 
 \item {\bf\color{blue} Q:}
+      What is a better way to specify arguments of the major functions,
+      \code{cubfits()}, \code{cubappr()}, or \code{cubpred},
+      through arguments or configurations?\\
+      {\bf\color{blue} A:}
+      In general, \pkg{cubfits} strongly suggests configurations instead of
+      arguments except for initial values of parameters. Default arguments of
+      the major functions are limited and do not cover many useful or tedious
+      options. As the development of options is stable, their should be removed
+      from arguments and only changeable from configurations. Currently,
+      the main objects for configurations are \code{.CF.CT} and \code{.CF.CONF}.
+
+\item {\bf\color{blue} Q:}
       What are configurations to enforce estimating bias of $\phi_g$,
       $K_{bias}$? \\
       {\bf\color{blue} A:}

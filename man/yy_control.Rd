@@ -65,7 +65,8 @@
       \code{phi.pred.DrawScale}      \tab random walk scale for phi.pred \cr
       \code{sigma.Phi.DrawScale}     \tab random walk scale for sigma.Phi \cr
       \code{bias.Phi.DrawScale}      \tab random walk scale for bias.Phi \cr
-      \code{estimate.bias.Phi}       \tab if estimate bias of phi during MCMC
+      \code{estimate.bias.Phi}       \tab if estimate bias of phi during MCMC \cr
+      \code{compute.logL}            \tab if compute logL in each iteration
     }
 
   \item
