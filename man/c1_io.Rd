@@ -33,7 +33,7 @@
 }
 \examples{
   \dontrun{
-    suppressMessages(library(cubfits, quietly = TRUE))
+    library(cubfits)
     seq.string <- readGenome("my_genome.fasta", 150, 10)
   }
 }
