@@ -1,6 +1,7 @@
 2014-07-24: Ver 0.1-2
   * Incorporate Cedric's codes for restarting and multiple chains.
   * Add man pages for Cedric's functions.
+  * Add Cedric's codes to rename b.Mat.
 
 2014-06-26: Ver 0.1-2
   * New work flows.
