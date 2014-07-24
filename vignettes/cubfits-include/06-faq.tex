@@ -1,7 +1,7 @@
 
-\section[FAQ]{FAQ}
-\label{sec:faq}
-\addcontentsline{toc}{section}{\thesection. FAQ}
+\section[FAQs]{FAQs}
+\label{sec:faqs}
+\addcontentsline{toc}{section}{\thesection. FAQs}
 
 \begin{enumerate}
 
@@ -98,6 +98,31 @@
       may still have to overwrite functions in \code{.cubfitEnv} since
       MCMC iterations heavily access functions from there instead of
       \code{.GlobalEnv}.
+
+\item {\bf\color{blue} Q:}
+      How does \pkg{cubfits} specify the reference codon for a amino acid? \\
+      {\bf\color{blue} A:}
+      \pkg{cubfits} follows \pkg{VGAM}'s arrangement to assign reference codon,
+      default is the last one by names.
+      For example, the amino acide ``Ala/A''
+      has four synonymous codons, ``GCA'', ``GCC'', ``GCG'', and ``GCT'' where
+      ``GCT'' will be the reference or base line of model.
+
+\item {\bf\color{blue} Q:}
+      How does \pkg{cubfits} arrange parameters
+      $(\log(\vec{\mu}), \vec{\Delta t})$
+      for codons and amino acids? \\
+      {\bf\color{blue} A:}
+      For ROC model, parameters (\code{b.Mat} in \code{bVec} format) are
+      ordered by names of amino
+      acid first, followed by $\mu$ for all non-reference codons, then
+      $\Delta t$ for all non-ference codons. All non-reference codons are
+      ordered by their name as well.
+      For example, the amino acide ``Ala/A'' will have a parameter vector
+      ordered as
+      $\log(\mu_{GCA}), \log(\mu_{GCC}), \log(\mu_{GCG}),\allowbreak
+       \Delta t_{GCA}, \Delta t_{GCC}, \Delta t_{GCG}$.
+      See \code{help("bVec")} for more details.
 
 \end{enumerate}
 

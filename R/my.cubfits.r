@@ -134,6 +134,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
                    hp.Init = p.Init[-1])
 
   ### Set logL.
+  logL.Curr <- -Inf
   if(.CF.CONF$compute.logL){
     tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Init,
                                   p.Curr, reu13.df = reu13.df.obs)
@@ -215,6 +216,9 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   my.check.acceptance(c("b", "p", "phi"))
 
 ### Return ###
+  aa.names <- names(y)
+  in.names <- names(b.Mat[[1]])
+  names(b.Mat[[1]]) <- mapBMatNames(in.names, aa.names, model = model)
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
               logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,

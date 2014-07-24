@@ -184,7 +184,7 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
   #############################################################
   j <- 1
   gel.res <- 0
-  iter.res <- 0
+  sample.res <- 0
   converged <- FALSE
   while(!converged)
   { 
@@ -221,9 +221,9 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
     ## Do convergence test
     if(currSamples > nsamples){ #if there are not enough iterations, just keep goint until we have enough for a convergence test
       testSampleSize <- min(nsamples + round(growthfactor*currSamples), currSamples)
-      gelman <- isConverged(results, niter=testSampleSize, frac1=frac1, frac2=frac2, eps=eps, thin=conv.thin, teston=teston, test="geweke")
+      gelman <- isConverged(results, nsamples=testSampleSize, frac1=frac1, frac2=frac2, eps=eps, thin=conv.thin, teston=teston, test="geweke")
       gel.res[j] <- gelman$gelman
-      iter.res[j] <- currSamples
+      sample.res[j] <- currSamples
       cat(paste("Geweke Z score after samples: ", sample.res[j], "\t" ,gel.res[j] , "\t test was performed on ", testSampleSize/conv.thin," samples\n", sep=""))
       converged <- gelman$isConverged
       j <- j + 1
@@ -240,7 +240,7 @@ cubsinglechain <- function(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, 
     if(currSamples > max){converged <- TRUE}
   }
   ## return full length chains
-  return(list(chains=results, convergence=cbind(iter.res, gel.res))) 
+  return(list(chains=results, convergence=cbind(sample.res, gel.res))) 
   
 }
 
