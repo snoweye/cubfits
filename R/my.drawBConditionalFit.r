@@ -88,10 +88,11 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
 ## calculates log( (b/b')^-1 )
 my.drawBPrior <- function(baa, baaProp)
 {
+  ncoef <- .cubfitsEnv$my.ncoef #get.my.ncoef(.cubfitsEnv$model, assign.Env = FALSE)
   # on log scale
   priorProp <- 0 # default is uniform 
   
-  dmindex <- 1:(length(baa)/2)
+  dmindex <- 1:(length(baa)/ncoef)
   baa <- baa[dmindex]
   baaProp <- baaProp[dmindex]
   if(.CF.CT$prior.dist[1] == "normal")
@@ -99,6 +100,5 @@ my.drawBPrior <- function(baa, baaProp)
     priorProp <- sum( dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
                   - dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )
   }
-  cat(paste("lprior =", priorProp, "\n"))
   return(priorProp) 
 }
