@@ -338,8 +338,8 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("p
   while(!converged)
   { 
     ## run chains in parallel
-    #for(i in nchains:1) # for debuging
-    res <- foreach(i = 1:nchains) %dopar%
+    for(i in nchains:1) # for debuging
+    #res <- foreach(i = 1:nchains) %dopar%
     {
       suppressMessages(library(cubfits, quietly = TRUE))
       
@@ -371,6 +371,7 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("p
       
       if(length(results[[i]]$p.Mat) < reset.qr) # reset the "cov" only in the begining
       {
+        cat(paste("Reset Cov matrix, total samples by now", length(results[[i]]$p.Mat), "\n"))
         b.rinit[i] <- list(NULL)
       }else{ # use the same matrix every time after some "burnin"
         b.rinit[[i]] <- res[[i]]$b.RInit

@@ -205,7 +205,9 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
       b.Mat[[thinnedIter]] <- do.call("c", b.Curr)
       p.Mat[[thinnedIter]] <- p.Curr
       phi.Mat[[thinnedIter]] <- phi.Curr
-      logL.Mat[[thinnedIter]] <- logL.Curr
+      if(.CF.CONF$compute.logL){
+        logL.Mat[[thinnedIter]] <- logL.Curr
+      }
     }
     my.verbose(verbose, iter, report)
     .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat", "logL.Mat"))
