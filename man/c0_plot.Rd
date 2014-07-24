@@ -39,7 +39,7 @@
   under development
 }
 \references{
-  \url{https://github.com/snoweye/cubfits/}
+  \url{https://github.com/clandere/cubfits/}
 }
 \author{
   Cedric Landerer \email{cedric.landerer@gmail.com}.

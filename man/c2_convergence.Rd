@@ -7,11 +7,14 @@
   This utility function provides convergence related functions by Cedric.
 }
 \usage{
-  cubmultichain(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
-                          growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10, eps=0.05, ncores=2, ...)
+  cubmultichain(cubmethod, nsamples, reset.qr, seeds=NULL,
+                teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
+                growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10,
+                eps=0.05, ncores=2, ...)
                           
-  cubsinglechain(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr, seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
-                           growthfactor=0, min=0, max=160000, conv.thin=10, eps=1, ...)
+  cubsinglechain(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr,
+                 seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
+                 growthfactor=0, min=0, max=160000, conv.thin=10, eps=1, ...)
 }
 \arguments{
   \item{cubmethod}{String to choose method. Options are "cubfits", "cubappr", "cubpred"}
@@ -42,7 +45,7 @@
   under development
 }
 \references{
-  \url{https://github.com/snoweye/cubfits/}
+  \url{https://github.com/clandere/cubfits/}
 }
 \author{
   Cedric Landerer \email{cedric.landerer@gmail.com}.

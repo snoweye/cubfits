@@ -170,6 +170,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   phi.pred.Curr <- phi.pred.Init
 
   ### Set logL.
+  logL.Curr <- -Inf
   if(.CF.CONF$compute.logL){
     tmp <- .cubfitsEnv$my.logLAll(phi.Curr, phi.Obs, y, n, b.Init,
                                   p.Curr, reu13.df = reu13.df.obs)
@@ -254,9 +255,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
       p.Mat[[thinnedIter]] <- p.Curr
       phi.Mat[[thinnedIter]] <- phi.Curr
       phi.pred.Mat[[thinnedIter]] <- phi.pred.Curr
-      if(.CF.CONF$compute.logL){
-        logL.Mat[[thinnedIter]] <- logL.Curr
-      }
+      logL.Mat[[thinnedIter]] <- logL.Curr
     }
     my.verbose(verbose, iter, report)
     .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.Mat",
@@ -267,6 +266,9 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   my.check.acceptance(c("b", "p", "phi", "phi.pred"))
 
 ### Return ###
+  aa.names <- names(y)
+  in.names <- names(b.Mat[[1]])
+  names(b.Mat[[1]]) <- mapBMatNames(in.names, aa.names, model = model)
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
               phi.pred.Mat = phi.pred.Mat, logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,
