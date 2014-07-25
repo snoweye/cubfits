@@ -338,8 +338,8 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("p
   while(!converged)
   { 
     ## run chains in parallel
-    for(i in nchains:1) # for debuging
-    #res <- foreach(i = 1:nchains) %dopar%
+    #for(i in nchains:1) # for debuging
+    res <- foreach(i = 1:nchains) %dopar%
     {
       suppressMessages(library(cubfits, quietly = TRUE))
       
