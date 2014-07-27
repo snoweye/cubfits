@@ -161,7 +161,7 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
 }
 
 
-plotBPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltat"), main="AA parameter posterior", nclass=100)
+plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltat"), main="AA parameter posterior", nclass=100, center=F)
 {
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
@@ -196,31 +196,68 @@ plotBPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltat"
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
+    ncodons <- sum(id.tmp)
     
+    ## find x and y limits
     ymax <- vector(mode = "numeric", length = length(id.tmp))
-    for(i in 1:sum(id.tmp))
-    {
+    ymaxcenter <- -10
+    for(i in 1:sum(id.tmp)) {
       ymax[i] <- max(hist(trace[interval, i], plot=F, nclass=nclass)$counts)
     }
-    ylim <- c(0, max(ymax))
-    xlim <- range(trace[interval, ])
+    if(center){
+      if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
+      centeredAA <- trace
+      for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
+      #centeredAA <- trace - means
+      ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
+      xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
+    }else{
+      xlim <- range(trace[interval, ])
+    }
+    ylim <- c(0, max(c(ymax, ymaxcenter)))
+    
+    # create empty plot
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
          xlab = xlab, ylab = "Frequency", main = i.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
+    
+    
+    ## Fill plots
+    if(center){
+      #centerColor <-  rgb(red = 124, green = 252, blue = 0, alpha = 50, maxColorValue = 255)
+      centerColor <-  rgb(red = 10, green = 10, blue = 10, alpha = 50, maxColorValue = 255)
+      #if(ncodons > 1){means <- rowMeans(trace)}else{means <- mean(trace)}
+      #centeredAA <- trace - means
+      hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
+    }
+    
     for(i.codon in plot.order){
       hist(trace[interval, i.codon], add=T, nclass=nclass, col=.CF.PT$color[i.codon], lty=0)
-    } 
+    }
   }
   trace <- lapply(1:length(bMat), function(i){
     bMat[[i]][id.plot]
   })
   trace <- do.call("rbind", trace)
-  ylim = c(0, max(hist(trace[interval, ], plot=F, nclass=5*nclass)$counts) )
-  xlim <- range(trace[interval, ])
+  ncodons <- dim(trace)[2]
+  if(center){
+    if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
+    centeredAA <- trace
+    for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
+    #centeredAA <- trace - means
+    ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
+    xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
+  }else{
+    xlim <- range(trace[interval, ])
+  }
+  ylim <- c(0, max(c(ymax, ymaxcenter)))
   plot(NULL, NULL, xlim = xlim, ylim = ylim,
        xlab = xlab, ylab = "Frequency", main = "Combined")
   
-  hist(trace[interval, ], nclass=500, col="blue", add=T, lty=0, xlab=xlab, ylab=Frequency)
+  hist(trace[interval, ], nclass=ncodons*nclass, col=.CF.PT$color[1], add=T, lty=0, xlab=xlab, ylab=Frequency)
+  if(center){
+    hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
+  }
 }
 
 plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")

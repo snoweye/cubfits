@@ -108,7 +108,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
   }else { # geweke
     if(teston[1] == "sphi") # scalar test on s phi
     {
-      result <- diag$z < eps
+      result <- abs(diag$z) < eps
       ret <- list(isConverged=result, gelman=diag$z)
     }else{ # else is enough here. The correctness of the method was determined above and leaves only two options
       # univariate test on all phi values
