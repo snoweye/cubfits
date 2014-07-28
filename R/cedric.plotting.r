@@ -166,7 +166,7 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
   names.b <- names(bmat)
-  id.intercept <- grep("Intercept", names.b)
+  id.intercept <- grep("log.mu", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
   
@@ -192,7 +192,7 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   
   ### Plot by aa.
   for(i.aa in names.aa){
-    id.tmp <- grepl(i.aa, names.b) & id.plot
+    id.tmp <- grepl(paste(i.aa, i.aa, sep="."), names.b, fixed=T) & id.plot
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
@@ -266,7 +266,7 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA pa
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
   names.b <- names(bmat)
-  id.intercept <- grep("Intercept", names.b)
+  id.intercept <- grep("log", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
   
@@ -295,14 +295,14 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA pa
   
   ### Plot by aa.
   for(i.aa in names.aa){
-    id.tmp <- grepl(i.aa, names.b) & id.plot
+    id.tmp <- grepl(paste(i.aa, i.aa, sep="."), names.b, fixed=T) & id.plot
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
     
     ylim <- range(trace, na.rm=T)
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
-         xlab = "Iterations", ylab = ylab, main = i.aa)
+         xlab = "Samples", ylab = ylab, main = i.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
     for(i.codon in plot.order){
       lines(x = x, y = trace[, i.codon], col = .CF.PT$color[i.codon])

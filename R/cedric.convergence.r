@@ -18,6 +18,7 @@ appendCUBresults <- function(res, to)
   
   ind <- ifelse(init.list.length == 0, 1, 2)
 #  s <- system.time({
+  to$logL.Mat <- c(to$logL.Mat, res$logL.Mat[ind:res.list.length])
   to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
   to$p.Mat <- c(to$p.Mat, res$p.Mat[ind:res.list.length])
   to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
