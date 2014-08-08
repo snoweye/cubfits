@@ -64,6 +64,7 @@ export(
 # Cedric
   "plotCUB",
   "plotTraces",
+  "plotBMatrixPosterior",
   "plotExpectedPhiTrace",
   "plotPTraces",
   # "appendCUBresults",

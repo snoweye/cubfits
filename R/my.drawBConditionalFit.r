@@ -43,19 +43,26 @@ my.drawBConditionalFit.RW_Norm <- function(bFitaa, baa, phi, yaa, naa,
 
 ### Utility function commonly for all my.drawBConditionalFit.*().
 my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
-    reu13.df.aa = NULL){
+    reu13.df.aa = NULL)
+  {
+  
+  #browser()
   baaProp <- proplist$prop
   lir <- proplist$lir
 
+  
   ### Calculate posterior ratio.
   lpr <- .cubfitsEnv$my.logdmultinomCodOne(baaProp, phi, yaa, naa,
                                            reu13.df.aa = reu13.df.aa) -
          .cubfitsEnv$my.logdmultinomCodOne(baa, phi, yaa, naa,
                                            reu13.df.aa = reu13.df.aa)
-
+  
+  ### Calculate prior ratio 
+  lprior <- my.drawBPrior(baa, baaProp)
+  
   ### log Acceptance probability.
-  logAcceptProb <- lpr - lir
-    
+  logAcceptProb <- lpr - lir - lprior
+  
   ### Error handling -- interpreting NaN etc. as ~= 0.
   if(!is.finite(logAcceptProb)){
     warning("log acceptance probability not finite in b draw")
@@ -76,3 +83,22 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
 
   ret
 } # End of my.drawBConditionalFit.MH().
+
+
+## calculates log( (b/b')^-1 )
+my.drawBPrior <- function(baa, baaProp)
+{
+  ncoef <- .cubfitsEnv$my.ncoef #get.my.ncoef(.cubfitsEnv$model, assign.Env = FALSE)
+  # on log scale
+  priorProp <- 0 # default is uniform 
+  
+  dmindex <- 1:(length(baa)/ncoef)
+  baa <- baa[dmindex]
+  baaProp <- baaProp[dmindex]
+  if(.CF.CT$prior.dist[1] == "normal")
+  {
+    priorProp <- sum( dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
+                  - dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )
+  }
+  return(priorProp) 
+}

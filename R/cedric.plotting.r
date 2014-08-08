@@ -142,6 +142,9 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
     axis(4, tck = 0.02, labels = FALSE)
   }
   
+  ## adding a histogram of phi values to plot
+  #hist(log10(phiMat), xlab=expression(phi), main="")
+    
   ### Add label.
   
   plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
@@ -158,7 +161,104 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
 }
 
 
-
+plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltat"), main="AA parameter posterior", nclass=100, center=F)
+{
+  bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
+  bmat <- convert.b.to.bVec(bmat)
+  names.b <- names(bmat)
+  id.intercept <- grep("log.mu", names.b)
+  id.slope <- 1:length(names.b)
+  id.slope <- id.slope[-id.intercept]
+  
+  
+  id.plot <- rep(0, length(names.b))
+  if(param[1] == "logmu"){
+    xlab <- expression(paste("log ( ", mu, " )"))
+    id.plot[id.intercept] <- id.intercept
+  } else if(param[1] == "deltat"){
+    xlab <- expression(paste(Delta, "t"))
+    id.plot[id.slope] <- id.slope
+  }  
+  
+  nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
+               rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
+  ### Plot title.
+  par(mar = c(0, 0, 0, 0))
+  plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
+  text(0.5, 0.6, main)
+  text(0.5, 0.4, date(), cex = 0.6)
+  par(mar = c(5.1, 4.1, 4.1, 2.1))
+  
+  
+  ### Plot by aa.
+  for(i.aa in names.aa){
+    id.tmp <- grepl(paste(i.aa, i.aa, sep="."), names.b, fixed=T) & id.plot
+    trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
+    trace <- do.call("rbind", trace)
+    if(length(trace) == 0) next
+    ncodons <- sum(id.tmp)
+    
+    ## find x and y limits
+    ymax <- vector(mode = "numeric", length = length(id.tmp))
+    ymaxcenter <- -10
+    for(i in 1:sum(id.tmp)) {
+      ymax[i] <- max(hist(trace[interval, i], plot=F, nclass=nclass)$counts)
+    }
+    if(center){
+      if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
+      centeredAA <- trace
+      for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
+      #centeredAA <- trace - means
+      ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
+      xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
+    }else{
+      xlim <- range(trace[interval, ])
+    }
+    ylim <- c(0, max(c(ymax, ymaxcenter)))
+    
+    # create empty plot
+    plot(NULL, NULL, xlim = xlim, ylim = ylim,
+         xlab = xlab, ylab = "Frequency", main = i.aa)
+    plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
+    
+    
+    ## Fill plots
+    if(center){
+      #centerColor <-  rgb(red = 124, green = 252, blue = 0, alpha = 50, maxColorValue = 255)
+      centerColor <-  rgb(red = 10, green = 10, blue = 10, alpha = 50, maxColorValue = 255)
+      #if(ncodons > 1){means <- rowMeans(trace)}else{means <- mean(trace)}
+      #centeredAA <- trace - means
+      hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
+    }
+    
+    for(i.codon in plot.order){
+      hist(trace[interval, i.codon], add=T, nclass=nclass, col=.CF.PT$color[i.codon], lty=0)
+    }
+  }
+  trace <- lapply(1:length(bMat), function(i){
+    bMat[[i]][id.plot]
+  })
+  trace <- do.call("rbind", trace)
+  ncodons <- dim(trace)[2]
+  if(center){
+    if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
+    centeredAA <- trace
+    for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
+    #centeredAA <- trace - means
+    ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
+    xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
+  }else{
+    xlim <- range(trace[interval, ])
+  }
+  ylim <- c(0, max(c(ymax, ymaxcenter)))
+  plot(NULL, NULL, xlim = xlim, ylim = ylim,
+       xlab = xlab, ylab = "Frequency", main = "Combined")
+  
+  hist(trace[interval, ], nclass=ncodons*nclass, col=.CF.PT$color[1], add=T, lty=0, xlab=xlab, ylab=Frequency)
+  if(center){
+    hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
+  }
+}
 
 plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
 {  
@@ -166,7 +266,7 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA pa
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
   names.b <- names(bmat)
-  id.intercept <- grep("Intercept", names.b)
+  id.intercept <- grep("log", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
   
@@ -195,14 +295,14 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA pa
   
   ### Plot by aa.
   for(i.aa in names.aa){
-    id.tmp <- grepl(i.aa, names.b) & id.plot
+    id.tmp <- grepl(paste(i.aa, i.aa, sep="."), names.b, fixed=T) & id.plot
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
     
     ylim <- range(trace, na.rm=T)
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
-         xlab = "Iterations", ylab = ylab, main = i.aa)
+         xlab = "Samples", ylab = ylab, main = i.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
     for(i.codon in plot.order){
       lines(x = x, y = trace[, i.codon], col = .CF.PT$color[i.codon])

@@ -52,7 +52,6 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   nsyns <- sapply(y, function(ybit){ dim(ybit)[2] })
                                             # # of synomous codons
   nBparams <- my.ncoef * sum(nsyns - 1)     # total # of regression parameters
-  cat(nBparams)
   nSave <- nIter / iterThin + 1             # # of space for iterations
   nPrior <- 2                               # # of prior parameters
   if(model.Phi == "logmixture"){
@@ -187,7 +186,9 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
       b.Mat[[thinnedIter]] <- do.call("c", b.Curr)
       p.Mat[[thinnedIter]] <- p.Curr
       phi.pred.Mat[[thinnedIter]] <- phi.Curr
-      logL.Mat[[thinnedIter]] <- logL.Curr
+      if(.CF.CONF$compute.logL){
+        logL.Mat[[thinnedIter]] <- logL.Curr
+      }
     }
     my.verbose(verbose, iter, report)
     .cubfitsEnv$my.dump(iter, list = c("b.Mat", "p.Mat", "phi.pred.Mat",

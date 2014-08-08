@@ -13,7 +13,8 @@
   init.fit = c("RW_Norm", "current", "random"), # how is b proposed
   parallel = c("lapply", "mclapply",
                "task.pull", "pbdLapply"),       # parallel functions
-  adaptive = c("simple", "none")                # method for adaptive mcmc
+  adaptive = c("simple", "none"),                # method for adaptive mcmc
+  prior.dist = c("uniform", "normal")
 )
 
 ### For configuration of initial and draw scaling.
@@ -70,5 +71,7 @@
   # phi.meanlog = -0.441473,         # yassour mean for log(phi)
   # phi.sdlog = 1.393285,            # yassour sd for log(phi)
   phi.meanlog = -1.125,            # mean of log(phi), -s^2/2
-  phi.sdlog = 1.5                  # sd of log(phi)
+  phi.sdlog = 1.5,                  # sd of log(phi)
+  prior.a = 0,                    # first parameter of density function of prior (e.g. dnorm(x, mean=a, sd=b))
+  prior.b = 1                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
 )

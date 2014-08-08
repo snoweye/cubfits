@@ -18,6 +18,7 @@ appendCUBresults <- function(res, to)
   
   ind <- ifelse(init.list.length == 0, 1, 2)
 #  s <- system.time({
+  to$logL.Mat <- c(to$logL.Mat, res$logL.Mat[ind:res.list.length])
   to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
   to$p.Mat <- c(to$p.Mat, res$p.Mat[ind:res.list.length])
   to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
@@ -108,7 +109,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
   }else { # geweke
     if(teston[1] == "sphi") # scalar test on s phi
     {
-      result <- diag$z < eps
+      result <- abs(diag$z) < eps
       ret <- list(isConverged=result, gelman=diag$z)
     }else{ # else is enough here. The correctness of the method was determined above and leaves only two options
       # univariate test on all phi values
@@ -371,6 +372,7 @@ cubmultichain <- function(cubmethod, nsamples, reset.qr, seeds=NULL, teston=c("p
       
       if(length(results[[i]]$p.Mat) < reset.qr) # reset the "cov" only in the begining
       {
+        cat(paste("Reset Cov matrix, total samples by now", length(results[[i]]$p.Mat), "\n"))
         b.rinit[i] <- list(NULL)
       }else{ # use the same matrix every time after some "burnin"
         b.rinit[[i]] <- res[[i]]$b.RInit
