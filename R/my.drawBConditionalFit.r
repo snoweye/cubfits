@@ -62,7 +62,6 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   
   ### log Acceptance probability.
   logAcceptProb <- lpr - lir - lprior
-  
   ### Error handling -- interpreting NaN etc. as ~= 0.
   if(!is.finite(logAcceptProb)){
     warning("log acceptance probability not finite in b draw")
@@ -70,7 +69,8 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   }
     
   ### Run MH acceptance rule.
-  if(-rexp(1) < logAcceptProb){
+  p <- -rexp(1)
+  if(p < logAcceptProb){
     bNew <- baaProp
     accept <- 1
   } else{
@@ -78,6 +78,7 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
     accept <- 0
   }
 
+  #cat(p);cat("\t");cat(logAcceptProb);cat("\t");cat(lpr);cat("\t");cat(lir);cat("\t");cat(lprior);cat("\n")
   ### Return.
   ret <- list(bNew = bNew, accept = accept)
 
@@ -97,8 +98,8 @@ my.drawBPrior <- function(baa, baaProp)
   baaProp <- baaProp[dmindex]
   if(.CF.CT$prior.dist[1] == "normal")
   {
-    priorProp <- sum( dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
-                  - dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )
+    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
+                  - dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )    
   }
   return(priorProp) 
 }

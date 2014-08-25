@@ -166,7 +166,8 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
   names.b <- names(bmat)
-  id.intercept <- grep("log.mu", names.b)
+  #id.intercept <- grep("Intercept", names.b)
+  id.intercept <- grep("log", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
   
@@ -191,7 +192,10 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   
   
   ### Plot by aa.
+  postMeans <- NULL
+  totalncodons <- 1
   for(i.aa in names.aa){
+    #id.tmp <- grepl(paste(i.aa,".",sep=""), names.b, fixed=T) & id.plot
     id.tmp <- grepl(paste(i.aa, i.aa, sep="."), names.b, fixed=T) & id.plot
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
@@ -199,65 +203,40 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
     ncodons <- sum(id.tmp)
     
     ## find x and y limits
-    ymax <- vector(mode = "numeric", length = length(id.tmp))
-    ymaxcenter <- -10
-    for(i in 1:sum(id.tmp)) {
+    ymax <- vector(mode = "numeric", length = ncodons)
+    for(i in 1:ncodons) {
       ymax[i] <- max(hist(trace[interval, i], plot=F, nclass=nclass)$counts)
     }
     if(center){
-      if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
-      centeredAA <- trace
-      for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
-      #centeredAA <- trace - means
-      ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
-      xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
-    }else{
-      xlim <- range(trace[interval, ])
+      if(ncodons > 1){means <- colMeans(trace[interval,])}else{means <- mean(trace[interval,])}
+      trace <- trace - mean(means)
     }
-    ylim <- c(0, max(c(ymax, ymaxcenter)))
+    if(ncodons > 1){means <- colMeans(trace[interval,])}else{means <- mean(trace[interval,])}
+    postMeans <- c(postMeans, means)
+    
+    xlim <- range(trace[interval, ])
+    ylim <- c(0, max(ymax))
     
     # create empty plot
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
          xlab = xlab, ylab = "Frequency", main = i.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
-    
-    
+       
     ## Fill plots
-    if(center){
-      #centerColor <-  rgb(red = 124, green = 252, blue = 0, alpha = 50, maxColorValue = 255)
-      centerColor <-  rgb(red = 10, green = 10, blue = 10, alpha = 50, maxColorValue = 255)
-      #if(ncodons > 1){means <- rowMeans(trace)}else{means <- mean(trace)}
-      #centeredAA <- trace - means
-      hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
-    }
-    
     for(i.codon in plot.order){
       hist(trace[interval, i.codon], add=T, nclass=nclass, col=.CF.PT$color[i.codon], lty=0)
     }
+    stddev <- format(sd(trace[interval, ]), digits = 3)
+    text(x=(xlim[2]+xlim[1])/2, y=ylim[2]-0.1*ylim[2], label=paste("sd =", stddev))
   }
-  trace <- lapply(1:length(bMat), function(i){
-    bMat[[i]][id.plot]
-  })
-  trace <- do.call("rbind", trace)
-  ncodons <- dim(trace)[2]
-  if(center){
-    if(ncodons > 1){means <- colMeans(trace)}else{means <- mean(trace)}
-    centeredAA <- trace
-    for(i in 1:ncodons){centeredAA[, i] <- trace[, i] - means[i]}
-    #centeredAA <- trace - means
-    ymaxcenter <- max(hist(centeredAA[interval, ], plot=F, nclass=ncodons*nclass)$counts)
-    xlim <- range(c(centeredAA[interval, ], trace[interval, ]))
-  }else{
-    xlim <- range(trace[interval, ])
-  }
-  ylim <- c(0, max(c(ymax, ymaxcenter)))
-  plot(NULL, NULL, xlim = xlim, ylim = ylim,
-       xlab = xlab, ylab = "Frequency", main = "Combined")
-  
-  hist(trace[interval, ], nclass=ncodons*nclass, col=.CF.PT$color[1], add=T, lty=0, xlab=xlab, ylab=Frequency)
-  if(center){
-    hist(centeredAA[interval, ], add=T, nclass=ncodons*nclass, col=centerColor, lty=0)
-  }
+
+  dens <- density(postMeans)
+  xlim <- range(dens$x)
+  ylim <- range(dens$y)
+  plot(dens, xlim = xlim, ylim = ylim+c(0, 0.2*ylim[2]),
+       xlab = xlab, ylab = "Density", main = "Posterior mean distribution")
+  stddev <- format(sd(postMeans), digits = 3)
+  text(x=(xlim[2]+xlim[1])/2, y=ylim[2]+0.1*ylim[2], label=paste("sd =", stddev))
 }
 
 plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")

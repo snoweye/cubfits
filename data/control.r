@@ -73,5 +73,5 @@
   phi.meanlog = -1.125,            # mean of log(phi), -s^2/2
   phi.sdlog = 1.5,                  # sd of log(phi)
   prior.a = 0,                    # first parameter of density function of prior (e.g. dnorm(x, mean=a, sd=b))
-  prior.b = 1                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
+  prior.b = 0.35                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
 )
