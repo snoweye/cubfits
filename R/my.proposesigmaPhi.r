@@ -29,10 +29,27 @@ my.proposesigmaPhi.RW_Norm <- function(sigma.Phi.Curr,
                  dnorm(log.sigma.Phi.Curr, log.sigma.Phi.New,
                        sigma.Phi.DrawScale.prev, log = TRUE)
   }
-
+  ### Calculate prior ratio 
+  #lprior <- my.drawSPhiPrior(sigma.Phi.Curr, sigma.Phi.New)
+  #lir <- lir - lprior
+  
   ### Return.
   ret <- list(nu.Phi = as.numeric(nu.Phi.New),
               sigma.Phi = as.numeric(sigma.Phi.New),
               lir = lir)
   ret
 } # End of my.proposesigmaPhi.RW_Norm().
+
+###Function currently not used, Was only for testing
+## calculates log( (p/p')^-1 )
+my.drawSPhiPrior <- function(log.sigma.Phi.Curr, log.sigma.Phi.New)
+{
+  ncoef <- .cubfitsEnv$my.ncoef #get.my.ncoef(.cubfitsEnv$model, assign.Env = FALSE)
+  # on log scale
+  priorProp <- 0 # default is uniform 
+#  if(.CF.CT$prior.dist[1] == "normal")
+#  {
+    priorProp <- dgamma(log.sigma.Phi.Curr, 5, 4) - dgamma(log.sigma.Phi.New, 5, 4)    
+#  }
+  return(priorProp) 
+}

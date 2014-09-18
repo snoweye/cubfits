@@ -54,7 +54,11 @@ my.fitMultinomOne.roc <- function(reu13.df.aa, phi, yaa, naa, phi.new = NULL,
   ret <- VGAM::vglm(yaa[tmp.id,] ~ tmp.phi[tmp.id],
                     VGAM::multinomial, coefstart = coefstart,
                     x.arg = x.arg, y.arg = y.arg, qr.arg = qr.arg)
-  ret <- list(coefficients = ret@coefficients,
+  coefficients <- ret@coefficients
+  ## convert delta.t to delta.eta
+  #coefficients[(length(ret@coefficients)/2+1):length(coefficients)] <- -1 * coefficients[(length(ret@coefficients)/2+1):length(coefficients)]
+  coefficients <- -coefficients
+  ret <- list(coefficients = coefficients,
               coef.mat = matrix(ret@coefficients, nrow = 2, byrow = TRUE),
               R = ret@R)
   ret

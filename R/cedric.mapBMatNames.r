@@ -1,10 +1,10 @@
-mapBMatNames <- function(in.names, aa.names, model = "roc"){
+mapBMatNames <- function(in.names, aa.names, model = "roc", as.delta.eta = T){
   ### Make a copy
   out.names <- in.names
 
   ### Get number of coefs and their names.
   ncoef <- get.my.ncoef(model, assign.Env = FALSE)
-  coefnames <- get.my.coefnames(model, assign.Env = FALSE)
+  coefnames <- get.my.coefnames(model, assign.Env = FALSE, as.delta.eta)
 
   ### Get synonymous codons.
   if("Z" %in% aa.names){
