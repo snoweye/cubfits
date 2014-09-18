@@ -87,9 +87,9 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
   #phi.bin <- phi.bin * phi.scale
   phi.bin.lim <- range(c(phi.bin, phiMat))
   
-  lbound <- length(bMat)-n.use.samples
+  lbound <- max(0, length(bMat)-n.use.samples)
   ubound <- length(bMat)
-  b.mat <- do.call(cbind, bMat[lbound:ubound])
+  b.mat <- do.call(cbind, bMat[lbound:ubound]) 
   Eb <- rowMeans(b.mat)
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
@@ -161,7 +161,7 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
 }
 
 
-plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltat"), main="AA parameter posterior", nclass=100, center=F)
+plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "deltaeta", "deltat"), main="AA parameter posterior", nclass=100, center=F)
 {
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
   bmat <- convert.b.to.bVec(bmat)
@@ -179,7 +179,10 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   } else if(param[1] == "deltat"){
     xlab <- expression(paste(Delta, "t"))
     id.plot[id.slope] <- id.slope
-  }  
+  } else if(param[1] == "deltaeta"){
+    xlab <- expression(paste(Delta, eta))
+    id.plot[id.slope] <- id.slope
+  }
   
   nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
                rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
@@ -239,7 +242,7 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
   text(x=(xlim[2]+xlim[1])/2, y=ylim[2]+0.1*ylim[2], label=paste("sd =", stddev))
 }
 
-plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA parameter trace")
+plotTraces <- function(bMat, names.aa, param = c("logmu", "deltaeta", "deltat"), main="AA parameter trace")
 {  
   
   bmat <- convert.bVec.to.b(bMat[[1]], names.aa)
@@ -257,7 +260,10 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltat"), main="AA pa
   } else if(param[1] == "deltat"){
     ylab <- expression(paste(Delta, "t"))
     id.plot[id.slope] <- id.slope
-  }  
+  } else if(param[1] == "deltaeta"){
+    ylab <- expression(paste(Delta, eta))
+    id.plot[id.slope] <- id.slope
+  }
   
   x <- 1:length(bMat)
   xlim <- range(x)

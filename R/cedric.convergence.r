@@ -21,7 +21,6 @@ appendCUBresults <- function(res, to)
   to$logL.Mat <- c(to$logL.Mat, res$logL.Mat[ind:res.list.length])
   to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
   to$p.Mat <- c(to$p.Mat, res$p.Mat[ind:res.list.length])
-  to$b.Mat <- c(to$b.Mat, res$b.Mat[ind:res.list.length])
   if("phi.Mat" %in% names(res)){
     to$phi.Mat <- c(to$phi.Mat, res$phi.Mat[ind:res.list.length])
   }
@@ -148,6 +147,12 @@ cubsinglechain <- function(cubmethod, frac1=0.1, frac2=0.5, reset.qr, seed=NULL,
   }else{
     input_list$iterThin <- 1
   }
+  if("b.Init" %in% names(input_list)){
+    b.init <- input_list$b.Init
+    input_list$b.Init <- NULL
+  }else{
+    b.init <- NULL
+  }  
   if("b.RInit" %in% names(input_list)){
     b.rinit <- input_list$b.RInit
     input_list$b.RInit <- NULL
@@ -192,11 +197,11 @@ cubsinglechain <- function(cubmethod, frac1=0.1, frac2=0.5, reset.qr, seed=NULL,
     .GlobalEnv$.CF.CT <- .CF.CT
     .GlobalEnv$.CF.CONF <- .CF.CONF
     if(cubmethod == "cubfits"){
-      res <- do.call(cubfits, c(input_list, list(phi.Init = init.phi), list(p.Init = p.init), list(b.RInit = b.rinit)))
+      res <- do.call(cubfits, c(input_list, list(phi.Init = init.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
     }else if(cubmethod == "cubappr"){
-      res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit)))
+      res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
     }else if(cubmethod == "cubpred"){
-      res <- do.call(cubpred, c(input_list, list(phi.Init = init.phi), list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit)))
+      res <- do.call(cubpred, c(input_list, list(phi.Init = init.phi), list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
     }
     
     ## append chains and get new initial values for restart
