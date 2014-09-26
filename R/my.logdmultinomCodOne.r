@@ -35,7 +35,7 @@ my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
   xm <- matrix(cbind(1, tmp.phi, tmp.phi * reu13.df.aa$Pos), ncol = 3)
 
   ### Call C to compute log posterior probability for every codon.
-  baamat <- matrix(baa, nrow = 3, byrow = TRUE)
+  baamat <- matrix(-baa, nrow = 3, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability) where codon count among all
@@ -74,7 +74,7 @@ my.logdmultinomCodOne.roc <- function(baa, phi, yaa, naa, vec = FALSE,
   xm <- matrix(cbind(1, phi), ncol = 2)
 
   ### Call C to compute log posterior probability for every codon.
-  baamat <- matrix(baa, nrow = 2, byrow = TRUE)
+  baamat <- matrix(-baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability).
@@ -110,7 +110,7 @@ my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
   xm <- matrix(cbind(1, tmp.phi * reu13.df.aa$Pos), ncol = 2)
 
   ### Call C to compute log posterior probability for every codon.
-  baamat <- matrix(baa, nrow = 2, byrow = TRUE)
+  baamat <- matrix(-baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability) where codon count among all

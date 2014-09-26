@@ -68,6 +68,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   logL.Mat <- my.generate.list(NA, 1, nSave)         # logL
 
 ### Initial Parameters ###
+  # set switch coefficient to move between delta t and delta eta
   ### Initial values for p first since scaling may change phi.Obs.
   p.Init <- my.pInit(p.Init, phi.pred.Init, model.Phi[1],
                      p.nclass = p.nclass, cub.method = "appr")
@@ -202,6 +203,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   aa.names <- names(y)
   in.names <- names(b.Mat[[1]])
   names(b.Mat[[1]]) <- mapBMatNames(in.names, aa.names, model = model)
+
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.pred.Mat = phi.pred.Mat,
               logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,

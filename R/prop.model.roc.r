@@ -41,6 +41,7 @@ find.prop.model.roc <- function(b.Init, phi.bin, phi.Obs.scale = 1){
 
   predict.roc <- list()
   for(aa in u.aa){
+    b.Init[[aa]]$coef.mat <- -b.Init[[aa]]$coef.mat ## converting from delta eta to delta t
     exponent <- x %*% b.Init[[aa]]$coef.mat
     scodon.prob <- my.inverse.mlogit(exponent)
     predict.roc[[aa]] <- cbind(scodon.prob, phi.bin * phi.Obs.scale)

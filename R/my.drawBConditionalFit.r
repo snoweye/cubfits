@@ -47,7 +47,10 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   {
   
   #browser()
+  ## change sign of b. Since it was changed before to match delta eta it has to be changed back here
+  ## to calculate the proper likelihood
   baaProp <- proplist$prop
+  baa <- baa
   lir <- proplist$lir
 
   
@@ -78,7 +81,6 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
     accept <- 0
   }
 
-  #cat(p);cat("\t");cat(logAcceptProb);cat("\t");cat(lpr);cat("\t");cat(lir);cat("\t");cat(lprior);cat("\n")
   ### Return.
   ret <- list(bNew = bNew, accept = accept)
 
