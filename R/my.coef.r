@@ -18,11 +18,14 @@ get.my.ncoef <- function(model, assign.Env = TRUE){
   ret
 } # End of get.my.ncoef().
 
-get.my.coefnames <- function(model, assign.Env = TRUE){
+get.my.coefnames <- function(model, assign.Env = TRUE, as.delta.eta = T){
+  pName <- "t"
+  if(as.delta.eta){pName <- "eta"}
+  
   if(model[1] == "rocnsef"){
-    ret <- c("log.mu", "Delta.t", "omega")
+    ret <- c("log.mu", paste("Delta", pName, sep="."), "omega")
   } else if(model[1] == "roc"){
-    ret <- c("log.mu", "Delta.t")
+    ret <- c("log.mu", paste("Delta", pName, sep="."))
   } else if(model[1] == "nsef"){
     ret <- c("log.mu", "omega")
   } else{

@@ -47,7 +47,10 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   {
   
   #browser()
+  ## change sign of b. Since it was changed before to match delta eta it has to be changed back here
+  ## to calculate the proper likelihood
   baaProp <- proplist$prop
+  baa <- baa
   lir <- proplist$lir
 
   
@@ -62,7 +65,6 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   
   ### log Acceptance probability.
   logAcceptProb <- lpr - lir - lprior
-  
   ### Error handling -- interpreting NaN etc. as ~= 0.
   if(!is.finite(logAcceptProb)){
     warning("log acceptance probability not finite in b draw")
@@ -70,7 +72,8 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   }
     
   ### Run MH acceptance rule.
-  if(-rexp(1) < logAcceptProb){
+  p <- -rexp(1)
+  if(p < logAcceptProb){
     bNew <- baaProp
     accept <- 1
   } else{
@@ -97,8 +100,8 @@ my.drawBPrior <- function(baa, baaProp)
   baaProp <- baaProp[dmindex]
   if(.CF.CT$prior.dist[1] == "normal")
   {
-    priorProp <- sum( dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
-                  - dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )
+    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
+                  - dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )    
   }
   return(priorProp) 
 }
