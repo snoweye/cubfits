@@ -191,7 +191,7 @@ my.cubpred <- function(reu13.df.obs, phi.Obs, y, n,
   my.set.acceptance(nIter + 1, n.aa, n.p = n.p, n.G = n.G, n.G.pred = n.G.pred)
 
   ### Set adaptive storage.
-  if(.CF.CONF$estimate.bias.Phi){
+  if(.CF.CONF$estimate.bias.Phi && length(p.DrawScale) < n.p){
     ### Bias of phi is coupled with p parameters.
     p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
   }

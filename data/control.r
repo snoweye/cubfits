@@ -14,12 +14,13 @@
   parallel = c("lapply", "mclapply",
                "task.pull", "pbdLapply"),       # parallel functions
   adaptive = c("simple", "none"),                # method for adaptive mcmc
-  prior.dist = c("uniform", "normal")
+  prior.dist.M = c("uniform", "normal"),
+  prior.dist.Sphi = c("uniform", "normal")
 )
 
 ### For configuration of initial and draw scaling.
 .CF.CONF <- list(
-  scale.phi.Obs = TRUE,            # if phi.Obs were scaled to mean 1
+  scale.phi.Obs = FALSE,           # if phi.Obs were scaled to mean 1
   init.b.Scale = 1,                # initial b scale
   init.phi.Scale = 1,              # initial phi scale
   p.nclass = 2,                    # # of classes if mixture phi
@@ -27,10 +28,12 @@
   p.DrawScale = 0.1,               # drawing scale for p if random walk
   phi.DrawScale = 1,               # random walk scale for phi
   phi.pred.DrawScale = 1,          # random walk scale for phi.pred
-  sigma.Phi.DrawScale = 1,         # random wasl scale for sigma.Phi
+  sigma.Phi.DrawScale = 1,         # random walk scale for sigma.Phi
   bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
-  estimate.bias.Phi = FALSE,       # if estimate bias of phi during MCMC
-  compute.logL = FALSE             # if compute logL in each iteration
+  estimate.bias.Phi = TRUE,        # if estimate bias of phi during MCMC
+  estimate.Phi.noise = TRUE,       # estimate the noise in the phi observed data (sigma epsilon)
+  estimate.S.Phi = TRUE,           # if FALSE, sPhi is fixed accross the run
+  compute.logL = TRUE              # if compute logL in each iteration
 )
 
 ### For optimization.
@@ -72,6 +75,8 @@
   # phi.sdlog = 1.393285,            # yassour sd for log(phi)
   phi.meanlog = -1.125,            # mean of log(phi), -s^2/2
   phi.sdlog = 1.5,                  # sd of log(phi)
-  prior.a = 0,                    # first parameter of density function of prior (e.g. dnorm(x, mean=a, sd=b))
-  prior.b = 0.35                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
+  prior.M.a = 0,                    # first parameter of density function of prior (e.g. dnorm(x, mean=a, sd=b))
+  prior.M.b = 0.35,                     # second parameter of density function of prior (e.g dnorm(x, mean=a, sd=b))
+  prior.Sphi.a = 0.52,          # meanlog for lognormal Sphi prior
+  prior.Sphi.b = 0.33          # sdlog for lognormal Sphi prior
 )

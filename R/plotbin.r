@@ -60,6 +60,10 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
           list(x = rep(ret.bin.codon$center[i.center], 2),
                y = tmp.y),
           col = color.alpha[i.codon], lwd = 0.8)
+        
+        ngenes.codon <- ret.bin[ret.bin$codon == u.codon[i.codon], ]
+        ngenes.codon <- sum(ngenes.codon$ngenes)
+        lines(ret.bin$center, (ret.bin$ngenes/ngenes.codon)*10, type="s", col="gray86", lwd=0.8)
       }
     }
 
@@ -84,7 +88,7 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
   }
 
   ### Add legends.
-  legend(x.lim[1], y.lim[2], u.codon.star, col = color, 
+  legend(x.lim[1], y.lim[2], u.codon.star, col = color, bg = NULL,
          box.lty = 0, lty = 1, pch = 19, cex = 0.8)
 } # End of plotbin().
 

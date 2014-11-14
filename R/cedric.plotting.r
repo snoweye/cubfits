@@ -2,7 +2,14 @@ plotPTraces <- function(pMat, ...)
 {
   input_list <- as.list(list(...))
   pMat <- do.call("rbind", pMat)
+  n.traces <- min(dim(pMat)[2], 4)
   
+  if("log" %in% names(input_list)){
+    logY <- input_list$log
+    input_list$log <- NULL
+  }else{
+    logY <- NULL
+  }  
   if("main" %in% names(input_list)){
     main <- input_list$main
     input_list$main <- NULL
@@ -13,18 +20,17 @@ plotPTraces <- function(pMat, ...)
     xlab <- input_list$xlab
     input_list$xlab <- NULL
   }else{
-    xlab <- "Iteration"
-  }
+    xlab <- "Samples"
+  } 
   if("ylab" %in% names(input_list)){
-    ylab <- input_list$ylab
+    ylabs <- input_list$ylab
     input_list$ylab <- NULL
   }else{
-    n.traces <- dim(pMat)[2]
-    if(n.traces==2)
+    if(n.traces == 2)
     {
-      ylabs <- c("M", expression("s"[phi]))
+      ylabs <- c(expression(mu[phi]), expression(sigma[phi]))
     }else{
-      ylabs <- c(expression("s"[epsilon]), "M", expression("s"[phi]), "K")
+      ylabs <- c(expression(sigma[epsilon]), expression(mu[phi]), expression(sigma[phi]), "K")
     }
   }
   if("type" %in% names(input_list)){
@@ -37,7 +43,12 @@ plotPTraces <- function(pMat, ...)
   par(oma=c(1,1,2,1), mgp=c(2,1,0), mar = c(3,4,2,1), mfrow=c(2, ceiling(n.traces/2) ))
   for(i in 1:n.traces)
   {
-    do.call(plot, c(input_list, list(x=pMat[, i]), list(xlab=xlab), list(ylab=ylabs[i]), list(type=type)) )
+    if(!is.null(logY) & min(pMat[, i]) > 0)
+    {
+      do.call(plot, c(input_list, list(x=pMat[, i]), list(xlab=xlab), list(ylab=ylabs[i]), list(type=type), list(log=logY)) )
+    }else{
+      do.call(plot, c(input_list, list(x=pMat[, i]), list(xlab=xlab), list(ylab=ylabs[i]), list(type=type)) )
+    }
     #plot(pMat[, i], xlab=xlab, ylab=ylabs[i], type=type)
   }
   title(main=main, outer=T)
@@ -76,16 +87,16 @@ plotExpectedPhiTrace <- function(phiMat, ...)
   
   
   do.call( plot, c(input_list, list(x=phiMat), list(xlab=xlab), list(ylab=ylab), list(main=main), list(type=type)) )
-  #plot(phi.Mat, xlab=xlab, ylab=ylab, main=main, type=type)  
+  abline(h=1, col="red")
 }
 
-plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, rescale=F,
+plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
                      main="CUB", model.label=c("True Model"), model.lty=1)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
   #phi.bin <- phi.bin * phi.scale
-  phi.bin.lim <- range(c(phi.bin, phiMat))
+  phi.bin.lim <- range(phi.bin)#range(c(phi.bin, phiMat))
   
   lbound <- max(0, length(bMat)-n.use.samples)
   ubound <- length(bMat)
@@ -104,10 +115,10 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
             max(lim.bin[2], lim.model[2]))
   
   
-  mat <- matrix(c(rep(1, 5), 2:21, rep(22, 5)),
-                nrow = 6, ncol = 5, byrow = TRUE)
-  mat <- cbind(rep(23, 6), mat, rep(24, 6))
-  nf <- layout(mat, c(3, rep(8, 5), 2), c(3, 8, 8, 8, 8, 3), respect = FALSE)
+  mat <- matrix(c(rep(1, 4), 2:21, rep(22, 4)),
+                nrow = 7, ncol = 4, byrow = TRUE)
+  mat <- cbind(rep(23, 7), mat, rep(24, 7))
+  nf <- layout(mat, c(3, rep(8, 4), 2), c(3, 8, 8, 8, 8, 8, 3), respect = FALSE)
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -123,17 +134,18 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = model.lty, axes = FALSE, xlim = xlim)
     box()
-    text(0, 1, aa.names[i.aa], cex = 1.5)
-    if(i.aa %in% c(1, 6, 11, 16)){
+    main.aa <- oneLetterAAtoThreeLetterAA(aa.names[i.aa])
+    text(0, 1, main.aa, cex = 1.5)
+    if(i.aa %in% c(1, 5, 9, 13, 17)){
       axis(2)
     }
-    if(i.aa %in% 15:19){
+    if(i.aa %in% 16:19){
       axis(1)
     }
-    if(i.aa %in% 1:5){
+    if(i.aa %in% 1:4){
       axis(3)
     }
-    if(i.aa %in% c(5, 10, 15)){
+    if(i.aa %in% c(4, 8, 12,16)){
       axis(4)
     }
     axis(1, tck = 0.02, labels = FALSE)
@@ -143,13 +155,15 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, phiMat, n.use.samples=2000, res
   }
   
   ## adding a histogram of phi values to plot
-  #hist(log10(phiMat), xlab=expression(phi), main="")
-    
+  hist.values <- hist(log10(phi.bin), plot=FALSE, nclass=30)
+  plot(hist.values, axes = FALSE, main="", xlab = "", ylab = "")
+  box()
+  axis(1)
+
   ### Add label.
-  
-  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
-       xlim = c(0, 1), ylim = c(0, 1))
-  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
+#  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
+#        xlim = c(0, 1), ylim = c(0, 1))
+#  legend(0.1, 0.8, model.label, lty = model.lty, box.lty = 0)
   
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -183,9 +197,12 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
     xlab <- expression(paste(Delta, eta))
     id.plot[id.slope] <- id.slope
   }
+
+  nf <- layout(matrix(c(rep(1, 4), 2:21), nrow = 6, ncol = 4, byrow = TRUE),
+               rep(1, 4), c(2, 8, 8, 8, 8, 8), respect = FALSE)  
+  #   nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
+  #                rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
   
-  nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-               rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -221,8 +238,9 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
     ylim <- c(0, max(ymax))
     
     # create empty plot
+    main.aa <- oneLetterAAtoThreeLetterAA(i.aa)
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
-         xlab = xlab, ylab = "Frequency", main = i.aa)
+         xlab = xlab, ylab = "Frequency", main = main.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
        
     ## Fill plots
@@ -269,8 +287,11 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltaeta", "deltat"),
   xlim <- range(x)
   
   ### Trace plot.
-  nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
-               rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
+  nf <- layout(matrix(c(rep(1, 4), 2:21), nrow = 6, ncol = 4, byrow = TRUE),
+               rep(1, 4), c(2, 8, 8, 8, 8, 8), respect = FALSE)  
+#   nf <- layout(matrix(c(rep(1, 5), 2:21), nrow = 5, ncol = 5, byrow = TRUE),
+#                rep(1, 5), c(2, 8, 8, 8, 8), respect = FALSE)
+  
   ### Plot title.
   par(mar = c(0, 0, 0, 0))
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
@@ -284,13 +305,22 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltaeta", "deltat"),
     trace <- lapply(1:length(bMat), function(i){ bMat[[i]][id.tmp] })
     trace <- do.call("rbind", trace)
     if(length(trace) == 0) next
-    
     ylim <- range(trace, na.rm=T)
+    
+    main.aa <- oneLetterAAtoThreeLetterAA(i.aa)
     plot(NULL, NULL, xlim = xlim, ylim = ylim,
-         xlab = "Samples", ylab = ylab, main = i.aa)
+         xlab = "Samples", ylab = ylab, main = main.aa)
     plot.order <- order(apply(trace, 2, sd), decreasing = TRUE)
     for(i.codon in plot.order){
       lines(x = x, y = trace[, i.codon], col = .CF.PT$color[i.codon])
     } 
   }
+}
+
+oneLetterAAtoThreeLetterAA <- function(letter)
+{
+  letters <- list(A="Ala", R="Arg", N="Asn", D="Asp", C="Cys", Q="Gln", E="Glu", 
+                  G="Gly", H="His", I="Ile", L="Leu", K="Lys", F="Phe", P="Pro", 
+                  S=expression("Ser"[4]), Z=expression("Ser"[2]), T="Thr", Y="Tyr", V="Val", M="Met", W="Trp")
+  return(letters[[letter]])
 }

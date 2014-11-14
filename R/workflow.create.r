@@ -12,7 +12,7 @@ cp.workflow <- function(flow = c("wphi", "wophi", "simu", "wphi_wophi"),
     model = c("roc"), pkg = "cubfits", to = NULL, code = FALSE){
   ### Check OS.
   if(Sys.info()["sysname"] == "Windows"){
-    stop("Non of work flows supports windows system.")
+    stop("Non of the workflows supports windows system.")
   }
 
   ### Check flow.
