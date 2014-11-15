@@ -80,6 +80,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
   } else{
     b.RInitList <- b.RInit
   }
+
   if(is.null(b.Init)){
     b.Init <- lapply(b.InitList,
                function(B){
@@ -125,7 +126,7 @@ my.cubappr <- function(reu13.df.obs, phi.pred.Init, y, n,
 ### MCMC here ###
   ### Get length for acceptance and adaptive storage.
   n.p <- 1
-  if(.CF.CONF$estimate.bias.Phi){
+  if(.CF.CONF$estimate.bias.Phi && length(p.DrawScale) < n.p){
     n.p <- n.p + 1
   }
 
