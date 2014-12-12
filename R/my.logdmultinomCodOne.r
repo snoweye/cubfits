@@ -36,7 +36,7 @@ my.logdmultinomCodOne.rocnsef <- function(baa, phi, yaa, naa,
 
   ### Call C to compute log posterior probability for every codon.
   baamat <- matrix(-baa, nrow = 3, byrow = TRUE)
-  lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
+  lp.vec <- cubfits:::my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability) where codon count among all
   ### synomous codons for each positon is either 0 or 1 in rocnsef model.

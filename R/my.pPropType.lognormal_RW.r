@@ -14,9 +14,15 @@ my.pPropType.lognormal_RW <- function(n.G, log.phi.Obs, phi.Curr,
 
   ### Draw \sigma^{2*}_W from IG((n_G - 1) / 2,
   ###                            (n_G - 1) S^{2(t)}_{phi_{obs}} / 2)
-  sigmaW.Curr <-
-    sqrt(1 / rgamma(1, shape = (n.G - 1) / 2,
-                       rate = sum((log.phi.Obs - log.phi.Curr)^2) / 2))
+  if(.CF.CONF$estimate.Phi.noise)
+  {
+    sigmaW.Curr <-
+      sqrt(1 / rgamma(1, shape = (n.G - 1) / 2,
+                      rate = sum((log.phi.Obs - log.phi.Curr)^2) / 2)) 
+  }else{
+    sigmaW.Curr <- p.Curr[1]
+  }  
+
 
   ### Propose sigma.Phi.Curr.
   proplist <- my.proposesigmaPhi.RW_Norm(

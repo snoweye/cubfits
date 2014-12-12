@@ -47,10 +47,7 @@ my.drawBConditionalFit.MH <- function(proplist, baa, phi, yaa, naa,
   {
   
   #browser()
-  ## change sign of b. Since it was changed before to match delta eta it has to be changed back here
-  ## to calculate the proper likelihood
   baaProp <- proplist$prop
-  baa <- baa
   lir <- proplist$lir
 
   
@@ -98,10 +95,10 @@ my.drawBPrior <- function(baa, baaProp)
   dmindex <- 1:(length(baa)/ncoef)
   baa <- baa[dmindex]
   baaProp <- baaProp[dmindex]
-  if(.CF.CT$prior.dist[1] == "normal")
+  if(.CF.CT$prior.dist.M[1] == "normal")
   {
-    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) 
-                  - dnorm(baaProp, .CF.PARAM$prior.a, .CF.PARAM$prior.b, log=T) )    
+    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.M.a, .CF.PARAM$prior.M.b, log=T) 
+                  - dnorm(baaProp, .CF.PARAM$prior.M.a, .CF.PARAM$prior.M.b, log=T) )    
   }
   return(priorProp) 
 }

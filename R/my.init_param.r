@@ -13,7 +13,7 @@ my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
       ### One more for bias.Phi.
       if(.CF.CONF$estimate.bias.Phi){
         nu.Phi.Init <- - sigma.Phi.Init^2 / 2 
-        bias.Phi.Init <- mean(log(phi.Obs)) - nu.Phi.Init
+        bias.Phi.Init <- log(mean(phi.Obs)) - nu.Phi.Init
         ret <- c(sigmaW.Init, nu.Phi.Init, sigma.Phi.Init, bias.Phi.Init)
       }
     } else if(model.Phi[1] == "logmixture"){

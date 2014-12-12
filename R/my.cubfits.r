@@ -153,7 +153,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   my.set.acceptance(nIter + 1, n.aa, n.p = n.p, n.G = n.G)
 
   ### Set adaptive storage.
-  if(.CF.CONF$estimate.bias.Phi){
+  if(.CF.CONF$estimate.bias.Phi && length(p.DrawScale) < n.p){
     ### Bias of phi is coupled with p parameters.
     p.DrawScale <- c(p.DrawScale, .CF.CONF$bias.Phi.DrawScale)
   }
@@ -229,6 +229,7 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
   aa.names <- names(y)
   in.names <- names(b.Mat[[1]])
   names(b.Mat[[1]]) <- mapBMatNames(in.names, aa.names, model = model)
+
   ret <- list(b.Mat = b.Mat, p.Mat = p.Mat, phi.Mat = phi.Mat,
               logL.Mat = logL.Mat,
               b.Init = b.Init, b.RInit = b.RInitList,
