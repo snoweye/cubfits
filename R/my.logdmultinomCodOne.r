@@ -107,10 +107,20 @@ my.logdmultinomCodOne.nsef <- function(baa, phi, yaa, naa, vec = FALSE,
   tmp.phi <- rep(phi, naa)
 
   ### Rebuild x matix in 2 columns, cbind(1, tmp.phi:Pos).
-  xm <- matrix(cbind(1, tmp.phi * reu13.df.aa$Pos), ncol = 2)
+  xm <- matrix(cbind(1, -1 * tmp.phi * reu13.df.aa$Pos * 4), ncol = 2)
+	##4 here is the ATP cost of direct codon addition, a_2
+
+  ###Codon Specific Parameters
+  baamat <- matrix(baa, nrow = 2, byrow = TRUE)
+
+## You can set a2 and (a1-a2) in the config.r file
+## Then do the full calculation mu - (a1-a2)*omega*phi - a2*phi*omega*position
+#  xm <- matrix(cbind(1, -1 * config$delta.a_12 * tmp.phi, -1 * config$a_2 * tmp.phi * reu13.df.aa$Pos), ncol = 3)
+#	#M - omega * a_2 * y_1 * pos \approx M - omega * a_2 * phi * pos
+#  baamat <- matrix(rbind(baamat, baamat[2,]), nrow=3)
+#	#adding a third row to work with delta.a_12
 
   ### Call C to compute log posterior probability for every codon.
-  baamat <- matrix(-baa, nrow = 2, byrow = TRUE)
   lp.vec <- my.inverse.mlogit(xm %*% baamat, log = TRUE)
 
   ### (Codon count) * (log posterior probability) where codon count among all
