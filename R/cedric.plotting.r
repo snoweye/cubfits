@@ -91,7 +91,7 @@ plotExpectedPhiTrace <- function(phiMat, ...)
 }
 
 plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
-                     main="CUB", model.label=c("True Model"), model.lty=1)
+                     main="CUB", model.label=c("True Model"), model.lty=1, ...)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
