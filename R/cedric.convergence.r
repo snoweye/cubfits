@@ -47,7 +47,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
         p.mat <- do.call("rbind", chains[[i]]$p.Mat)
         index <- 3 # index of sphi for with x obs
         if(dim(p.mat)[2] == 2){index <- 2} # index of sphi for without x obs
-        dataobj <- p.mat[, index]
+        dataobj <- log10(p.mat[, index])
       }else if(teston[1] == "phi"){ # test on phis
         if("phi.Mat" %in% names(chains[[i]])) # with x obs 
         {
@@ -57,7 +57,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
         {
           phi.mat <- do.call("rbind", chains[[i]]$phi.pred.Mat)
         }
-        dataobj <- phi.mat
+        dataobj <- log10(phi.mat)
       }else{
         stop("convergence test can not be perfomed on choosen data\n")
       }
@@ -72,7 +72,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
       p.mat <- do.call("rbind", chains$p.Mat)
       index <- 3 # index of sphi for with x obs
       if(dim(p.mat)[2] == 2){index <- 2} # index of sphi for without x obs
-      dataobj <- p.mat[, index]
+      dataobj <- log10(p.mat[, index])
     }else if(teston[1] == "phi"){ # test on phis
       if("phi.Mat" %in% names(chains)) # with x obs 
       {
@@ -82,7 +82,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
       {
         phi.mat <- do.call("rbind", chains$phi.pred.Mat)
       }
-      dataobj <- phi.mat
+      dataobj <- log10(phi.mat)
     }else{
       stop("convergence test can not be perfomed on choosen data\n")
     }
@@ -113,7 +113,7 @@ isConverged <- function(chains, nsamples, eps=0.1, thin=10, frac1=0.1, frac2=0.5
     }else{ # else is enough here. The correctness of the method was determined above and leaves only two options
       # univariate test on all phi values
       result <- sum(diag$z < eps) == length(diag$z)
-      ret <- list(isConverged=result, gelman=diag$z)
+      ret <- list(isConverged=result, gelman=mean(diag$z))
     }    
   }
   return(ret)
@@ -184,7 +184,26 @@ cubsinglechain <- function(cubmethod, frac1=0.1, frac2=0.5, reset.qr, seed=NULL,
   if(is.null(seed)){
     seed <- round(runif(1, 1, 100000))
   }
-  
+  if("b.DrawScale" %in% names(input_list) ){
+    b.DrawScale <- input_list$b.DrawScale
+  }else{
+    b.DrawScale <- .CF.CONF$b.DrawScale
+  }
+  if("p.DrawScale" %in% names(input_list) ){
+    p.DrawScale <- input_list$p.DrawScale
+  }else{
+    p.DrawScale <- .CF.CONF$p.DrawScale
+  }
+  if("phi.pred.DrawScale" %in% names(input_list) ){
+    phi.pred.DrawScale <- input_list$phi.pred.DrawScale
+  }else{
+    phi.pred.DrawScale <- .CF.CONF$phi.pred.DrawScale
+  }
+  if("phi.DrawScale" %in% names(input_list) ){
+    phi.DrawScale <- input_list$phi.DrawScale
+  }else{
+    phi.DrawScale <- .CF.CONF$phi.DrawScale
+  }   
   #############################################################
   ## running chain and checking for convergence ##
   #############################################################
@@ -194,24 +213,38 @@ cubsinglechain <- function(cubmethod, frac1=0.1, frac2=0.5, reset.qr, seed=NULL,
   converged <- FALSE
   while(!converged)
   { 
+    
+    
     .GlobalEnv$.CF.CT <- .CF.CT
     .GlobalEnv$.CF.CONF <- .CF.CONF
     if(cubmethod == "cubfits"){
-      res <- do.call(cubfits, c(input_list, list(phi.Init = init.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
+      res <- do.call(cubfits, c(input_list, list(phi.Init = init.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init),
+                                list(b.DrawScale = b.DrawScale), list(p.DrawScale = p.DrawScale), list(phi.DrawScale = phi.DrawScale)))
     }else if(cubmethod == "cubappr"){
-      res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
+      res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init),
+                                list(b.DrawScale = b.DrawScale), list(p.DrawScale = p.DrawScale), list(phi.pred.DrawScale = phi.pred.DrawScale)))
     }else if(cubmethod == "cubpred"){
-      res <- do.call(cubpred, c(input_list, list(phi.Init = init.phi), list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init)))
+      res <- do.call(cubpred, c(input_list, list(phi.Init = init.phi), list(phi.pred.Init = init.pred.phi), list(p.Init = p.init), list(b.RInit = b.rinit), list(b.Init = b.init),
+                                list(b.DrawScale = b.DrawScale), list(p.DrawScale = p.DrawScale), list(phi.pred.DrawScale = phi.pred.DrawScale), list(phi.DrawScale = phi.DrawScale)))
     }
-    
+    b.DrawScale <- .cubfitsEnv$DrawScale$b[[length(.cubfitsEnv$DrawScale$b)]]
+    if(length(.cubfitsEnv$DrawScale$p) > 0){
+      p.DrawScale <- .cubfitsEnv$DrawScale$p[[length(.cubfitsEnv$DrawScale$p)]]
+    }
     ## append chains and get new initial values for restart
     if(cubmethod == "cubfits" | cubmethod == "cubpred")
     {
       init.phi <- normalizeDataSet(res$phi.Mat[[length(res$phi.Mat)]])
+      if(length(.cubfitsEnv$DrawScale$p) > 0){
+        phi.DrawScale <- .cubfitsEnv$DrawScale$phi[[length(.cubfitsEnv$DrawScale$phi)]]
+      }
     }
     if(cubmethod == "cubappr" | cubmethod == "cubpred")
     {
       init.pred.phi <- normalizeDataSet(res$phi.pred.Mat[[length(res$phi.pred.Mat)]])
+      if(length(.cubfitsEnv$DrawScale$p) > 0){
+        phi.pred.DrawScale <- .cubfitsEnv$DrawScale$phi.pred[[length(.cubfitsEnv$DrawScale$phi.pred)]]
+      }
     }
     p.init <- res$p.Mat[[length(res$p.Mat)]]
     results <- appendCUBresults(res, results)
@@ -327,7 +360,34 @@ cubmultichain <- function(cubmethod, reset.qr, seeds=NULL, teston=c("phi", "sphi
     input_list$.CF.CONF <- NULL
   }else{
     .CF.CONF <- eval(parse(text = "cubfits::.CF.CONF"))
-  }   
+  } 
+  if("b.DrawScale" %in% names(input_list) ){
+    b.DrawScale <- input_list$b.DrawScale
+  }else{
+    b.DrawScale <- list(.CF.CONF$b.DrawScale)
+    length(b.DrawScale) <- nchains  
+  }
+  if("p.DrawScale" %in% names(input_list) ){
+    p.DrawScale <- input_list$p.DrawScale
+  }else{
+    p.DrawScale <- list(.CF.CONF$p.DrawScale)
+    length(p.DrawScale) <- nchains  
+  }
+  if("phi.pred.DrawScale" %in% names(input_list) ){
+    phi.pred.DrawScale <- input_list$phi.pred.DrawScale
+  }else{
+    phi.pred.DrawScale <- list(.CF.CONF$phi.pred.DrawScale)
+    length(phi.pred.DrawScale) <- nchains  
+  }
+  if("phi.DrawScale" %in% names(input_list) ){
+    phi.DrawScale <- input_list$phi.DrawScale
+  }else{
+    phi.DrawScale <- list(.CF.CONF$phi.DrawScale)
+    length(phi.DrawScale) <- nchains  
+  } 
+  
+  
+  
   results <- list()
   length(results) <- nchains
   if(is.null(seeds)){
@@ -348,29 +408,34 @@ cubmultichain <- function(cubmethod, reset.qr, seeds=NULL, teston=c("phi", "sphi
     res <- foreach(i = 1:nchains) %dopar%
     {
       suppressMessages(library(cubfits, quietly = TRUE))
-      
       .GlobalEnv$.CF.CT <- .CF.CT
       .GlobalEnv$.CF.CONF <- .CF.CONF
       set.seed(seeds[i])
       if(cubmethod == "cubfits"){
-        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
+        do.call(cubfits, c(input_list, list(phi.Init = init.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]]),
+                           list(b.DrawScale = b.DrawScale[[i]]), list(p.DrawScale = p.DrawScale[[i]]), list(phi.DrawScale = phi.DrawScale[[i]])))
       }else if(cubmethod == "cubappr"){
-        res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
+        res <- do.call(cubappr, c(input_list, list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]]),
+                                  list(b.DrawScale = b.DrawScale[[i]]), list(p.DrawScale = p.DrawScale[[i]]), list(phi.pred.DrawScale = phi.pred.DrawScale[[i]])))
       }else if(cubmethod == "cubpred"){
-        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]])))
+        do.call(cubpred, c(input_list, list(phi.Init = init.phi[[i]]), list(phi.pred.Init = init.pred.phi[[i]]), list(p.Init = p.init[[i]]), list(b.RInit = b.rinit[[i]]), list(b.Init = b.init[[i]]),
+                           list(b.DrawScale = b.DrawScale[[i]]), list(p.DrawScale = p.DrawScale[[i]]), list(phi.pred.DrawScale = phi.pred.DrawScale[[i]]), list(phi.DrawScale = phi.DrawScale[[i]])))
       }
     }
     ## append chains and get new initial values for restart
     for(i in 1:nchains)
     {
-      
+      b.DrawScale[[i]] <- .cubfitsEnv$DrawScale$b[[length(.cubfitsEnv$DrawScale$b)]]
+      p.DrawScale[[i]] <- .cubfitsEnv$DrawScale$p[[length(.cubfitsEnv$DrawScale$p)]]
       if(cubmethod == "cubfits" | cubmethod == "cubpred")
       {
         init.phi[[i]] <- normalizeDataSet(res[[i]]$phi.Mat[[length(res[[i]]$phi.Mat)]])
+        phi.DrawScale[[i]] <- .cubfitsEnv$DrawScale$phi[[length(.cubfitsEnv$DrawScale$phi)]]
       }
       if(cubmethod == "cubappr" | cubmethod == "cubpred")
       {
         init.pred.phi[[i]] <- normalizeDataSet(res[[i]]$phi.pred.Mat[[length(res[[i]]$phi.pred.Mat)]])
+        phi.pred.DrawScale[[i]] <- .cubfitsEnv$DrawScale$phi.pred[[length(.cubfitsEnv$DrawScale$phi.pred)]]
       }
       p.init[[i]] <- res[[i]]$p.Mat[[length(res[[i]]$p.Mat)]]
       results[[i]] <- appendCUBresults(res[[i]], results[[i]])

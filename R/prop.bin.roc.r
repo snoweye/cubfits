@@ -111,7 +111,7 @@ find.prop <- function(tmp.id, tmp.aa){
   ret <- data.frame(codon = as.character(name.codon),
                     freq.mean = as.double(mean.p),
                     freq.std = as.double(std.p),
-                    freq.stderr = as.double(stderr.p),
+                    freq.stderr = as.double(stderr.p), ngenes = length(u.orf),
                     stringsAsFactors = FALSE)
   ret
 } # End of find.prop().
