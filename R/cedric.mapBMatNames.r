@@ -16,7 +16,7 @@ mapBMatNames <- function(in.names, aa.names, model = "roc", as.delta.eta = T){
   ### Drop the last reference codon.
   synonymous.codon <- lapply(synonymous.codon, function(x) x[-length(x)])
 
-  if(model == "roc"){
+  if(model == "roc" || model == "nsef"){
     ### Original Cedric's code.
     codon.count <- lapply(synonymous.codon, length)
     id.intercept <- grep("Intercept", in.names)

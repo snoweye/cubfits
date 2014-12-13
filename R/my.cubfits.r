@@ -200,6 +200,14 @@ my.cubfits <- function(reu13.df.obs, phi.Obs, y, n,
         c(.CF.AC$b.DrawScale, .CF.AC$p.DrawScale, .CF.AC$phi.DrawScale))
     }
 
+    ### Update Covariance Matrix
+    if((iter/iterThin) %in% c(100, 200, 400, 800)){
+      b.InitList <- .cubfitsEnv$my.fitMultinomAll(reu13.df.obs, phi.Curr, y, n)
+      b.RInitList <- lapply(b.InitList, function(B){ B$R })
+      names(b.RInitList) <- names(reu13.df.obs)
+    }
+
+
     ### Dump parameters out.
     if((iter %% iterThin) == 0){
       thinnedIter <- iter / iterThin + 1
