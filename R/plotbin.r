@@ -28,8 +28,8 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
 
   u.codon <- sort(unique(as.character(ret.bin$codon)))
   u.center <- unique(ret.bin$center)
-  color <- cubfits:::get.color(u.codon)
-  color.alpha <- cubfits:::get.color(u.codon, color = .CF.PT$color.alpha)
+  color <- get.color(u.codon)
+  color.alpha <- get.color(u.codon, color = .CF.PT$color.alpha)
   ### Reorder R for better legend.
   if(all(u.codon %in% .CF.GV$synonymous.codon$R)){
     u.codon <- u.codon[c(3:6, 1:2)]

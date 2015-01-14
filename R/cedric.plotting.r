@@ -139,7 +139,7 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = model.lty, axes = FALSE, xlim = xlim)
     box()
-    main.aa <- cubfits:::oneLetterAAtoThreeLetterAA(aa.names[i.aa])
+    main.aa <- oneLetterAAtoThreeLetterAA(aa.names[i.aa])
     text(0, 1, main.aa, cex = 1.5)
     if(i.aa %in% c(1, 5, 9, 13, 17)){
       axis(2)
