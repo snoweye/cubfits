@@ -90,23 +90,28 @@ plotExpectedPhiTrace <- function(phiMat, ...)
   abline(h=1, col="red")
 }
 
-plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
+plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2000,
                      main="CUB", model.label=c("True Model"), model.lty=1)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
   #phi.bin <- phi.bin * phi.scale
   phi.bin.lim <- range(phi.bin)#range(c(phi.bin, phiMat))
-  
-  lbound <- max(0, length(bMat)-n.use.samples)
-  ubound <- length(bMat)
-  b.mat <- do.call(cbind, bMat[lbound:ubound]) 
-  Eb <- rowMeans(b.mat)
+  if(is.null(bMat))
+  {
+    Eb <- bVec  
+  }else{
+    lbound <- max(0, length(bMat)-n.use.samples)
+    ubound <- length(bMat)
+    b.mat <- do.call(cbind, bMat[lbound:ubound]) 
+    Eb <- rowMeans(b.mat)  
+  }
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
   ### Compute.
   ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
   predict.roc <- prop.model.roc(Eb, phi.bin.lim)
+  
   
   ### Fix xlim at log10 scale. 
   lim.bin <- range(log10(ret.phi.bin[[1]]$center))
@@ -134,7 +139,7 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = model.lty, axes = FALSE, xlim = xlim)
     box()
-    main.aa <- oneLetterAAtoThreeLetterAA(aa.names[i.aa])
+    main.aa <- cubfits:::oneLetterAAtoThreeLetterAA(aa.names[i.aa])
     text(0, 1, main.aa, cex = 1.5)
     if(i.aa %in% c(1, 5, 9, 13, 17)){
       axis(2)
