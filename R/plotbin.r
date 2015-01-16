@@ -37,6 +37,16 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
     color.alpha <- color.alpha[c(3:6, 1:2)]
   }
 
+  ngenes.codon.total <- 0
+  for(i.codon in 1:length(u.codon)){  
+    ngenes.codon <- ret.bin[ret.bin$codon == u.codon[i.codon], ]
+    ngenes.codon.total <- ngenes.codon.total + ngenes.codon$codon.count
+  }
+  ret.bin.codon <- ret.bin[ret.bin$codon == u.codon[1],]
+  plot(ret.bin.codon$center, ngenes.codon.total, ,type="h", pch=22, col="#D8D8D888", lwd=7, xaxt="n", yaxt="n", bty="n", xlab="",ylab="", xlim=x.lim)    
+  par(new=TRUE)
+  
+  
   ### Make an empty plot
   plot(NULL, NULL, xlim = x.lim, ylim = y.lim,
        main = main, xlab = xlab, ylab = ylab, ...)
@@ -61,18 +71,15 @@ plotbin <- function(ret.bin, ret.model = NULL, main = NULL,
                y = tmp.y),
           col = color.alpha[i.codon], lwd = 0.8)
         
-        ngenes.codon <- ret.bin[ret.bin$codon == u.codon[i.codon], ]
-        ngenes.codon <- sum(ngenes.codon$ngenes)
-        lines(ret.bin$center, (ret.bin$ngenes/ngenes.codon)*10, type="s", col="gray86", lwd=0.8)
       }
     }
-
     ### Add points.
     points(ret.bin.codon$center,
            ret.bin.codon$freq.mean,
-           pch = 19, col = color[i.codon], cex = 0.5)
+           pch = 19, col = color[i.codon], cex = 0.5)    
   }
-
+  
+  
   ### Add modeled lines.
   u.codon.star <- u.codon
   if(!is.null(ret.model)){

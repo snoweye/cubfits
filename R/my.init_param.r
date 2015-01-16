@@ -18,7 +18,7 @@ my.pInit <- function(p.Init, phi.Obs, model.Phi, p.nclass = 2,
       }
     } else if(model.Phi[1] == "logmixture"){
       if(p.nclass <= 1){
-        stop("p.nclass > 1")
+        stop("p.nclass > 1 required")
       }
       log.phi.Obs <- matrix(log(phi.Obs), ncol = 1)
       tmp <- EMCluster::rand.EM(log.phi.Obs, nclass = as.integer(p.nclass),
