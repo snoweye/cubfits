@@ -90,33 +90,32 @@ plotExpectedPhiTrace <- function(phiMat, ...)
   abline(h=1, col="red")
 }
 
-plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
-                     main="CUB", model.label=c("True Model"), model.lty=1, ...)
+plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2000,
+                     main="CUB", model.label=c("True Model"), model.lty=1)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
   #phi.bin <- phi.bin * phi.scale
   phi.bin.lim <- range(phi.bin)#range(c(phi.bin, phiMat))
-  
-  lbound <- max(0, length(bMat)-n.use.samples)
-  ubound <- length(bMat)
-  b.mat <- do.call(cbind, bMat[lbound:ubound]) 
-  Eb <- rowMeans(b.mat)
+  if(is.null(bMat))
+  {
+    Eb <- bVec  
+  }else{
+    lbound <- max(0, length(bMat)-n.use.samples)
+    ubound <- length(bMat)
+    b.mat <- do.call(cbind, bMat[lbound:ubound]) 
+    Eb <- rowMeans(b.mat)  
+  }
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
   ### Compute.
   ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
+  predict.roc <- prop.model.roc(Eb, phi.bin.lim)
   
-  if(model=="nse"){
-    if("delta_a12" %in% names(list(...))) delta_a12 <- list(...)$delta_a12
-    if("a_2" %in% names(list(...))) a_2 <- list(...)$a_2
-    prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim, delta_a12=delta_a12, a_2=a_2)
-  }
-  else{  prediction <- prop.model.roc(Eb, phi.bin.lim) }
   
   ### Fix xlim at log10 scale. 
   lim.bin <- range(log10(ret.phi.bin[[1]]$center))
-  lim.model <- range(log10(prediction[[1]]$center))
+  lim.model <- range(log10(predict.roc[[1]]$center))
   xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 4,
             max(lim.bin[2], lim.model[2]))
   
@@ -135,7 +134,7 @@ plotCUB <- function(reu13.df.obs, bMat, phi.bin, n.use.samples=2000, rescale=F,
   for(i.aa in 1:length(aa.names))
   {
     tmp.obs <- ret.phi.bin[[i.aa]]
-    tmp.roc <- prediction[[i.aa]]
+    tmp.roc <- predict.roc[[i.aa]]
     
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = model.lty, axes = FALSE, xlim = xlim)

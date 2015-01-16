@@ -30,7 +30,7 @@
   phi.pred.DrawScale = 1,          # random walk scale for phi.pred
   sigma.Phi.DrawScale = 1,         # random walk scale for sigma.Phi
   bias.Phi.DrawScale = 0.1,        # random walk scale for bias.Phi
-  estimate.bias.Phi = TRUE,        # if estimate bias of phi during MCMC
+  estimate.bias.Phi = FALSE,        # if estimate bias of phi during MCMC
   estimate.Phi.noise = TRUE,       # estimate the noise in the phi observed data (sigma epsilon)
   estimate.S.Phi = TRUE,           # if FALSE, sPhi is fixed accross the run
   compute.logL = TRUE              # if compute logL in each iteration
