@@ -1,6 +1,6 @@
 plotCUB.NSE <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2000,
                      main="CUB", model.label=c("True Model"), model.lty=1,
-                     delta_a12=0, a_2=1, positions=c(100, 200, 400, 800))
+                     delta_a12=0, a_2=1, positions=c(100, 200, 400, 800), weightedCenters=TRUE)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
@@ -18,7 +18,8 @@ plotCUB.NSE <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.sampl
   
   ### Compute.
   ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
-  prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim, delta_a12=delta_a12, a_2=a_2, positions=positions)
+  prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim,
+                               delta_a12=delta_a12, a_2=a_2, positions=positions,weightedCenters=weightedCenters)
   
   
   ### Fix xlim at log10 scale. 

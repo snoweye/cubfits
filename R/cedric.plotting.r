@@ -110,11 +110,6 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   
   ### Compute.
   ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
-  if(model=="nse"){
-    if("delta_a12" %in% names(list(...))) delta_a12 <- list(...)$delta_a12
-    if("a_2" %in% names(list(...))) a_2 <- list(...)$a_2
-    prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim, delta_a12=delta_a12, a_2=a_2)
-  }
   prediction <- prop.model.roc(Eb, phi.bin.lim)
   
   
