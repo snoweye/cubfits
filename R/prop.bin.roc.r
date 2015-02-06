@@ -35,7 +35,7 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
 
 
 ### Summarize by amino acid.
-### sub.aa.dfs is from REU12.
+### sub.aa.dfs is from REU13.
 ### phi.method is a data.frame(ORF, phi),
 ###            where ORF is the key to match codons in sub.aa.dfs.
 ### phi.bin is a vector used to bin phi.method$phi, usually
@@ -54,7 +54,7 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
     i.bin <- 2
     tmp.id <- tmp.aa$ORF %in% phi.method$ORF[phi < phi.bin[i.bin]]
     if(sum(tmp.id) > 0){
-      ret.aa <- find.prop(tmp.id, tmp.aa)
+      ret.aa <- find.prop(tmp.id, tmp.aa, u.codon)
       ret.aa$center <- mean(phi.bin[(i.bin - 1):i.bin])
     }
 
@@ -63,7 +63,7 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
       tmp.id <- tmp.aa$ORF %in%
                 phi.method$ORF[phi > phi.bin[i.bin] & phi < phi.bin[i.bin + 1]]
       if(sum(tmp.id) > 0){
-        tmp.prop <- find.prop(tmp.id, tmp.aa)
+        tmp.prop <- find.prop(tmp.id, tmp.aa, u.codon)
         tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
         ret.aa <- rbind(ret.aa, tmp.prop)
       }
@@ -73,7 +73,7 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
     i.bin <- nclass
     tmp.id <- tmp.aa$ORF %in% phi.method$ORF[phi > phi.bin[i.bin]]
     if(sum(tmp.id) > 0){
-      tmp.prop <- find.prop(tmp.id, tmp.aa)
+      tmp.prop <- find.prop(tmp.id, tmp.aa, u.codon)
       tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
       ret.aa <- rbind(ret.aa, tmp.prop)
     }
@@ -87,7 +87,7 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
 } # End of find.prop.bin.roc().
 
 
-find.prop <- function(tmp.id, tmp.aa){
+find.prop <- function(tmp.id, tmp.aa, u.codon){
   ### tmp.aa is in parent's environment.
   tmp.aa.bin <- tmp.aa[tmp.id,]
   u.orf <- as.character(unique(tmp.aa.bin$ORF))
@@ -100,15 +100,25 @@ find.prop <- function(tmp.id, tmp.aa){
   # }
   ### This is much fast.
   tmp.table <- table(tmp.aa.bin$ORF, tmp.aa.bin$Codon)
+  missing.codons <- length(u.codon) - ncol(tmp.table)
+  if(missing.codons > 0){
+    for(mc in 1:missing.codons){
+      tmp.table <- cbind(tmp.table, rep(0, nrow(tmp.table)))
+    }
+    colnames(tmp.table) <- u.codon  
+  }
+  
   tmp.table.orf <- tmp.table / rowSums(tmp.table)
   tmp.table.orf <- matrix(tmp.table.orf, nrow = nrow(tmp.table))
-
+  
+  tmp.table.codon.count <- colSums(tmp.table)
+  
   mean.p <- colMeans(tmp.table.orf)
   std.p <- apply(tmp.table.orf, 2, sd)
   stderr.p <- std.p / sum(tmp.id)
 
   name.codon <- colnames(tmp.table)
-  ret <- data.frame(codon = as.character(name.codon),
+  ret <- data.frame(codon = as.character(name.codon), codon.count = tmp.table.codon.count,
                     freq.mean = as.double(mean.p),
                     freq.std = as.double(std.p),
                     freq.stderr = as.double(stderr.p), ngenes = length(u.orf),
