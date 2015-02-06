@@ -91,7 +91,7 @@ plotExpectedPhiTrace <- function(phiMat, ...)
 }
 
 plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2000,
-                     main="CUB", model.label=c("True Model"), model.lty=1)
+                     main="CUB", model.label=c("True Model"), model.lty=1, weightedCenters=TRUE)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
@@ -109,7 +109,7 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
   ### Compute.
-  ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
+  ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin, weightedCenters=weightedCenters)
   prediction <- prop.model.roc(Eb, phi.bin.lim)
   
   
