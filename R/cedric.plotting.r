@@ -110,12 +110,17 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   
   ### Compute.
   ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin)
-  predict.roc <- prop.model.roc(Eb, phi.bin.lim)
+  if(model=="nse"){
+    if("delta_a12" %in% names(list(...))) delta_a12 <- list(...)$delta_a12
+    if("a_2" %in% names(list(...))) a_2 <- list(...)$a_2
+    prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim, delta_a12=delta_a12, a_2=a_2)
+  }
+  prediction <- prop.model.roc(Eb, phi.bin.lim)
   
   
   ### Fix xlim at log10 scale. 
   lim.bin <- range(log10(ret.phi.bin[[1]]$center))
-  lim.model <- range(log10(predict.roc[[1]]$center))
+  lim.model <- range(log10(prediction[[1]]$center))
   xlim <- c(lim.bin[1] - (lim.bin[2] - lim.bin[1]) / 4,
             max(lim.bin[2], lim.model[2]))
   
@@ -134,7 +139,7 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   for(i.aa in 1:length(aa.names))
   {
     tmp.obs <- ret.phi.bin[[i.aa]]
-    tmp.roc <- predict.roc[[i.aa]]
+    tmp.roc <- prediction[[i.aa]]
     
     plotbin(tmp.obs, tmp.roc, main = "", xlab = "", ylab = "",
             lty = model.lty, axes = FALSE, xlim = xlim)
@@ -200,6 +205,9 @@ plotBMatrixPosterior <- function(bMat, names.aa, interval, param = c("logmu", "d
     id.plot[id.slope] <- id.slope
   } else if(param[1] == "deltaeta"){
     xlab <- expression(paste(Delta, eta))
+    id.plot[id.slope] <- id.slope
+  } else if(param[1] == "deltaomega"){
+    xlab <- expression(paste(Delta, omega))
     id.plot[id.slope] <- id.slope
   }
 
@@ -274,7 +282,7 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltaeta", "deltat"),
   id.intercept <- grep("log", names.b)
   id.slope <- 1:length(names.b)
   id.slope <- id.slope[-id.intercept]
-  
+
   
   id.plot <- rep(0, length(names.b))
   if(param[1] == "logmu"){
@@ -285,6 +293,9 @@ plotTraces <- function(bMat, names.aa, param = c("logmu", "deltaeta", "deltat"),
     id.plot[id.slope] <- id.slope
   } else if(param[1] == "deltaeta"){
     ylab <- expression(paste(Delta, eta))
+    id.plot[id.slope] <- id.slope
+  } else if(param[1] == "deltaomega"){
+    ylab <- expression(paste(Delta, omega))
     id.plot[id.slope] <- id.slope
   }
   

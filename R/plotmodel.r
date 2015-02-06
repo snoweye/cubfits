@@ -58,12 +58,24 @@ plotaddmodel <- function(ret.model, lty, u.codon = NULL, color = NULL,
   if(is.null(color)){
     color <- get.color(u.codon)
   }
-
-  for(i.codon in 1:length(u.codon)){
-    lines(list(x = ret.model$center,
-               y = ret.model[, colnames(ret.model) == u.codon[i.codon]]),
-          col = color[i.codon],
-          lty = lty, lwd = 1.2)
+  
+  if(is.list(ret.model)){
+    linetype <- c(1, 2, 4, 3)
+    for(i.pos in 1:length(ret.model)){
+      for(i.codon in 1:length(u.codon)){
+        lines(list(x = ret.model[[i.pos]]$center,
+                   y = ret.model[[i.pos]][, colnames(ret.model[[i.pos]]) == u.codon[i.codon]]),
+              col = color[i.codon],
+              lty = linetype[i.pos], lwd = 1.2)
+      }
+    }
+  }else{
+    for(i.codon in 1:length(u.codon)){
+      lines(list(x = ret.model$center,
+                 y = ret.model[, colnames(ret.model) == u.codon[i.codon]]),
+            col = color[i.codon],
+            lty = lty, lwd = 1.2)
+    }
   }
 } # End of plotaddmodel().
 

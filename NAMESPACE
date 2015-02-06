@@ -18,6 +18,10 @@ export(
   "plotaddmodel",
   "prop.bin.roc",
   "prop.model.roc",
+# NSE Plotting
+  "plotCUB.NSE",
+  "prop.model.nse",
+  "plotbin.NSE",
 # SCUO
   "calc_scuo_values",
   "scuo.random",

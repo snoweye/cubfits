@@ -1,6 +1,6 @@
 ### Wrapper of find.prop.bin.roc().
 prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
-    bin.class = NULL){
+    bin.class = NULL, weightedCenters=TRUE){
   if(is.null(phi.Obs)){
     n.aa <- length(reu13.df)
     tmp.ORF <- lapply(1:n.aa, function(i.aa) unique(reu13.df[[i.aa]]$ORF))
@@ -29,7 +29,7 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
     bin.class <- c(0, seq(0.05, 0.95, length = nclass), 1)
   }
   phi.bin <- as.vector(quantile(phi.Obs, bin.class))
-  ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin)
+  ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin, weightedCenters)
   ret
 } # End of prop.bin.roc().
 
@@ -41,7 +41,7 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
 ### phi.bin is a vector used to bin phi.method$phi, usually
 ###       quantile(phi.method$phi, c(0, seq(0.05, 0.95, length = 19), 1)).
 
-find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
+find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin, weightedCenters=TRUE){
   nclass <- length(phi.bin) - 1
   phi <- phi.method$phi
 
@@ -55,7 +55,11 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
     tmp.id <- tmp.aa$ORF %in% phi.method$ORF[phi < phi.bin[i.bin]]
     if(sum(tmp.id) > 0){
       ret.aa <- find.prop(tmp.id, tmp.aa, u.codon)
-      ret.aa$center <- mean(phi.bin[(i.bin - 1):i.bin])
+      if(weightedCenters){
+        ret.aa$center <- mean(phi[phi < phi.bin[i.bin]])
+      }else{
+        ret.aa$center <- mean(phi.bin[(i.bin - 1):i.bin])
+      }
     }
 
     ### For between 2 to nclass - 1
@@ -64,8 +68,12 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
                 phi.method$ORF[phi > phi.bin[i.bin] & phi < phi.bin[i.bin + 1]]
       if(sum(tmp.id) > 0){
         tmp.prop <- find.prop(tmp.id, tmp.aa, u.codon)
-        tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
-        ret.aa <- rbind(ret.aa, tmp.prop)
+        if(weightedCenters){
+          tmp.prop$center <- mean(phi[phi > phi.bin[i.bin] & phi < phi.bin[i.bin + 1]])
+        }else{
+          tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
+        }
+          ret.aa <- rbind(ret.aa, tmp.prop)
       }
     }
 
@@ -74,7 +82,11 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin){
     tmp.id <- tmp.aa$ORF %in% phi.method$ORF[phi > phi.bin[i.bin]]
     if(sum(tmp.id) > 0){
       tmp.prop <- find.prop(tmp.id, tmp.aa, u.codon)
-      tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
+      if(weightedCenters){
+        tmp.prop$center <- mean(phi[phi > phi.bin[i.bin]])
+      }else{
+        tmp.prop$center <- mean(phi.bin[i.bin:(i.bin + 1)])
+      }
       ret.aa <- rbind(ret.aa, tmp.prop)
     }
 
