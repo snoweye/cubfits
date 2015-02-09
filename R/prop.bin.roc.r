@@ -1,6 +1,6 @@
 ### Wrapper of find.prop.bin.roc().
 prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
-    bin.class = NULL, weightedCenters=TRUE){
+    bin.class = NULL, weightedCenters=TRUE, logBins=FALSE){
   if(is.null(phi.Obs)){
     n.aa <- length(reu13.df)
     tmp.ORF <- lapply(1:n.aa, function(i.aa) unique(reu13.df[[i.aa]]$ORF))
@@ -28,8 +28,11 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
   if(is.null(bin.class)){
     bin.class <- c(0, seq(0.05, 0.95, length = nclass), 1)
   }
-  phi.bin <- as.vector(quantile(phi.Obs, bin.class))
-  ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin, weightedCenters)
+  if(logBins) { phi.bin <- as.vector(quantile(log10(phi.Obs), bin.class))
+  } else { phi.bin <- as.vector(quantile(phi.Obs, bin.class)) }
+##  phi.bin <- as.vector(quantile(phi.Obs, bin.class))
+##  phi.bin <- ifelse(logBins, as.vector(quantile(phi.Obs, bin.class)), as.vector(quantile(log10(phi.Obs), bin.class)))
+  ret <- find.prop.bin.roc(reu13.df, phi.method, phi.bin, weightedCenters, logBins)
   ret
 } # End of prop.bin.roc().
 
@@ -41,9 +44,11 @@ prop.bin.roc <- function(reu13.df, phi.Obs = NULL, nclass = 20,
 ### phi.bin is a vector used to bin phi.method$phi, usually
 ###       quantile(phi.method$phi, c(0, seq(0.05, 0.95, length = 19), 1)).
 
-find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin, weightedCenters=TRUE){
+find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin, weightedCenters=TRUE, logBins=FALSE){
   nclass <- length(phi.bin) - 1
-  phi <- phi.method$phi
+  if(logBins){ phi <- log10(phi.method$phi)
+  } else { phi <- phi.method$phi }
+  
 
   ret <- list()
   for(i.aa in 1:length(sub.aa.dfs)){
@@ -90,6 +95,7 @@ find.prop.bin.roc <- function(sub.aa.dfs, phi.method, phi.bin, weightedCenters=T
       ret.aa <- rbind(ret.aa, tmp.prop)
     }
 
+    if(logBins) { ret.aa$center <- 10^(ret.aa$center) }
     ### Bind to all
     ret[[i.aa]] <- ret.aa
   }

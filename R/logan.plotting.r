@@ -1,6 +1,6 @@
 plotCUB.NSE <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2000,
                      main="CUB", model.label=c("True Model"), model.lty=1,
-                     delta_a12=0, a_2=1, positions=c(100, 200, 400, 800), weightedCenters=TRUE)
+                     delta_a12=0, a_2=1, positions=c(100, 200, 400, 800), weightedCenters=TRUE, logBins)
 {
   ### Arrange data.
   aa.names <- names(reu13.df.obs)
@@ -17,7 +17,7 @@ plotCUB.NSE <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.sampl
   Eb <- convert.bVec.to.b(Eb, aa.names)
   
   ### Compute.
-  ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin,weightedCenters=weightedCenters)
+  ret.phi.bin <- prop.bin.roc(reu13.df.obs, phi.bin,weightedCenters=weightedCenters, logBins=logBins)
   prediction <- prop.model.nse(Eb, reu13.df.obs, phi.bin.lim, delta_a12=delta_a12, a_2=a_2, positions=positions)
   
   
