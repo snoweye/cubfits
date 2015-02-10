@@ -1,6 +1,6 @@
 ### Wrapper of find.prop.model.nse().
 prop.model.nse <- function(b.Init, reu13.df, phi.Obs.lim = c(0.01, 10), phi.Obs.scale = 1,
-                           nclass = 40, x.log10 = TRUE, delta_a12=0, a_2=1)
+                           nclass = 40, x.log10 = TRUE, delta_a12=0, a_2=1, positions=c(100, 200, 400, 800))
   {
   aa.names <- names(b.Init)
   if("Z" %in% aa.names){
@@ -30,26 +30,29 @@ prop.model.nse <- function(b.Init, reu13.df, phi.Obs.lim = c(0.01, 10), phi.Obs.
   }
 
   ### Call find.prop.model.nse().
-  ret <- find.prop.model.nse(b.Init, reu13.df, phi.bin, phi.Obs.scale, delta_a12=delta_a12, a_2=a_2)
+  ret <- lapply(1:length(positions), function(ii) {
+    find.prop.model.nse(b.Init, reu13.df, phi.bin, phi.Obs.scale, delta_a12=delta_a12, a_2=a_2, positions[ii])
+  })
   ret
 } # End of prop.model.nse().
 
 
 ### Summarize by amino acid for bInint could be from MCMC outputs.
-find.prop.model.nse <- function(b.Init, reu13.df, phi.bin, phi.Obs.scale = 1
-                                ,delta_a12=0, a_2=1)
+find.prop.model.nse <- function(b.Init, reu13.df, phi.bin, phi.Obs.scale = 1,
+                                delta_a12=0, a_2=1, pos=0)
   {
   u.aa <- unique(names(b.Init))
   x <- cbind(1, phi.bin, phi.bin)
 
   predict.nse <- list()
   for(aa in u.aa){
-    b.Init[[aa]]$coef.mat <- -b.Init[[aa]]$coef.mat ## converting from delta eta to delta t
+    #b.Init[[aa]]$coef.mat <- -b.Init[[aa]]$coef.mat
     b.Init[[aa]]$coef.mat <- matrix(rbind(b.Init[[aa]]$coef.mat, b.Init[[aa]]$coef.mat[2,]), nrow=3)
-    b.Init[[aa]]$coef.mat[1,] <- b.Init[[aa]]$coef.mat[1,] * -1 ## (better?) converting from delta eta to delta t
+    b.Init[[aa]]$coef.mat[1,] <- b.Init[[aa]]$coef.mat[1,] * -1
     b.Init[[aa]]$coef.mat[2,] <- b.Init[[aa]]$coef.mat[2,] * delta_a12
-    b.Init[[aa]]$coef.mat[3,] <- b.Init[[aa]]$coef.mat[3,] * mean(reu13.df[[aa]]$Pos) * a_2
-    exponent <- x %*% b.Init[[aa]]$coef.mat
+    b.Init[[aa]]$coef.mat[3,] <- b.Init[[aa]]$coef.mat[3,] * pos * a_2
+    #exponent <- x %*% b.Init[[aa]]$coef.mat
+    exponent <- x %*% (-b.Init[[aa]]$coef.mat)
     scodon.prob <- my.inverse.mlogit(exponent)
     predict.nse[[aa]] <- cbind(scodon.prob, phi.bin * phi.Obs.scale)
     predict.nse[[aa]] <- as.data.frame(predict.nse[[aa]],
