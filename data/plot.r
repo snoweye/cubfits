@@ -20,13 +20,13 @@
             rgb(255, 153, 255, maxColorValue = 255)  # khaki
            ),
   color.alpha = c(
-                  rgb(  0,   0, 205, 192, maxColorValue = 255), # bl
-                  rgb(255, 140,   0, 192, maxColorValue = 255), # or
-                  rgb(148,   0, 211, 192, maxColorValue = 255), # vi
-                  rgb( 50, 205,  50, 192, maxColorValue = 255), # gr
-                  rgb(135, 206, 250, 192, maxColorValue = 255), # sky blue
+                  rgb(  0,   0, 205, 65, maxColorValue = 255), # bl
+                  rgb(255, 140,   0, 65, maxColorValue = 255), # or
+                  rgb(148,   0, 211, 65, maxColorValue = 255), # vi
+                  rgb( 50, 205,  50, 65, maxColorValue = 255), # gr
+                  rgb(135, 206, 250, 65, maxColorValue = 255), # sky blue
                   # rgb(240, 230, 140, 192, maxColorValue = 255)  # khaki
-                  rgb(255, 153, 255, 192, maxColorValue = 255)  # khaki
+                  rgb(255, 153, 255, 65, maxColorValue = 255)  # khaki
                  )
 ) # End of .CF.PT.
 

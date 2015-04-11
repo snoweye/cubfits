@@ -142,16 +142,16 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
     main.aa <- oneLetterAAtoThreeLetterAA(aa.names[i.aa])
     text(0, 1, main.aa, cex = 1.5)
     if(i.aa %in% c(1, 5, 9, 13, 17)){
-      axis(2)
+      axis(2, las=1)
     }
-    if(i.aa %in% 16:19){
+    if(i.aa %in% 17:19){
       axis(1)
     }
     if(i.aa %in% 1:4){
       axis(3)
     }
     if(i.aa %in% c(4, 8, 12,16)){
-      axis(4)
+      axis(4, las=1)
     }
     axis(1, tck = 0.02, labels = FALSE)
     axis(2, tck = 0.02, labels = FALSE)
@@ -162,8 +162,9 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   ## adding a histogram of phi values to plot
   hist.values <- hist(log10(phi.bin), plot=FALSE, nclass=30)
   plot(hist.values, axes = FALSE, main="", xlab = "", ylab = "")
-  box()
   axis(1)
+  axis(4, las=1)
+  
 
   ### Add label.
 #  plot(NULL, NULL, axes = FALSE, main = "", xlab = "", ylab = "",
@@ -172,7 +173,8 @@ plotCUB <- function(reu13.df.obs, bMat=NULL, bVec=NULL, phi.bin, n.use.samples=2
   
   ### Plot xlab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
-  text(0.5, 0.5, "Production Rate (log10)")
+  text(0.5, 0.2, expression("log"[10]~"(Protein Synthesis Rate"~phi~")"))  
+  #text(0.5, 0.5, "Production Rate (log10)")
   
   ### Plot ylab.
   plot(NULL, NULL, xlim = c(0, 1), ylim = c(0, 1), axes = FALSE)
