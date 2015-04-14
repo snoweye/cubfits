@@ -114,7 +114,7 @@ convert.bVec.to.b <- function(bVec, aa.names, model = .CF.CT$model[1]){
 
   ### Check b and aa.names.
   aa.names <- aa.names[!(aa.names %in% c("M", "W", "X"))] # single and stop codons
-  if("S" %in% aa.names){
+  if("Z" %in% aa.names){
     synonymous.codon <- .CF.GV$synonymous.codon.split[aa.names]
   } else{
     synonymous.codon <- .CF.GV$synonymous.codon[aa.names]

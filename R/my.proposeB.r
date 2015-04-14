@@ -1,6 +1,9 @@
 ### Proposes value from multivariate normal with mean mu, and variance R'R.
 ### Returns proposal, log importance ratio, and z-values
 
+### Transformation described in: Gentle, J.E. (2009). Computational Statistics. New York: Springer. pp. 315–316.
+### http://download.springer.com/static/pdf/677/bok%253A978-0-387-98144-4.pdf?auth66=1426090126_653f471b5793fdd863be1412d1c04822&ext=.pdf
+
 my.proposeB.ID_Norm <- function(mu.prev, mu, R){
   ### Draw from proposal.
   zProp <- rnorm(length(mu))

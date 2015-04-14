@@ -35,6 +35,8 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
       R2 <- summary(m.1)$r.squared
       abline(a = a, b = b, col = 2)
 
+      rho <- ifelse(b > 0, sqrt(R2), -sqrt(R2))
+      
       width <- xlim[2] - xlim[1]
       height <- ylim[2] - ylim[1]
       text(xlim[1] - width * 0.04, ylim[2] - height * 0.05,
@@ -43,8 +45,8 @@ plot.b.corr <- function(x, y, label, x.ci = NULL, y.ci = NULL,
            pos = 4, cex = 0.6)
 
       text(xlim[1] - width * 0.04, ylim[2] - height * 0.10,
-           parse(text = paste("R^2 == ",
-                              sprintf("%.4f", R2), sep = "")),
+           parse(text = paste("rho == ",
+                              sprintf("%.4f", rho), sep = "")),
            pos = 4, cex = 0.6)
 
       ### Add 95% CI.

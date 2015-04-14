@@ -97,7 +97,7 @@ my.drawBPrior <- function(baa, baaProp)
   baaProp <- baaProp[dmindex]
   if(.CF.CT$prior.dist.M[1] == "normal")
   {
-    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.M.a, .CF.PARAM$prior.M.b, log=T) 
+    priorProp <- sum( dnorm(baa, .CF.PARAM$prior.M.a, .CF.PARAM$prior.M.b, log=T)
                   - dnorm(baaProp, .CF.PARAM$prior.M.a, .CF.PARAM$prior.M.b, log=T) )    
   }
   return(priorProp) 
