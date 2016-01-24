@@ -1,3 +1,6 @@
+2016-01-24: Ver 0.1-2
+  * Fix tons of warnings and notes from R CMD check.
+
 2014-07-24: Ver 0.1-2
   * Incorporate Cedric's codes for restarting and multiple chains.
   * Add man pages for Cedric's functions.

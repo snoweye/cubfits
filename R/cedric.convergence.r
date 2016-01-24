@@ -290,7 +290,7 @@ cubmultichain <- function(cubmethod, reset.qr, seeds=NULL, teston=c("phi", "sphi
   #require(doParallel)
   cl <- makeCluster(ncores)
   #registerDoParallel(cl)
-  registerDoSNOW(cl)
+  #registerDoSNOW(cl)
   
   ########################
   ## checking arguments ##

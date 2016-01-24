@@ -1,6 +1,6 @@
 Package: cubfits
 Version: 0.1-2
-Date: 2014-06-26
+Date: 2016-01-24
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
@@ -11,9 +11,10 @@ Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        person("Michael A.", "Gilchrist", role = "aut"),
        person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 3.0.0), methods, doSNOW, coda
+Depends: R(>= 3.0.0), methods, coda, foreach, parallel, stats,
+        graphics, utils
 Suggests: seqinr, VGAM, EMCluster
-Enhances: pbdMPI (>= 0.2-2), parallel
+Enhances: pbdMPI (>= 0.3-1)
 LazyLoad: yes
 LazyData: yes
 Description: Estimating mutation and selection coefficients on synonymous
@@ -26,7 +27,8 @@ Description: Estimating mutation and selection coefficients on synonymous
        yeast genome and gene expression data of Yassour (2009).
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
-Packaged: 2014-07-24 18:12:52 UTC; snoweye
+NeedsCompilation: yes
+Packaged: 2016-01-24 20:10:27 UTC; snoweye
 Author: Wei-Chen Chen [aut, cre],
   Russell Zaretzki [aut],
   William Howell [aut],

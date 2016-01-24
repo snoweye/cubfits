@@ -7,18 +7,17 @@
   This utility function provides convergence related functions by Cedric.
 }
 \usage{
-  cubmultichain(cubmethod, nsamples, reset.qr, seeds=NULL,
+  cubmultichain(cubmethod, reset.qr, seeds=NULL,
                 teston=c("phi", "sphi"), swap=0, swapAt=0.05, monitor=NULL, 
-                growthfactor=0, min=0, max=160000, nchains=2, conv.thin=10,
-                eps=0.05, ncores=2, ...)
+                min=0, max=160000, nchains=2, conv.thin=10,
+                eps=0.1, ncores=2, ...)
                           
-  cubsinglechain(cubmethod, nsamples, frac1=0.1, frac2=0.5, reset.qr,
+  cubsinglechain(cubmethod, frac1=0.1, frac2=0.5, reset.qr,
                  seed=NULL, teston=c("phi", "sphi"), monitor=NULL, 
-                 growthfactor=0, min=0, max=160000, conv.thin=10, eps=1, ...)
+                 min=0, max=160000, conv.thin=10, eps=1, ...)
 }
 \arguments{
   \item{cubmethod}{String to choose method. Options are "cubfits", "cubappr", "cubpred"}
-  \item{nsamples}{Number of samples to obtain for convergence check. No check is performed until nsamples is reached}
   \item{reset.qr}{recalculate QR decomposition matrix of covariance matrix until reset.qr samples are reached}
   \item{swap}{proportion of b matrix parameters to be swaped between convergence checks}
   \item{swapAt}{difference (L1-norm) between two consequtive convergence test leading to a swap in the b matrix}
@@ -27,7 +26,6 @@
   \item{teston}{Select data to test convergence on}
   \item{monitor}{A function to monitor the progress of the MCMC. The fucntions expects the result object and for cubmultichain an index i. 
   (cubmultichain call: monitor(x,i), cubsinglechain call: monitor(x))}
-  \item{growthfactor}{describes the growth of the window for the convergence test. (nsamples + growthfactor*totalSamples)}
   \item{min}{Minimum samples to be obtained. eps is ignored until number of samples reaches min}
   \item{max}{Maximum samples to be obtained. eps is ignored after max samples is obtained}
   \item{eps}{Convergence criterium}

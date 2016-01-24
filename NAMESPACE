@@ -1,4 +1,4 @@
-import(methods, doSNOW, coda)
+import(methods, coda, foreach, parallel, stats, graphics, utils)
 useDynLib(cubfits)
 # exportPattern("^[[:alpha:]]+")
 
