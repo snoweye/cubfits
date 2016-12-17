@@ -28,13 +28,4 @@ Description: Estimating mutation and selection coefficients on synonymous
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
 NeedsCompilation: yes
-Packaged: 2016-01-24 20:10:27 UTC; snoweye
-Author: Wei-Chen Chen [aut, cre],
-  Russell Zaretzki [aut],
-  William Howell [aut],
-  Cedric Landerer [aut],
-  Drew Schmidt [aut],
-  Michael A. Gilchrist [aut],
-  Preston Hewgley [ctb],
-  Students REU13 [ctb]
 Maintainer: Wei-Chen Chen <wccsnow@gmail.com>
