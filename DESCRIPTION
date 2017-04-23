@@ -1,6 +1,6 @@
 Package: cubfits
-Version: 0.1-2
-Date: 2016-01-24
+Version: 0.1-3
+Date: 2017-04-23
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
