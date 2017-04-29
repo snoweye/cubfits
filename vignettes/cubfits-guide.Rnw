@@ -12,20 +12,18 @@
 \author{
 \begin{minipage}{6in}
 \centering
-Wei-Chen Chen$^1$, Russell Zaretzki$^{2,4}$, William Howell$^1$, \\
-Cedric Landerer$^1$, Drew Schmidt$^3$, and Michael A. Gilchrist$^{1,4}$
+Wei-Chen Chen$^1$, Russell Zaretzki$^{3,4}$, William Howell$^2$, \\
+Cedric Landerer$^2$, Drew Schmidt$^1$, and Michael A. Gilchrist$^{2,4}$
 \end{minipage}
 \\
 \\
-$^1$Department of Ecology and Evolutionary Biology, \\
+$^1$pbdR Core Team \\
+\\
+$^2$Department of Ecology and Evolutionary Biology, \\
 University of Tennessee, \\
 Knoxville, TN, USA \\
 \\
-$^2$Department of Statistics, Operations, and Management Science, \\
-University of Tennessee, \\
-Knoxville, TN, USA \\
-\\
-$^3$National Institute for Computational Sciences, \\
+$^3$Department of Statistics, Operations, and Management Science, \\
 University of Tennessee, \\
 Knoxville, TN, USA \\
 \\
