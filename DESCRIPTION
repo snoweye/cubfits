@@ -24,7 +24,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        of expressions and measurement errors. Work flows with examples for
        simulation, estimation and prediction processes are also provided
        with parallelization speedup. The whole framework is tested with
-       yeast genome and gene expression data of Yassour et al. (2009)
+       yeast genome and gene expression data of Yassour, et al. (2009)
        <doi:10.1073/pnas.0812841106>.
 License: Mozilla Public License 2.0
 URL: https://github.com/snoweye/cubfits
