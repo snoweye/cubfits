@@ -24,9 +24,9 @@
   convert them to \code{phi.Obs} values either in geometric means or individually.
 }
 \source{
-  \url{http://www.pnas.org/content/early/2009/02/10/0812841106}
+  \url{https://www.pnas.org/content/early/2009/02/10/0812841106}
 
-  \url{http://www.pnas.org/content/vol0/issue2009/images/data/0812841106/DCSupplemental/SD3.xls}
+  \url{https://www.pnas.org/highwire/filestream/598612/field_highwire_adjunct_files/3/SD3.xls}
 
   Yassour M, Kaplan T, Fraser HB, Levin JZ, Pfiffner J, Adiconis X,
   Schroth G, Luo S, Khrebtukova I, Gnirke A, Nusbaum C, Thompson DA,

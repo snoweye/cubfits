@@ -21,7 +21,7 @@
   \code{SCUO} indices are returned.
 }
 \references{
-  \url{http://www.tandfonline.com/doi/abs/10.1080/03081070500502967}
+  \url{https://www.tandfonline.com/doi/abs/10.1080/03081070500502967}
 
   Wan X.-F., Zhou J., Xu D.
     ``CodonO: a new informatics method for measuring synonymous codon usage
