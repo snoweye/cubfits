@@ -1,6 +1,6 @@
 Package: cubfits
-Version: 0.1-3
-Date: 2017-04-23
+Version: 0.1-4
+Date: 2021-07-26
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
@@ -11,7 +11,7 @@ Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        person("Michael A.", "Gilchrist", role = "aut"),
        person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 3.0.0), methods, coda, foreach, parallel, stats,
+Depends: R(>= 4.0.5), methods, coda, foreach, parallel, stats,
         graphics, utils
 Suggests: seqinr, VGAM, EMCluster
 Enhances: pbdMPI (>= 0.3-1)

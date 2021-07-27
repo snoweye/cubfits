@@ -59,7 +59,7 @@ plotaddmodel <- function(ret.model, lty, u.codon = NULL, color = NULL,
     color <- get.color(u.codon)
   }
   
-  if(is.list(ret.model)){
+  if(is.list(ret.model) && !is.data.frame(ret.model)){
     linetype <- c(1, 2, 4, 3)
     for(i.pos in 1:length(ret.model)){
       for(i.codon in 1:length(u.codon)){

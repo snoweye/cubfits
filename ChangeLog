@@ -1,3 +1,6 @@
+2021-07-26: Ver 0.1-4
+  * Add a check for data.frame() in plotaddmodel().
+
 2016-01-24: Ver 0.1-2
   * Fix tons of warnings and notes from R CMD check.
 
