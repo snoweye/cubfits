@@ -11,7 +11,7 @@ Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        person("Michael A.", "Gilchrist", role = "aut"),
        person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 4.0.5), methods, coda, foreach, parallel, stats,
+Depends: R(>= 4.1.0), methods, coda, foreach, parallel, stats,
         graphics, utils
 Suggests: seqinr, VGAM, EMCluster
 Enhances: pbdMPI (>= 0.3-1)
