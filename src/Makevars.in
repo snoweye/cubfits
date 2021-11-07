@@ -1,0 +1,6 @@
+OBJECTS = lib.o lp_c_raw.o stable_exp.o zzz.o
+
+all: $(SHLIB)
+
+$(SHLIB): $(OBJECTS)
+

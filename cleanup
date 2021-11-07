@@ -1,6 +1,7 @@
 #! /bin/sh
 rm -rf ./chm
 rm -rf ./config.*
+rm -rf ./configure~
 rm -rf ./autom4te.cache
 rm -rf ./src/Makevars
 rm -rf ./src/Makedeps

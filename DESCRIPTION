@@ -4,14 +4,14 @@ Date: 2021-07-26
 Title: Codon Usage Bias Fits
 Authors@R: c(person("Wei-Chen", "Chen", role = c("aut", "cre"), email =
        "wccsnow@gmail.com"),
-       person("Russell", "Zaretzki", role = "aut"),
+       person("Russell", "Zaretzki", role = "aut", email = "rzaretzk@utk.edu"),
        person("William", "Howell", role = "aut"),
        person("Cedric", "Landerer", role = "aut"),
        person("Drew", "Schmidt", role = "aut"),
-       person("Michael A.", "Gilchrist", role = "aut"),
+       person("Michael A.", "Gilchrist", role = "aut", email = "mikeg@utk.edu"),
        person("Preston", "Hewgley", role = "ctb"),
        person("Students", "REU13", role = "ctb"))
-Depends: R(>= 4.1.0), methods, coda, foreach, parallel, stats,
+Depends: R(>= 4.0.0), methods, coda, foreach, parallel, stats,
         graphics, utils
 Suggests: seqinr, VGAM, EMCluster
 Enhances: pbdMPI (>= 0.3-1)
@@ -27,6 +27,7 @@ Description: Estimating mutation and selection coefficients on synonymous
        yeast genome and gene expression data of Yassour, et al. (2009)
        <doi:10.1073/pnas.0812841106>.
 License: Mozilla Public License 2.0
+BugReports: https://github.com/snoweye/cubfits/issues
 URL: https://github.com/snoweye/cubfits
 NeedsCompilation: yes
 Maintainer: Wei-Chen Chen <wccsnow@gmail.com>

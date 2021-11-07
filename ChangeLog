@@ -1,3 +1,7 @@
+2021-11-06: Ver 0.1-4
+  * Update to autoconf version 2.71.
+  * Add e-mails.
+
 2021-07-26: Ver 0.1-4
   * Add a check for data.frame() in plotaddmodel().
   * Fix URLs in man Rd files.
